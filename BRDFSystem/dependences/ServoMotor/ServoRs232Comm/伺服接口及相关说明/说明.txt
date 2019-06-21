@@ -1,0 +1,40 @@
+1.函数：bool Servo_MoveSensorHome_CW(int com_port); 描述：正转电机至底部光电开关; 输入：com_port(串口序号，默认3);
+
+
+2.函数：bool Servo_MoveSensorHome_CCW(int com_port); 描述：反转电机至顶部光电开关; 输入：com_port(串口序号，默认3);
+
+
+3.函数：bool Servo_MoveDistance(double distance, double distance_per_rev, int com_port); 描述：电机带动滑台升降高度; 输入：distance(需要达到的高度), distance_per_rev(为同步轮转一圈滑台升降的高度，义乌义正为10cm深圳久宸为12.5cm), com_port(串口序号，默认3);
+
+
+
+4.函数：bool Servo_Move_CW(int com_port);描述：正转电机, 下降；输入：com_port(串口序号，默认3)；
+
+
+5.函数：bool Servo_StopAndUpdateDistance_CW(double distance_per_rev, int com_port);描述：停止电机顺时针转（下降）动并更新位置；输入：distance_per_rev(为同步轮转一圈滑台升降的高度，义乌义正为10cm深圳久宸为12.5cm), com_port(串口序号，默认3)；
+
+
+6.函数：bool Servo_Move_CCW(int com_port);描述：反转电机，上升；输入：com_port(串口序号，默认3)；
+
+
+7.函数：bool Servo_StopAndUpdateDistance_CCW(double distance_per_rev, int com_port);描述：停止电机逆时针(上升)转动并更新位置；输入：distance_per_rev(为同步轮转一圈滑台升降的高度，义乌义正为10cm深圳久宸为12.5cm), com_port(串口序号，默认3)；
+
+
+8.函数：double Servo_ReturnCurrentPosition()；描述：返回滑台当前所在的位置，输出：current_position(当前滑台所在的位置);
+
+
+9.函数：void Servo_GetLastPosition()；描述：从配置文件获取上次关机的滑台；输入：last_distance（配置文件中读取的位置值）
+
+
+注意点：
+
+由于在断电之后无法记录滑台位置，因此，在打开软件进行设备初始化的过程中，需先调用函数bool Servo_MoveSensorHome_CW(int com_port)或者bool Servo_MoveSensorHome_CCW(int com_port)进行滑台位置的初始化。
+
+
+位置初始化也可通过函数void Servo_GetLastPosition()来实现，前提是上一次关软件的时候把位置通过double Servo_ReturnCurrentPosition()函数记录下来。
+
+
+函数bool Servo_Move_CW(int com_port)与函数bool Servo_StopAndUpdateDistance_CW(double distance_per_rev, int com_port)需配合使用，当需要滑台下降的时候，按下鼠标时调用函数bool Servo_Move_CW(int com_port)，松开鼠标时调用函数bool Servo_StopAndUpdateDistance_CW(double distance_per_rev, int com_port)
+
+
+函数bool Servo_Move_CCW(int com_port)与函数bool Servo_StopAndUpdateDistance_CCW(double distance_per_rev, int com_port)需配合使用，当需要滑台上升的时候，按下鼠标时调用函数bool Servo_Move_CCW(int com_port)，松开鼠标时调用函数bool Servo_StopAndUpdateDistance_CCW(double distance_per_rev, int com_port)

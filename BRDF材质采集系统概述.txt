@@ -1,0 +1,398 @@
+/*****************************系统各模块说明**********************************/
+一、系统初始化
+1、材质台就位
+2、相机、光源、材质台控制测试
+
+二、预处理
+1、工业相机标定及校正预处理	
+	1）辐射度标定（白平衡校正、均匀度校正、颜色校正）
+	2）几何标定（棋盘格）
+	3）线性度标定（最大曝光时间、自动曝光时间）
+	4）坏点标记及暗电平处理
+2、单反相机参数设置
+
+三、材质采集
+1、BRDF采集
+	1）一般采集（各项同性/各向异性）
+	光源依次点亮，相机同步采集一帧/多帧，（材质台旋转）
+	2）HDR采集（针对低动态范围）
+	光源依次点亮，相机同步采集多帧，（材质台旋转）
+	3）EOS采集（超分辨率）
+	若干指定方向光源，固定方向单反采集多张，（材质台旋转）
+2、svBRDF采集
+3、BTF采集（待定）
+
+四、图像处理（在上一步图像保存前/下一步拟合前进行）
+	1）多帧图像平均去噪
+	2）坏点校正和暗点平处理
+	3）角度校正、方向对齐、裁剪、极限角度剔除
+	4）白平衡处理、均匀度校正、颜色校正
+	5）几何校正(Zhang)
+	6）HDR、超分辨率
+	7）保存处理后图像(/.btf/...)
+	8）逐角度计算图像平均亮度/逐像素亮度，保存BRDF材质数据（.xml/.binary/...）
+
+五、BRDF建模、参数拟合（有余力再实现拟合过程可视化）
+1、BRDF模型
+	1）读取本地材质库
+	2）选取模型/模型组
+	3）选择拟合方法（待定）
+2、svBRDF模型（逐点BRDF、聚类；考虑法向量）
+3、BTF模型（建模方法待研究）
+
+六、材质库检索（材质类别—材质编号—模型参数—（材质属性））
+1、本地采集材质库检索
+2、外部材质数据导入（需要确定文件格式）
+
+七、渲染效果测试（三维可视化）
+1、点光源
+	1）选取默认模型/用户自定义模型
+	2）选取材质
+2、环境光源
+	1）选取默认模型/用户自定义模型
+	2）选取默认场景/用户自定义场景
+	3）选取材质
+
+
+/**********************************程序软件框架*********************************/
+///////////////////////////////////LED光源控制类/////////////////////////////////
+////参考 下位机协议.doc
+class Illuminant
+{
+public:
+	Illuminant();
+	~Illuminant();
+
+	//串口初始化
+	bool InitCOM();
+	//设置延时
+	bool SetSteadyTime(int steadyTime);
+	//按ID亮灯	
+	//bool LightenById(vector<int> id);
+	bool LightenById(string id);
+	//按顺序亮灯
+	bool LightenByOrder(int num);
+
+private:
+	//打开串口
+	bool OpenCOM();
+
+	//int 				_orderType;//设置几种亮灯顺序，原则上只需要一种
+	int 				_steadyTime;//光源点亮持续时间
+	//int 				_waitingTime;//光源点亮间隔时间
+};
+
+
+/////////////////////////////////AVT工业相机控制/////////////////////////////
+////////////Matlab 标定部分//////////////
+	//材质中心位置校准
+	bool FindCenter();
+	//定位载物平台标记点圆心 用于仿射变换 返回角点位置
+	Mat FindCorners()；
+	//A 辐射度标定
+	//白平衡校正（完美全反射）&均匀度校正（事先用白板标定，载物台上标记点仅用于仿射变换及采集过程中的白平衡检验）
+	Mat WhiteBlockCorrection(CameraPtr& camera, int cameraID);
+	//颜色校正（多项式回归） 返回变换矩阵
+	Mat ColorCorrection(CameraPtr& camera, int cameraID);
+	//B 几何标定
+	//Zhang棋盘格标定 返回相机参数矩阵
+	Mat ChessCorrection(CameraPtr& camera, int cameraID);
+	//C 线性度测试（计算最大曝光时间、自动曝光时间） num曝光次数
+	bool LinearityTest(CameraPtr& camera, int cameraID, int num, float& k, float& tMax, float& tAuto);
+	//D 底噪校正
+	//坏点标记 返回坏点位置矩阵
+	Mat DeadPixelDetect(CameraPtr& camera, int cameraID);
+	//暗电平处理（Vimba SDK中提供了设置BlackLevel的功能，我们需要对其BlackLevel=0时留的pedestal进行处理，输出不能为负数）
+	//返回需要减去的基值
+	int BlackLevelCorrection(CameraPtr& camera, int cameraID);
+
+/////////////////////////////////////////
+////////////C++ 采集及图像处理///////////
+//调用Vimba SDK
+//参考 Vimba CPP Manual.pdf
+class AVTCamera
+{
+public:
+	AVTCamera();
+	~AVTCamera();
+
+	//系统初始化
+	bool Init(CameraPtrVector& cameras);
+	//打开相机
+	bool OpenCamera(int cameraID);
+	//设置相机参数
+	bool SetCameraSettings(int cameraID, double exposureTime, double gain, double blackLevel);
+	//返回一帧图像
+	VmbUchar_t* CaptureImage(int cameraID);//typedef unsigned char VmbUchar_t
+	//返回图像尺寸
+	bool GetImageSize(int cameraID, int& widthOutput, int& heightOutput);
+	//保存一帧图像
+	bool SaveImage(Mat& captureMat, string imageSavingPath, int cameraID, int saveName);
+	//自动曝光
+	vector<int> AutoExposure(int cameraID, int num, FeaturePtr feature);
+	//相机多线程函数
+	static void CameraThread(CameraThreadInfo threadInfo);//线程调用的接口必须是全局函数或静态成员函数
+	//多相机（9台）同步采集
+	void CaptureSynchronizally(CameraPtrVector& cameras, string imageSavingPath, CameraThreadInfo threadInfo);
+	//关闭相机
+	bool CloseCamera(int cameraID);
+	//关闭系统
+	bool Fini(CameraPtrVector& cameras);
+
+	friend class ImageProcessing;  //采集图像处理类需要用到该类的校正矩阵
+	friend class CollectingOperation; //采集操作类需要用到该类相机方法
+
+private:
+	//采集前清空目录
+	static int EmptyFiles(string dirPath);
+	//多帧图像平均去噪
+	Mat MAverage(vector<Mat> src, int num);
+	//坏点标记 r领域像素数量
+	Mat MDeadPixelDetect(Mat src, Mat deadPixelLoc, int r);
+	//暗电平处理
+	Mat MBlackLevelCorrection(Mat src, int pedestal);
+	//角度校正、方向对齐、裁剪
+	Mat MDirectionCorrection(Mat src, Mat trans, int width, int height);
+	//白平衡校正&均匀度校正
+	Mat MWhiteBlockCorrection(Mat src, Mat trans);
+	//颜色校正
+	Mat MColorCorrection(Mat src, Mat trans);
+	//几何畸变校正
+	Mat MChessCorrection(Mat src, Mat trans);
+	//HDR num曝光次数
+	Mat MContributeHDR(vector<Mat> src, int num);
+	//超分辨率
+	Mat MContributeSR(vector<Mat> matHQ, vector<Mat> matLQ);
+
+	
+	VmbError_t				_err;
+	VmbUint32_t				_width;
+	VmbUint32_t				_height;
+	CameraPtrVector			_cameras;
+	CameraPtr				_camera;
+	VmbHandle_t				_hCamera;
+	int						_cameraID;
+	FeaturePtr				_feature;
+	CameraThreadInfo		_threadInfo;
+	static int				_threadID;
+	Mat						_captureMat;
+	string					_imageSavingPath;
+	
+	//相机曝光参数 9组
+	float*					_tMax;
+	float*					_tAuto;
+	float*					_k; //E-t曲线斜率
+}
+
+//////////////////////////////////////EOS单反相机控制类////////////////////////////////////
+//调用EDSDK3.6.1
+//参考 EDSDK_API.pdf
+class EOSCamera
+{
+public：
+	EOSCamera();
+	~EOSCamera();
+
+	//系统初始化 打开相机
+	bool Init(EdsCameraRef& camera);
+	//设置相机参数
+	bool SetCameraSettings(float exposureTime,...);
+	//拍摄照片 count拍摄数量  interv_millsec拍摄间隔
+	bool TakePhoto(EdsCameraRef camera, int count, int interv_millsec);
+	//下载照片到PC
+	bool DownloadImage(EdsDirectoryItemRef directoryItem);
+	//关闭相机
+	bool Fini(EdsCameraRef camera);
+	//相机状态、属性、事件等改变触发回调函数
+	
+	friend class CollectingOperation; 
+	
+private：
+	//相机对象事件变化回调函数
+	EdsSetObjectEventHandler(camera, kEdsObjectEvent_All, CameraEventListener::handleObjectEvent, (EdsVoid *)_controller);
+	//相机属性事件变化回调函数
+	EdsSetPropertyEventHandler(camera, kEdsPropertyEvent_All, CameraEventListener::handlePropertyEvent, (EdsVoid *)_controller);
+	//相机状态事件变化回调函数
+	EdsSetCameraStateEventHandler(camera, kEdsStateEvent_All, CameraEventListener::handleStateEvent, (EdsVoid *)_controller);
+	
+	bool 						_isSDKLoaded;
+	EdsError 					_err;
+	EdsCameraRef 				_camera;
+	CameraModel* 				_model;
+	CameraController* 			_controller;
+} 
+
+////////////////////////////////////////材质台控制类//////////////////////////////////////////
+class PlatformControl
+{
+public：
+	PlatformControl();
+	~PlatformControl();
+
+	//导轨就位
+	bool TrackIn();
+	//导轨归位
+	bool TrackOut();
+	//载物平台开始旋转
+	bool StartRotating(int speed, int step, int interv_millsec, bool direction);
+	//载物平台停止旋转
+	bool StopRotating();
+	//载物平台（角度）复位
+	bool ResetRotating();
+	
+	friend class CollectingOperation; 
+	
+private:
+	int 						_speed;//旋转速度
+	int 						_step;//旋转步长（每旋转一定角度，停顿，等待相机拍摄）
+	int 						_intervMillsec;//等待相机拍摄时间
+	bool 						_direction;//旋转方向（顺时针/逆时针）
+}
+
+///////////////////////////////////////拟合建模类//////////////////////////////////////////////
+class MaterialModel
+{
+public:
+	MaterialModel();
+	~MaterialModel();
+
+	void BRDFModeling(Mat brdf, ...);
+	void svBRDFModeling(Mat svBRDF, ...);
+
+private:
+	//读取BRDF材质数据
+	Mat ReadingBRDF(string brdfPath);
+	//获得brdf_simple数据的采样角度
+	vector<double> ComputeSamplingAngle(Mat Lth0, Mat Lph0, Mat Vth0);
+	//WardDuer模型函数
+	void WardDuerfun(double *p, double *hx, int m, int n, void *adata);
+	//最小二乘法求初值
+	vector<double> GetOriValue();
+	//LM求最优值
+	void GetFinalValue(vector<double> oriValue);
+	//保存模型参数
+	void SaveModelParameters(vector<double> parameters);
+	
+	Mat							_Lth0; //三个采样角度矩阵
+	Mat							_Lph0;
+	Mat							_Vth0;
+	Mat							_brdf; //BRDF材质数据矩阵
+	Mat							_svbrdf; //svBRDF材质数据矩阵
+}
+
+//////////////////////////////////////采集操作类//////////////////////////////////////////////
+class CollectingOperation
+{
+public:
+	CollectingOperation();
+	~CollectingOperation();
+
+	void BRDFCollecting();
+	//void OriCollecting();
+	//void HDRCollecting();
+	//void EOSCollecting();
+	void SVBRDFCollecting();
+	void BTFCollecting();
+
+private:
+	
+}
+
+///////////////////////////////////////材质库检索类///////////////////////////////////////////
+//暂略...
+///////////////////////////////////////渲染测试类/////////////////////////////////////////////
+//暂略...
+
+///////////////////////////////////////主界面类///////////////////////////////////////////////
+////AVT相机线程
+class WorkerAVT : public QObject
+{
+	Q_OBJECT
+
+public:
+	WorkerAVT(QObject *parent = 0);
+	~WorkerAVT();
+	virtual void timerEvent(QTimerEvent *event);
+	friend class BRDFGui;
+
+private:
+	AVTCamera					*_cameraAVT;
+	QImage						_img;
+	Mat							_mat;
+	int							_timerId;
+	unsigned char*				_pImageFrame;
+	int							_height;
+	int							_width;
+
+signals:
+	void sendingImg(QImage);
+};
+
+////EOS单反相机线程
+class WorkerEOS : public QObject
+{
+	Q_OBJECT
+
+public:
+	WorkerEOS(QObject *parent = 0);
+	~WorkerEOS();
+	friend class BRDFGui;
+
+private:
+	EOSCamera					*_cameraEOS;
+	QImage						_img;
+	Mat							_mat;
+	unsigned char*				_pImageFrame;
+	int							_height;
+	int							_width;
+};
+
+////主界面
+class BRDFGui : public QMainWindow
+{
+	Q_OBJECT
+
+public:
+	BRDFGui(QWidget *parent = 0);
+	~BRDFGui();
+
+private:
+	Ui::BRDFGuiClass ui;
+
+	WorkerAVT 					*_workerAVT;
+	QThread 					*_threadAVT;
+	WorkerEOS 					*_workerEOS;
+	QThread 					*_threadEOS;
+
+private slots:
+	//具体控件暂略...
+};
+
+////配置文件界面
+class Configuration : public QMainWindow
+{
+	Q_OBJECT
+
+public:
+	Configuration(QWidget *parent = 0);
+	~Configuration();
+	friend class MainWindow;
+
+private:
+	Ui::ConfigurationClass ui;
+
+	//设置参数
+	QSettings *ini = NULL;	
+	int aff = 0;
+	QString aff_Str = "";
+	int framerate = 0;
+	QString framerate_Str = "";
+	int acqFrequency = 0;
+	QString acqFrequency_Str = "";
+	QString savepath = "";
+
+private slots:
+	void Save();
+	void Defaults();
+	void IsEdited();
+};
