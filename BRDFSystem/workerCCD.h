@@ -6,7 +6,9 @@
 #include <QObject>
 #include <QImage>
 #include <QTimerEvent>
+#include <QThread>
 #include "ccd.h"
+#include "workerMeasurement.h"
 
 class WorkerCCD : public QObject
 {
@@ -24,6 +26,9 @@ private slots:
 	void StartTimer();
 
 private:
+	WorkerMeasurement*		workerMeasurement;
+	QThread*				threadMeasurement;
+
 	VimbaSystem&			_system;
 	int						_workerID;
 	AVTCamera				*_cameraAVT;
@@ -38,8 +43,9 @@ private:
 	int						_width;
 
 signals:
-	//void sendingImg(int, QImage);
-	void sendingImg(QImage);
-	//void startMeasurement(QImage);
+	void sendingMat(int workerID, Mat mat);
+	void sendingImg(int workerID, QImage img);
+	void startMeasurement();
 };
 #endif
+

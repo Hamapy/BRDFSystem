@@ -75,7 +75,6 @@ public:
     QLabel *label_16;
     QLabel *label_13;
     QComboBox *comboBox_2;
-    QGroupBox *groupBox_15;
     QGroupBox *groupBox_16;
     QGridLayout *gridLayout_8;
     QGridLayout *gridLayout_7;
@@ -127,8 +126,8 @@ public:
     QLabel *label_77;
     QLabel *label_78;
     QLabel *label_75;
-    QPushButton *pushButton_defaults;
     QPushButton *pushButton_save;
+    QPushButton *pushButton_defaults;
     QWidget *PreCamera;
     QGridLayout *gridLayout_43;
     QGridLayout *gridLayout_44;
@@ -189,26 +188,28 @@ public:
     QGroupBox *groupBox_20;
     QGridLayout *gridLayout_33;
     QGridLayout *gridLayout_34;
-    QLabel *label_58;
-    QLabel *label_59;
-    QComboBox *comboBox_22;
     QComboBox *comboBox_23;
-    QPushButton *pushButton_19;
-    QLabel *label_60;
     QLabel *label_61;
-    QLabel *label_62;
-    QComboBox *comboBox_24;
     QLabel *label_63;
     QLabel *label_64;
-    QComboBox *comboBox_25;
-    QLabel *label_65;
-    QLabel *label_66;
-    QComboBox *comboBox_26;
+    QLabel *label_59;
+    QPushButton *pushButton_19;
+    QComboBox *comboBox_22;
+    QLabel *label_60;
+    QLabel *label_62;
+    QLabel *label_58;
+    QComboBox *comboBox_24;
     QComboBox *comboBox_27;
+    QComboBox *comboBox_26;
     QLabel *label_67;
-    QPushButton *pushButton_20;
-    QPushButton *pushButton_21;
+    QLabel *label_65;
+    QComboBox *comboBox_25;
     QPushButton *pushButton_22;
+    QLabel *label_66;
+    QComboBox *comboBox_9;
+    QLabel *label_23;
+    QPushButton *pushButton_21;
+    QPushButton *pushButton_20;
     QGroupBox *groupBox_17;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout_5;
@@ -230,26 +231,28 @@ public:
     QGroupBox *groupBox_19;
     QGridLayout *gridLayout_31;
     QGridLayout *gridLayout_32;
-    QLabel *label_48;
-    QLabel *label_49;
-    QLabel *label_50;
-    QLabel *label_51;
     QLabel *label_52;
+    QLabel *label_51;
+    QLabel *label_48;
+    QLabel *label_50;
     QLabel *label_53;
+    QLabel *label_49;
+    QPushButton *pushButton_18;
+    QLabel *label_56;
+    QComboBox *comboBox_21;
+    QPushButton *pushButton_15;
+    QLabel *label_55;
+    QLineEdit *lineEdit_12;
     QComboBox *comboBox_12;
     QComboBox *comboBox_18;
     QComboBox *comboBox_19;
-    QLabel *label_54;
-    QComboBox *comboBox_20;
-    QPushButton *pushButton_15;
-    QLabel *label_55;
-    QComboBox *comboBox_21;
-    QLabel *label_56;
     QLabel *label_57;
-    QLineEdit *lineEdit_12;
+    QComboBox *comboBox_20;
+    QLabel *label_54;
+    QLabel *label_22;
+    QComboBox *comboBox_8;
     QPushButton *pushButton_16;
     QPushButton *pushButton_17;
-    QPushButton *pushButton_18;
     QGroupBox *groupBox_18;
     QGridLayout *gridLayout_35;
     QLabel *label_2;
@@ -469,11 +472,6 @@ public:
 
         gridLayout_45->addWidget(groupBox_14, 0, 0, 1, 1);
 
-        groupBox_15 = new QGroupBox(Settings);
-        groupBox_15->setObjectName(QStringLiteral("groupBox_15"));
-
-        gridLayout_45->addWidget(groupBox_15, 0, 1, 1, 2);
-
         groupBox_16 = new QGroupBox(Settings);
         groupBox_16->setObjectName(QStringLiteral("groupBox_16"));
         gridLayout_8 = new QGridLayout(groupBox_16);
@@ -539,7 +537,7 @@ public:
         gridLayout_8->addLayout(gridLayout_7, 0, 0, 1, 1);
 
 
-        gridLayout_45->addWidget(groupBox_16, 1, 0, 1, 1);
+        gridLayout_45->addWidget(groupBox_16, 0, 1, 1, 1);
 
         groupBox_21 = new QGroupBox(Settings);
         groupBox_21->setObjectName(QStringLiteral("groupBox_21"));
@@ -634,7 +632,7 @@ public:
         gridLayout_48->addLayout(gridLayout_46, 0, 0, 1, 1);
 
 
-        gridLayout_45->addWidget(groupBox_21, 1, 1, 1, 1);
+        gridLayout_45->addWidget(groupBox_21, 1, 0, 1, 1);
 
         groupBox_22 = new QGroupBox(Settings);
         groupBox_22->setObjectName(QStringLiteral("groupBox_22"));
@@ -730,23 +728,26 @@ public:
         gridLayout_50->addLayout(gridLayout_47, 0, 0, 1, 1);
 
 
-        gridLayout_45->addWidget(groupBox_22, 1, 2, 1, 1);
-
-        pushButton_defaults = new QPushButton(Settings);
-        pushButton_defaults->setObjectName(QStringLiteral("pushButton_defaults"));
-        QFont font;
-        font.setFamily(QStringLiteral("Times New Roman"));
-        font.setPointSize(9);
-        pushButton_defaults->setFont(font);
-
-        gridLayout_45->addWidget(pushButton_defaults, 2, 2, 1, 1);
+        gridLayout_45->addWidget(groupBox_22, 1, 1, 1, 1);
 
         pushButton_save = new QPushButton(Settings);
         pushButton_save->setObjectName(QStringLiteral("pushButton_save"));
+        QFont font;
+        font.setFamily(QStringLiteral("Times New Roman"));
+        font.setPointSize(9);
         pushButton_save->setFont(font);
 
-        gridLayout_45->addWidget(pushButton_save, 2, 1, 1, 1);
+        gridLayout_45->addWidget(pushButton_save, 2, 0, 1, 1);
 
+        pushButton_defaults = new QPushButton(Settings);
+        pushButton_defaults->setObjectName(QStringLiteral("pushButton_defaults"));
+        pushButton_defaults->setFont(font);
+
+        gridLayout_45->addWidget(pushButton_defaults, 2, 1, 1, 1);
+
+        gridLayout_45->setRowStretch(0, 2);
+        gridLayout_45->setRowStretch(1, 4);
+        gridLayout_45->setRowStretch(2, 1);
         stackedWidget->addWidget(Settings);
         PreCamera = new QWidget();
         PreCamera->setObjectName(QStringLiteral("PreCamera"));
@@ -1047,50 +1048,15 @@ public:
         gridLayout_34 = new QGridLayout();
         gridLayout_34->setSpacing(6);
         gridLayout_34->setObjectName(QStringLiteral("gridLayout_34"));
-        label_58 = new QLabel(groupBox_20);
-        label_58->setObjectName(QStringLiteral("label_58"));
-
-        gridLayout_34->addWidget(label_58, 0, 0, 1, 1);
-
-        label_59 = new QLabel(groupBox_20);
-        label_59->setObjectName(QStringLiteral("label_59"));
-
-        gridLayout_34->addWidget(label_59, 1, 0, 1, 1);
-
-        comboBox_22 = new QComboBox(groupBox_20);
-        comboBox_22->setObjectName(QStringLiteral("comboBox_22"));
-
-        gridLayout_34->addWidget(comboBox_22, 2, 1, 1, 1);
-
         comboBox_23 = new QComboBox(groupBox_20);
         comboBox_23->setObjectName(QStringLiteral("comboBox_23"));
 
         gridLayout_34->addWidget(comboBox_23, 3, 1, 1, 1);
 
-        pushButton_19 = new QPushButton(groupBox_20);
-        pushButton_19->setObjectName(QStringLiteral("pushButton_19"));
-
-        gridLayout_34->addWidget(pushButton_19, 0, 2, 1, 1);
-
-        label_60 = new QLabel(groupBox_20);
-        label_60->setObjectName(QStringLiteral("label_60"));
-
-        gridLayout_34->addWidget(label_60, 1, 2, 1, 1);
-
         label_61 = new QLabel(groupBox_20);
         label_61->setObjectName(QStringLiteral("label_61"));
 
         gridLayout_34->addWidget(label_61, 2, 2, 1, 1);
-
-        label_62 = new QLabel(groupBox_20);
-        label_62->setObjectName(QStringLiteral("label_62"));
-
-        gridLayout_34->addWidget(label_62, 3, 0, 1, 1);
-
-        comboBox_24 = new QComboBox(groupBox_20);
-        comboBox_24->setObjectName(QStringLiteral("comboBox_24"));
-
-        gridLayout_34->addWidget(comboBox_24, 0, 1, 1, 1);
 
         label_63 = new QLabel(groupBox_20);
         label_63->setObjectName(QStringLiteral("label_63"));
@@ -1102,50 +1068,95 @@ public:
 
         gridLayout_34->addWidget(label_64, 3, 2, 1, 1);
 
-        comboBox_25 = new QComboBox(groupBox_20);
-        comboBox_25->setObjectName(QStringLiteral("comboBox_25"));
+        label_59 = new QLabel(groupBox_20);
+        label_59->setObjectName(QStringLiteral("label_59"));
 
-        gridLayout_34->addWidget(comboBox_25, 5, 1, 1, 1);
+        gridLayout_34->addWidget(label_59, 1, 0, 1, 1);
 
-        label_65 = new QLabel(groupBox_20);
-        label_65->setObjectName(QStringLiteral("label_65"));
+        pushButton_19 = new QPushButton(groupBox_20);
+        pushButton_19->setObjectName(QStringLiteral("pushButton_19"));
 
-        gridLayout_34->addWidget(label_65, 5, 2, 1, 1);
+        gridLayout_34->addWidget(pushButton_19, 0, 2, 1, 1);
 
-        label_66 = new QLabel(groupBox_20);
-        label_66->setObjectName(QStringLiteral("label_66"));
+        comboBox_22 = new QComboBox(groupBox_20);
+        comboBox_22->setObjectName(QStringLiteral("comboBox_22"));
 
-        gridLayout_34->addWidget(label_66, 2, 0, 1, 1);
+        gridLayout_34->addWidget(comboBox_22, 2, 1, 1, 1);
 
-        comboBox_26 = new QComboBox(groupBox_20);
-        comboBox_26->setObjectName(QStringLiteral("comboBox_26"));
+        label_60 = new QLabel(groupBox_20);
+        label_60->setObjectName(QStringLiteral("label_60"));
 
-        gridLayout_34->addWidget(comboBox_26, 1, 1, 1, 1);
+        gridLayout_34->addWidget(label_60, 1, 2, 1, 1);
+
+        label_62 = new QLabel(groupBox_20);
+        label_62->setObjectName(QStringLiteral("label_62"));
+
+        gridLayout_34->addWidget(label_62, 3, 0, 1, 1);
+
+        label_58 = new QLabel(groupBox_20);
+        label_58->setObjectName(QStringLiteral("label_58"));
+
+        gridLayout_34->addWidget(label_58, 0, 0, 1, 1);
+
+        comboBox_24 = new QComboBox(groupBox_20);
+        comboBox_24->setObjectName(QStringLiteral("comboBox_24"));
+
+        gridLayout_34->addWidget(comboBox_24, 0, 1, 1, 1);
 
         comboBox_27 = new QComboBox(groupBox_20);
         comboBox_27->setObjectName(QStringLiteral("comboBox_27"));
 
         gridLayout_34->addWidget(comboBox_27, 4, 1, 1, 1);
 
+        comboBox_26 = new QComboBox(groupBox_20);
+        comboBox_26->setObjectName(QStringLiteral("comboBox_26"));
+
+        gridLayout_34->addWidget(comboBox_26, 1, 1, 1, 1);
+
         label_67 = new QLabel(groupBox_20);
         label_67->setObjectName(QStringLiteral("label_67"));
 
         gridLayout_34->addWidget(label_67, 4, 0, 1, 1);
 
-        pushButton_20 = new QPushButton(groupBox_20);
-        pushButton_20->setObjectName(QStringLiteral("pushButton_20"));
+        label_65 = new QLabel(groupBox_20);
+        label_65->setObjectName(QStringLiteral("label_65"));
 
-        gridLayout_34->addWidget(pushButton_20, 4, 3, 1, 1);
+        gridLayout_34->addWidget(label_65, 5, 2, 1, 1);
 
-        pushButton_21 = new QPushButton(groupBox_20);
-        pushButton_21->setObjectName(QStringLiteral("pushButton_21"));
+        comboBox_25 = new QComboBox(groupBox_20);
+        comboBox_25->setObjectName(QStringLiteral("comboBox_25"));
 
-        gridLayout_34->addWidget(pushButton_21, 5, 3, 1, 1);
+        gridLayout_34->addWidget(comboBox_25, 5, 1, 1, 1);
 
         pushButton_22 = new QPushButton(groupBox_20);
         pushButton_22->setObjectName(QStringLiteral("pushButton_22"));
 
         gridLayout_34->addWidget(pushButton_22, 0, 3, 1, 1);
+
+        label_66 = new QLabel(groupBox_20);
+        label_66->setObjectName(QStringLiteral("label_66"));
+
+        gridLayout_34->addWidget(label_66, 2, 0, 1, 1);
+
+        comboBox_9 = new QComboBox(groupBox_20);
+        comboBox_9->setObjectName(QStringLiteral("comboBox_9"));
+
+        gridLayout_34->addWidget(comboBox_9, 6, 1, 1, 1);
+
+        label_23 = new QLabel(groupBox_20);
+        label_23->setObjectName(QStringLiteral("label_23"));
+
+        gridLayout_34->addWidget(label_23, 6, 0, 1, 1);
+
+        pushButton_21 = new QPushButton(groupBox_20);
+        pushButton_21->setObjectName(QStringLiteral("pushButton_21"));
+
+        gridLayout_34->addWidget(pushButton_21, 6, 3, 1, 1);
+
+        pushButton_20 = new QPushButton(groupBox_20);
+        pushButton_20->setObjectName(QStringLiteral("pushButton_20"));
+
+        gridLayout_34->addWidget(pushButton_20, 5, 3, 1, 1);
 
 
         gridLayout_33->addLayout(gridLayout_34, 0, 0, 1, 1);
@@ -1261,35 +1272,65 @@ public:
         gridLayout_32 = new QGridLayout();
         gridLayout_32->setSpacing(6);
         gridLayout_32->setObjectName(QStringLiteral("gridLayout_32"));
-        label_48 = new QLabel(groupBox_19);
-        label_48->setObjectName(QStringLiteral("label_48"));
+        label_52 = new QLabel(groupBox_19);
+        label_52->setObjectName(QStringLiteral("label_52"));
 
-        gridLayout_32->addWidget(label_48, 2, 0, 1, 1);
-
-        label_49 = new QLabel(groupBox_19);
-        label_49->setObjectName(QStringLiteral("label_49"));
-
-        gridLayout_32->addWidget(label_49, 0, 0, 1, 1);
-
-        label_50 = new QLabel(groupBox_19);
-        label_50->setObjectName(QStringLiteral("label_50"));
-
-        gridLayout_32->addWidget(label_50, 6, 0, 1, 1);
+        gridLayout_32->addWidget(label_52, 4, 0, 1, 1);
 
         label_51 = new QLabel(groupBox_19);
         label_51->setObjectName(QStringLiteral("label_51"));
 
         gridLayout_32->addWidget(label_51, 5, 0, 1, 1);
 
-        label_52 = new QLabel(groupBox_19);
-        label_52->setObjectName(QStringLiteral("label_52"));
+        label_48 = new QLabel(groupBox_19);
+        label_48->setObjectName(QStringLiteral("label_48"));
 
-        gridLayout_32->addWidget(label_52, 4, 0, 1, 1);
+        gridLayout_32->addWidget(label_48, 2, 0, 1, 1);
+
+        label_50 = new QLabel(groupBox_19);
+        label_50->setObjectName(QStringLiteral("label_50"));
+
+        gridLayout_32->addWidget(label_50, 6, 0, 1, 1);
 
         label_53 = new QLabel(groupBox_19);
         label_53->setObjectName(QStringLiteral("label_53"));
 
         gridLayout_32->addWidget(label_53, 2, 3, 1, 1);
+
+        label_49 = new QLabel(groupBox_19);
+        label_49->setObjectName(QStringLiteral("label_49"));
+
+        gridLayout_32->addWidget(label_49, 0, 0, 1, 1);
+
+        pushButton_18 = new QPushButton(groupBox_19);
+        pushButton_18->setObjectName(QStringLiteral("pushButton_18"));
+
+        gridLayout_32->addWidget(pushButton_18, 0, 4, 1, 1);
+
+        label_56 = new QLabel(groupBox_19);
+        label_56->setObjectName(QStringLiteral("label_56"));
+
+        gridLayout_32->addWidget(label_56, 3, 3, 1, 1);
+
+        comboBox_21 = new QComboBox(groupBox_19);
+        comboBox_21->setObjectName(QStringLiteral("comboBox_21"));
+
+        gridLayout_32->addWidget(comboBox_21, 5, 2, 1, 1);
+
+        pushButton_15 = new QPushButton(groupBox_19);
+        pushButton_15->setObjectName(QStringLiteral("pushButton_15"));
+
+        gridLayout_32->addWidget(pushButton_15, 0, 3, 1, 1);
+
+        label_55 = new QLabel(groupBox_19);
+        label_55->setObjectName(QStringLiteral("label_55"));
+
+        gridLayout_32->addWidget(label_55, 4, 3, 1, 1);
+
+        lineEdit_12 = new QLineEdit(groupBox_19);
+        lineEdit_12->setObjectName(QStringLiteral("lineEdit_12"));
+
+        gridLayout_32->addWidget(lineEdit_12, 6, 2, 1, 1);
 
         comboBox_12 = new QComboBox(groupBox_19);
         comboBox_12->setObjectName(QStringLiteral("comboBox_12"));
@@ -1306,60 +1347,40 @@ public:
 
         gridLayout_32->addWidget(comboBox_19, 4, 2, 1, 1);
 
-        label_54 = new QLabel(groupBox_19);
-        label_54->setObjectName(QStringLiteral("label_54"));
+        label_57 = new QLabel(groupBox_19);
+        label_57->setObjectName(QStringLiteral("label_57"));
 
-        gridLayout_32->addWidget(label_54, 3, 0, 1, 1);
+        gridLayout_32->addWidget(label_57, 6, 3, 1, 1);
 
         comboBox_20 = new QComboBox(groupBox_19);
         comboBox_20->setObjectName(QStringLiteral("comboBox_20"));
 
         gridLayout_32->addWidget(comboBox_20, 0, 2, 1, 1);
 
-        pushButton_15 = new QPushButton(groupBox_19);
-        pushButton_15->setObjectName(QStringLiteral("pushButton_15"));
+        label_54 = new QLabel(groupBox_19);
+        label_54->setObjectName(QStringLiteral("label_54"));
 
-        gridLayout_32->addWidget(pushButton_15, 0, 3, 1, 1);
+        gridLayout_32->addWidget(label_54, 3, 0, 1, 1);
 
-        label_55 = new QLabel(groupBox_19);
-        label_55->setObjectName(QStringLiteral("label_55"));
+        label_22 = new QLabel(groupBox_19);
+        label_22->setObjectName(QStringLiteral("label_22"));
 
-        gridLayout_32->addWidget(label_55, 4, 3, 1, 1);
+        gridLayout_32->addWidget(label_22, 7, 0, 1, 1);
 
-        comboBox_21 = new QComboBox(groupBox_19);
-        comboBox_21->setObjectName(QStringLiteral("comboBox_21"));
+        comboBox_8 = new QComboBox(groupBox_19);
+        comboBox_8->setObjectName(QStringLiteral("comboBox_8"));
 
-        gridLayout_32->addWidget(comboBox_21, 5, 2, 1, 1);
-
-        label_56 = new QLabel(groupBox_19);
-        label_56->setObjectName(QStringLiteral("label_56"));
-
-        gridLayout_32->addWidget(label_56, 3, 3, 1, 1);
-
-        label_57 = new QLabel(groupBox_19);
-        label_57->setObjectName(QStringLiteral("label_57"));
-
-        gridLayout_32->addWidget(label_57, 6, 3, 1, 1);
-
-        lineEdit_12 = new QLineEdit(groupBox_19);
-        lineEdit_12->setObjectName(QStringLiteral("lineEdit_12"));
-
-        gridLayout_32->addWidget(lineEdit_12, 6, 2, 1, 1);
+        gridLayout_32->addWidget(comboBox_8, 7, 2, 1, 1);
 
         pushButton_16 = new QPushButton(groupBox_19);
         pushButton_16->setObjectName(QStringLiteral("pushButton_16"));
 
-        gridLayout_32->addWidget(pushButton_16, 6, 4, 1, 1);
+        gridLayout_32->addWidget(pushButton_16, 7, 4, 1, 1);
 
         pushButton_17 = new QPushButton(groupBox_19);
         pushButton_17->setObjectName(QStringLiteral("pushButton_17"));
 
-        gridLayout_32->addWidget(pushButton_17, 5, 4, 1, 1);
-
-        pushButton_18 = new QPushButton(groupBox_19);
-        pushButton_18->setObjectName(QStringLiteral("pushButton_18"));
-
-        gridLayout_32->addWidget(pushButton_18, 0, 4, 1, 1);
+        gridLayout_32->addWidget(pushButton_17, 6, 4, 1, 1);
 
         gridLayout_32->setColumnStretch(0, 1);
         gridLayout_32->setColumnStretch(2, 1);
@@ -1805,7 +1826,7 @@ public:
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        verticalLayout_6->setContentsMargins(-1, -1, 30, 610);
+        verticalLayout_6->setContentsMargins(-1, -1, 30, 640);
         pushButton_settings = new QPushButton(SystemSettings);
         pushButton_settings->setObjectName(QStringLiteral("pushButton_settings"));
 
@@ -1840,8 +1861,8 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(3);
-        toolBox->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(2);
+        toolBox->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindowClass);
@@ -1880,7 +1901,6 @@ public:
          << QApplication::translate("MainWindowClass", ".BMP", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", ".PNG", Q_NULLPTR)
         );
-        groupBox_15->setTitle(QApplication::translate("MainWindowClass", "\345\215\225\345\217\215\347\233\270\346\234\272", Q_NULLPTR));
         groupBox_16->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220", Q_NULLPTR));
         label_6->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_6->clear();
@@ -1954,8 +1974,8 @@ public:
         label_77->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_78->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_75->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
-        pushButton_defaults->setText(QApplication::translate("MainWindowClass", "\346\201\242\345\244\215\351\273\230\350\256\244\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_save->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\351\205\215\347\275\256", Q_NULLPTR));
+        pushButton_defaults->setText(QApplication::translate("MainWindowClass", "\346\201\242\345\244\215\351\273\230\350\256\244\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_3->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\346\240\241\346\255\243\357\274\210\346\243\213\347\233\230\346\240\274\346\240\207\345\256\232\357\274\211", Q_NULLPTR));
         pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
         label_20->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\346\240\274\345\274\217", Q_NULLPTR));
@@ -1994,12 +2014,14 @@ public:
         groupBox_precamera8->setTitle(QApplication::translate("MainWindowClass", "Camera8", Q_NULLPTR));
         label_precamera8->setText(QString());
         groupBox_20->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\240\267\345\223\201\345\271\263\351\235\242\346\216\247\345\210\266", Q_NULLPTR));
-        label_58->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        label_61->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_63->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
+        label_64->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_59->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
         pushButton_19->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245", Q_NULLPTR));
         label_60->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
-        label_61->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_62->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
+        label_58->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_24->clear();
         comboBox_24->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -2013,14 +2035,18 @@ public:
          << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
         );
-        label_63->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
-        label_64->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_65->setText(QApplication::translate("MainWindowClass", "\302\260", Q_NULLPTR));
-        label_66->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         label_67->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
-        pushButton_20->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
-        pushButton_21->setText(QApplication::translate("MainWindowClass", "\346\232\202\345\201\234", Q_NULLPTR));
+        label_65->setText(QApplication::translate("MainWindowClass", "\302\260", Q_NULLPTR));
         pushButton_22->setText(QApplication::translate("MainWindowClass", "\347\273\210\346\255\242", Q_NULLPTR));
+        label_66->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_9->clear();
+        comboBox_9->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "CW", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "CCW", Q_NULLPTR)
+        );
+        label_23->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\346\226\271\345\220\221", Q_NULLPTR));
+        pushButton_21->setText(QApplication::translate("MainWindowClass", "\346\232\202\345\201\234", Q_NULLPTR));
+        pushButton_20->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
         groupBox_17->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220\346\265\213\350\257\225", Q_NULLPTR));
         label_5->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_4->clear();
@@ -2051,13 +2077,17 @@ public:
         pushButton->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242", Q_NULLPTR));
         label_31->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         groupBox_19->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\273\221\350\275\250\346\216\247\345\210\266", Q_NULLPTR));
-        label_48->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
-        label_49->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
-        label_50->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\350\267\235\347\246\273", Q_NULLPTR));
-        label_51->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
         label_52->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
+        label_51->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
+        label_48->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
+        label_50->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\350\267\235\347\246\273", Q_NULLPTR));
         label_53->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
-        label_54->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
+        label_49->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        pushButton_18->setText(QApplication::translate("MainWindowClass", "\347\273\210\346\255\242", Q_NULLPTR));
+        label_56->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        pushButton_15->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245", Q_NULLPTR));
+        label_55->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_57->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));
         comboBox_20->clear();
         comboBox_20->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -2071,13 +2101,15 @@ public:
          << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
         );
-        pushButton_15->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245", Q_NULLPTR));
-        label_55->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_56->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_57->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));
+        label_54->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
+        label_22->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\346\226\271\345\220\221", Q_NULLPTR));
+        comboBox_8->clear();
+        comboBox_8->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "CW", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "CCW", Q_NULLPTR)
+        );
         pushButton_16->setText(QApplication::translate("MainWindowClass", "\346\232\202\345\201\234", Q_NULLPTR));
         pushButton_17->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
-        pushButton_18->setText(QApplication::translate("MainWindowClass", "\347\273\210\346\255\242", Q_NULLPTR));
         groupBox_18->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\346\265\213\350\257\225", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindowClass", "\346\230\276\347\244\272\345\233\276\345\203\217", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272ID", Q_NULLPTR));

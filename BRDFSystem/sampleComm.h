@@ -30,11 +30,11 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #include "cnComm.h"
 
 #define STEP_FEEDBACK      "DONE"    //电机反馈标识
-#define STEP_ACCELERATE    5       //电机加速度
-#define STEP_DECELERATE    5       //电机减速度
+#define STEP_ACCELERATE    10       //电机加速度
+#define STEP_DECELERATE    10       //电机减速度
 #define STEP_RESOLUTION    8        //电机分辨率
 #define STEP_TIMEOUT       120000   //超时,毫秒
-#define STEP_SAFESTEP     500000	 //归位电机保护步数,最多转这么多步后会停下来
+#define STEP_SAFESTEP	   500000	 //归位电机保护步数,最多转这么多步后会停下来
 
 class SampleComm : public CRs232Comm
 {
@@ -45,10 +45,10 @@ public:
 	//初始化设备
     bool Init(int wheel_port, int wheel_step, double velocity, int accelerate, int decelerate, int resolution, int wheel_homeadj);
 	bool Init(int wheel_port);
-	//调整到下一个通道的位置
+	//旋转到下一角度
 	bool  GotoNextPos(int step);
 	//设置速度
-	bool SetVel(double v);
+	//bool SetVel(double v);
 	//归位
 	bool Reset();
 	//停止设备

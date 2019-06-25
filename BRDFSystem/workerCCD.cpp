@@ -8,6 +8,11 @@ QObject(parent)
 {
 	_capture = 0;
 	_measurement = 0;
+	//connect(this, SIGNAL(startMeasureMent(Mat)), _workerMeasurement, SLOT(StartMesurement()));
+	
+	workerMeasurement = new WorkerMeasurement(this);//指明每一个采集线程的父指针
+	threadMeasurement = new QThread();
+	workerMeasurement->moveToThread(threadMeasurement);
 }
 
 void WorkerCCD::StartTimer()
@@ -22,15 +27,23 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 	{
 		_cameraAVT->GetImageSize(_width, _height);
 		_pImageFrame = _cameraAVT->CaptureImage();
-		//_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-		//_img = QImage(_mat.data, _mat.cols, _mat.rows, static_cast<int>(_mat.step), QImage::Format_RGB888);
 		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
+		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 		if (_capture == 1)
 		{
-			_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 			_cameraAVT->SaveImage(_mat);
 		}
-		emit sendingImg(_img);
+		if (_measurement == 1)
+		{
+			if (!threadMeasurement->isRunning())
+			{
+				threadMeasurement->start();
+				connect(this, SIGNAL(startMeasurement()), workerMeasurement, SLOT(StartTimer()));
+				emit startMeasurement();
+			}
+		}
+		emit sendingMat(_workerID, _mat);
+		emit sendingImg(_workerID, _img);
 	}
 }
 

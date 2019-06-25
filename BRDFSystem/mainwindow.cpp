@@ -14,6 +14,7 @@ QMainWindow(parent)
 	this->setAttribute(Qt::WA_DeleteOnClose, true);//关闭窗口时清空内存
 	TurnToMeasurement1();
 	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	
 	////页面切换
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
@@ -28,6 +29,13 @@ QMainWindow(parent)
 	////采集页面
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
+
+	//for (int i = 0; i < CAM_NUM; i++)
+	//{
+	//	workerMeasurement[i] = new WorkerMeasurement(i, _system);
+	//	threadMeasurement[i] = new QThread();
+	//	workerMeasurement[i]->moveToThread(threadMeasurement[i]);
+	//}
 
 	////相机预处理页面
 	this->ui.pushButton_captureContinuously->setEnabled(false);
@@ -47,8 +55,8 @@ QMainWindow(parent)
 		//	threadCCD[i]->terminate();
 		//}
 	}
-	connect(workerCCD[0], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage0(QImage)), Qt::QueuedConnection);
-	connect(workerCCD[1], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage1(QImage)), Qt::QueuedConnection);
+	connect(workerCCD[0], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
+	connect(workerCCD[1], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
 	//connect(workerCCD[2], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage2(QImage)), Qt::QueuedConnection);
 	//connect(workerCCD[3], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage3(QImage)), Qt::QueuedConnection);
 	//connect(workerCCD[4], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage4(QImage)), Qt::QueuedConnection);
@@ -82,9 +90,38 @@ MainWindow::~MainWindow()
 	AVTCamera::FiniVimba(_system);
 }
 
+////////////////////////////////私有槽函数/////////////////////////////////////
+////////////////////////////////配置页面/////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_Save_Pressed
+// 描述：根据菜单栏选项切换主窗口
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Save_Pressed()
+{
+	
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_Save_Pressed
+// 描述：根据菜单栏选项切换主窗口
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Defaults_Pressed()
+{
+	
+}
+
 ////////////////////////////////切换页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToMeasurement1
 // 描述：根据菜单栏选项切换主窗口
 // 输入：Null
 // 输出：Null
@@ -97,91 +134,56 @@ void MainWindow::TurnToMeasurement1()
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);	
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToMeasurement2
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement2()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToMeasurement3
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement3()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToModeling1
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling1()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToModeling2
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling2()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToSettings
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToSettings()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Settings);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToTest
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToTest()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Test);
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
+// 函数：TurnToPreCamera
 // 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToPreCamera()
 {
@@ -211,7 +213,8 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 	this->ui.lineEdit_materialName->setEnabled(false);
 	
 	//slideComm->SlideMoveIn();
-	//Sleep(1000);//等待滑轨就位
+	//Sleep(10000);//等待滑轨就位
+	CreateFolds("..\\imgs_measurement");
 
 	for (int i = 0; i < CAM_NUM; i++)
 	{
@@ -222,7 +225,15 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 			emit startTimer();
 			this->workerCCD[i]->_measurement = 1;
 		}
+		//if (!threadMeasurement[i]->isRunning())
+		//{
+		//	threadMeasurement[i]->start();
+		//	connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
+		//	emit startTimer();
+		//	this->workerCCD[i]->_measurement = 1;
+		//}
 	}
+
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：StopMeasurement
@@ -273,30 +284,10 @@ void MainWindow::PushButton_IniCCD_Pressed()
 	ui.pushButton_finiCCD->setEnabled(true);
 
 	_displayFlag = 0;
+	CreateFolds("..\\imgs_calibration");
+	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
-		string defaultPath = "..\\imgs_calibration";
-		///////Unicode字符集问题/////////
-		WCHAR wszStr[256];
-		memset(wszStr, 0, sizeof(wszStr));
-		MultiByteToWideChar(CP_ACP, 0, defaultPath.c_str(), strlen(defaultPath.c_str()) + 1, wszStr,
-			sizeof(wszStr) / sizeof(wszStr[0]));
-
-		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
-		{
-			string newFolderPath = defaultPath + "\\camera" + to_string(i);
-			///////Unicode字符集问题/////////
-			WCHAR wszNewStr[256];
-			memset(wszNewStr, 0, sizeof(wszNewStr));
-			MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
-				sizeof(wszNewStr) / sizeof(wszNewStr[0]));
-
-			if (!CreateDirectory(wszNewStr, NULL))
-			{
-				cout << "文件夹已存在！" << endl;
-			}
-		}
-
 		//workerCCD[i]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//图像格式老问题，5.9又踩坑
 		if (!threadCCD[i]->isRunning())
 		{
@@ -333,236 +324,312 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage0(QImage img)
+void MainWindow::DisplayImage(int workerID, QImage img)
 {
 	if (_displayFlag == 0)
 	{
-		if (!img.isNull())
-		{
-			//将图像由QImage格式转换为QPixmap
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera0->width(), ui.label_precamera0->height());
-			this->ui.label_precamera0->setPixmap(pic);
-			this->ui.label_precamera0->setScaledContents(true);//限定qlabel大小
-		}
+		if (workerID == 0)
+			ShowImgOnQLabel(this->ui.label_precamera0, img);
+		if (workerID == 1)
+			ShowImgOnQLabel(this->ui.label_precamera1, img);
+		if (workerID == 2)
+			ShowImgOnQLabel(this->ui.label_precamera2, img);
+		if (workerID == 3)
+			ShowImgOnQLabel(this->ui.label_precamera3, img);
+		if (workerID == 4)
+			ShowImgOnQLabel(this->ui.label_precamera4, img);
+		if (workerID == 5)
+			ShowImgOnQLabel(this->ui.label_precamera5, img);
+		if (workerID == 6)
+			ShowImgOnQLabel(this->ui.label_precamera6, img);
+		if (workerID == 7)
+			ShowImgOnQLabel(this->ui.label_precamera7, img);
+		if (workerID == 8)
+			ShowImgOnQLabel(this->ui.label_precamera8, img);
 	}
 	else if (_displayFlag == 1)
 	{
-		if (!img.isNull())
+		if (workerID == 0)
+			ShowImgOnQLabel(this->ui.label_camera0, img);
+		if (workerID == 1)
+			ShowImgOnQLabel(this->ui.label_camera1, img);
+		if (workerID == 2)
+			ShowImgOnQLabel(this->ui.label_camera2, img);
+		if (workerID == 3)
+			ShowImgOnQLabel(this->ui.label_camera3, img);
+		if (workerID == 4)
+			ShowImgOnQLabel(this->ui.label_camera4, img);
+		if (workerID == 5)
+			ShowImgOnQLabel(this->ui.label_camera5, img);
+		if (workerID == 6)
+			ShowImgOnQLabel(this->ui.label_camera6, img);
+		if (workerID == 7)
+			ShowImgOnQLabel(this->ui.label_camera7, img);
+		if (workerID == 8)
+			ShowImgOnQLabel(this->ui.label_camera8, img);
+	}
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage1
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage1(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera1->width(), ui.label_precamera1->height());
+//			this->ui.label_precamera1->setPixmap(pic);
+//			this->ui.label_precamera1->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera1->width(), ui.label_camera1->height());
+//			this->ui.label_camera1->setPixmap(pic);
+//			this->ui.label_camera1->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage2
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage2(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera2->width(), ui.label_precamera2->height());
+//			this->ui.label_precamera2->setPixmap(pic);
+//			this->ui.label_precamera2->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera2->width(), ui.label_camera2->height());
+//			this->ui.label_camera2->setPixmap(pic);
+//			this->ui.label_camera2->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage3
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage3(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera3->width(), ui.label_precamera3->height());
+//			this->ui.label_precamera3->setPixmap(pic);
+//			this->ui.label_precamera3->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera3->width(), ui.label_camera3->height());
+//			this->ui.label_camera3->setPixmap(pic);
+//			this->ui.label_camera3->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage4
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage4(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera4->width(), ui.label_precamera4->height());
+//			this->ui.label_precamera4->setPixmap(pic);
+//			this->ui.label_precamera4->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera4->width(), ui.label_camera4->height());
+//			this->ui.label_camera4->setPixmap(pic);
+//			this->ui.label_camera4->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage5
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage5(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera5->width(), ui.label_precamera5->height());
+//			this->ui.label_precamera5->setPixmap(pic);
+//			this->ui.label_precamera5->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera5->width(), ui.label_camera5->height());
+//			this->ui.label_camera5->setPixmap(pic);
+//			this->ui.label_camera5->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage6
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage6(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera6->width(), ui.label_precamera6->height());
+//			this->ui.label_precamera6->setPixmap(pic);
+//			this->ui.label_precamera6->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera6->width(), ui.label_camera6->height());
+//			this->ui.label_camera6->setPixmap(pic);
+//			this->ui.label_camera6->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage7
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage7(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera7->width(), ui.label_precamera7->height());
+//			this->ui.label_precamera7->setPixmap(pic);
+//			this->ui.label_precamera7->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera7->width(), ui.label_camera7->height());
+//			this->ui.label_camera7->setPixmap(pic);
+//			this->ui.label_camera7->setScaledContents(true);
+//		}
+//	}
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DisplayImage8
+//////////////////////////////////////////////////////////////////////////////
+//void MainWindow::DisplayImage8(QImage img)
+//{
+//	if (_displayFlag == 0)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_precamera8->width(), ui.label_precamera8->height());
+//			this->ui.label_precamera8->setPixmap(pic);
+//			this->ui.label_precamera8->setScaledContents(true);
+//		}
+//	}
+//	else if (_displayFlag == 1)
+//	{
+//		if (!img.isNull())
+//		{
+//			QPixmap pic = QPixmap::fromImage(img);
+//			pic = pic.scaled(ui.label_camera8->width(), ui.label_camera8->height());
+//			this->ui.label_camera8->setPixmap(pic);
+//			this->ui.label_camera8->setScaledContents(true);
+//		}
+//	}
+//}
+
+////////////////////////////////////私有函数////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+// 函数：CreateFolds
+// 描述：在指定目录下创建相机对应文件夹
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::CreateFolds(string root)
+{
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		///////Unicode字符集问题/////////
+		WCHAR wszStr[256];
+		memset(wszStr, 0, sizeof(wszStr));
+		MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
+			sizeof(wszStr) / sizeof(wszStr[0]));
+
+		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
 		{
-			//将图像由QImage格式转换为QPixmap
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera0->width(), ui.label_camera0->height());
-			this->ui.label_camera0->setPixmap(pic);
-			this->ui.label_camera0->setScaledContents(true);//限定qlabel大小
+			string newFolderPath = root + "\\camera" + to_string(i);
+			///////Unicode字符集问题/////////
+			WCHAR wszNewStr[256];
+			memset(wszNewStr, 0, sizeof(wszNewStr));
+			MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
+				sizeof(wszNewStr) / sizeof(wszNewStr[0]));
+
+			if (!CreateDirectory(wszNewStr, NULL))
+			{
+				cout << "文件夹已存在！" << endl;
+			}
 		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage1
+// 函数：ShowImgOnQLabel
+// 描述：在指定Qlabel上显示采集图像
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage1(QImage img)
+void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 {
-	if (_displayFlag == 0)
+	if (!img.isNull())
 	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera1->width(), ui.label_precamera1->height());
-			this->ui.label_precamera1->setPixmap(pic);
-			this->ui.label_precamera1->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera1->width(), ui.label_camera1->height());
-			this->ui.label_camera1->setPixmap(pic);
-			this->ui.label_camera1->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage2
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage2(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera2->width(), ui.label_precamera2->height());
-			this->ui.label_precamera2->setPixmap(pic);
-			this->ui.label_precamera2->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera2->width(), ui.label_camera2->height());
-			this->ui.label_camera2->setPixmap(pic);
-			this->ui.label_camera2->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage3
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage3(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera3->width(), ui.label_precamera3->height());
-			this->ui.label_precamera3->setPixmap(pic);
-			this->ui.label_precamera3->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera3->width(), ui.label_camera3->height());
-			this->ui.label_camera3->setPixmap(pic);
-			this->ui.label_camera3->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage4
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage4(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera4->width(), ui.label_precamera4->height());
-			this->ui.label_precamera4->setPixmap(pic);
-			this->ui.label_precamera4->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera4->width(), ui.label_camera4->height());
-			this->ui.label_camera4->setPixmap(pic);
-			this->ui.label_camera4->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage5
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage5(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera5->width(), ui.label_precamera5->height());
-			this->ui.label_precamera5->setPixmap(pic);
-			this->ui.label_precamera5->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera5->width(), ui.label_camera5->height());
-			this->ui.label_camera5->setPixmap(pic);
-			this->ui.label_camera5->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage6
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage6(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera6->width(), ui.label_precamera6->height());
-			this->ui.label_precamera6->setPixmap(pic);
-			this->ui.label_precamera6->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera6->width(), ui.label_camera6->height());
-			this->ui.label_camera6->setPixmap(pic);
-			this->ui.label_camera6->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage7
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage7(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera7->width(), ui.label_precamera7->height());
-			this->ui.label_precamera7->setPixmap(pic);
-			this->ui.label_precamera7->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera7->width(), ui.label_camera7->height());
-			this->ui.label_camera7->setPixmap(pic);
-			this->ui.label_camera7->setScaledContents(true);
-		}
-	}
-}
-////////////////////////////////////////////////////////////////////////////
-// 函数：DisplayImage8
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::DisplayImage8(QImage img)
-{
-	if (_displayFlag == 0)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_precamera8->width(), ui.label_precamera8->height());
-			this->ui.label_precamera8->setPixmap(pic);
-			this->ui.label_precamera8->setScaledContents(true);
-		}
-	}
-	else if (_displayFlag == 1)
-	{
-		if (!img.isNull())
-		{
-			QPixmap pic = QPixmap::fromImage(img);
-			pic = pic.scaled(ui.label_camera8->width(), ui.label_camera8->height());
-			this->ui.label_camera8->setPixmap(pic);
-			this->ui.label_camera8->setScaledContents(true);
-		}
+		QPixmap pic = QPixmap::fromImage(img);
+		pic = pic.scaled(qlabel->width(), qlabel->height());
+		qlabel->setPixmap(pic);
+		qlabel->setScaledContents(true);
 	}
 }

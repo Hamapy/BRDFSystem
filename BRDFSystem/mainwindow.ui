@@ -20,10 +20,10 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>3</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="Settings">
-         <layout class="QGridLayout" name="gridLayout_45">
+         <layout class="QGridLayout" name="gridLayout_45" rowstretch="2,4,1">
           <item row="0" column="0">
            <widget class="QGroupBox" name="groupBox_14">
             <property name="title">
@@ -107,14 +107,7 @@
             </layout>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QGroupBox" name="groupBox_15">
-            <property name="title">
-             <string>单反相机</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+          <item row="0" column="1">
            <widget class="QGroupBox" name="groupBox_16">
             <property name="title">
              <string>光源</string>
@@ -241,7 +234,7 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_21">
             <property name="title">
              <string>样品台电机驱动</string>
@@ -393,7 +386,7 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="2">
+          <item row="1" column="1">
            <widget class="QGroupBox" name="groupBox_22">
             <property name="title">
              <string>滑轨电机驱动</string>
@@ -545,20 +538,7 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="2">
-           <widget class="QPushButton" name="pushButton_defaults">
-            <property name="font">
-             <font>
-              <family>Times New Roman</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>恢复默认配置</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
+          <item row="2" column="0">
            <widget class="QPushButton" name="pushButton_save">
             <property name="font">
              <font>
@@ -568,6 +548,19 @@
             </property>
             <property name="text">
              <string>保存配置</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="pushButton_defaults">
+            <property name="font">
+             <font>
+              <family>Times New Roman</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>恢复默认配置</string>
             </property>
            </widget>
           </item>
@@ -906,10 +899,27 @@
             <layout class="QGridLayout" name="gridLayout_33">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_34">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_58">
+               <item row="3" column="1">
+                <widget class="QComboBox" name="comboBox_23"/>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="label_61">
                  <property name="text">
-                  <string>端口选择</string>
+                  <string>m/s^2</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_63">
+                 <property name="text">
+                  <string>样品旋转角度</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="label_64">
+                 <property name="text">
+                  <string>m/s^2</string>
                  </property>
                 </widget>
                </item>
@@ -920,18 +930,15 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="comboBox_22"/>
-               </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="comboBox_23"/>
-               </item>
                <item row="0" column="2">
                 <widget class="QPushButton" name="pushButton_19">
                  <property name="text">
                   <string>连接</string>
                  </property>
                 </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="comboBox_22"/>
                </item>
                <item row="1" column="2">
                 <widget class="QLabel" name="label_60">
@@ -940,17 +947,17 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_61">
-                 <property name="text">
-                  <string>m/s^2</string>
-                 </property>
-                </widget>
-               </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_62">
                  <property name="text">
                   <string>步进电机减速度</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_58">
+                 <property name="text">
+                  <string>端口选择</string>
                  </property>
                 </widget>
                </item>
@@ -1008,27 +1015,33 @@
                  </item>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_63">
+               <item row="4" column="1">
+                <widget class="QComboBox" name="comboBox_27"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="comboBox_26"/>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_67">
                  <property name="text">
-                  <string>样品旋转角度</string>
+                  <string>步进电机分辨率</string>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="2">
-                <widget class="QLabel" name="label_64">
+               <item row="5" column="2">
+                <widget class="QLabel" name="label_65">
                  <property name="text">
-                  <string>m/s^2</string>
+                  <string>°</string>
                  </property>
                 </widget>
                </item>
                <item row="5" column="1">
                 <widget class="QComboBox" name="comboBox_25"/>
                </item>
-               <item row="5" column="2">
-                <widget class="QLabel" name="label_65">
+               <item row="0" column="3">
+                <widget class="QPushButton" name="pushButton_22">
                  <property name="text">
-                  <string>°</string>
+                  <string>终止</string>
                  </property>
                 </widget>
                </item>
@@ -1039,37 +1052,38 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="comboBox_26"/>
+               <item row="6" column="1">
+                <widget class="QComboBox" name="comboBox_9">
+                 <item>
+                  <property name="text">
+                   <string>CW</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CCW</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
-               <item row="4" column="1">
-                <widget class="QComboBox" name="comboBox_27"/>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_67">
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_23">
                  <property name="text">
-                  <string>步进电机分辨率</string>
+                  <string>样品旋转方向</string>
                  </property>
                 </widget>
                </item>
-               <item row="4" column="3">
-                <widget class="QPushButton" name="pushButton_20">
-                 <property name="text">
-                  <string>启动</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="3">
+               <item row="6" column="3">
                 <widget class="QPushButton" name="pushButton_21">
                  <property name="text">
                   <string>暂停</string>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="3">
-                <widget class="QPushButton" name="pushButton_22">
+               <item row="5" column="3">
+                <widget class="QPushButton" name="pushButton_20">
                  <property name="text">
-                  <string>终止</string>
+                  <string>启动</string>
                  </property>
                 </widget>
                </item>
@@ -1244,24 +1258,10 @@
             <layout class="QGridLayout" name="gridLayout_31">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_32" columnstretch="1,0,1,1,1">
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_48">
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_52">
                  <property name="text">
-                  <string>伺服电机速度</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_49">
-                 <property name="text">
-                  <string>端口选择</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_50">
-                 <property name="text">
-                  <string>滑台移动距离</string>
+                  <string>伺服电机减速度</string>
                  </property>
                 </widget>
                </item>
@@ -1272,10 +1272,17 @@
                  </property>
                 </widget>
                </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_52">
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_48">
                  <property name="text">
-                  <string>伺服电机减速度</string>
+                  <string>伺服电机速度</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_50">
+                 <property name="text">
+                  <string>滑台移动距离</string>
                  </property>
                 </widget>
                </item>
@@ -1286,6 +1293,47 @@
                  </property>
                 </widget>
                </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_49">
+                 <property name="text">
+                  <string>端口选择</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QPushButton" name="pushButton_18">
+                 <property name="text">
+                  <string>终止</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="3">
+                <widget class="QLabel" name="label_56">
+                 <property name="text">
+                  <string>m/s^2</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QComboBox" name="comboBox_21"/>
+               </item>
+               <item row="0" column="3">
+                <widget class="QPushButton" name="pushButton_15">
+                 <property name="text">
+                  <string>连接</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="3">
+                <widget class="QLabel" name="label_55">
+                 <property name="text">
+                  <string>m/s^2</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QLineEdit" name="lineEdit_12"/>
+               </item>
                <item row="3" column="2">
                 <widget class="QComboBox" name="comboBox_12"/>
                </item>
@@ -1295,10 +1343,10 @@
                <item row="4" column="2">
                 <widget class="QComboBox" name="comboBox_19"/>
                </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_54">
+               <item row="6" column="3">
+                <widget class="QLabel" name="label_57">
                  <property name="text">
-                  <string>伺服电机加速度</string>
+                  <string>cm</string>
                  </property>
                 </widget>
                </item>
@@ -1356,58 +1404,45 @@
                  </item>
                 </widget>
                </item>
-               <item row="0" column="3">
-                <widget class="QPushButton" name="pushButton_15">
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_54">
                  <property name="text">
-                  <string>连接</string>
+                  <string>伺服电机加速度</string>
                  </property>
                 </widget>
                </item>
-               <item row="4" column="3">
-                <widget class="QLabel" name="label_55">
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_22">
                  <property name="text">
-                  <string>m/s^2</string>
+                  <string>滑台移动方向</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="2">
-                <widget class="QComboBox" name="comboBox_21"/>
-               </item>
-               <item row="3" column="3">
-                <widget class="QLabel" name="label_56">
-                 <property name="text">
-                  <string>m/s^2</string>
-                 </property>
+               <item row="7" column="2">
+                <widget class="QComboBox" name="comboBox_8">
+                 <item>
+                  <property name="text">
+                   <string>CW</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CCW</string>
+                  </property>
+                 </item>
                 </widget>
                </item>
-               <item row="6" column="3">
-                <widget class="QLabel" name="label_57">
-                 <property name="text">
-                  <string>cm</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="2">
-                <widget class="QLineEdit" name="lineEdit_12"/>
-               </item>
-               <item row="6" column="4">
+               <item row="7" column="4">
                 <widget class="QPushButton" name="pushButton_16">
                  <property name="text">
                   <string>暂停</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="4">
+               <item row="6" column="4">
                 <widget class="QPushButton" name="pushButton_17">
                  <property name="text">
                   <string>启动</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="4">
-                <widget class="QPushButton" name="pushButton_18">
-                 <property name="text">
-                  <string>终止</string>
                  </property>
                 </widget>
                </item>
@@ -1869,7 +1904,7 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="MaterialMeasurement">
        <property name="geometry">
@@ -1975,7 +2010,7 @@
            <number>30</number>
           </property>
           <property name="bottomMargin">
-           <number>610</number>
+           <number>640</number>
           </property>
           <item>
            <widget class="QPushButton" name="pushButton_settings">

@@ -64,8 +64,21 @@ bool AVTCamera::IniCamera()
 	{
 		//cout << "相机初始化完成" << endl;
 		_camera = _cameras[_cameraID];
+
 		if (VmbErrorSuccess == _camera->Open(VmbAccessModeFull))//完全读写相机权限
 		{
+			//相机参数初始化设置
+			_camera->GetFeatureByName("PixelFormat", _feature);
+			_feature->SetValue("RGB8Packed");//这个像素源格式很重要，否则后续的QImage、QPixmap包括Mat的数据转换都会报错
+			_camera->GetFeatureByName("Gain", _feature);
+			_feature->SetValue(0);
+			_camera->GetFeatureByName("BlackLevel", _feature);
+			_feature->SetValue(0);
+			_camera->GetFeatureByName("Gamma", _feature);
+			_feature->SetValue(0);
+			//_camera->GetFeatureByName("Hue", _feature);
+			//_feature->SetValue(0);
+
 			string name;
 			_camera->GetName(name);
 			string ID;
@@ -86,18 +99,15 @@ bool AVTCamera::IniCamera()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void AVTCamera::SetCameraSettings(double exposureTime, double gain, double blackLevel)
+void AVTCamera::CameraSettings(double exposureTime, double gain, double blackLevel)
 {
-	_camera->GetFeatureByName("ExposureTime", feature);
-	feature->SetValue(exposureTime);
-	_camera->GetFeatureByName("Gain", feature);
-	feature->SetValue(gain);
-	_camera->GetFeatureByName("BlackLevel", feature);
-	feature->SetValue(blackLevel);
-	_camera->GetFeatureByName("PixelFormat", feature);
-	//feature->SetValue("BayerRG8");
-	feature->SetValue("RGB8Packed");//这个像素源格式很重要，否则后续的QImage、QPixmap包括Mat的数据转换都会报错
-
+	_camera->GetFeatureByName("ExposureTime", _feature);
+	_feature->SetValue(exposureTime);
+	_camera->GetFeatureByName("Gain", _feature);
+	_feature->SetValue(gain);
+	_camera->GetFeatureByName("BlackLevel", _feature);
+	_feature->SetValue(blackLevel);
+	
 	return;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -396,5 +406,177 @@ int AVTCamera::EmptyFiles(string dirPath)
 		// when Handle is created, it should be closed at last.  
 		_findclose(handle);
 	}
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：EmptyFiles(string dirPath)
+//// 描述：采集前清空文件夹
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat AVTCamera::WhiteBalance(Mat src, Rect wBlock)
+{
+	Mat roi(src, Rect(wBlock.x, wBlock.y, wBlock.width, wBlock.height));
+	Mat rR(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
+	Mat rG(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
+	Mat rB(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
+	uchar *pRoi, *prR, *prG, *prB;
+	int sumB = 0;
+	int sumG = 0;
+	int sumR = 0;
+	int i, j;
+	int amount = 0;
+	for (i = 0; i < roi.rows; i++)
+	{
+		pRoi = roi.ptr<uchar>(i);
+		prR = rR.ptr<uchar>(i);
+		prG = rG.ptr<uchar>(i);
+		prB = rB.ptr<uchar>(i);
+		for (j = 0; j < roi.cols; j++)
+		{
+			//在Mat中是按照BGR的顺序存储的          
+			prB[j] = pRoi[j*roi.channels()];
+			prG[j] = pRoi[j*roi.channels() + 1];
+			prR[j] = pRoi[j*roi.channels() + 2];
+			sumB += prB[j];
+			sumG += prG[j];
+			sumR += prR[j];
+			amount++;
+		}
+	}
+	double avgB = (double)sumB / amount;
+	double avgG = (double)sumG / amount;
+	double avgR = (double)sumR / amount;
+
+	//对每个点将像素量化到[0,255]之间
+	uchar blue, green, red;
+	double maxVal;
+	minMaxLoc(roi, NULL, &maxVal, NULL, NULL);
+	uchar *pSrc, *psR, *psG, *psB, *pDst;
+	Mat sR(src.rows, src.cols, CV_8UC1, Scalar::all(0));
+	Mat sG(src.rows, src.cols, CV_8UC1, Scalar::all(0));
+	Mat sB(src.rows, src.cols, CV_8UC1, Scalar::all(0));
+	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
+	for (i = 0; i < src.rows; i++)
+	{
+		pSrc = src.ptr<uchar>(i);
+		pDst = dst.ptr<uchar>(i);
+		psR = sR.ptr<uchar>(i);
+		psG = sG.ptr<uchar>(i);
+		psB = sB.ptr<uchar>(i);
+		for (j = 0; j < src.cols; j++)
+		{
+			psB[j] = pSrc[j*src.channels()];
+			psG[j] = pSrc[j*src.channels() + 1];
+			psR[j] = pSrc[j*src.channels() + 2];
+
+			if (psB[j] > avgB) blue = maxVal;
+			else blue = (double)psB[j] * maxVal / avgB;
+
+			if (psG[j] > avgG) green = maxVal;
+			else green = (double)psG[j] * maxVal / avgG;
+
+			if (psR[j] > avgR) red = maxVal;
+			else red = (double)psR[j] * maxVal / avgR;
+
+			////if (red > 255) red = 255;
+			////else if (red < 0) red = 0;
+			////if (green > 255) green = 255;
+			////else if (green < 0) green = 0;
+			////if (blue > 255)	blue = 255;
+			////else if (blue < 0) blue = 0;
+
+			////if (red > 255 || green > 255 || blue > 255)
+			////{
+			////	red = 255;
+			////	green = 255;
+			////	blue = 255;
+			////}
+
+			//if (red > 255)
+			//{
+			//	blue = (double)blue * red / 255;
+			//	green = (double)green * red / 255;
+			//	if (blue > 255 || green > 255)
+			//	{
+			//		blue = 255;
+			//		green = 255;
+			//	}
+			//	red = 255;
+			//}
+
+			//if (blue > 255)
+			//{
+			//	red = (double)red * blue / 255;
+			//	green = (double)green * blue / 255;
+			//	if (red > 255 || green > 255)
+			//	{
+			//		red = 255;
+			//		green = 255;
+			//	}
+			//	blue = 255;
+			//}
+
+			//if (green > 255)
+			//{
+			//	blue = (double)blue * green / 255;
+			//	red = (double)red * green / 255;
+			//	if (blue > 255 || red > 255)
+			//	{
+			//		blue = 255;
+			//		red = 255;
+			//	}
+			//	green = 255;
+			//}
+
+			pDst[j*src.channels()] = blue;
+			pDst[j*src.channels() + 1] = green;
+			pDst[j*src.channels() + 2] = red;
+		}
+	}
+
+	return dst;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：EmptyFiles(string dirPath)
+//// 描述：采集前清空文件夹
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+int AVTCamera::WihteAreaDetection(Mat src, Rect wBlock)
+{
+	Mat img;
+	cvtColor(src, img, CV_BGR2GRAY);
+	Mat roi(img, Rect(wBlock.x, wBlock.y, wBlock.width, wBlock.height));
+	threshold(roi, roi, 180, 255, CV_THRESH_BINARY);//灰度变二值，阈值180，最大值255
+	int counter = 0;
+	Mat_<uchar>::iterator it = roi.begin<uchar>();
+	Mat_<uchar>::iterator itend = roi.end<uchar>();	//定义迭代器访问像素点  
+	for (; it != itend; ++it)
+	{
+		if ((*it)>0)
+			counter += 1;
+	}
+	int num1 = wBlock.width*wBlock.height;
+	int num2 = num1 * 95.00 / 100.00;
+	if (counter <= num1 && counter > num2)//Rect框内像素点数，考虑容许误差90%
+	{
+		cout << "小白块位置正常" << endl;
+		system("pause");
+	}
+	else
+	{
+		cout << "小白块位置偏移" << endl;
+		system("pause");
+	}
+
 	return 0;
 }

@@ -1,11 +1,5 @@
 #include "sampleComm.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 ////////////////////////////////电机命令释义////////////////////////////////////
 /*
 // 设置电机为计算机控制
@@ -53,7 +47,7 @@ SampleComm::~SampleComm()
 //       accelerate:   电机加速度
 //       decelerate:   电机减速度
 //       resolution：  电机分辨率
-//       wheel_homeadj:  相机归位需要调节的步数
+//       wheel_homeadj:  归位需要调节的步数
 // 输出：
 // 返回：是否成功完成操作
 // 备注：
@@ -149,6 +143,7 @@ bool SampleComm::Init(int port)
 ////////////////////////////////////////////////////////////////////////////
 // 函数：GotoNextPos
 // 描述：转到下一位置
+
 // 输入: 
 // 输出：
 // 返回：是否成功完成操作
@@ -167,30 +162,30 @@ bool SampleComm::GotoNextPos(int step)
 	else 
 		return false;
 }
-////////////////////////////////////////////////////////////////////////////
-// 函数：SetVel
-// 描述：设置速度
-// 输入: v: 电机速度
-// 输出：
-// 返回：是否成功完成操作
-// 备注：
-// Modified by 
-////////////////////////////////////////////////////////////////////////////
-bool SampleComm::SetVel(double v)
-{
-	char cmd[256];
-	bool ret = false;
-
-	ClearInputBuffer();
-	sprintf_s(cmd, "VE%.2f\rSS%s\r", v, STEP_FEEDBACK);
-	Write(cmd);
-
-	if (IsFinished(STEP_TIMEOUT))
-		ret = true;
-	else 
-		ret = false;
-	return ret;
-}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：SetVel
+//// 描述：设置速度
+//// 输入: v: 电机速度
+//// 输出：
+//// 返回：是否成功完成操作
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+//bool SampleComm::SetVel(double v)
+//{
+//	char cmd[256];
+//	bool ret = false;
+//
+//	ClearInputBuffer();
+//	sprintf_s(cmd, "VE%.2f\rSS%s\r", v, STEP_FEEDBACK);
+//	Write(cmd);
+//
+//	if (IsFinished(STEP_TIMEOUT))
+//		ret = true;
+//	else 
+//		ret = false;
+//	return ret;
+//}
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Reset
 // 描述：样品平台归位

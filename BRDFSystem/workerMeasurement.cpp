@@ -1,43 +1,43 @@
-/*
 #include "workerMeasurement.h"
 
 ////////////////////////////////AVT相机线程类定义////////////////////////////
-WorkerMeasurement::WorkerMeasurement(int workerID, VimbaSystem&	system, QObject *parent) :
-_workerID(workerID),
-_system(system),
+WorkerMeasurement::WorkerMeasurement(QObject *parent) :
 QObject(parent)
 {
-	_capture = 0;
-	_measurement = 0;
+	illuminant = new Illuminant(6);
+	_saveName = 0;
+}
+WorkerMeasurement::~WorkerMeasurement()
+{
+	this->killTimer(_timerId);
 }
 
 void WorkerMeasurement::StartTimer()
 {
-	_cameraAVT = new AVTCamera(_workerID, _system);
-	_timerId = this->startTimer(100);//设置定时器触发子线程capture
+	_timerId = this->startTimer(5000);//设置定时器触发子线程capture
 }
 
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
 {
 	if (event->timerId() == _timerId)
 	{
-		_cameraAVT->GetImageSize(_width, _height);
-		_pImageFrame = _cameraAVT->CaptureImage();
-		//_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-		//_img = QImage(_mat.data, _mat.cols, _mat.rows, static_cast<int>(_mat.step), QImage::Format_RGB888);
-		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
-		if (_capture == 1)
-		{
-			_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-			_cameraAVT->SaveImage(_mat);
-		}
-		//emit sendingImg(_img);
+		//illuminant.NextIlluminant(int exposureTimes);
+		connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));		
 	}
 }
 
-WorkerMeasurement::~WorkerMeasurement()
+void WorkerMeasurement::SaveAMat(int workerID, Mat mat)
 {
-	this->killTimer(_timerId);
-	delete _cameraAVT;
+	disconnect(this->parent(), SIGNAL(sendingImg(QImage)), this, SLOT(SaveAnImage(QImage)));
+
+	char saveName[4] = { 0 };
+	sprintf(saveName, "%4d", _saveName);
+	char sPath[200];
+
+	sprintf(sPath, "//%s.bmp", saveName);
+	string path = _imageSavingPath + "//camera" + to_string(workerID) + sPath;
+	imwrite(path, mat);
+
+	return;
 }
-*/
+

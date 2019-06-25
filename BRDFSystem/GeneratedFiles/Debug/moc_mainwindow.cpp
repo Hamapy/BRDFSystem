@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[26];
-    char stringdata0[412];
+    QByteArrayData data[19];
+    char stringdata0[308];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,16 +45,9 @@ QT_MOC_LITERAL(12, 190, 15), // "StopMeasurement"
 QT_MOC_LITERAL(13, 206, 10), // "ConnectRGB"
 QT_MOC_LITERAL(14, 217, 25), // "PushButton_IniCCD_Pressed"
 QT_MOC_LITERAL(15, 243, 38), // "PushButton_CaptureContinuousl..."
-QT_MOC_LITERAL(16, 282, 13), // "DisplayImage0"
-QT_MOC_LITERAL(17, 296, 3), // "img"
-QT_MOC_LITERAL(18, 300, 13), // "DisplayImage1"
-QT_MOC_LITERAL(19, 314, 13), // "DisplayImage2"
-QT_MOC_LITERAL(20, 328, 13), // "DisplayImage3"
-QT_MOC_LITERAL(21, 342, 13), // "DisplayImage4"
-QT_MOC_LITERAL(22, 356, 13), // "DisplayImage5"
-QT_MOC_LITERAL(23, 370, 13), // "DisplayImage6"
-QT_MOC_LITERAL(24, 384, 13), // "DisplayImage7"
-QT_MOC_LITERAL(25, 398, 13) // "DisplayImage8"
+QT_MOC_LITERAL(16, 282, 12), // "DisplayImage"
+QT_MOC_LITERAL(17, 295, 8), // "workerID"
+QT_MOC_LITERAL(18, 304, 3) // "img"
 
     },
     "MainWindow\0startTimer\0\0TurnToMeasurement1\0"
@@ -65,10 +58,7 @@ QT_MOC_LITERAL(25, 398, 13) // "DisplayImage8"
     "StopMeasurement\0ConnectRGB\0"
     "PushButton_IniCCD_Pressed\0"
     "PushButton_CaptureContinuously_Pressed\0"
-    "DisplayImage0\0img\0DisplayImage1\0"
-    "DisplayImage2\0DisplayImage3\0DisplayImage4\0"
-    "DisplayImage5\0DisplayImage6\0DisplayImage7\0"
-    "DisplayImage8"
+    "DisplayImage\0workerID\0img"
 };
 #undef QT_MOC_LITERAL
 
@@ -78,7 +68,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      23,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -86,31 +76,23 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  129,    2, 0x06 /* Public */,
+       1,    0,   89,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,  130,    2, 0x08 /* Private */,
-       4,    0,  131,    2, 0x08 /* Private */,
-       5,    0,  132,    2, 0x08 /* Private */,
-       6,    0,  133,    2, 0x08 /* Private */,
-       7,    0,  134,    2, 0x08 /* Private */,
-       8,    0,  135,    2, 0x08 /* Private */,
-       9,    0,  136,    2, 0x08 /* Private */,
-      10,    0,  137,    2, 0x08 /* Private */,
-      11,    0,  138,    2, 0x08 /* Private */,
-      12,    0,  139,    2, 0x08 /* Private */,
-      13,    0,  140,    2, 0x08 /* Private */,
-      14,    0,  141,    2, 0x08 /* Private */,
-      15,    0,  142,    2, 0x08 /* Private */,
-      16,    1,  143,    2, 0x08 /* Private */,
-      18,    1,  146,    2, 0x08 /* Private */,
-      19,    1,  149,    2, 0x08 /* Private */,
-      20,    1,  152,    2, 0x08 /* Private */,
-      21,    1,  155,    2, 0x08 /* Private */,
-      22,    1,  158,    2, 0x08 /* Private */,
-      23,    1,  161,    2, 0x08 /* Private */,
-      24,    1,  164,    2, 0x08 /* Private */,
-      25,    1,  167,    2, 0x08 /* Private */,
+       3,    0,   90,    2, 0x08 /* Private */,
+       4,    0,   91,    2, 0x08 /* Private */,
+       5,    0,   92,    2, 0x08 /* Private */,
+       6,    0,   93,    2, 0x08 /* Private */,
+       7,    0,   94,    2, 0x08 /* Private */,
+       8,    0,   95,    2, 0x08 /* Private */,
+       9,    0,   96,    2, 0x08 /* Private */,
+      10,    0,   97,    2, 0x08 /* Private */,
+      11,    0,   98,    2, 0x08 /* Private */,
+      12,    0,   99,    2, 0x08 /* Private */,
+      13,    0,  100,    2, 0x08 /* Private */,
+      14,    0,  101,    2, 0x08 /* Private */,
+      15,    0,  102,    2, 0x08 /* Private */,
+      16,    2,  103,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -129,15 +111,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
-    QMetaType::Void, QMetaType::QImage,   17,
+    QMetaType::Void, QMetaType::Int, QMetaType::QImage,   17,   18,
 
        0        // eod
 };
@@ -162,15 +136,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 11: _t->ConnectRGB(); break;
         case 12: _t->PushButton_IniCCD_Pressed(); break;
         case 13: _t->PushButton_CaptureContinuously_Pressed(); break;
-        case 14: _t->DisplayImage0((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 15: _t->DisplayImage1((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 16: _t->DisplayImage2((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 17: _t->DisplayImage3((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 18: _t->DisplayImage4((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 19: _t->DisplayImage5((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 20: _t->DisplayImage6((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 21: _t->DisplayImage7((*reinterpret_cast< QImage(*)>(_a[1]))); break;
-        case 22: _t->DisplayImage8((*reinterpret_cast< QImage(*)>(_a[1]))); break;
+        case 14: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -211,13 +177,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 23)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 23;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 23)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 23;
+        _id -= 15;
     }
     return _id;
 }

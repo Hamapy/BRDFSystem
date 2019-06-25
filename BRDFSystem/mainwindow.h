@@ -6,6 +6,7 @@
 #include <QDebug>
 //#include <QTimerEvent>
 #include <QFileDialog>
+#include <QSettings>
 #include <time.h>
 #include <QMessageBox>
 #include "ui_mainwindow.h"
@@ -26,19 +27,6 @@ public:
 	MainWindow(VimbaSystem&	system, QWidget *parent = 0);
 	virtual ~MainWindow();
 
-private:
-	Ui::MainWindowClass ui;
-
-	SlideComm*					slideComm;
-	SampleComm*					sampleComm;
-	WorkerCCD*					workerCCD[9];
-	QThread*					threadCCD[9];
-	VimbaSystem&				_system;
-	//VimbaSystem&				_system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
-																	 //为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
-	QString _qMaterialName;
-	bool _displayFlag;
-
 private slots:
 	//页面切换栏
 	void TurnToMeasurement1();
@@ -50,6 +38,10 @@ private slots:
 	void TurnToTest();
 	void TurnToPreCamera();
 	
+	//配置文件
+	void PushButton_Save_Pressed();
+	void PushButton_Defaults_Pressed();
+
 	//材质采集页面
 	void PushButton_StartMeasurement_Pressed();
 	void StopMeasurement();
@@ -61,16 +53,34 @@ private slots:
 
 
 	//槽函数的公用函数
-	//不知道有没有更好的写法
-	void DisplayImage0(QImage img);
-	void DisplayImage1(QImage img);
-	void DisplayImage2(QImage img);
-	void DisplayImage3(QImage img);
-	void DisplayImage4(QImage img);
-	void DisplayImage5(QImage img);
-	void DisplayImage6(QImage img);
-	void DisplayImage7(QImage img);
-	void DisplayImage8(QImage img);
+	void DisplayImage(int workerID, QImage img);
+	//void DisplayImage1(QImage img);
+	//void DisplayImage2(QImage img);
+	//void DisplayImage3(QImage img);
+	//void DisplayImage4(QImage img);
+	//void DisplayImage5(QImage img);
+	//void DisplayImage6(QImage img);
+	//void DisplayImage7(QImage img);
+	//void DisplayImage8(QImage img);
+
+private:
+	Ui::MainWindowClass ui;
+
+	SlideComm*					slideComm;
+	SampleComm*					sampleComm;
+	WorkerCCD*					workerCCD[9];
+	QThread*					threadCCD[9];
+	//WorkerMeasurement*			workerMeasurement[9];
+	//QThread*					threadMeasurement[9];
+	VimbaSystem&				_system;
+	QSettings					*ini;
+	//VimbaSystem&				_system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
+	//为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
+	QString _qMaterialName;
+	bool _displayFlag;
+
+	void CreateFolds(string root);
+	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 signals:
 	void startTimer();

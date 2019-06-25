@@ -66,7 +66,7 @@ public:
 	//打开相机
 	//bool OpenCamera(int cameraID);
 	//设置相机参数
-	void SetCameraSettings(double exposureTime, double gain, double blackLevel);
+	void CameraSettings(double exposureTime, double gain, double blackLevel);
 	//返回一帧图像
 	VmbUchar_t* CaptureImage();//typedef unsigned char VmbUchar_t
 	//返回图像尺寸
@@ -90,7 +90,7 @@ public:
 	//相机标定校正部分
 	//辐射度标定
 	//白平衡校正（完美全反射）&均匀度校正（事先用白板标定，载物台上标记点仅用于仿射变换及采集过程中的白平衡检验）
-	Mat WhiteBlockCorrection(CameraPtr& camera, int cameraID);
+	Mat WhiteBalance(Mat src, Rect wBlock);
 	//颜色校正（多项式回归） 返回变换矩阵
 	Mat ColorCorrection(CameraPtr& camera, int cameraID);
 
@@ -126,11 +126,11 @@ private:
 	VmbUint32_t					_height;
 	string						_imageSavingPath = "..\\imgs_calibration";
 	int							_saveName;
+	FeaturePtr					_feature;
 
 	//VmbError_t					err;
-
-	VmbHandle_t					hCamera_;
-	FeaturePtr					feature;
+	//VmbHandle_t					hCamera_;
+	
 	CameraThreadInfo			threadInfo;
 	static int					threadID;
 	Mat							captureMat;
@@ -145,5 +145,7 @@ private:
 	static int EmptyFiles(string dirPath);
 	//寻找材质样品四个边界点的位置
 	vector<Point> FindCorner(int cameraID);
+	//寻找白色标记区域
+	int AVTCamera::WihteAreaDetection(Mat src, Rect wBlock);
 };
 #endif
