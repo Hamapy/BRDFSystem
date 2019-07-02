@@ -86,15 +86,46 @@ bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, 
 ////////////////////////////////////////////////////////////////////////////
 bool SlideComm::Init(int port)
 {
-	//bool ret = true;
+	bool ret = false;
+	char cmd[STRING_LEN];
+	_port = port;
 
 	// 打开串口
 	if (IsOpen())
+	{
 		Close();
-	if (Open(_port))
-		return true;
+	}
+	if (!Open(_port))
+	{
+		ret = false;
+	}
 	else
-		return false;
+		ret = true;
+
+	//以下注释加了就有问题
+	/*
+	if (ret)
+	{
+		ClearInputBuffer();
+		//sprintf(cmd, "PM2\rSI3\rCM21\rSS%s\r", SERVO_FEEDBACK);
+		//sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
+		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", SERVO_FEEDBACK);
+		Write(cmd);  // 设置电机为计算机控制
+		ret = IsFinished(10000);
+	}
+
+	if (ret)
+	{
+		//设置伺服电机参数
+		ClearInputBuffer();
+		sprintf(cmd, "AC%d\rVE%.2f\rDE%d\rEG%d\rSS%s\r", _accelerate, _velocity, _decelerate, _resolution, SERVO_FEEDBACK);
+		Write(cmd);
+
+		ret = IsFinished(10000);
+	}
+	*/
+
+	return ret;
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：MoveToX1

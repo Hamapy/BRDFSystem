@@ -9,14 +9,14 @@
 #include "ccd.h"
 #include "illuminant.h"
 #include "sampleComm.h"
-#include "ccd.h"
 
 class WorkerMeasurement : public QObject
 {
 	Q_OBJECT
 
 public:
-	WorkerMeasurement(QObject *parent = 0);
+	//WorkerMeasurement(QObject *parent = 0);
+	WorkerMeasurement(int workerID, VimbaSystem& system, QObject *parent = 0);
 	virtual ~WorkerMeasurement();
 	virtual void timerEvent(QTimerEvent *event);
 	//virtual void run();
@@ -24,10 +24,21 @@ public:
 	friend class WorkerCCD;
 
 private slots:
+	//void StartMeasure(int measureFlag);
 	void StartTimer(int measureFlag);
-	void SaveAMat(int workerID, Mat mat);
+	//void SaveAMat(int workerID, Mat mat);
+	//void GetExposureTime(int workerID, Mat mat);
 
 private:
+	VimbaSystem&			_system;
+	int						_workerID;
+	AVTCamera*				cameraAVT;
+	QImage					_img;
+	Mat						_mat;
+	unsigned char*			_pImageFrame;
+	int						_height;
+	int						_width;
+
 	Illuminant*				illuminant;
 	SampleComm*				sampleComm;
 	UINT                    portNo;
@@ -39,5 +50,9 @@ private:
 	UINT					_ID;
 	int						_measureFlag;
 	float					_exposureTime;
+	QMutex					_mutex;
+
+signals:
+	void					done();
 };
 #endif

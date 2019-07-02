@@ -1,9 +1,12 @@
 #include "workerMeasurement.h"
 
 ////////////////////////////////AVT相机线程类定义////////////////////////////
-WorkerMeasurement::WorkerMeasurement(QObject *parent) :
+WorkerMeasurement::WorkerMeasurement(int workerID, VimbaSystem&	system, QObject *parent) :
+_workerID(workerID),
+_system(system),
 QObject(parent)
 {
+	cameraAVT = new AVTCamera(_workerID, _system);
 	illuminant = new Illuminant(5);
 	sampleComm = new SampleComm();
 	sampleComm->Init(2, 0, 0.25, STEP_ACCELERATE, STEP_DECELERATE, STEP_RESOLUTION, STEP_TOHOME);
@@ -21,16 +24,30 @@ QObject(parent)
 	_saveName = 0;
 	_measureFlag = 0;
 	_exposureTime = 50;
+
+	/*
+	//_measureFlag = measureFlag;
+	illuminant->InitCOM();
+	if (_measureFlag == 1)
+		illuminant->SetSteadyTime(10);
+	if (_measureFlag == 2)
+		illuminant->SetSteadyTime(360);
+	_timerId = this->startTimer(10000);//设置定时器触发子线程capture
+	*/
 }
 WorkerMeasurement::~WorkerMeasurement()
 {
 	delete illuminant;
 	delete _illuminantID;
+	delete sampleComm;
+	delete cameraAVT;
 	this->killTimer(_timerId);
 }
 
+
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
+	
 	_measureFlag = measureFlag;
 	illuminant->InitCOM();
 	//为什么程序启动会自动跳到这句
@@ -42,6 +59,7 @@ void WorkerMeasurement::StartTimer(int measureFlag)
 }
 
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
+//void WorkerMeasurement::StartMeasure(int measueFlag)
 {
 	if (event->timerId() == _timerId)
 	{
@@ -52,8 +70,21 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			illuminant->Start();
 			_ID++;
 			Sleep(500);//避免收到灯亮前的图像
-			connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//这么写是为了避免与workerCCD抢占相机资源并减去不必要的相机匹配ID参数传递		
-
+			//connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//这么写是为了避免与workerCCD抢占相机资源并减去不必要的相机匹配ID参数传递
+																									//但这么写太奇怪了，还是重新申请相机资源，加锁
+			
+			//加锁避免抢占相机
+			_mutex.lock();
+			cameraAVT->GetImageSize(_width, _height);
+			_pImageFrame = cameraAVT->CaptureImage();
+			_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+			_exposureTime = AVTCamera::GetExposureTime(_mat);
+			//调整曝光时间
+			cameraAVT->CameraSettings(_exposureTime * 1000);
+			Sleep(1000);//等曝光时间生效
+			_pImageFrame = cameraAVT->CaptureImage();
+			_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+			_mutex.unlock();
 		}
 		if (_measureFlag = 2)
 		{
@@ -64,20 +95,48 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			Sleep(500);//避免收到灯亮前的图像
 			for (int i = 0; i < 36; i++)
 			{
+				//connect(this, SIGNAL(sendingMat(int, Mat)), this, SLOT(GetExposureTime(int, Mat)));
+				//Sleep(1000);//等曝光时间生效
+				//connect(this, SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));
+				
+				//加锁避免抢占相机
+				_mutex.lock();
+				cameraAVT->GetImageSize(_width, _height);
+				_pImageFrame = cameraAVT->CaptureImage();
+				_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+				_exposureTime = AVTCamera::GetExposureTime(_mat);
+				//调整曝光时间
+				cameraAVT->CameraSettings(_exposureTime * 1000);
+				Sleep(1000);//等曝光时间生效
+				_pImageFrame = cameraAVT->CaptureImage();
+				_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+				_mutex.unlock();
+
 				sampleComm->GotoNextPos(175);
-				connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));	
+				Sleep(3000);//等待样品台旋转
 			}
 		}
-
+		if (_ID == 195)
+		{
+			disconnect(this, SIGNAL(sendingMat(int, Mat)), this, SLOT(GetExposureTime(int, Mat)));
+			disconnect(this, SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));
+			emit done();//发送采集完成信号
+		}
 	}
 }
-
-
+/*
+void WorkerMeasurement::GetExposureTime(int workerID, Mat mat)
+{
+	disconnect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(GetExposureTime(int, Mat)));//进入槽函数后立刻断连，避免多帧Mat碰撞
+	//_mutex.lock();
+	_exposureTime = AVTCamera::GetExposureTime(mat);
+	//_mutex.unlock();
+}
+*/
+/*
 void WorkerMeasurement::SaveAMat(int workerID, Mat mat)
 {
 	disconnect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//进入槽函数后立刻断连，避免多帧Mat碰撞
-
-	_exposureTime = AVTCamera::GetExposureTime(mat);
 
 	char saveName[4] = { 0 };
 	sprintf(saveName, "%4d", _saveName);
@@ -94,5 +153,5 @@ void WorkerMeasurement::SaveAMat(int workerID, Mat mat)
 
 	return;
 }
-
+*/
 

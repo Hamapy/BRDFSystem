@@ -1,7 +1,7 @@
 #include "sampleComm.h"
 
 
-void main()
+void main2()
 {
 	SampleComm t;
 	t.Init(2, 0, 0.1, STEP_ACCELERATE, STEP_DECELERATE, STEP_RESOLUTION, STEP_TOHOME);

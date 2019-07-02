@@ -31,11 +31,10 @@ private:
 
 	VimbaSystem&			_system;
 	int						_workerID;
-	AVTCamera				*_cameraAVT;
+	//AVTCamera				*_cameraAVT;
 	QImage					_img;
 	Mat						_mat;
 	bool					_capture;
-	int						_measurement;
 	//int framerate = 0;
 	int						_timerId;
 	unsigned char*			_pImageFrame;

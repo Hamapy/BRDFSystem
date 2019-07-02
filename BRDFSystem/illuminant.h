@@ -1,8 +1,4 @@
-////////////////////////////BRDF数据建模类声明////////////////////////////
-//Author:ZJB
-//Review:ZJX
 #pragma once
-#include "stdafx.h"
 #include <vector>
 #include <windows.h>
 #include <iostream>
@@ -30,22 +26,22 @@ public:
 	bool LightenByOrder(int num);
 	//读取串口接受缓冲区中的数据
 	//void ReadData(unsigned char* cRecved);
-
 	//发送启动指令
 	bool Start();
-	//发送暂停/停止指令
+	//发送暂停指令
 	bool Suspend();
 	//实现按照自定义的顺序点亮光源
 	bool LightenByCustomOrder(unsigned char* Order, int length);
 	//bool Run(unsigned char* Order, int length);
 	//开启监听线程
 	bool OpenListenThread();
-	//正式实现采集
+	//按照流水灯顺序正式实现采集
 	void Collection(unsigned char* Order, int length);
+	//用定时器来点亮灯顺序
+	void LightNext(int num);
 private:
 	//获取输入缓冲区的字节数
 	UINT GetBytesInCOM();
-
 	//打开串口
 	bool OpenCOM();
 	//关闭监听线程
@@ -71,4 +67,5 @@ private:
 	volatile HANDLE     _hListenThread;//线程句柄
 	CRITICAL_SECTION    _csCommunicationSync;//同步互斥，临界区保护
 	static    atomic<bool>      _flag;//判断光源点亮过程是否出错,应该为原子操作
+	static    atomic<int>       _num;//判断点亮到哪一个灯，起始灯为0
 };

@@ -1,7 +1,7 @@
 #include "slideComm.h"
 
 
-void main4()
+void main1()
 {
 	SlideComm t;
 	t.Init(13, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);

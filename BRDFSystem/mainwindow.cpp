@@ -14,11 +14,7 @@ QMainWindow(parent)
 	this->setAttribute(Qt::WA_DeleteOnClose, true);//关闭窗口时清空内存
 	
 	//初始界面置为各向同性采集界面
-	this->ui.label_materialName->setText(QStringLiteral("采集材质（各向同性）名称"));
-	this->ui.label_measureStatus->setText(QStringLiteral("当前采集进度：第0/36个倾斜角 第0/9个方位角"));
-	this->ui.pushButton_stopMeasurement->setEnabled(false);
-	this->ui.toolBox->setCurrentWidget(this->ui.MaterialMeasurement);
-	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
+	TurnToMeasurement1();
 	
 	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	slideComm = new SlideComm();
@@ -34,7 +30,7 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
 	////采集页面
-	_measureFlag = 0;
+	//_measureFlag = 0;
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
 
@@ -71,6 +67,9 @@ MainWindow::~MainWindow()
 {
 	for (int i = 0; i < CAM_NUM; i++)
 	{
+		delete workerCCD[i];
+		workerCCD[i] = NULL;
+
 		if (threadCCD[i]->isFinished())
 			return;
 		threadCCD[i]->quit();
@@ -78,9 +77,6 @@ MainWindow::~MainWindow()
 
 		//delete workerCCD[i]->_cameraAVT;
 		//workerCCD[i]->_cameraAVT = NULL;//留给他自己去delete
-
-		delete workerCCD[i];
-		workerCCD[i] = NULL;
 
 		delete threadCCD[i];
 		threadCCD[i] = NULL;
@@ -223,7 +219,12 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		QMessageBox::critical(NULL, QStringLiteral("警告"), QStringLiteral("请输入材质名称"), QMessageBox::Ok);
 		return;
 	}
-	CreateFolds("..\\imgs_measurement");
+
+	if (_measureFlag == 1)
+		CreateFolds("..\\imgs_measurement1");
+	if (_measureFlag == 2)
+		CreateFolds("..\\imgs_measurement2");
+
 	this->ui.lineEdit_materialName->setEnabled(false);
 	this->ui.pushButton_stopMeasurement->setEnabled(true);
 	this->ui.toolBox->setEnabled(false);
@@ -243,9 +244,9 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 
 			_mutex.lock();
 			if (_measureFlag == 1)
-				this->workerCCD[i]->_measurement = 1;
+				this->workerCCD[i]->_measureFlag = 1;
 			if (_measureFlag == 2)
-				this->workerCCD[i]->_measurement = 2;
+				this->workerCCD[i]->_measureFlag = 2;
 			_mutex.unlock();
 		}
 	}
