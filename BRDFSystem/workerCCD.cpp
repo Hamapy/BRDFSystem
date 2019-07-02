@@ -29,6 +29,7 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 	if (event->timerId() == _timerId)
 	{
 		_cameraAVT->GetImageSize(_width, _height);
+		_cameraAVT->CameraSettings(workerMeasurement->_exposureTime * 1000);
 		_pImageFrame = _cameraAVT->CaptureImage();
 		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
 		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);

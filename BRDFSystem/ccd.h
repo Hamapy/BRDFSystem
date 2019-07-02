@@ -66,7 +66,7 @@ public:
 	//打开相机
 	//bool OpenCamera(int cameraID);
 	//设置相机参数
-	void CameraSettings(double exposureTime, double gain, double blackLevel);
+	void CameraSettings(double exposureTime, double gain = 0, double blackLevel = 0);
 	//返回一帧图像
 	VmbUchar_t* CaptureImage();//typedef unsigned char VmbUchar_t
 	//返回图像尺寸
@@ -75,6 +75,8 @@ public:
 	bool SaveImage(Mat& captureMat);
 	//连续采集
 	void CaptureContinuously(int num, int millisecond);
+	//计算合适曝光时间
+	static float GetExposureTime(Mat mat);
 	//自动曝光
 	vector<int> AutoExposure(int num, FeaturePtr feature);
 	//相机多线程函数

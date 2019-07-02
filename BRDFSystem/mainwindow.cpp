@@ -229,9 +229,9 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 	this->ui.toolBox->setEnabled(false);
 	
 	//滑轨就位
-	//slideComm->Init(13, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
-	//slideComm->MoveToX2();
-	//Sleep(30000);//等待滑轨就位
+	slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
+	slideComm->MoveToX2();
+	Sleep(30000);//等待滑轨就位
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
@@ -242,7 +242,10 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 			emit startTimer(_measureFlag);
 
 			_mutex.lock();
-			this->workerCCD[i]->_measurement = 1;
+			if (_measureFlag == 1)
+				this->workerCCD[i]->_measurement = 1;
+			if (_measureFlag == 2)
+				this->workerCCD[i]->_measurement = 2;
 			_mutex.unlock();
 		}
 	}

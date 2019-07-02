@@ -20,6 +20,7 @@ QObject(parent)
 	_ID = 0;
 	_saveName = 0;
 	_measureFlag = 0;
+	_exposureTime = 50;
 }
 WorkerMeasurement::~WorkerMeasurement()
 {
@@ -33,7 +34,10 @@ void WorkerMeasurement::StartTimer(int measureFlag)
 	_measureFlag = measureFlag;
 	illuminant->InitCOM();
 	//为什么程序启动会自动跳到这句
-	illuminant->SetSteadyTime(30);
+	if (_measureFlag == 1)
+		illuminant->SetSteadyTime(10);
+	if (_measureFlag == 2)
+		illuminant->SetSteadyTime(360);
 	_timerId = this->startTimer(10000);//设置定时器触发子线程capture
 }
 
@@ -43,22 +47,26 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 	{
 		if (_measureFlag = 1)
 		{
+			illuminant->Suspend();
 			illuminant->LightenById(_illuminantID[_ID]);
 			illuminant->Start();
 			_ID++;
-			Sleep(1000);//避免收到灯亮前的图像
+			Sleep(500);//避免收到灯亮前的图像
 			connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//这么写是为了避免与workerCCD抢占相机资源并减去不必要的相机匹配ID参数传递		
 
 		}
 		if (_measureFlag = 2)
 		{
-			sampleComm->GotoNextPos(100);
+			illuminant->Suspend();
 			illuminant->LightenById(_illuminantID[_ID]);
 			illuminant->Start();
 			_ID++;
-			Sleep(1000);//避免收到灯亮前的图像
-			connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//这么写是为了避免与workerCCD抢占相机资源并减去不必要的相机匹配ID参数传递		
-
+			Sleep(500);//避免收到灯亮前的图像
+			for (int i = 0; i < 36; i++)
+			{
+				sampleComm->GotoNextPos(175);
+				connect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));	
+			}
 		}
 
 	}
@@ -67,14 +75,20 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 
 void WorkerMeasurement::SaveAMat(int workerID, Mat mat)
 {
-	disconnect(this->parent(), SIGNAL(sendingImg(QImage)), this, SLOT(SaveAnImage(QImage)));
+	disconnect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//进入槽函数后立刻断连，避免多帧Mat碰撞
+
+	_exposureTime = AVTCamera::GetExposureTime(mat);
 
 	char saveName[4] = { 0 };
 	sprintf(saveName, "%4d", _saveName);
 	char sPath[200];
 
 	sprintf(sPath, "//%s.bmp", saveName);
-	string path = _imageSavingPath + "//camera" + to_string(workerID) + sPath;
+	string path;
+	if (_measureFlag == 1)
+		path = _imageSavingPath1 + "//camera" + to_string(workerID) + sPath;
+	if (_measureFlag == 1)
+		path = _imageSavingPath2 + "//camera" + to_string(workerID) + sPath;
 	imwrite(path, mat);
 	_saveName++;
 

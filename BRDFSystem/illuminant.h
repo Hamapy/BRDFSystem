@@ -33,6 +33,8 @@ public:
 
 	//发送启动指令
 	bool Start();
+	//发送暂停/停止指令
+	bool Suspend();
 	//实现按照自定义的顺序点亮光源
 	bool LightenByCustomOrder(unsigned char* Order, int length);
 	//bool Run(unsigned char* Order, int length);
@@ -43,8 +45,7 @@ public:
 private:
 	//获取输入缓冲区的字节数
 	UINT GetBytesInCOM();
-	//发送暂停/停止指令
-	bool Suspend();
+
 	//打开串口
 	bool OpenCOM();
 	//关闭监听线程

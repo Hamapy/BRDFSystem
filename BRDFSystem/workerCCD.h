@@ -8,7 +8,6 @@
 #include <QTimerEvent>
 #include <QThread>
 #include <QMutex>
-#include "ccd.h"
 #include "workerMeasurement.h"
 
 class WorkerCCD : public QObject

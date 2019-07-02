@@ -195,6 +195,26 @@ bool AVTCamera::SaveImage(Mat& captureMat)
 		return 0;
 }
 ////////////////////////////////////////////////////////////////////////////
+// 函数：GetExposureTime(Mat mat, float time)
+// 描述：计算相机在一定角度光源下的合适曝光时间
+// 输入：Null
+// 输出：曝光时间
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+float AVTCamera::GetExposureTime(Mat mat)
+{
+	Mat gray;
+	cvtColor(mat, gray, CV_RGB2GRAY);
+	Scalar scalar = mean(gray);
+	float ave = scalar.val[0];
+	float k = 50.00 / ave;//50ms下拍摄图像
+	float t = k * 255 * 0.60;
+
+	return t;
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：AutoExposure(CameraPtr& camera, int cameraID, int num)
 // 描述：计算最大曝光时间
 // 输入：Null
