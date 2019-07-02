@@ -53,6 +53,7 @@ private slots:
 
 
 	//槽函数的公用函数
+	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
 	//void DisplayImage1(QImage img);
 	//void DisplayImage2(QImage img);

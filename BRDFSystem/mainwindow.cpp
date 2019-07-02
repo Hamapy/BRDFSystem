@@ -15,7 +15,144 @@ QMainWindow(parent)
 	TurnToMeasurement1();
 	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+
+
+
+	////滑动条相关设置
+	int nMin = 0;
+	int nMax = 200;
+	int nSingleStep = 10;
+
+
+	QSlider *pSlider1 = this->ui.horizontalSlider_gain;
+	pSlider1->setMinimum(nMin);  // 最小值
+	pSlider1->setMaximum(nMax);  // 最大值
+	pSlider1->setSingleStep(nSingleStep);  // 步长
+
+	QSlider *pSlider2 = this->ui.horizontalSlider_darkLevel;
+	pSlider2->setMinimum(nMin);  // 最小值
+	pSlider2->setMaximum(nMax);  // 最大值
+	pSlider2->setSingleStep(nSingleStep);  // 步长
+
+
+
+	////显示配置文件的参数
+	////工业相机配置参数
+	gain = this->ini->value("SWIR-Configuration/gain").toInt();
+	gain = QString::number(gain, 10);
+	this->ui.lineEdit_gain->setText(gain);
+	darkLevel = this->ini->value("SWIR-Configuration/darkLevel").toInt();
+	darkLevel = QString::number(darkLevel, 10);
+	this->ui.lineEdit_darkLevel->setText(darkLevel);
+	imageSaveFormat = this->ini->value("SWIR-Configuration/imageSaveFormat").toString();
+	int index = ui->comboBox_imageSaveFormat->findText(imageSaveFormat);
+	ui->comboBox_imageSaveFormat->setCurrentIndex(index);
+	imageSavePath = this->ini->value("SWIR-Configuration/imageSavePath").toString();
+	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
+
+
+	////光源配置参数
+	serialPortSelection = this->ini->value("SWIR-Configuration/serialPortSelection").toString();
+	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
+	ui->comboBox_serialPortSelection->setCurrentIndex(index);
+	baudRate = this->ini->value("SWIR-Configuration/baudRate").toString();
+	int index = ui->comboBox_baudRate->findText(baudRate);
+	ui->comboBox_baudRate->setCurrentIndex(index);
+	delaySetting = this->ini->value("SWIR-Configuration/delaySetting").toInt();
+	delaySetting = QString::number(delaySetting, 10);
+	this->ui.lineEdit_delaySetting->setText(delaySetting);
+	lightingSequence = this->ini->value("SWIR-Configuration/lightingSequence").toInt();
+	lightingSequence = QString::number(lightingSequence, 10);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequence);
+
+
+	////样品台电机驱动配置参数
+	stepperMotorPortSelection = this->ini->value("SWIR-Configuration/stepperMotorPortSelection").toString();
+	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
+	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
+	stepperMotorSpeed = this->ini->value("SWIR-Configuration/stepperMotorSpeed").toString();
+	int index = ui->comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
+	ui->comboBox_stepperMotorSpeed->setCurrentIndex(index);
+	stepperMotorAcceleration = this->ini->value("SWIR-Configuration/stepperMotorAcceleration").toString();
+	int index = ui->comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
+	ui->comboBox_stepperMotorAcceleration->setCurrentIndex(index);
+	stepperMotorDeceleration = this->ini->value("SWIR-Configuration/stepperMotorDeceleration").toString();
+	int index = ui->comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
+	ui->comboBox_stepperMotorDeceleration->setCurrentIndex(index);
+	stepperMotorResolution = this->ini->value("SWIR-Configuration/stepperMotorResolution").toString();
+	int index = ui->comboBox_stepperMotorResolution->findText(stepperMotorResolution);
+	ui->comboBox_stepperMotorResolution->setCurrentIndex(index);
+	sampleRotationAngle = this->ini->value("SWIR-Configuration/sampleRotationAngle").toString();
+	int index = ui->comboBox_sampleRotationAngle->findText(sampleRotationAngle);
+	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
 	
+
+	////滑轨电机驱动配置参数
+	servoMotorPortSelection = this->ini->value("SWIR-Configuration/servoMotorPortSelection").toString();
+	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
+	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
+	servoMotorSpeed = this->ini->value("SWIR-Configuration/servoMotorSpeed").toString();
+	int index = ui->comboBox_servoMotorSpeed->findText(servoMotorSpeed);
+	ui->comboBox_servoMotorSpeed->setCurrentIndex(index);
+	servoMotorAcceleration = this->ini->value("SWIR-Configuration/servoMotorAcceleration").toString();
+	int index = ui->comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
+	ui->comboBox_servoMotorAcceleration->setCurrentIndex(index);
+	servoMotorDeceleration = this->ini->value("SWIR-Configuration/servoMotorDeceleration").toString();
+	int index = ui->comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
+	ui->comboBox_servoMotorDeceleration->setCurrentIndex(index);
+	servoMotorResolution = this->ini->value("SWIR-Configuration/servoMotorResolution").toString();
+	int index = ui->comboBox_servoMotorResolution->findText(servoMotorResolution);
+	ui->comboBox_servoMotorResolution->setCurrentIndex(index);
+	slideTableMovingDistance = this->ini->value("SWIR-Configuration/slideTableMovingDistance").toInt();
+	slideTableMovingDistance = QString::number(slideTableMovingDistance, 10);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
+
+	
+	
+
+	
+	
+	////连接信号槽,保存和恢复默认设置
+	connect(this->ui.pushButton_save, SIGNAL(pressed()), this, SLOT(PushButton_Save_Pressed()));
+	connect(this->ui.pushButton_defaults, SIGNAL(pressed()), this, SLOT(PushButton_Defaults_Pressed()));
+	////连接信号槽（相互改变）
+	connect(this->ui.lineEdit_gain, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_gain, SLOT(setValue(int)));
+	connect(this->ui.horizontalSlider_gain, SIGNAL(valueChanged(int)), this->ui.lineEdit_gain, SLOT(setValue(int)));
+	connect(this->ui.lineEdit_gain, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_gain, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	////连接信号槽（相互改变）
+	connect(this->ui.lineEdit_darkLevel, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_darkLevel, SLOT(setValue(int)));
+	connect(this->ui.horizontalSlider_darkLevel, SIGNAL(valueChanged(int)), this->ui.lineEdit_darkLevel, SLOT(setValue(int)));
+	connect(this->ui.lineEdit_darkLevel, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_darkLevel, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.comboBox_imageSaveFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_imageSavePath, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+	connect(this->ui.comboBox_serialPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_baudRate, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_delaySetting, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_delaySetting, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_lightingSequence, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_lightingSequence, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+	connect(this->ui.comboBox_stepperMotorPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorSpeed, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorAcceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorDeceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_sampleRotationAngle, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+
+	connect(this->ui.comboBox_servoMotorPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorSpeed, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorAcceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorDeceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+
+
+
 	////页面切换
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
 	connect(this->ui.pushButton_measure2, SIGNAL(pressed()), this, SLOT(TurnToMeasurement2()));
@@ -93,6 +230,20 @@ MainWindow::~MainWindow()
 ////////////////////////////////私有槽函数/////////////////////////////////////
 ////////////////////////////////配置页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
+// 函数：isEdited()
+// 描述：文本框参数有改动时，按钮控件可点击
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::IsEdited()
+{
+	this->ui.pushButton_defaults->setEnabled(true);
+	this->ui.pushButton_save->setEnabled(true);
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_Save_Pressed
 // 描述：根据菜单栏选项切换主窗口
 // 输入：Null
@@ -103,7 +254,59 @@ MainWindow::~MainWindow()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Save_Pressed()
 {
-	
+	////工业相机配置保存
+	gain = this->ui.lineEdit_gain->text().toInt();
+	this->ini->setValue("/SWIR-Configuration/gain", gain);
+	darkLevel = this->ui.lineEdit_darkLevel->text().toInt();
+	this->ini->setValue("/SWIR-Configuration/darkLevel", darkLevel);
+	imageSaveFormat = this->ui.comboBox_imageSaveFormat->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/imageSaveFormat", imageSaveFormat);
+	imageSavePath = this->ui.lineEdit_imageSavePath->text().toString();
+	this->ini->setValue("/SWIR-Configuration/imageSavePath", imageSavePath);
+
+	////光源配置保存
+	serialPortSelection = this->ui.comboBox_serialPortSelection->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/serialPortSelection", serialPortSelection);
+	baudRate = this->ui.comboBox_baudRate->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/baudRate", baudRate);
+	delaySetting = this->ui.lineEdit_delaySetting->text().toInt();
+	this->ini->setValue("/SWIR-Configuration/delaySetting", delaySetting);
+	lightingSequence = this->ui.lineEdit_lightingSequence->text().toInt();
+	this->ini->setValue("/SWIR-Configuration/lightingSequence", lightingSequence);
+
+	////样品台电机驱动配置保存
+	stepperMotorPortSelection = this->ui.comboBox_stepperMotorPortSelection->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/stepperMotorPortSelection", stepperMotorPortSelection);
+	stepperMotorSpeed = this->ui.comboBox_stepperMotorSpeed->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/stepperMotorSpeed", stepperMotorSpeed);
+	stepperMotorAcceleration = this->ui.comboBox_stepperMotorAcceleration->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/stepperMotorAcceleration", stepperMotorAcceleration);
+	stepperMotorDeceleration = this->ui.comboBox_stepperMotorDeceleration->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/stepperMotorDeceleration", stepperMotorDeceleration);
+	stepperMotorResolution = this->ui.comboBox_stepperMotorResolution->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/stepperMotorResolution", stepperMotorResolution);
+	sampleRotationAngle = this->ui.comboBox_sampleRotationAngle->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/sampleRotationAngle", sampleRotationAngle);
+
+	////滑轨电机驱动配置保存
+	servoMotorPortSelection = this->ui.comboBox_servoMotorPortSelection->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/servoMotorPortSelection", servoMotorPortSelection);
+	servoMotorSpeed = this->ui.comboBox_servoMotorSpeed->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/servoMotorSpeed", servoMotorSpeed);
+	servoMotorAcceleration = this->ui.comboBox_servoMotorAcceleration->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/servoMotorAcceleration", servoMotorAcceleration);
+	servoMotorDeceleration = this->ui.comboBox_servoMotorDeceleration->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/servoMotorDeceleration", servoMotorDeceleration);
+	servoMotorResolution = this->ui.comboBox_servoMotorResolution->currentText().toString();
+	this->ini->setValue("/SWIR-Configuration/servoMotorResolution", servoMotorResolution);
+	slideTableMovingDistance = this->ui.lineEdit_slideTableMovingDistance->text().toInt();
+	this->ini->setValue("/SWIR-Configuration/slideTableMovingDistance", slideTableMovingDistance);
+
+
+
+
+
+	QMessageBox::information(NULL, "Save", "Saved Successfully.", QMessageBox::Ok, QMessageBox::Ok);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_Save_Pressed
@@ -116,7 +319,48 @@ void MainWindow::PushButton_Save_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Defaults_Pressed()
 {
-	
+	////工业相机默认配置
+	this->ui.lineEdit_gain->setText(gain);
+	this->ui.lineEdit_darkLevel->setText(darkLevel);
+	int index = ui->comboBox_imageSaveFormat->findText(imageSaveFormat);
+	ui->comboBox_imageSaveFormat->setCurrentIndex(index);
+	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
+
+	////光源默认配置
+	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
+	ui->comboBox_serialPortSelection->setCurrentIndex(index);
+	int index = ui->comboBox_baudRate->findText(baudRate);
+	ui->comboBox_baudRate->setCurrentIndex(index);
+	this->ui.lineEdit_delaySetting->setText(delaySetting);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequencel);
+
+	////样品台电机驱动默认配置
+	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
+	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
+	int index = ui->comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
+	ui->comboBox_stepperMotorSpeed->setCurrentIndex(index);
+	int index = ui->comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
+	ui->comboBox_stepperMotorAcceleration->setCurrentIndex(index);
+	int index = ui->comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
+	ui->comboBox_stepperMotorDeceleration->setCurrentIndex(index);
+	int index = ui->comboBox_stepperMotorResolution->findText(stepperMotorResolution);
+	ui->comboBox_stepperMotorResolution->setCurrentIndex(index);
+	int index = ui->comboBox_sampleRotationAngle->findText(sampleRotationAngle);
+	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
+
+
+	////滑轨电机驱动默认配置
+	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
+	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
+	int index = ui->comboBox_servoMotorSpeed->findText(servoMotorSpeed);
+	ui->comboBox_servoMotorSpeed->setCurrentIndex(index);
+	int index = ui->comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
+	ui->comboBox_servoMotorAcceleration->setCurrentIndex(index);
+	int index = ui->comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
+	ui->comboBox_servoMotorDeceleration->setCurrentIndex(index);
+	int index = ui->comboBox_servoMotorResolution->findText(servoMotorResolution);
+	ui->comboBox_servoMotorResolution->setCurrentIndex(index);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
 }
 
 ////////////////////////////////切换页面/////////////////////////////////////
