@@ -43,7 +43,7 @@ public:
 private:
 	//获取输入缓冲区的字节数
 	UINT GetBytesInCOM();
-	//发送暂停指令
+	//发送暂停/停止指令
 	bool Suspend();
 	//打开串口
 	bool OpenCOM();

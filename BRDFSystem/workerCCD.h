@@ -7,6 +7,7 @@
 #include <QImage>
 #include <QTimerEvent>
 #include <QThread>
+#include <QMutex>
 #include "ccd.h"
 #include "workerMeasurement.h"
 
@@ -23,7 +24,7 @@ public:
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 
 private slots:
-	void StartTimer();
+	void StartTimer(int measureFlag);
 
 private:
 	WorkerMeasurement*		workerMeasurement;
@@ -35,17 +36,20 @@ private:
 	QImage					_img;
 	Mat						_mat;
 	bool					_capture;
-	bool					_measurement;
+	int						_measurement;
 	//int framerate = 0;
 	int						_timerId;
 	unsigned char*			_pImageFrame;
 	int						_height;
 	int						_width;
 
+	int						_measureFlag;//主界面传入的采集类型标记
+	QMutex					_mutex;
+
 signals:
 	void sendingMat(int workerID, Mat mat);
 	void sendingImg(int workerID, QImage img);
-	void startMeasurement();
+	void startMeasurement(int measureFlag);
 };
 #endif
 

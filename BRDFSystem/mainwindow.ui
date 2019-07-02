@@ -20,7 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="Settings">
          <layout class="QGridLayout" name="gridLayout_45" rowstretch="2,4,1">
@@ -1748,9 +1748,9 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_state">
+             <widget class="QLabel" name="label_measureStatus">
               <property name="text">
-               <string>当前采集进度：第i个倾斜角 第j个高度角 第k个样品旋转角度</string>
+               <string>当前采集进度：第0个倾斜角 第0个高度角 第0个样品角度</string>
               </property>
              </widget>
             </item>
@@ -1904,7 +1904,7 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MaterialMeasurement">
        <property name="geometry">
@@ -1943,8 +1943,14 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_measure3">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>svBRDF采集</string>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -1957,8 +1963,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
-         <height>783</height>
+         <width>124</width>
+         <height>721</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1996,8 +2002,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
-         <height>783</height>
+         <width>124</width>
+         <height>740</height>
         </rect>
        </property>
        <attribute name="label">

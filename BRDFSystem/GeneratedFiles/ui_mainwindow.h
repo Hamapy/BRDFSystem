@@ -297,7 +297,7 @@ public:
     QLineEdit *lineEdit_materialName;
     QPushButton *pushButton_startMeasurement;
     QPushButton *pushButton_stopMeasurement;
-    QLabel *label_state;
+    QLabel *label_measureStatus;
     QLabel *label_materialName;
     QWidget *Modeling;
     QGridLayout *gridLayout_27;
@@ -1621,10 +1621,10 @@ public:
 
         gridLayout_26->addWidget(pushButton_stopMeasurement, 1, 1, 1, 1);
 
-        label_state = new QLabel(Measurement);
-        label_state->setObjectName(QStringLiteral("label_state"));
+        label_measureStatus = new QLabel(Measurement);
+        label_measureStatus->setObjectName(QStringLiteral("label_measureStatus"));
 
-        gridLayout_26->addWidget(label_state, 2, 0, 1, 1);
+        gridLayout_26->addWidget(label_measureStatus, 2, 0, 1, 1);
 
         label_materialName = new QLabel(Measurement);
         label_materialName->setObjectName(QStringLiteral("label_materialName"));
@@ -1784,6 +1784,8 @@ public:
 
         pushButton_measure3 = new QPushButton(MaterialMeasurement);
         pushButton_measure3->setObjectName(QStringLiteral("pushButton_measure3"));
+        pushButton_measure3->setEnabled(false);
+        pushButton_measure3->setAutoDefault(false);
 
         verticalLayout_4->addWidget(pushButton_measure3);
 
@@ -1793,7 +1795,7 @@ public:
         toolBox->addItem(MaterialMeasurement, QString::fromUtf8("\346\235\220\350\264\250\351\207\207\351\233\206"));
         MeterialModeling = new QWidget();
         MeterialModeling->setObjectName(QStringLiteral("MeterialModeling"));
-        MeterialModeling->setGeometry(QRect(0, 0, 184, 783));
+        MeterialModeling->setGeometry(QRect(0, 0, 124, 721));
         gridLayout_15 = new QGridLayout(MeterialModeling);
         gridLayout_15->setSpacing(6);
         gridLayout_15->setContentsMargins(11, 11, 11, 11);
@@ -1818,7 +1820,7 @@ public:
         toolBox->addItem(MeterialModeling, QString::fromUtf8("\346\235\220\350\264\250\345\273\272\346\250\241"));
         SystemSettings = new QWidget();
         SystemSettings->setObjectName(QStringLiteral("SystemSettings"));
-        SystemSettings->setGeometry(QRect(0, 0, 184, 783));
+        SystemSettings->setGeometry(QRect(0, 0, 124, 740));
         gridLayout_16 = new QGridLayout(SystemSettings);
         gridLayout_16->setSpacing(6);
         gridLayout_16->setContentsMargins(11, 11, 11, 11);
@@ -1861,8 +1863,8 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(2);
-        toolBox->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(3);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindowClass);
@@ -2147,7 +2149,7 @@ public:
         label_camera8->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
         pushButton_startMeasurement->setText(QApplication::translate("MainWindowClass", "\345\274\200\345\247\213\351\207\207\351\233\206", Q_NULLPTR));
         pushButton_stopMeasurement->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\351\207\207\351\233\206", Q_NULLPTR));
-        label_state->setText(QApplication::translate("MainWindowClass", "\345\275\223\345\211\215\351\207\207\351\233\206\350\277\233\345\272\246\357\274\232\347\254\254i\344\270\252\345\200\276\346\226\234\350\247\222 \347\254\254j\344\270\252\351\253\230\345\272\246\350\247\222 \347\254\254k\344\270\252\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
+        label_measureStatus->setText(QApplication::translate("MainWindowClass", "\345\275\223\345\211\215\351\207\207\351\233\206\350\277\233\345\272\246\357\274\232\347\254\2540\344\270\252\345\200\276\346\226\234\350\247\222 \347\254\2540\344\270\252\351\253\230\345\272\246\350\247\222 \347\254\2540\344\270\252\346\240\267\345\223\201\350\247\222\345\272\246", Q_NULLPTR));
         label_materialName->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\235\220\350\264\250\345\220\215\347\247\260", Q_NULLPTR));
         QTreeWidgetItem *___qtreewidgetitem = treeWidget->headerItem();
         ___qtreewidgetitem->setText(3, QApplication::translate("MainWindowClass", "\346\234\254\345\234\260\350\267\257\345\276\204", Q_NULLPTR));

@@ -2,7 +2,7 @@
 #include<windows.h> 
 #include "Illuminant.h"
 using namespace std;
-int test_illuminant()
+int main2()
 {
 	//此程序的使用方法1.首先调用InitiCOM()，打开和初始化串口 2.调用SetSteadyTime设置所需要的亮灯时间
 	//3.使用Collection函数实现正式的采集顺序

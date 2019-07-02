@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include "ccd.h"
 #include "illuminant.h"
+#include "sampleComm.h"
 
 class WorkerMeasurement : public QObject
 {
@@ -21,28 +22,18 @@ public:
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 
 private slots:
-	void StartTimer();
+	void StartTimer(int measureFlag);
 	void SaveAMat(int workerID, Mat mat);
 
 private:
 	Illuminant*				illuminant;
+	SampleComm*				sampleComm;
 	UINT                    portNo;
 	int						_timerId;
 	int						_saveName;
 	string					_imageSavingPath = "..\\imgs_measurement";
-	//Mat						_mat;
-	//VimbaSystem&			_system;
-	//int						_workerID;
-	//AVTCamera				*_cameraAVT;
-	//QImage					_img;
-	//Mat						_mat;
-	//bool					_capture;
-	//bool					_measurement;
-	//int framerate = 0;
-	
-	//unsigned char*			_pImageFrame;
-	//int						_height;
-	//int						_width;
-
+	UINT*					_illuminantID;
+	UINT					_ID;
+	int						_measureFlag;
 };
 #endif

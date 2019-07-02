@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_WorkerCCD_t {
-    QByteArrayData data[10];
-    char stringdata0[82];
+    QByteArrayData data[11];
+    char stringdata0[94];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,12 +38,13 @@ QT_MOC_LITERAL(5, 35, 3), // "mat"
 QT_MOC_LITERAL(6, 39, 10), // "sendingImg"
 QT_MOC_LITERAL(7, 50, 3), // "img"
 QT_MOC_LITERAL(8, 54, 16), // "startMeasurement"
-QT_MOC_LITERAL(9, 71, 10) // "StartTimer"
+QT_MOC_LITERAL(9, 71, 11), // "measureFlag"
+QT_MOC_LITERAL(10, 83, 10) // "StartTimer"
 
     },
     "WorkerCCD\0sendingMat\0\0workerID\0Mat\0"
     "mat\0sendingImg\0img\0startMeasurement\0"
-    "StartTimer"
+    "measureFlag\0StartTimer"
 };
 #undef QT_MOC_LITERAL
 
@@ -63,18 +64,18 @@ static const uint qt_meta_data_WorkerCCD[] = {
  // signals: name, argc, parameters, tag, flags
        1,    2,   34,    2, 0x06 /* Public */,
        6,    2,   39,    2, 0x06 /* Public */,
-       8,    0,   44,    2, 0x06 /* Public */,
+       8,    1,   44,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    0,   45,    2, 0x08 /* Private */,
+      10,    1,   47,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, 0x80000000 | 4,    3,    5,
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    3,    7,
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    9,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,    9,
 
        0        // eod
 };
@@ -87,8 +88,8 @@ void WorkerCCD::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         switch (_id) {
         case 0: _t->sendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< Mat(*)>(_a[2]))); break;
         case 1: _t->sendingImg((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
-        case 2: _t->startMeasurement(); break;
-        case 3: _t->StartTimer(); break;
+        case 2: _t->startMeasurement((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->StartTimer((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -109,7 +110,7 @@ void WorkerCCD::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             }
         }
         {
-            typedef void (WorkerCCD::*_t)();
+            typedef void (WorkerCCD::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&WorkerCCD::startMeasurement)) {
                 *result = 2;
                 return;
@@ -169,8 +170,9 @@ void WorkerCCD::sendingImg(int _t1, QImage _t2)
 }
 
 // SIGNAL 2
-void WorkerCCD::startMeasurement()
+void WorkerCCD::startMeasurement(int _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, Q_NULLPTR);
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_END_MOC_NAMESPACE

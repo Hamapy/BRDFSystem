@@ -20,7 +20,7 @@ using namespace cv;
 using namespace AVT::VmbAPI;
 
 
-#define CAPTURE_NUM 50 //采集图像数量 
+#define CAPTURE_NUM 100 //采集图像数量 
 #define TIMEOUT 5000 //采集图像等待超时时间 
 
 //相机编号

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_WorkerMeasurement_t {
-    QByteArrayData data[7];
-    char stringdata0[56];
+    QByteArrayData data[8];
+    char stringdata0[68];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,14 +32,15 @@ static const qt_meta_stringdata_WorkerMeasurement_t qt_meta_stringdata_WorkerMea
 QT_MOC_LITERAL(0, 0, 17), // "WorkerMeasurement"
 QT_MOC_LITERAL(1, 18, 10), // "StartTimer"
 QT_MOC_LITERAL(2, 29, 0), // ""
-QT_MOC_LITERAL(3, 30, 8), // "SaveAMat"
-QT_MOC_LITERAL(4, 39, 8), // "workerID"
-QT_MOC_LITERAL(5, 48, 3), // "Mat"
-QT_MOC_LITERAL(6, 52, 3) // "mat"
+QT_MOC_LITERAL(3, 30, 11), // "measureFlag"
+QT_MOC_LITERAL(4, 42, 8), // "SaveAMat"
+QT_MOC_LITERAL(5, 51, 8), // "workerID"
+QT_MOC_LITERAL(6, 60, 3), // "Mat"
+QT_MOC_LITERAL(7, 64, 3) // "mat"
 
     },
-    "WorkerMeasurement\0StartTimer\0\0SaveAMat\0"
-    "workerID\0Mat\0mat"
+    "WorkerMeasurement\0StartTimer\0\0measureFlag\0"
+    "SaveAMat\0workerID\0Mat\0mat"
 };
 #undef QT_MOC_LITERAL
 
@@ -57,12 +58,12 @@ static const uint qt_meta_data_WorkerMeasurement[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   24,    2, 0x08 /* Private */,
-       3,    2,   25,    2, 0x08 /* Private */,
+       1,    1,   24,    2, 0x08 /* Private */,
+       4,    2,   27,    2, 0x08 /* Private */,
 
  // slots: parameters
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, 0x80000000 | 5,    4,    6,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int, 0x80000000 | 6,    5,    7,
 
        0        // eod
 };
@@ -73,7 +74,7 @@ void WorkerMeasurement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         WorkerMeasurement *_t = static_cast<WorkerMeasurement *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->StartTimer(); break;
+        case 0: _t->StartTimer((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 1: _t->SaveAMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< Mat(*)>(_a[2]))); break;
         default: ;
         }

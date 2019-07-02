@@ -30,11 +30,15 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #include "cnComm.h"
 
 #define STEP_FEEDBACK      "DONE"    //电机反馈标识
-#define STEP_ACCELERATE    10       //电机加速度
-#define STEP_DECELERATE    10       //电机减速度
-#define STEP_RESOLUTION    8        //电机分辨率
-#define STEP_TIMEOUT       120000   //超时,毫秒
-#define STEP_SAFESTEP	   500000	 //归位电机保护步数,最多转这么多步后会停下来
+#define STEP_ACCELERATE    25       //电机加速度
+#define STEP_DECELERATE    25       //电机减速度
+#define STEP_RESOLUTION    3        //电机分辨率
+//#define STEP_RESOLUTION    0.5        //电机分辨率
+//#define STEP_TIMEOUT       120000   //超时,毫秒
+#define STEP_TIMEOUT       10000   //超时,毫秒
+#define STEP_SAFESTEP	   10000	 //归位电机保护步数,最多转这么多步后会停下来
+#define STEP_STRINGLEN	   256
+#define STEP_TOHOME        6300  //归位需要调节的步数 样品台一圈约6300步
 
 class SampleComm : public CRs232Comm
 {
@@ -57,6 +61,11 @@ public:
 
 
 private:
+	//确认电机已经完成当前指令
+	bool IsFinished(int wait_time);
+	//时间等待函数
+
+	void Wait(int millisec);
 	int m_step;             //转到下一通道电机需要移动的步数
 	int m_homeadj;          //归位时电机需要移动的步数
     int m_port;             //电机连接的串口	
@@ -64,11 +73,6 @@ private:
 	int m_decelerate;       //电机减速度
 	int m_resolution;       //电机分辨率
 	double m_velocity;      //电机速度
-
-	//确认电机已经完成当前指令
-	bool IsFinished(int wait_time);
-	//时间等待函数
-	void Wait(int millisec);
 
 };
 #endif

@@ -12,9 +12,16 @@ QMainWindow(parent)
 	//界面及软件初始化
 	AVTCamera::IniVimba(_system);
 	this->setAttribute(Qt::WA_DeleteOnClose, true);//关闭窗口时清空内存
-	TurnToMeasurement1();
-	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
+	
+	//初始界面置为各向同性采集界面
+	this->ui.label_materialName->setText(QStringLiteral("采集材质（各向同性）名称"));
+	this->ui.label_measureStatus->setText(QStringLiteral("当前采集进度：第0/36个倾斜角 第0/9个方位角"));
+	this->ui.pushButton_stopMeasurement->setEnabled(false);
+	this->ui.toolBox->setCurrentWidget(this->ui.MaterialMeasurement);
+	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
+	
 	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	slideComm = new SlideComm();
 	
 	////页面切换
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
@@ -27,6 +34,7 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
 	////采集页面
+	_measureFlag = 0;
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
 
@@ -38,6 +46,7 @@ QMainWindow(parent)
 	//}
 
 	////相机预处理页面
+	_displayFlag = 0;
 	this->ui.pushButton_captureContinuously->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
@@ -54,16 +63,8 @@ QMainWindow(parent)
 		//{
 		//	threadCCD[i]->terminate();
 		//}
+		connect(workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
 	}
-	connect(workerCCD[0], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	connect(workerCCD[1], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[2], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage2(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[3], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage3(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[4], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage4(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[5], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage5(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[6], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage6(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[7], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage7(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[8], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage8(QImage)), Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -75,8 +76,8 @@ MainWindow::~MainWindow()
 		threadCCD[i]->quit();
 		threadCCD[i]->wait();
 
-		delete workerCCD[i]->_cameraAVT;
-		workerCCD[i]->_cameraAVT = NULL;
+		//delete workerCCD[i]->_cameraAVT;
+		//workerCCD[i]->_cameraAVT = NULL;//留给他自己去delete
 
 		delete workerCCD[i];
 		workerCCD[i] = NULL;
@@ -86,6 +87,8 @@ MainWindow::~MainWindow()
 	}
 	//delete[] workerCCD; //这样定义不好确定workerID
 	//delete[] threadCCD;
+
+	delete slideComm;
 
 	AVTCamera::FiniVimba(_system);
 }
@@ -131,6 +134,11 @@ void MainWindow::PushButton_Defaults_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement1()
 {
+	_measureFlag = 1;
+	this->ui.label_materialName->setText(QStringLiteral("采集材质（各向同性）名称"));
+	this->ui.label_measureStatus->setText(QStringLiteral("当前采集进度：第0/36个倾斜角 第0/9个方位角"));
+	this->ui.pushButton_stopMeasurement->setEnabled(false);
+	this->ui.toolBox->setCurrentWidget(this->ui.MaterialMeasurement);
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);	
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -139,6 +147,10 @@ void MainWindow::TurnToMeasurement1()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement2()
 {
+	_measureFlag = 2;
+	this->ui.label_materialName->setText(QStringLiteral("采集材质（各向异性）名称"));
+	this->ui.label_measureStatus->setText(QStringLiteral("当前采集进度：第0/36个倾斜角 第0/9个方位角 第0/18个样品角度"));
+	this->ui.pushButton_stopMeasurement->setEnabled(false);
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -147,6 +159,7 @@ void MainWindow::TurnToMeasurement2()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement3()
 {
+	_measureFlag = 3;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -210,28 +223,28 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		QMessageBox::critical(NULL, QStringLiteral("警告"), QStringLiteral("请输入材质名称"), QMessageBox::Ok);
 		return;
 	}
-	this->ui.lineEdit_materialName->setEnabled(false);
-	
-	//slideComm->SlideMoveIn();
-	//Sleep(10000);//等待滑轨就位
 	CreateFolds("..\\imgs_measurement");
-
+	this->ui.lineEdit_materialName->setEnabled(false);
+	this->ui.pushButton_stopMeasurement->setEnabled(true);
+	this->ui.toolBox->setEnabled(false);
+	
+	//滑轨就位
+	//slideComm->Init(13, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
+	//slideComm->MoveToX2();
+	//Sleep(30000);//等待滑轨就位
+	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer();
+			connect(this, SIGNAL(startTimer(int)), workerCCD[i], SLOT(StartTimer(int)));
+			emit startTimer(_measureFlag);
+
+			_mutex.lock();
 			this->workerCCD[i]->_measurement = 1;
+			_mutex.unlock();
 		}
-		//if (!threadMeasurement[i]->isRunning())
-		//{
-		//	threadMeasurement[i]->start();
-		//	connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-		//	emit startTimer();
-		//	this->workerCCD[i]->_measurement = 1;
-		//}
 	}
 
 }
@@ -293,7 +306,7 @@ void MainWindow::PushButton_IniCCD_Pressed()
 		{
 			threadCCD[i]->start();
 			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer();
+			emit startTimer(0);
 		}
 	}
 }

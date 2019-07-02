@@ -14,6 +14,7 @@ Illuminant::Illuminant(UINT portNo):_portNo(portNo)
 
 Illuminant::~Illuminant()
 {
+	Suspend();
     CloseListenTread();
 	CloseCOM();
 	DeleteCriticalSection(&_csCommunicationSync);
@@ -152,7 +153,7 @@ bool Illuminant::SetSteadyTime(int steadyTime)
 		return false;
 	}
 	delete[]temp;
-	Sleep(1 * 100);
+	Sleep(2 * 100);
 	return true;//
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -491,7 +492,7 @@ UINT WINAPI Illuminant::ListenThread(void* pParam)
 			}
 			++i;
 		}
-		if (i == 9)//这个是和所需要点亮光源的数量相等
+		if (i == 196)//这个是和所需要点亮光源的数量相等
 			return 0;
 	}
 	return 0;

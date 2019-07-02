@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include <QtWidgets/QApplication>
 
-/*
-int main(int argc, char *argv[])
+
+int main1(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	VimbaSystem& system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
@@ -13,5 +13,5 @@ int main(int argc, char *argv[])
 	w->show();
 	return a.exec();
 }
-*/
+
 

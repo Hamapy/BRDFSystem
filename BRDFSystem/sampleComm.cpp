@@ -56,42 +56,66 @@ SampleComm::~SampleComm()
 bool SampleComm::Init(int port, int step, double velocity, int accelerate, int decelerate, int resolution, int homeadj)
 {
 	bool ret = false;
-	m_accelerate = accelerate;
-	m_velocity   = velocity;
-	m_decelerate = decelerate;
-	m_resolution = resolution;
-	m_homeadj    = homeadj;
-	m_step       = step;
-	m_port       = port;
+	char cmd[STEP_STRINGLEN];
+	m_port = port;
 
-    char cmd[256];
-
-	if(IsOpen())
+	if (IsOpen())
 	{
 		Close();
 	}
-	if(!Open(m_port))
+	if (!Open(m_port))
 	{
-		return false;
+		ret = false;
+	}
+	else
+	{
+		ret = true;
 	}
 
-	//设置电机为计算机控制
-	ClearInputBuffer();
-	sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
-	Write(cmd);
-
-	//设置电机参数
-	ClearInputBuffer();
-	//sprintf_s(cmd,"CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r",m_accelerate,m_velocity,m_decelerate,m_resolution,FEEDBACK_SIGN);
-	sprintf_s(cmd, "AC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
-	Write(cmd);
-
-	if (IsFinished(STEP_TIMEOUT))
-		ret = true;
-	else 
-		ret = false;
+	//先重置再设置PC控制
 	if (ret)
-		Reset();
+	{
+		//重置电机驱动
+		ClearInputBuffer();
+		sprintf(cmd, "CHR\rRE\rSS%s\r", STEP_FEEDBACK);
+		Write(cmd);
+		ret = IsFinished(STEP_TIMEOUT);
+	}
+	//Fini();
+	
+	ret = Init(m_port);
+
+
+	if (ret)
+	{
+		//设置电机为计算机控制
+		ClearInputBuffer();
+		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", STEP_FEEDBACK);//该坑浪费我半个下午，先要设置为计算机控制
+		Write(cmd);
+		ret = IsFinished(STEP_TIMEOUT);
+	}
+
+	m_accelerate = accelerate;
+	m_velocity = velocity;
+	m_decelerate = decelerate;
+	m_resolution = resolution;
+	m_homeadj = homeadj;
+	m_step = step;
+	if (ret)
+	{
+		//设置电机参数
+		ClearInputBuffer();
+		//sprintf_s(cmd, "CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		sprintf_s(cmd, "AC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		Write(cmd);
+		ret = IsFinished(STEP_TIMEOUT);
+	}
+
+	if (ret)
+	{
+		//Fini();
+		//ret = Reset();//一直转原来是这里的问题，找不到光电限位开关
+	}
 
 	return ret;	
 }
@@ -107,9 +131,7 @@ bool SampleComm::Init(int port, int step, double velocity, int accelerate, int d
 bool SampleComm::Init(int port)
 {
 	bool ret = false;
-	m_port = port;
-
-	char cmd[256];
+	char cmd[STEP_STRINGLEN];
 
 	if (IsOpen())
 	{
@@ -117,27 +139,34 @@ bool SampleComm::Init(int port)
 	}
 	if (!Open(m_port))
 	{
-		return false;
+		ret = false;
+	}
+	else
+	{
+		ret = true;
+	}
+	
+	/*
+	if (ret)
+	{
+		//设置电机为计算机控制
+		ClearInputBuffer();
+		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", STEP_FEEDBACK);//该坑浪费我半个下午，先要设置为计算机控制
+		Write(cmd);
+		ret = IsFinished(STEP_TIMEOUT);
 	}
 
-	//设置电机为计算机控制
-	ClearInputBuffer();
-	sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
-	Write(cmd);
-
-	//设置电机参数
-	ClearInputBuffer();
-	//sprintf_s(cmd,"CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r",m_accelerate,m_velocity,m_decelerate,m_resolution,FEEDBACK_SIGN);
-	sprintf_s(cmd, "CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
-	Write(cmd);
-
-	if (IsFinished(STEP_TIMEOUT))
-		ret = true;
-	else
-		ret = false;
 	if (ret)
-		Reset();
-
+	{
+		//设置电机参数
+		ClearInputBuffer();
+		//sprintf_s(cmd, "CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		sprintf_s(cmd, "AC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		Write(cmd);
+		ret = IsFinished(STEP_TIMEOUT);
+	}
+	*/
+	
 	return ret;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -152,15 +181,26 @@ bool SampleComm::Init(int port)
 ////////////////////////////////////////////////////////////////////////////
 bool SampleComm::GotoNextPos(int step)
 {
+	char cmd[STEP_STRINGLEN];
+	bool ret = false;
+
+	// 初始化设备
+	ret = Init(m_port);
 	m_step = step;
-	char cmd[256];
-	sprintf_s(cmd, "DI%d\rFL\rSS%s\r", step, STEP_FEEDBACK);	//写入转动步数
+
 	ClearInputBuffer();
+	sprintf_s(cmd, "DI%d\rFL\rSS%s\r", step, STEP_FEEDBACK);	//写入转动步数
+	
 	Write(cmd);
 	if (IsFinished(STEP_TIMEOUT))
-		return true;
+	{
+		Fini();
+		ret = true;
+	}
 	else 
-		return false;
+		ret = false;
+
+	return ret;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：SetVel
@@ -197,14 +237,56 @@ bool SampleComm::GotoNextPos(int step)
 ////////////////////////////////////////////////////////////////////////////
 bool SampleComm::Reset()
 {
-	char cmd[256];
+	char cmd[STEP_STRINGLEN];
+	char rdstr[STEP_STRINGLEN];
 	bool ret = false;
+
+	ret = Init(m_port);
 	ClearInputBuffer();	
-	//若未找到挡片，最多转WHEEL_SAFE_STEP=500000（2000转一圈）也会停下
-	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rDI%d\rFL\rSS%s\r", 0 - m_homeadj, STEP_SAFESTEP, 5700, STEP_FEEDBACK);
+	//sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+
 	Write(cmd);
 	if (IsFinished(STEP_TIMEOUT))
-		ret = true;
+	{
+		//报警复位，使能电机
+		ClearInputBuffer();
+		sprintf(cmd, "AL\r");
+		Write(cmd);
+
+		Wait(5000);//等待样品台归位
+		Read(rdstr, 256, 20);
+		//if (strstr(rdstr, "AL=0004"))
+		if (strstr(rdstr, "AL=0001"))
+		{
+			ClearInputBuffer();
+			sprintf(cmd, "DI%d\rFL\rSS%s\r", -500, STEP_FEEDBACK);
+			Write(cmd);
+			if (IsFinished(STEP_TIMEOUT))
+			{
+
+				ClearInputBuffer();
+				sprintf(cmd, "AR\r");
+				Write(cmd);
+
+				Wait(20);
+				ClearInputBuffer();
+				sprintf(cmd, "AL\r");
+				Write(cmd);
+
+				Wait(20);
+				Read(rdstr, 256, 20);
+				if (strstr(rdstr, "AL=0000"))
+				{
+					ret = true;
+					Fini();
+				}
+			}
+		}
+		else
+			ret = false;
+	}
+	
 	return ret;	
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -225,7 +307,7 @@ void SampleComm::Fini()
 }
 ///////////////////////////////////私有成员函数/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// 函数：Fini
+// 函数：IsFinished
 // 描述：查询电机是否已经完成当前指令
 // 输入: 需要等待的时间
 // 输出：
@@ -233,35 +315,35 @@ void SampleComm::Fini()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SampleComm::IsFinished(int wait_time)
+bool SampleComm::IsFinished(int timeout)
 {
 	#define READ_WAIT_TIME   20
-	#define WAIT_DEAY        50
-	bool success = false;
-	char rdstr[256];
+	#define WAIT_DEAY        200
+	bool ret = false;
+	char rdstr[STEP_STRINGLEN];
 	int  time_start = GetTickCount();
-	MSG  msg;
+	//MSG  msg;
 	while(1)
 	{	
-		Wait(WAIT_DEAY);//避免串口繁忙,等待50ms
-		Read(rdstr, 256, READ_WAIT_TIME);
+		Wait(WAIT_DEAY);//避免串口繁忙,等待200ms
+		Read(rdstr, STEP_STRINGLEN, READ_WAIT_TIME);
 		if (strstr(rdstr, STEP_FEEDBACK))
 		{
-			success = true;
+			ret = true;
 			break;
 		}
-		if ((int)(GetTickCount() - time_start) > wait_time)
+		if ((int)(GetTickCount() - time_start) > timeout)
 		{
-			success = false;           
+			ret = false;           
 			break;
 		} 	
-		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}	
+		//while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
+		//{
+		//	TranslateMessage(&msg);
+		//	DispatchMessage(&msg);
+		//}	
     }
-	return success;
+	return ret;
 	#undef READ_WAIT_TIME
 	#undef WAIT_DEAY
 }
