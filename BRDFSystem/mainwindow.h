@@ -11,12 +11,12 @@
 #include <QMessageBox>
 #include "ui_mainwindow.h"
 #include "slideComm.h"
-//#include "sampleComm.h"
+#include "sampleComm.h"
 #include "ccd.h"
 #include "workerCCD.h"
 //#include "configuration.h"
 
-#define CAM_NUM 6  //相机数量
+#define CAM_NUM 2  //相机数量
 
 ////////////////////////////界面主线程类声明////////////////////////////
 class MainWindow : public QMainWindow
@@ -53,6 +53,7 @@ private slots:
 
 
 	//槽函数的公用函数
+	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
 	//void DisplayImage1(QImage img);
 	//void DisplayImage2(QImage img);
@@ -67,25 +68,23 @@ private:
 	Ui::MainWindowClass ui;
 
 	SlideComm*					slideComm;
-	//SampleComm*					sampleComm;
+	SampleComm*					sampleComm;
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
-	//WorkerMeasurement*		workerMeasurement[9];
+	//WorkerMeasurement*			workerMeasurement[9];
 	//QThread*					threadMeasurement[9];
 	VimbaSystem&				_system;
 	QSettings					*ini;
 	//VimbaSystem&				_system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
 	//为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
-	QString						_qMaterialName;
-	bool						_displayFlag; //标记采集窗口/预处理/测试窗口显示图像(1/2/3)
-	int							_measureFlag; //标记测量类型（1/2/3）
-	QMutex						_mutex;
+	QString _qMaterialName;
+	bool _displayFlag;
 
 	void CreateFolds(string root);
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 signals:
-	void startTimer(int measureFlag);
+	void startTimer();
 	//void startMeasureMent();
 };
 #endif
