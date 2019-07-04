@@ -13,12 +13,13 @@
 #include "slideComm.h"
 //#include "sampleComm.h"
 //#include "ccd.h"
+
 #include "workerCCD.h"
 //#include "configuration.h"
 
-#define CAM_NUM 6  //Ïà»úÊıÁ¿
+#define CAM_NUM 2  //ç›¸æœºæ•°é‡
 
-////////////////////////////½çÃæÖ÷Ïß³ÌÀàÉùÃ÷////////////////////////////
+////////////////////////////ç•Œé¢ä¸»çº¿ç¨‹ç±»å£°æ˜////////////////////////////
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -28,7 +29,7 @@ public:
 	virtual ~MainWindow();
 
 private slots:
-	//Ò³ÃæÇĞ»»À¸
+	//é¡µé¢åˆ‡æ¢æ 
 	void TurnToMeasurement1();
 	void TurnToMeasurement2();
 	void TurnToMeasurement3();
@@ -38,32 +39,25 @@ private slots:
 	void TurnToTest();
 	void TurnToPreCamera();
 	
-	//ÅäÖÃÎÄ¼ş
+	//é…ç½®æ–‡ä»¶
 	void PushButton_Save_Pressed();
 	void PushButton_Defaults_Pressed();
 
-	//²ÄÖÊ²É¼¯Ò³Ãæ
+	//æè´¨é‡‡é›†é¡µé¢
 	void PushButton_StartMeasurement_Pressed();
 	void StopMeasurement();
 	void SendingMat(int workerID, QImage mat);
 	void ConnectRGB();
 
 
-	//Ïà»úÔ¤´¦ÀíÒ³Ãæ
+	//ç›¸æœºé¢„å¤„ç†é¡µé¢
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
 
 
-	//²Ûº¯ÊıµÄ¹«ÓÃº¯Êı
+	//æ§½å‡½æ•°çš„å…¬ç”¨å‡½æ•°
+	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
-	//void DisplayImage1(QImage img);
-	//void DisplayImage2(QImage img);
-	//void DisplayImage3(QImage img);
-	//void DisplayImage4(QImage img);
-	//void DisplayImage5(QImage img);
-	//void DisplayImage6(QImage img);
-	//void DisplayImage7(QImage img);
-	//void DisplayImage8(QImage img);
 
 private:
 	Ui::MainWindowClass ui;
@@ -71,19 +65,17 @@ private:
 	WorkerMeasurement*			workerMeasurement;
 	QThread*					threadMeasurement;
 	SlideComm*					slideComm;
-	//SampleComm*					sampleComm;
+	SampleComm*					sampleComm;
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
-	//WorkerMeasurement*		workerMeasurement[9];
+	//WorkerMeasurement*			workerMeasurement[9];
 	//QThread*					threadMeasurement[9];
 	VimbaSystem&				_system;
 	QSettings					*ini;
-	//VimbaSystem&				_system = VimbaSystem::GetInstance();//Ïà»úµÄSDK-VimbaÏµÍ³
-	//ÎªÁË±ÜÃâÃ¿¸öÏà»úÏß³ÌÖØ¸´¿ªÆôVimbaÏµÍ³£¬Ö»ÄÜÔİÊ±°É¸ÃÒıÓÃÌáµ½×îÉÏ²ã
-	QString						_qMaterialName;
-	bool						_displayFlag; //±ê¼Ç²É¼¯´°¿Ú/Ô¤´¦Àí/²âÊÔ´°¿ÚÏÔÊ¾Í¼Ïñ(1/2/3)
-	int							_measureFlag; //±ê¼Ç²âÁ¿ÀàĞÍ£¨1/2/3£©
-	QMutex						_mutex;
+	//VimbaSystem&				_system = VimbaSystem::GetInstance();//ç›¸æœºçš„SDK-Vimbaç³»ç»Ÿ
+	//ä¸ºäº†é¿å…æ¯ä¸ªç›¸æœºçº¿ç¨‹é‡å¤å¼€å¯Vimbaç³»ç»Ÿï¼Œåªèƒ½æš‚æ—¶å§è¯¥å¼•ç”¨æåˆ°æœ€ä¸Šå±‚
+	QString _qMaterialName;
+	bool _displayFlag;
 
 	void CreateFolds(int flag, string root, string fileName = "");
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
@@ -92,6 +84,7 @@ signals:
 	void startTimer(/*int dispalyFlag*/);
 	void startMeasure(int measureFlag);
 	void sendingMaterialName(QString materialName);
-	void sendingMat(int workerID, QImage mat);//Ö÷½çÃæ×ªÊÖÒ»ÏÂ
+	void sendingMat(int workerID, QImage mat);//ä¸»ç•Œé¢è½¬æ‰‹ä¸€ä¸‹
+
 };
 #endif
