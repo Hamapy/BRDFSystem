@@ -1,15 +1,18 @@
 #include "workerMeasurement.h"
 
 ////////////////////////////////AVT相机线程类定义////////////////////////////
-WorkerMeasurement::WorkerMeasurement(int workerID, VimbaSystem&	system, QObject *parent) :
-_workerID(workerID),
+WorkerMeasurement::WorkerMeasurement(VimbaSystem&	system, QObject *parent) :
 _system(system),
 QObject(parent)
 {
-	cameraAVT = new AVTCamera(_workerID, _system);
-	illuminant = new Illuminant(5);
+	_mutex.lock();
+	//cameraAVT = new AVTCamera(_workerID, _system);
+
 	sampleComm = new SampleComm();
 	sampleComm->Init(2, 0, 0.25, STEP_ACCELERATE, STEP_DECELERATE, STEP_RESOLUTION, STEP_TOHOME);
+	illuminant = new Illuminant(5);
+	illuminant->InitCOM();
+	//illuminant->SetSteadyTime(30);
 	//光源排布顺序
 	_illuminantID = new UINT[196] { 0, 1, 2, 3,    25, 26, 27, 28, 29,    50,51,52,53,       75,76,77,78,79,   100,101,102,103,      125,126,127,128,129,    150,151,152,153,      175,176,177,178,179,\
 									  4,5,6,7,8,     30,31,32,33,           54,55,56,57,58,    80,81,82,83,      104,105,106,107,108,  130,131,132,133,        154,155,156,157,158,  180,181,182,183,\
@@ -20,11 +23,16 @@ QObject(parent)
 									  22,23,         47,                    71,72,             97,               122,123,              147,                    171,172,              197,\
 									  24,            48,                    73,                                  124,                  148,                    173,                  \
 										    		 49,                                       98,                                     149,                                          198 };
-	_ID = 0;
-	_saveName = 0;
+	_iID = 0;
+	_sID = 0;
+	_isReady = 0;
+	_captureDone = 0;
 	_measureFlag = 0;
-	_exposureTime = 50;
-
+	_sampleFlag = 0;
+	//_exposureTime = 50;
+	//_saveName = 0;
+	_saveName = new int[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+	_seriesCAM = new bool[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 	/*
 	//_measureFlag = measureFlag;
 	illuminant->InitCOM();
@@ -40,11 +48,131 @@ WorkerMeasurement::~WorkerMeasurement()
 	delete illuminant;
 	delete _illuminantID;
 	delete sampleComm;
-	delete cameraAVT;
+	//delete cameraAVT;
 	this->killTimer(_timerId);
 }
 
+void WorkerMeasurement::NextMeasureState(int workerID, /*Mat*/QImage mat)
+{
+	if (!_isReady)
+	{
+		if (_measureFlag == 1)
+		{
+			if (_iID != 196)
+			{
+				illuminant->Suspend();
+				//Sleep(500);
+				illuminant->SetSteadyTime(50);
+				illuminant->LightenById(_illuminantID[_iID]);
+				illuminant->Start();
+				Sleep(500);//避免接收到灯亮前的图像
+				_iID++;
+				_isReady = 1;
+				emit readyForCapture();//通过主线程告诉相机咱切换到下一个灯了，你可以试试调整一下你的曝光时间
+			}
+		}
 
+		if (_measureFlag == 2)
+		{
+			if (_iID != 196)
+			{
+				if (_sampleFlag == 0)
+				{
+					illuminant->Suspend();
+					illuminant->SetSteadyTime(200);
+					illuminant->LightenById(_illuminantID[_iID]);
+					illuminant->Start();
+					Sleep(500);
+				}
+
+				if (_sID != 9)//36个角度耗时太长
+				{
+					sampleComm->GotoNextPos(175);
+					Sleep(3000);//等待样品台旋转，设置2秒时指令污染
+					_sID++;
+					_isReady = 1;
+					_sampleFlag = 1;
+				}
+				else
+				{
+					_sampleFlag = 0;
+					_sID = 0;//开始转下一圈
+					_iID++;
+					_isReady = 1;
+					emit readyForCapture();
+				}
+			}
+		}
+	}
+	else //光源样品就位，保存相机线程发来的采集图像
+	{
+		SaveSeriesMat(workerID, mat);
+		//emit readyForCapture();
+		//if (_captureDone)
+		//	_isReady = 0;
+	}
+
+}
+
+inline void WorkerMeasurement::SaveSeriesMat(int workerID, /*Mat*/QImage mat)
+{
+#define CAM_NUM 6
+
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		if (workerID == i)
+			_seriesCAM[i] = 1;
+	}
+	SaveAMat(workerID, mat);
+
+	int s = 0;
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		s += _seriesCAM[i];
+	}
+	if (s == CAM_NUM)
+	{
+		//_captureDone = 1;
+		_isReady = 1;
+		for (int i = 0; i < CAM_NUM; i++)
+		{
+			_seriesCAM[i] = 0;
+		}
+	}
+	else
+		_isReady = 0;
+		//_captureDone = 0;
+
+#undef CAM_NUM
+}
+
+inline void WorkerMeasurement::SaveAMat(int workerID, /*Mat*/QImage mat)
+{
+	char saveName[4] = { 0 };
+	sprintf(saveName, "%4d", _saveName[workerID]);
+	char sPath[200];
+
+	sprintf(sPath, "//%s.bmp", saveName);
+	string path;
+	if (_measureFlag == 1)
+		path = _imageSavingPath1 + _materialName + "//camera" + to_string(workerID) + sPath;
+	if (_measureFlag == 2)
+		path = _imageSavingPath2 + _materialName + "//camera" + to_string(workerID) + sPath;
+	if (_measureFlag == 3)
+		path = _imageSavingPath3 + "//camera" + to_string(workerID) + sPath;
+	//imwrite(path, mat);
+	mat.save(QString::fromStdString(path), "BMP", 100);
+	_saveName[workerID]++;
+
+	return;
+}
+
+void WorkerMeasurement::GetMaterialName(QString materialName)
+{
+	_materialName = materialName.toStdString();
+}
+
+/*
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
 	
@@ -57,7 +185,9 @@ void WorkerMeasurement::StartTimer(int measureFlag)
 		illuminant->SetSteadyTime(360);
 	_timerId = this->startTimer(10000);//设置定时器触发子线程capture
 }
+*/
 
+/*
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
 //void WorkerMeasurement::StartMeasure(int measueFlag)
 {
@@ -124,6 +254,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 		}
 	}
 }
+*/
 /*
 void WorkerMeasurement::GetExposureTime(int workerID, Mat mat)
 {
@@ -133,25 +264,9 @@ void WorkerMeasurement::GetExposureTime(int workerID, Mat mat)
 	//_mutex.unlock();
 }
 */
-/*
-void WorkerMeasurement::SaveAMat(int workerID, Mat mat)
-{
-	disconnect(this->parent(), SIGNAL(sendingMat(int, Mat)), this, SLOT(SaveAMat(int, Mat)));//进入槽函数后立刻断连，避免多帧Mat碰撞
 
-	char saveName[4] = { 0 };
-	sprintf(saveName, "%4d", _saveName);
-	char sPath[200];
 
-	sprintf(sPath, "//%s.bmp", saveName);
-	string path;
-	if (_measureFlag == 1)
-		path = _imageSavingPath1 + "//camera" + to_string(workerID) + sPath;
-	if (_measureFlag == 1)
-		path = _imageSavingPath2 + "//camera" + to_string(workerID) + sPath;
-	imwrite(path, mat);
-	_saveName++;
 
-	return;
-}
-*/
+
+
 

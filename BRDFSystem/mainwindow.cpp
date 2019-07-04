@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 
-////////////////////////////////Ö÷½çÃæ¶¨Òå////////////////////////////
+////////////////////////////////ä¸»ç•Œé¢å®šä¹‰////////////////////////////
 //VimbaSystem& _system = VimbaSystem::GetInstance();
 
 MainWindow::MainWindow(VimbaSystem&	system, QWidget *parent) : 
@@ -9,35 +9,35 @@ QMainWindow(parent)
 {
 	ui.setupUi(this);
 	
-	//½çÃæ¼°Èí¼ş³õÊ¼»¯
+	//ç•Œé¢åŠè½¯ä»¶åˆå§‹åŒ–
 	AVTCamera::IniVimba(_system);
-	this->setAttribute(Qt::WA_DeleteOnClose, true);//¹Ø±Õ´°¿ÚÊ±Çå¿ÕÄÚ´æ
+	this->setAttribute(Qt::WA_DeleteOnClose, true);//å…³é—­çª—å£æ—¶æ¸…ç©ºå†…å­˜
 	TurnToMeasurement1();
 	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//¶ÁÈ¡ÅäÖÃÎÄ¼ş
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//è¯»å–é…ç½®æ–‡ä»¶
 
 
 
-	////»¬¶¯ÌõÏà¹ØÉèÖÃ
+	////æ»‘åŠ¨æ¡ç›¸å…³è®¾ç½®
 	int nMin = 0;
 	int nMax = 200;
 	int nSingleStep = 10;
 
 
 	QSlider *pSlider1 = this->ui.horizontalSlider_gain;
-	pSlider1->setMinimum(nMin);  // ×îĞ¡Öµ
-	pSlider1->setMaximum(nMax);  // ×î´óÖµ
-	pSlider1->setSingleStep(nSingleStep);  // ²½³¤
+	pSlider1->setMinimum(nMin);  // æœ€å°å€¼
+	pSlider1->setMaximum(nMax);  // æœ€å¤§å€¼
+	pSlider1->setSingleStep(nSingleStep);  // æ­¥é•¿
 
 	QSlider *pSlider2 = this->ui.horizontalSlider_darkLevel;
-	pSlider2->setMinimum(nMin);  // ×îĞ¡Öµ
-	pSlider2->setMaximum(nMax);  // ×î´óÖµ
-	pSlider2->setSingleStep(nSingleStep);  // ²½³¤
+	pSlider2->setMinimum(nMin);  // æœ€å°å€¼
+	pSlider2->setMaximum(nMax);  // æœ€å¤§å€¼
+	pSlider2->setSingleStep(nSingleStep);  // æ­¥é•¿
 
 
 
-	////ÏÔÊ¾ÅäÖÃÎÄ¼şµÄ²ÎÊı
-	////¹¤ÒµÏà»úÅäÖÃ²ÎÊı
+	////æ˜¾ç¤ºé…ç½®æ–‡ä»¶çš„å‚æ•°
+	////å·¥ä¸šç›¸æœºé…ç½®å‚æ•°
 	gain = this->ini->value("SWIR-Configuration/gain").toInt();
 	gain = QString::number(gain, 10);
 	this->ui.lineEdit_gain->setText(gain);
@@ -51,7 +51,7 @@ QMainWindow(parent)
 	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
 
 
-	////¹âÔ´ÅäÖÃ²ÎÊı
+	////å…‰æºé…ç½®å‚æ•°
 	serialPortSelection = this->ini->value("SWIR-Configuration/serialPortSelection").toString();
 	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
 	ui->comboBox_serialPortSelection->setCurrentIndex(index);
@@ -66,7 +66,7 @@ QMainWindow(parent)
 	this->ui.lineEdit_lightingSequence->setText(lightingSequence);
 
 
-	////ÑùÆ·Ì¨µç»úÇı¶¯ÅäÖÃ²ÎÊı
+	////æ ·å“å°ç”µæœºé©±åŠ¨é…ç½®å‚æ•°
 	stepperMotorPortSelection = this->ini->value("SWIR-Configuration/stepperMotorPortSelection").toString();
 	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
 	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
@@ -87,7 +87,7 @@ QMainWindow(parent)
 	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
 	
 
-	////»¬¹ìµç»úÇı¶¯ÅäÖÃ²ÎÊı
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é…ç½®å‚æ•°
 	servoMotorPortSelection = this->ini->value("SWIR-Configuration/servoMotorPortSelection").toString();
 	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
 	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
@@ -112,15 +112,15 @@ QMainWindow(parent)
 
 	
 	
-	////Á¬½ÓĞÅºÅ²Û,±£´æºÍ»Ö¸´Ä¬ÈÏÉèÖÃ
+	////è¿æ¥ä¿¡å·æ§½,ä¿å­˜å’Œæ¢å¤é»˜è®¤è®¾ç½®
 	connect(this->ui.pushButton_save, SIGNAL(pressed()), this, SLOT(PushButton_Save_Pressed()));
 	connect(this->ui.pushButton_defaults, SIGNAL(pressed()), this, SLOT(PushButton_Defaults_Pressed()));
-	////Á¬½ÓĞÅºÅ²Û£¨Ïà»¥¸Ä±ä£©
+	////è¿æ¥ä¿¡å·æ§½ï¼ˆç›¸äº’æ”¹å˜ï¼‰
 	connect(this->ui.lineEdit_gain, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_gain, SLOT(setValue(int)));
 	connect(this->ui.horizontalSlider_gain, SIGNAL(valueChanged(int)), this->ui.lineEdit_gain, SLOT(setValue(int)));
 	connect(this->ui.lineEdit_gain, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_gain, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
-	////Á¬½ÓĞÅºÅ²Û£¨Ïà»¥¸Ä±ä£©
+	////è¿æ¥ä¿¡å·æ§½ï¼ˆç›¸äº’æ”¹å˜ï¼‰
 	connect(this->ui.lineEdit_darkLevel, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_darkLevel, SLOT(setValue(int)));
 	connect(this->ui.horizontalSlider_darkLevel, SIGNAL(valueChanged(int)), this->ui.lineEdit_darkLevel, SLOT(setValue(int)));
 	connect(this->ui.lineEdit_darkLevel, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
@@ -153,7 +153,7 @@ QMainWindow(parent)
 
 
 
-	////Ò³ÃæÇĞ»»
+	////é¡µé¢åˆ‡æ¢
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
 	connect(this->ui.pushButton_measure2, SIGNAL(pressed()), this, SLOT(TurnToMeasurement2()));
 	connect(this->ui.pushButton_measure3, SIGNAL(pressed()), this, SLOT(TurnToMeasurement3()));
@@ -163,18 +163,17 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_test, SIGNAL(pressed()), this, SLOT(TurnToTest()));
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
-	////²É¼¯Ò³Ãæ
+	////é‡‡é›†é¡µé¢
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
+	
+	//_mutex.lock();//é˜²æ­¢9å°ç›¸æœºæŠ¢å Vimbaç³»ç»Ÿåˆ«å
+	workerMeasurement = new WorkerMeasurement(_system);//æŒ‡æ˜æ¯ä¸€ä¸ªé‡‡é›†çº¿ç¨‹çš„çˆ¶æŒ‡é’ˆ
+	//_mutex.unlock();
+	threadMeasurement = new QThread();
+	workerMeasurement->moveToThread(threadMeasurement);
 
-	//for (int i = 0; i < CAM_NUM; i++)
-	//{
-	//	workerMeasurement[i] = new WorkerMeasurement(i, _system);
-	//	threadMeasurement[i] = new QThread();
-	//	workerMeasurement[i]->moveToThread(threadMeasurement[i]);
-	//}
-
-	////Ïà»úÔ¤´¦ÀíÒ³Ãæ
+	////ç›¸æœºé¢„å¤„ç†é¡µé¢
 	this->ui.pushButton_captureContinuously->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
@@ -191,16 +190,8 @@ QMainWindow(parent)
 		//{
 		//	threadCCD[i]->terminate();
 		//}
+		connect(workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//ç”¨é˜Ÿåˆ—æ–¹å¼ä¼šæœ‰å»¶æ—¶
 	}
-	connect(workerCCD[0], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	connect(workerCCD[1], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[2], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage2(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[3], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage3(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[4], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage4(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[5], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage5(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[6], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage6(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[7], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage7(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[8], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage8(QImage)), Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -221,21 +212,30 @@ MainWindow::~MainWindow()
 		delete threadCCD[i];
 		threadCCD[i] = NULL;
 	}
-	//delete[] workerCCD; //ÕâÑù¶¨Òå²»ºÃÈ·¶¨workerID
+	//delete[] workerCCD; //è¿™æ ·å®šä¹‰ä¸å¥½ç¡®å®šworkerID
 	//delete[] threadCCD;
+
+	delete slideComm;
+	delete workerMeasurement;
+	if (threadMeasurement->isFinished())
+		return;
+	threadMeasurement->quit();
+	threadMeasurement->wait();
+	delete threadMeasurement;
+	threadMeasurement = NULL;
 
 	AVTCamera::FiniVimba(_system);
 }
 
-////////////////////////////////Ë½ÓĞ²Ûº¯Êı/////////////////////////////////////
-////////////////////////////////ÅäÖÃÒ³Ãæ/////////////////////////////////////
+////////////////////////////////ç§æœ‰æ§½å‡½æ•°/////////////////////////////////////
+////////////////////////////////é…ç½®é¡µé¢/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºisEdited()
-// ÃèÊö£ºÎÄ±¾¿ò²ÎÊıÓĞ¸Ä¶¯Ê±£¬°´Å¥¿Ø¼ş¿Éµã»÷
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šisEdited()
+// æè¿°ï¼šæ–‡æœ¬æ¡†å‚æ•°æœ‰æ”¹åŠ¨æ—¶ï¼ŒæŒ‰é’®æ§ä»¶å¯ç‚¹å‡»
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::IsEdited()
@@ -244,17 +244,17 @@ void MainWindow::IsEdited()
 	this->ui.pushButton_save->setEnabled(true);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_Save_Pressed
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_Save_Pressed
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Save_Pressed()
 {
-	////¹¤ÒµÏà»úÅäÖÃ±£´æ
+	////å·¥ä¸šç›¸æœºé…ç½®ä¿å­˜
 	gain = this->ui.lineEdit_gain->text().toInt();
 	this->ini->setValue("/SWIR-Configuration/gain", gain);
 	darkLevel = this->ui.lineEdit_darkLevel->text().toInt();
@@ -264,7 +264,7 @@ void MainWindow::PushButton_Save_Pressed()
 	imageSavePath = this->ui.lineEdit_imageSavePath->text().toString();
 	this->ini->setValue("/SWIR-Configuration/imageSavePath", imageSavePath);
 
-	////¹âÔ´ÅäÖÃ±£´æ
+	////å…‰æºé…ç½®ä¿å­˜
 	serialPortSelection = this->ui.comboBox_serialPortSelection->currentText().toString();
 	this->ini->setValue("/SWIR-Configuration/serialPortSelection", serialPortSelection);
 	baudRate = this->ui.comboBox_baudRate->currentText().toString();
@@ -274,7 +274,7 @@ void MainWindow::PushButton_Save_Pressed()
 	lightingSequence = this->ui.lineEdit_lightingSequence->text().toInt();
 	this->ini->setValue("/SWIR-Configuration/lightingSequence", lightingSequence);
 
-	////ÑùÆ·Ì¨µç»úÇı¶¯ÅäÖÃ±£´æ
+	////æ ·å“å°ç”µæœºé©±åŠ¨é…ç½®ä¿å­˜
 	stepperMotorPortSelection = this->ui.comboBox_stepperMotorPortSelection->currentText().toString();
 	this->ini->setValue("/SWIR-Configuration/stepperMotorPortSelection", stepperMotorPortSelection);
 	stepperMotorSpeed = this->ui.comboBox_stepperMotorSpeed->currentText().toString();
@@ -288,7 +288,7 @@ void MainWindow::PushButton_Save_Pressed()
 	sampleRotationAngle = this->ui.comboBox_sampleRotationAngle->currentText().toString();
 	this->ini->setValue("/SWIR-Configuration/sampleRotationAngle", sampleRotationAngle);
 
-	////»¬¹ìµç»úÇı¶¯ÅäÖÃ±£´æ
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é…ç½®ä¿å­˜
 	servoMotorPortSelection = this->ui.comboBox_servoMotorPortSelection->currentText().toString();
 	this->ini->setValue("/SWIR-Configuration/servoMotorPortSelection", servoMotorPortSelection);
 	servoMotorSpeed = this->ui.comboBox_servoMotorSpeed->currentText().toString();
@@ -302,31 +302,27 @@ void MainWindow::PushButton_Save_Pressed()
 	slideTableMovingDistance = this->ui.lineEdit_slideTableMovingDistance->text().toInt();
 	this->ini->setValue("/SWIR-Configuration/slideTableMovingDistance", slideTableMovingDistance);
 
-
-
-
-
 	QMessageBox::information(NULL, "Save", "Saved Successfully.", QMessageBox::Ok, QMessageBox::Ok);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_Save_Pressed
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_Save_Pressed
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Defaults_Pressed()
 {
-	////¹¤ÒµÏà»úÄ¬ÈÏÅäÖÃ
+	////å·¥ä¸šç›¸æœºé»˜è®¤é…ç½®
 	this->ui.lineEdit_gain->setText(gain);
 	this->ui.lineEdit_darkLevel->setText(darkLevel);
 	int index = ui->comboBox_imageSaveFormat->findText(imageSaveFormat);
 	ui->comboBox_imageSaveFormat->setCurrentIndex(index);
 	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
 
-	////¹âÔ´Ä¬ÈÏÅäÖÃ
+	////å…‰æºé»˜è®¤é…ç½®
 	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
 	ui->comboBox_serialPortSelection->setCurrentIndex(index);
 	int index = ui->comboBox_baudRate->findText(baudRate);
@@ -334,7 +330,7 @@ void MainWindow::PushButton_Defaults_Pressed()
 	this->ui.lineEdit_delaySetting->setText(delaySetting);
 	this->ui.lineEdit_lightingSequence->setText(lightingSequencel);
 
-	////ÑùÆ·Ì¨µç»úÇı¶¯Ä¬ÈÏÅäÖÃ
+	////æ ·å“å°ç”µæœºé©±åŠ¨é»˜è®¤é…ç½®
 	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
 	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
 	int index = ui->comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
@@ -349,7 +345,7 @@ void MainWindow::PushButton_Defaults_Pressed()
 	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
 
 
-	////»¬¹ìµç»úÇı¶¯Ä¬ÈÏÅäÖÃ
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é»˜è®¤é…ç½®
 	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
 	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
 	int index = ui->comboBox_servoMotorSpeed->findText(servoMotorSpeed);
@@ -363,14 +359,14 @@ void MainWindow::PushButton_Defaults_Pressed()
 	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
 }
 
-////////////////////////////////ÇĞ»»Ò³Ãæ/////////////////////////////////////
+////////////////////////////////åˆ‡æ¢é¡µé¢/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement1
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šTurnToMeasurement1
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement1()
@@ -378,56 +374,56 @@ void MainWindow::TurnToMeasurement1()
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);	
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement2
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToMeasurement2
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement2()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement3
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToMeasurement3
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement3()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToModeling1
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToModeling1
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling1()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToModeling2
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToModeling2
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling2()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToSettings
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToSettings
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToSettings()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Settings);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToTest
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToTest
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToTest()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Test);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToPreCamera
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToPreCamera
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToPreCamera()
 {
@@ -435,14 +431,14 @@ void MainWindow::TurnToPreCamera()
 }
 
 
-////////////////////////////////²É¼¯Ò³Ãæ/////////////////////////////////////
+////////////////////////////////é‡‡é›†é¡µé¢/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºStartMeasurement
-// ÃèÊö£º¿ªÊ¼²É¼¯
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šStartMeasurement
+// æè¿°ï¼šå¼€å§‹é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_StartMeasurement_Pressed()
@@ -451,13 +447,35 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 	_qMaterialName = this->ui.lineEdit_materialName->text();
 	if (_qMaterialName == "")
 	{
-		QMessageBox::critical(NULL, QStringLiteral("¾¯¸æ"), QStringLiteral("ÇëÊäÈë²ÄÖÊÃû³Æ"), QMessageBox::Ok);
+		QMessageBox::critical(NULL, QStringLiteral("è­¦å‘Š"), QStringLiteral("è¯·è¾“å…¥æè´¨åç§°"), QMessageBox::Ok);
 		return;
 	}
+
 	this->ui.lineEdit_materialName->setEnabled(false);
+	this->ui.pushButton_startMeasurement->setEnabled(false);
+	if (_measureFlag == 1)
+	{
+		CreateFolds(1, "..\\imgs_measurement1\\", _qMaterialName.toStdString());
+		CreateFolds(2, "..\\imgs_measurement1\\" + _qMaterialName.toStdString());
+	}	
+	if (_measureFlag == 2)
+	{
+		CreateFolds(1, "..\\imgs_measurement2\\", _qMaterialName.toStdString());
+		CreateFolds(2, "..\\imgs_measurement2\\" + _qMaterialName.toStdString());
+	}
+
+	this->ui.lineEdit_materialName->setEnabled(false);
+	this->ui.pushButton_stopMeasurement->setEnabled(true);
+	this->ui.toolBox->setEnabled(false);
+	
+	//æ»‘è½¨å°±ä½
+	slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
+	slideComm->MoveToX2();
+	Sleep(15000);//ç­‰å¾…æ»‘è½¨å°±ä½
+
 	
 	//slideComm->SlideMoveIn();
-	//Sleep(10000);//µÈ´ı»¬¹ì¾ÍÎ»
+	//Sleep(10000);//ç­‰å¾…æ»‘è½¨å°±ä½
 	CreateFolds("..\\imgs_measurement");
 
 	for (int i = 0; i < CAM_NUM; i++)
@@ -467,7 +485,18 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 			threadCCD[i]->start();
 			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
 			emit startTimer();
-			this->workerCCD[i]->_measurement = 1;
+
+			//ç”¨æ§½æœºåˆ¶ä¼ é€’Matä¿å­˜ä¸‹æ¥çš„æ˜¯ç©ºå›¾ï¼Ÿ æ³¨å†Œç±»å‹ä¹‹åè¿˜æ˜¯ä¸è¡Œ
+			////å‘æ§½æœºåˆ¶æ³¨å†Œä¸€ä¸‹Matç±»å‹
+			//qRegisterMetaType<Mat>("Mat");
+			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, Mat)), this->workerMeasurement, SLOT(NextMeasureState(int, Mat)), Qt::UniqueConnection);//å”¯ä¸€è¿æ¥ï¼Œç­‰æˆ‘æŠŠæ§½å‡½æ•°æ‰§è¡Œå®Œï¼Œåˆ«å‚¬
+			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//å”¯ä¸€è¿æ¥ï¼Œç­‰æˆ‘æŠŠæ§½å‡½æ•°æ‰§è¡Œå®Œï¼Œåˆ«å‚¬
+
+			//connect(this->workerCCD[i], SIGNAL(next()), this->workerMeasurement, SLOT(NextMeasureState()));
+			connect(this->workerMeasurement, SIGNAL(readyForCapture()), this->workerCCD[i], SLOT(SetExposureTime()));
+
+			connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this, SLOT(SendingMat(int, QImage)), Qt::UniqueConnection);//å”¯ä¸€è¿æ¥
+
 		}
 		//if (!threadMeasurement[i]->isRunning())
 		//{
@@ -477,15 +506,32 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		//	this->workerCCD[i]->_measurement = 1;
 		//}
 	}
+	//éœ€è¦ä¸»çº¿ç¨‹ä¸­è½¬ä¸€ä¸‹ï¼Œä¸ç„¶è¿˜æ˜¯ä¹ä¸ªç›¸æœºçº¿ç¨‹åœ¨æŠ¢å…‰æºå’Œæ ·å“å°ä¸²å£
+	//è¿™æ ·å…¶å®è¿˜æ˜¯å¹¶è¡Œé‡‡é›†ä¸²è¡Œä¿å­˜
+	connect(this, SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//å”¯ä¸€è¿æ¥ï¼Œç­‰æˆ‘æŠŠæ§½å‡½æ•°æ‰§è¡Œå®Œï¼Œåˆ«å‚¬
+
+	if (!threadMeasurement->isRunning())
+	{
+		_mutex.lock();
+		this->workerMeasurement->_measureFlag = _measureFlag;
+		_mutex.unlock();
+
+		threadMeasurement->start();
+		//connect(this, SIGNAL(startMeasurement(int)), workerMeasurement, SLOT(NextMeasureState(int, Mat)));
+		//emit startMeasure(_measureFlag);
+		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerMeasurement, SLOT(GetMaterialName(QString)));
+		emit sendingMaterialName(_qMaterialName);
+	}
+	Sleep(500);//ç­‰å¾…ç›¸æœºåˆå§‹åŒ–
 
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºStopMeasurement
-// ÃèÊö£ºÍ£Ö¹²É¼¯
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šStopMeasurement
+// æè¿°ï¼šåœæ­¢é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::StopMeasurement()
@@ -493,33 +539,46 @@ void MainWindow::StopMeasurement()
 
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºChangeWindows
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šStopMeasurement
+// æè¿°ï¼šåœæ­¢é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::SendingMat(int workerID, QImage mat)
+{
+	emit sendingMat(workerID, mat);
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼šChangeWindows
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::ConnectRGB()
 {
 	//workerCCD[0]->cameraRGB_->Init();
 	//workerCCD[0]->cameraRGB_->OpenCamera(0);
-	//workerCCD[0]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//Í¼Ïñ¸ñÊ½ÀÏÎÊÌâ£¬5.9ÓÖ²È¿Ó
+	//workerCCD[0]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//å›¾åƒæ ¼å¼è€é—®é¢˜ï¼Œ5.9åˆè¸©å‘
 	//if (!threadRGB[0]->isRunning())
 	//{
 	//	threadRGB[0]->start();
 	//}
 }
 
-/////////////////////////////Ïà»úÔ¤´¦ÀíÒ³Ãæ/////////////////////////////////
+/////////////////////////////ç›¸æœºé¢„å¤„ç†é¡µé¢/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_iniCCD_pressed
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_iniCCD_pressed
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_IniCCD_Pressed()
@@ -528,11 +587,11 @@ void MainWindow::PushButton_IniCCD_Pressed()
 	ui.pushButton_finiCCD->setEnabled(true);
 
 	_displayFlag = 0;
-	CreateFolds("..\\imgs_calibration");
+	CreateFolds(2, "..\\imgs_calibration");
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
-		//workerCCD[i]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//Í¼Ïñ¸ñÊ½ÀÏÎÊÌâ£¬5.9ÓÖ²È¿Ó
+		//workerCCD[i]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//å›¾åƒæ ¼å¼è€é—®é¢˜ï¼Œ5.9åˆè¸©å‘
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
@@ -542,12 +601,12 @@ void MainWindow::PushButton_IniCCD_Pressed()
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_captureContinuously_pressed
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_captureContinuously_pressed
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_CaptureContinuously_Pressed()
@@ -558,14 +617,14 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 	}
 }
 
-/////////////////////////////²Ûº¯ÊıµÄ¹«ÓÃº¯Êı/////////////////////////////////
+/////////////////////////////æ§½å‡½æ•°çš„å…¬ç”¨å‡½æ•°/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºDisplayImage0
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šDisplayImage0
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::DisplayImage(int workerID, QImage img)
@@ -614,7 +673,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 	}
 }
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage1
+//// å‡½æ•°ï¼šDisplayImage1
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage1(QImage img)
 //{
@@ -640,7 +699,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage2
+//// å‡½æ•°ï¼šDisplayImage2
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage2(QImage img)
 //{
@@ -666,7 +725,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage3
+//// å‡½æ•°ï¼šDisplayImage3
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage3(QImage img)
 //{
@@ -692,7 +751,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage4
+//// å‡½æ•°ï¼šDisplayImage4
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage4(QImage img)
 //{
@@ -718,7 +777,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage5
+//// å‡½æ•°ï¼šDisplayImage5
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage5(QImage img)
 //{
@@ -744,7 +803,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage6
+//// å‡½æ•°ï¼šDisplayImage6
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage6(QImage img)
 //{
@@ -770,7 +829,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage7
+//// å‡½æ•°ï¼šDisplayImage7
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage7(QImage img)
 //{
@@ -796,7 +855,7 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 //////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage8
+//// å‡½æ•°ï¼šDisplayImage8
 //////////////////////////////////////////////////////////////////////////////
 //void MainWindow::DisplayImage8(QImage img)
 //{
@@ -822,30 +881,30 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 //	}
 //}
 
-////////////////////////////////////Ë½ÓĞº¯Êı////////////////////////////////////////
+////////////////////////////////////ç§æœ‰å‡½æ•°////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºCreateFolds
-// ÃèÊö£ºÔÚÖ¸¶¨Ä¿Â¼ÏÂ´´½¨Ïà»ú¶ÔÓ¦ÎÄ¼ş¼Ğ
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šCreateFolds
+// æè¿°ï¼šåœ¨æŒ‡å®šç›®å½•ä¸‹åˆ›å»ºç›¸æœºå¯¹åº”æ–‡ä»¶å¤¹
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::CreateFolds(string root)
+void MainWindow::CreateFolds(int flag, string root, string fileName)
 {
-	for (int i = 0; i < CAM_NUM; i++)
+	if (flag == 1)
 	{
-		///////Unicode×Ö·û¼¯ÎÊÌâ/////////
+		///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
 		WCHAR wszStr[256];
 		memset(wszStr, 0, sizeof(wszStr));
 		MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
 			sizeof(wszStr) / sizeof(wszStr[0]));
 
-		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //ÅĞ¶ÏÂ·¾¶ÊÇÎÄ¼ş»¹ÊÇÄ¿Â¼
+		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //åˆ¤æ–­è·¯å¾„æ˜¯æ–‡ä»¶è¿˜æ˜¯ç›®å½•
 		{
-			string newFolderPath = root + "\\camera" + to_string(i);
-			///////Unicode×Ö·û¼¯ÎÊÌâ/////////
+			string newFolderPath = root + fileName;
+			///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
 			WCHAR wszNewStr[256];
 			memset(wszNewStr, 0, sizeof(wszNewStr));
 			MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
@@ -853,22 +912,49 @@ void MainWindow::CreateFolds(string root)
 
 			if (!CreateDirectory(wszNewStr, NULL))
 			{
-				cout << "ÎÄ¼ş¼ĞÒÑ´æÔÚ£¡" << endl;
+				cout << "æ–‡ä»¶å¤¹å·²å­˜åœ¨ï¼" << endl;
+			}
+		}
+	}
+	if (flag == 2)
+	{
+		for (int i = 0; i < CAM_NUM; i++)
+		{
+			///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
+			WCHAR wszStr[256];
+			memset(wszStr, 0, sizeof(wszStr));
+			MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
+				sizeof(wszStr) / sizeof(wszStr[0]));
+
+			if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //åˆ¤æ–­è·¯å¾„æ˜¯æ–‡ä»¶è¿˜æ˜¯ç›®å½•
+			{
+				string newFolderPath = root + "\\camera" + to_string(i);
+				///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
+				WCHAR wszNewStr[256];
+				memset(wszNewStr, 0, sizeof(wszNewStr));
+				MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
+					sizeof(wszNewStr) / sizeof(wszNewStr[0]));
+
+				if (!CreateDirectory(wszNewStr, NULL))
+				{
+					cout << "æ–‡ä»¶å¤¹å·²å­˜åœ¨ï¼" << endl;
+				}
 			}
 		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºShowImgOnQLabel
-// ÃèÊö£ºÔÚÖ¸¶¨QlabelÉÏÏÔÊ¾²É¼¯Í¼Ïñ
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šShowImgOnQLabel
+// æè¿°ï¼šåœ¨æŒ‡å®šQlabelä¸Šæ˜¾ç¤ºé‡‡é›†å›¾åƒ
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 {
+	_mutex.lock();
 	if (!img.isNull())
 	{
 		QPixmap pic = QPixmap::fromImage(img);
@@ -876,4 +962,5 @@ void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 		qlabel->setPixmap(pic);
 		qlabel->setScaledContents(true);
 	}
+	_mutex.unlock();
 }
