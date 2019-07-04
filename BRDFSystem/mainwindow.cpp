@@ -33,13 +33,12 @@ QMainWindow(parent)
 	//_measureFlag = 0;
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
-
-	//for (int i = 0; i < CAM_NUM; i++)
-	//{
-	//	workerMeasurement[i] = new WorkerMeasurement(i, _system);
-	//	threadMeasurement[i] = new QThread();
-	//	workerMeasurement[i]->moveToThread(threadMeasurement[i]);
-	//}
+	
+	//_mutex.lock();//防止9台相机抢占Vimba系统别名
+	workerMeasurement = new WorkerMeasurement(_system);//指明每一个采集线程的父指针
+	//_mutex.unlock();
+	threadMeasurement = new QThread();
+	workerMeasurement->moveToThread(threadMeasurement);
 
 	////相机预处理页面
 	_displayFlag = 0;
@@ -59,7 +58,7 @@ QMainWindow(parent)
 		//{
 		//	threadCCD[i]->terminate();
 		//}
-		connect(workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
+		connect(workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//用队列方式会有延时
 	}
 }
 
@@ -85,6 +84,13 @@ MainWindow::~MainWindow()
 	//delete[] threadCCD;
 
 	delete slideComm;
+	delete workerMeasurement;
+	if (threadMeasurement->isFinished())
+		return;
+	threadMeasurement->quit();
+	threadMeasurement->wait();
+	delete threadMeasurement;
+	threadMeasurement = NULL;
 
 	AVTCamera::FiniVimba(_system);
 }
@@ -220,10 +226,17 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		return;
 	}
 
+	this->ui.pushButton_startMeasurement->setEnabled(false);
 	if (_measureFlag == 1)
-		CreateFolds("..\\imgs_measurement1");
+	{
+		CreateFolds(1, "..\\imgs_measurement1\\", _qMaterialName.toStdString());
+		CreateFolds(2, "..\\imgs_measurement1\\" + _qMaterialName.toStdString());
+	}	
 	if (_measureFlag == 2)
-		CreateFolds("..\\imgs_measurement2");
+	{
+		CreateFolds(1, "..\\imgs_measurement2\\", _qMaterialName.toStdString());
+		CreateFolds(2, "..\\imgs_measurement2\\" + _qMaterialName.toStdString());
+	}
 
 	this->ui.lineEdit_materialName->setEnabled(false);
 	this->ui.pushButton_stopMeasurement->setEnabled(true);
@@ -232,24 +245,45 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 	//滑轨就位
 	slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
 	slideComm->MoveToX2();
-	Sleep(30000);//等待滑轨就位
+	Sleep(15000);//等待滑轨就位
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer(int)), workerCCD[i], SLOT(StartTimer(int)));
-			emit startTimer(_measureFlag);
+			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
+			emit startTimer();
 
-			_mutex.lock();
-			if (_measureFlag == 1)
-				this->workerCCD[i]->_measureFlag = 1;
-			if (_measureFlag == 2)
-				this->workerCCD[i]->_measureFlag = 2;
-			_mutex.unlock();
+			//用槽机制传递Mat保存下来的是空图？ 注册类型之后还是不行
+			////向槽机制注册一下Mat类型
+			//qRegisterMetaType<Mat>("Mat");
+			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, Mat)), this->workerMeasurement, SLOT(NextMeasureState(int, Mat)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
+			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
+
+			//connect(this->workerCCD[i], SIGNAL(next()), this->workerMeasurement, SLOT(NextMeasureState()));
+			connect(this->workerMeasurement, SIGNAL(readyForCapture()), this->workerCCD[i], SLOT(SetExposureTime()));
+
+			connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this, SLOT(SendingMat(int, QImage)), Qt::UniqueConnection);//唯一连接
 		}
 	}
+	//需要主线程中转一下，不然还是九个相机线程在抢光源和样品台串口
+	//这样其实还是并行采集串行保存
+	connect(this, SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
+
+	if (!threadMeasurement->isRunning())
+	{
+		_mutex.lock();
+		this->workerMeasurement->_measureFlag = _measureFlag;
+		_mutex.unlock();
+
+		threadMeasurement->start();
+		//connect(this, SIGNAL(startMeasurement(int)), workerMeasurement, SLOT(NextMeasureState(int, Mat)));
+		//emit startMeasure(_measureFlag);
+		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerMeasurement, SLOT(GetMaterialName(QString)));
+		emit sendingMaterialName(_qMaterialName);
+	}
+	Sleep(500);//等待相机初始化
 
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -264,6 +298,19 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 void MainWindow::StopMeasurement()
 {
 
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：StopMeasurement
+// 描述：停止采集
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::SendingMat(int workerID, QImage mat)
+{
+	emit sendingMat(workerID, mat);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：ChangeWindows
@@ -301,7 +348,7 @@ void MainWindow::PushButton_IniCCD_Pressed()
 	ui.pushButton_finiCCD->setEnabled(true);
 
 	_displayFlag = 0;
-	CreateFolds("..\\imgs_calibration");
+	CreateFolds(2, "..\\imgs_calibration");
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
@@ -310,7 +357,7 @@ void MainWindow::PushButton_IniCCD_Pressed()
 		{
 			threadCCD[i]->start();
 			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer(0);
+			emit startTimer();
 		}
 	}
 }
@@ -605,9 +652,9 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::CreateFolds(string root)
+void MainWindow::CreateFolds(int flag, string root, string fileName)
 {
-	for (int i = 0; i < CAM_NUM; i++)
+	if (flag == 1)
 	{
 		///////Unicode字符集问题/////////
 		WCHAR wszStr[256];
@@ -617,7 +664,7 @@ void MainWindow::CreateFolds(string root)
 
 		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
 		{
-			string newFolderPath = root + "\\camera" + to_string(i);
+			string newFolderPath = root + fileName;
 			///////Unicode字符集问题/////////
 			WCHAR wszNewStr[256];
 			memset(wszNewStr, 0, sizeof(wszNewStr));
@@ -627,6 +674,32 @@ void MainWindow::CreateFolds(string root)
 			if (!CreateDirectory(wszNewStr, NULL))
 			{
 				cout << "文件夹已存在！" << endl;
+			}
+		}
+	}
+	if (flag == 2)
+	{
+		for (int i = 0; i < CAM_NUM; i++)
+		{
+			///////Unicode字符集问题/////////
+			WCHAR wszStr[256];
+			memset(wszStr, 0, sizeof(wszStr));
+			MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
+				sizeof(wszStr) / sizeof(wszStr[0]));
+
+			if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
+			{
+				string newFolderPath = root + "\\camera" + to_string(i);
+				///////Unicode字符集问题/////////
+				WCHAR wszNewStr[256];
+				memset(wszNewStr, 0, sizeof(wszNewStr));
+				MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
+					sizeof(wszNewStr) / sizeof(wszNewStr[0]));
+
+				if (!CreateDirectory(wszNewStr, NULL))
+				{
+					cout << "文件夹已存在！" << endl;
+				}
 			}
 		}
 	}
@@ -642,6 +715,7 @@ void MainWindow::CreateFolds(string root)
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 {
+	_mutex.lock();
 	if (!img.isNull())
 	{
 		QPixmap pic = QPixmap::fromImage(img);
@@ -649,4 +723,5 @@ void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 		qlabel->setPixmap(pic);
 		qlabel->setScaledContents(true);
 	}
+	_mutex.unlock();
 }

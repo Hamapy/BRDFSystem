@@ -176,7 +176,7 @@ bool AVTCamera::GetImageSize(int& width, int& height)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveImage(Mat& captureMat)
+bool AVTCamera::SaveImage(Mat& captureMat, string imageSavingPath)
 {
 	if (_saveName < CAPTURE_NUM)
 	{
@@ -185,7 +185,7 @@ bool AVTCamera::SaveImage(Mat& captureMat)
 		char sPath[200];
 		//strcpy(sPath, imageSavingPath.c_str());
 		sprintf(sPath, "//%s.bmp", saveName);
-		string path = _imageSavingPath + "//camera" + to_string(_cameraID) + sPath;
+		string path = imageSavingPath + "//camera" + to_string(_cameraID) + sPath;
 		bool isSaved = imwrite(path, captureMat);
 		_saveName++;
 

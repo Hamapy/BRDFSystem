@@ -72,7 +72,7 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& widthOutput, int& heightOutput);
 	//保存一帧图像
-	bool SaveImage(Mat& captureMat);
+	bool SaveImage(Mat& captureMat, string imageSavingPath);
 	//连续采集
 	void CaptureContinuously(int num, int millisecond);
 	//计算合适曝光时间
@@ -126,7 +126,7 @@ private:
 	VmbUchar_t*					_pImage;
 	VmbUint32_t					_width;
 	VmbUint32_t					_height;
-	string						_imageSavingPath = "..\\imgs_calibration";
+	//string						_imageSavingPath = "..\\imgs_calibration";
 	int							_saveName;
 	FeaturePtr					_feature;
 

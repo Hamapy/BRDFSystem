@@ -154,6 +154,7 @@ bool SlideComm::MoveToX1(bool Wait_feedback/* = true*/)
 		SS 发送字符串
 		*/
 		sprintf(cmd, "STD\rDI%d\rFS1R\rSS%s\r", 10000, SERVO_FEEDBACK);
+		//sprintf(cmd, "STD\rDI%d\rFS1L\rSS%s\r", 10000, SERVO_FEEDBACK);
 		//就位前先归位时的限位条件
 		//sprintf(cmd, "STD\rDI%d\rFS2R\rSS%s\r", 10000, SERVO_FEEDBACK);
 		Write(cmd);
@@ -198,6 +199,7 @@ bool SlideComm::MoveToX2(bool Wait_feedback/* = true*/)
 	{
 		ClearInputBuffer();
 		sprintf(cmd, "STD\rDI%d\rFS2R\rSS%s\r", -10000, SERVO_FEEDBACK);
+		//sprintf(cmd, "STD\rDI%d\rFS2L\rSS%s\r", -10000, SERVO_FEEDBACK);
 		Write(cmd);
 
 		if (Wait_feedback)

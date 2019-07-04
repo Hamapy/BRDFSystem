@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets/QMainWindow>
-#include <QThread>
+//#include <QThread>
 #include <QDebug>
 //#include <QTimerEvent>
 #include <QFileDialog>
@@ -12,7 +12,7 @@
 #include "ui_mainwindow.h"
 #include "slideComm.h"
 //#include "sampleComm.h"
-#include "ccd.h"
+//#include "ccd.h"
 #include "workerCCD.h"
 //#include "configuration.h"
 
@@ -45,7 +45,9 @@ private slots:
 	//材质采集页面
 	void PushButton_StartMeasurement_Pressed();
 	void StopMeasurement();
+	void SendingMat(int workerID, QImage mat);
 	void ConnectRGB();
+
 
 	//相机预处理页面
 	void PushButton_IniCCD_Pressed();
@@ -66,6 +68,8 @@ private slots:
 private:
 	Ui::MainWindowClass ui;
 
+	WorkerMeasurement*			workerMeasurement;
+	QThread*					threadMeasurement;
 	SlideComm*					slideComm;
 	//SampleComm*					sampleComm;
 	WorkerCCD*					workerCCD[9];
@@ -81,11 +85,13 @@ private:
 	int							_measureFlag; //标记测量类型（1/2/3）
 	QMutex						_mutex;
 
-	void CreateFolds(string root);
+	void CreateFolds(int flag, string root, string fileName = "");
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 signals:
-	void startTimer(int measureFlag);
-	//void startMeasureMent();
+	void startTimer(/*int dispalyFlag*/);
+	void startMeasure(int measureFlag);
+	void sendingMaterialName(QString materialName);
+	void sendingMat(int workerID, QImage mat);//主界面转手一下
 };
 #endif
