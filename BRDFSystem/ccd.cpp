@@ -438,128 +438,141 @@ int AVTCamera::EmptyFiles(string dirPath)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-Mat AVTCamera::WhiteBalance(Mat src, Rect wBlock)
+Mat AVTCamera::WhiteBalance(Mat src)
 {
-	Mat roi(src, Rect(wBlock.x, wBlock.y, wBlock.width, wBlock.height));
-	Mat rR(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	Mat rG(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	Mat rB(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	uchar *pRoi, *prR, *prG, *prB;
+
+#define WHITE_NUM 500
+
+	//暂时取全图亮度最高的一定数量像素点均值作为白点
+	//...
+	//后面考虑检测白色标记点连通域
+	
+	const int height = src.rows;
+	const int width = src.cols;
+
+	vector<Mat> channels;
+	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+	Mat B = srcB.clone();
+	Mat G = srcG.clone();
+	Mat R = srcR.clone();
+
+	//把Mat矩阵拉成一维数组
+	unsigned char *arrayB = new unsigned char[srcB.rows*srcB.cols];
+	if (srcB.isContinuous())
+		arrayB = B.data;//防止修改原图像素顺序
+	unsigned char *arrayG = new unsigned char[srcG.rows*srcG.cols];
+	if (srcG.isContinuous())
+		arrayG = G.data;
+	unsigned char *arrayR = new unsigned char[srcR.rows*srcR.cols];
+	if (srcR.isContinuous())
+		arrayR = R.data;
+
+
+	//计算亮度值最大像素点集合平均亮度
+	sort(arrayB, arrayB + srcB.rows*srcB.cols);
+	reverse(arrayB, arrayB + srcB.rows*srcB.cols);
+	//sort(arrayB[0], arrayB[srcB.rows*srcB.cols - 1]);
+	//reverse(arrayB[0], arrayB[srcB.rows*srcB.cols - 1]);
 	int sumB = 0;
+	for (int i = 0; i < WHITE_NUM; i++)
+	{
+		sumB += (int)arrayB[i];
+	}
+	uchar aveB = (float)sumB / (float)WHITE_NUM;
+
+	sort(arrayG, arrayG + srcG.rows*srcG.cols);
+	reverse(arrayG, arrayG + srcG.rows*srcG.cols);
 	int sumG = 0;
+	for (int i = 0; i < WHITE_NUM; i++)
+	{
+		sumG += (int)arrayG[i];
+	}
+	uchar aveG = (float)sumG / (float)WHITE_NUM;
+
+	sort(arrayR, arrayR + srcR.rows*srcR.cols);
+	reverse(arrayR, arrayR + srcR.rows*srcR.cols);
 	int sumR = 0;
-	int i, j;
-	int amount = 0;
-	for (i = 0; i < roi.rows; i++)
+	for (int i = 0; i < WHITE_NUM; i++)
 	{
-		pRoi = roi.ptr<uchar>(i);
-		prR = rR.ptr<uchar>(i);
-		prG = rG.ptr<uchar>(i);
-		prB = rB.ptr<uchar>(i);
-		for (j = 0; j < roi.cols; j++)
+		sumR += (int)arrayR[i];
+	}
+	uchar aveR = (float)sumR / (float)WHITE_NUM;
+
+
+
+	//对每个点将像素拉到[0,255]之间
+	//针对超出1的像素，重新归一化
+	vector<vector<float>> fBGR(height,vector<float>(width,0));
+	float max = 0;
+	float s = 255 / (float)aveB;
+	for (int i = 0; i < srcB.rows; i++)
+	{
+		for (int j = 0; j < srcB.cols; j++)
 		{
-			//在Mat中是按照BGR的顺序存储的          
-			prB[j] = pRoi[j*roi.channels()];
-			prG[j] = pRoi[j*roi.channels() + 1];
-			prR[j] = pRoi[j*roi.channels() + 2];
-			sumB += prB[j];
-			sumG += prG[j];
-			sumR += prR[j];
-			amount++;
+			fBGR[i][j] = srcB.at<uchar>(i, j) / 255.00 * s;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
 		}
 	}
-	double avgB = (double)sumB / amount;
-	double avgG = (double)sumG / amount;
-	double avgR = (double)sumR / amount;
+	for (int i = 0; i < srcB.rows; i++)
+	{
+		for (int j = 0; j < srcB.cols; j++)
+		{
+			srcB.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
 
-	//对每个点将像素量化到[0,255]之间
-	uchar blue, green, red;
-	double maxVal;
-	minMaxLoc(roi, NULL, &maxVal, NULL, NULL);
-	uchar *pSrc, *psR, *psG, *psB, *pDst;
-	Mat sR(src.rows, src.cols, CV_8UC1, Scalar::all(0));
-	Mat sG(src.rows, src.cols, CV_8UC1, Scalar::all(0));
-	Mat sB(src.rows, src.cols, CV_8UC1, Scalar::all(0));
+	max = 0;
+	s = 255 / (float)aveG;
+	for (int i = 0; i < srcG.rows; i++)
+	{
+		for (int j = 0; j < srcG.cols; j++)
+		{
+			fBGR[i][j] = srcG.at<uchar>(i, j) / 255.00 * s;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
+		}
+	}
+	for (int i = 0; i < srcG.rows; i++)
+	{
+		for (int j = 0; j < srcG.cols; j++)
+		{
+			srcG.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
+
+	max = 0;
+	s = 255 / (float)aveR;
+	for (int i = 0; i < srcR.rows; i++)
+	{
+		for (int j = 0; j < srcR.cols; j++)
+		{
+			fBGR[i][j] = srcR.at<uchar>(i, j) / 255.00 * s;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
+		}
+	}
+	for (int i = 0; i < srcR.rows; i++)
+	{
+		for (int j = 0; j < srcR.cols; j++)
+		{
+			srcR.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
+
 	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
-	for (i = 0; i < src.rows; i++)
-	{
-		pSrc = src.ptr<uchar>(i);
-		pDst = dst.ptr<uchar>(i);
-		psR = sR.ptr<uchar>(i);
-		psG = sG.ptr<uchar>(i);
-		psB = sB.ptr<uchar>(i);
-		for (j = 0; j < src.cols; j++)
-		{
-			psB[j] = pSrc[j*src.channels()];
-			psG[j] = pSrc[j*src.channels() + 1];
-			psR[j] = pSrc[j*src.channels() + 2];
-
-			if (psB[j] > avgB) blue = maxVal;
-			else blue = (double)psB[j] * maxVal / avgB;
-
-			if (psG[j] > avgG) green = maxVal;
-			else green = (double)psG[j] * maxVal / avgG;
-
-			if (psR[j] > avgR) red = maxVal;
-			else red = (double)psR[j] * maxVal / avgR;
-
-			////if (red > 255) red = 255;
-			////else if (red < 0) red = 0;
-			////if (green > 255) green = 255;
-			////else if (green < 0) green = 0;
-			////if (blue > 255)	blue = 255;
-			////else if (blue < 0) blue = 0;
-
-			////if (red > 255 || green > 255 || blue > 255)
-			////{
-			////	red = 255;
-			////	green = 255;
-			////	blue = 255;
-			////}
-
-			//if (red > 255)
-			//{
-			//	blue = (double)blue * red / 255;
-			//	green = (double)green * red / 255;
-			//	if (blue > 255 || green > 255)
-			//	{
-			//		blue = 255;
-			//		green = 255;
-			//	}
-			//	red = 255;
-			//}
-
-			//if (blue > 255)
-			//{
-			//	red = (double)red * blue / 255;
-			//	green = (double)green * blue / 255;
-			//	if (red > 255 || green > 255)
-			//	{
-			//		red = 255;
-			//		green = 255;
-			//	}
-			//	blue = 255;
-			//}
-
-			//if (green > 255)
-			//{
-			//	blue = (double)blue * green / 255;
-			//	red = (double)red * green / 255;
-			//	if (blue > 255 || red > 255)
-			//	{
-			//		blue = 255;
-			//		red = 255;
-			//	}
-			//	green = 255;
-			//}
-
-			pDst[j*src.channels()] = blue;
-			pDst[j*src.channels() + 1] = green;
-			pDst[j*src.channels() + 2] = red;
-		}
-	}
+	merge({ srcB, srcG, srcR }, dst);
 
 	return dst;
+
+#undef WHITE_NUM
 }
 
 //////////////////////////////////////////////////////////////////////////////

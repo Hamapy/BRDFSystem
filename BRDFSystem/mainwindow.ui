@@ -20,7 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="Settings">
          <layout class="QGridLayout" name="gridLayout_45" rowstretch="2,4,1">
@@ -43,7 +43,7 @@
                 <widget class="QLineEdit" name="lineEdit_gain"/>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="label_imagSavePath">
+                <widget class="QLabel" name="label_imageSavePath">
                  <property name="text">
                   <string>图像保存路径</string>
                  </property>
@@ -67,7 +67,7 @@
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QLineEdit" name="lineEdit_imagSavePath"/>
+                <widget class="QLineEdit" name="lineEdit_imageSavePath"/>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_imageSaveFormat">
@@ -1099,11 +1099,35 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
-              <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1" columnminimumwidth="0,0,0">
-               <item row="2" column="2">
-                <widget class="QLabel" name="label_5">
+              <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,1,1,1,1,1,0" columnstretch="1,1,1" columnminimumwidth="0,0,0">
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_4">
                  <property name="text">
-                  <string>*100ms</string>
+                  <string>延时设置</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLineEdit" name="lineEdit_3"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>波特率</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QRadioButton" name="radioButton_2">
+                 <property name="text">
+                  <string>顺序亮灯</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>串口选择</string>
                  </property>
                 </widget>
                </item>
@@ -1151,22 +1175,12 @@
                  </item>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_9">
+               <item row="2" column="2">
+                <widget class="QLabel" name="label_5">
                  <property name="text">
-                  <string>波特率</string>
+                  <string>*100ms</string>
                  </property>
                 </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>延时设置</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLineEdit" name="lineEdit"/>
                </item>
                <item row="1" column="1">
                 <widget class="QComboBox" name="comboBox_5">
@@ -1190,10 +1204,10 @@
                  </item>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_8">
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_31">
                  <property name="text">
-                  <string>串口选择</string>
+                  <string>Baut/s</string>
                  </property>
                 </widget>
                </item>
@@ -1204,18 +1218,8 @@
                  </property>
                 </widget>
                </item>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="lineEdit_2"/>
-               </item>
-               <item row="4" column="0">
-                <widget class="QRadioButton" name="radioButton_2">
-                 <property name="text">
-                  <string>顺序亮灯</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QLineEdit" name="lineEdit_3"/>
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="lineEdit"/>
                </item>
                <item row="4" column="2">
                 <widget class="QLabel" name="label_7">
@@ -1223,6 +1227,9 @@
                   <string>（输入1-196）</string>
                  </property>
                 </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLineEdit" name="lineEdit_2"/>
                </item>
                <item row="5" column="0">
                 <widget class="QPushButton" name="pushButton_4">
@@ -1235,13 +1242,6 @@
                 <widget class="QPushButton" name="pushButton">
                  <property name="text">
                   <string>停止</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="label_31">
-                 <property name="text">
-                  <string>Baut/s</string>
                  </property>
                 </widget>
                </item>
@@ -1904,7 +1904,7 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MaterialMeasurement">
        <property name="geometry">

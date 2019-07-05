@@ -21,6 +21,7 @@ public:
 private slots:
 	void StartTimer();
 	void SetExposureTime();
+	void CloseWorker();
 	//void SaveAMat();
 
 private:
@@ -29,9 +30,10 @@ private:
 
 	VimbaSystem&			_system;
 	int						_workerID;
-	AVTCamera				*cameraAVT;
+	AVTCamera*				cameraAVT;
 	QImage					_img;
 	Mat						_mat;
+	Mat						_matWB;
 	bool					_capture;
 	//int framerate = 0;
 	int						_timerId;

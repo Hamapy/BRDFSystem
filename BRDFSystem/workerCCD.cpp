@@ -14,6 +14,8 @@ QObject(parent)
 	cameraAVT = new AVTCamera(_workerID, _system);
 	_mutex.unlock();
 
+	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
+
 	//线程嵌套 moveToThread: Cannot move objects with a parent
 	//_mutex.lock();//防止9台相机抢占Vimba系统别名
 	//workerMeasurement = new WorkerMeasurement(_workerID, _system);//指明每一个采集线程的父指针
@@ -37,7 +39,9 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 		cameraAVT->GetImageSize(_width, _height);
 		_pImageFrame = cameraAVT->CaptureImage();
 		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
+		_matWB = cameraAVT->WhiteBalance(_mat);
+		//_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
+		_img = QImage((const unsigned char*)(_matWB.data), _matWB.cols, _matWB.rows, QImage::Format_RGB888);
 
 		//if (_capture == 1)
 		//{
@@ -87,10 +91,14 @@ void WorkerCCD::SetExposureTime()
 //
 //	return;
 //}
+void WorkerCCD::CloseWorker()
+{
+	this->killTimer(_timerId);//销毁计时器写在析构函数里会报错
+}
 
 WorkerCCD::~WorkerCCD()
 {
-	this->killTimer(_timerId);
+	//this->killTimer(_timerId);//销毁计时器写在析构函数里会报错
 	delete cameraAVT;
 	cameraAVT = NULL;
 

@@ -116,7 +116,7 @@ void WorkerMeasurement::NextMeasureState(int workerID, /*Mat*/QImage mat)
 
 inline void WorkerMeasurement::SaveSeriesMat(int workerID, /*Mat*/QImage mat)
 {
-#define CAM_NUM 6
+#define CAM_NUM 9
 
 	for (int i = 0; i < CAM_NUM; i++)
 	{

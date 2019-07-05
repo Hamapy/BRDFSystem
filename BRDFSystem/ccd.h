@@ -6,6 +6,7 @@
 #include <direct.h>
 #include <thread>
 #include <mutex>
+#include <algorithm>
 #include "Camera.h"
 #include "Vimbacpp.h"
 #include "VimbaSystem.h"
@@ -92,7 +93,7 @@ public:
 	//相机标定校正部分
 	//辐射度标定
 	//白平衡校正（完美全反射）&均匀度校正（事先用白板标定，载物台上标记点仅用于仿射变换及采集过程中的白平衡检验）
-	Mat WhiteBalance(Mat src, Rect wBlock);
+	Mat WhiteBalance(Mat src);
 	//颜色校正（多项式回归） 返回变换矩阵
 	Mat ColorCorrection(CameraPtr& camera, int cameraID);
 
