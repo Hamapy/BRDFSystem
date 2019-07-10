@@ -82,36 +82,53 @@ private:
 	void CreateFolds(int flag, string root, string fileName = "");
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
-	/*
-	//配置文件参数
-	////工业相机配置保存
-	int gain;
-	int darkLevel;
-	QString imageSaveFormat;
-	QString imageSavePath;
-
-	////光源配置保存
-	QString serialPortSelection;
-	QString baudRate;
-	int delaySetting;
-	int lightingSequence;
-
-	////样品台电机驱动配置保存
-	QString stepperMotorPortSelection;
-	QString stepperMotorSpeed;
-	QString stepperMotorAcceleration;
-	QString stepperMotorDeceleration;
-	QString stepperMotorResolution;
-	QString sampleRotationAngle;
-
-	////滑轨电机驱动配置保存
-	QString servoMotorPortSelection;
-	QString servoMotorSpeed;
-	QString servoMotorAcceleration;
-	QString servoMotorDeceleration;
-	QString servoMotorResolution;
-	QString slideTableMovingDistance;
-	*/
+	//设置参数
+	int gain = 0;
+	int gain_Int = 0;
+	QString gain_Str = "";
+	int darkLevel = 0;
+	int darkLevel_Int = 0;
+	QString darkLevel_Str = "";
+	QString imageSaveFormat = "";
+	QString imageSaveFormat_Str = "";
+	QString imageSavePath = "";
+	QString imageSavePath_Str = "";
+	QString serialPortSelection = "";
+	QString serialPortSelection_Str = "";
+	QString baudRate = "";
+	QString baudRate_Str = "";
+	int delaySetting = 0;
+	QString delaySetting_Str = "";
+	int lightingSequence = 0;
+	QString lightingSequence_Str = "";
+	QString stepperMotorPortSelection = "";
+	QString stepperMotorPortSelection_Str = "";
+	int stepperMotorSpeed_Int = 0;
+	QString stepperMotorSpeed = "";
+	QString stepperMotorSpeed_Str = "";
+	int stepperMotorAcceleration_Int = 0;
+	QString stepperMotorAcceleration = "";
+	QString stepperMotorAcceleration_Str = "";
+	int stepperMotorDeceleration_Int = 0;
+	QString stepperMotorDeceleration = "";
+	QString stepperMotorDeceleration_Str = "";
+	int stepperMotorResolution_Int = 0;
+	QString stepperMotorResolution = "";
+	QString stepperMotorResolution_Str = "";
+	QString sampleRotationAngle = "";
+	QString sampleRotationAngle_Str = "";
+	QString servoMotorPortSelection = "";
+	QString servoMotorPortSelection_Str = "";
+	QString servoMotorSpeed = "";
+	QString servoMotorSpeed_Str = "";
+	QString servoMotorAcceleration = "";
+	QString servoMotorAcceleration_Str = "";
+	QString servoMotorDeceleration = "";
+	QString servoMotorDeceleration_Str = "";
+	QString servoMotorResolution = "";
+	QString servoMotorResolution_Str = "";
+	int slideTableMovingDistance = 0;
+	QString slideTableMovingDistance_Str = "";
 
 signals:
 	void startTimer(/*int dispalyFlag*/);

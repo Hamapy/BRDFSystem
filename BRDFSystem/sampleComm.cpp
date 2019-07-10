@@ -55,6 +55,8 @@ SampleComm::~SampleComm()
 ////////////////////////////////////////////////////////////////////////////
 bool SampleComm::Init(int port, int step, double velocity, int accelerate, int decelerate, int resolution, int homeadj)
 {
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//¶ÁÈ¡ÅäÖÃÎÄ¼þ
+
 	bool ret = false;
 	char cmd[STEP_STRINGLEN];
 	m_port = port;
@@ -95,10 +97,14 @@ bool SampleComm::Init(int port, int step, double velocity, int accelerate, int d
 		ret = IsFinished(STEP_TIMEOUT);
 	}
 
-	m_accelerate = accelerate;
-	m_velocity = velocity;
-	m_decelerate = decelerate;
-	m_resolution = resolution;
+	m_velocity = this->ini->value("SWIR-Configuration/stepperMotorSpeed").toInt();
+	m_accelerate = this->ini->value("SWIR-Configuration/stepperMotorAcceleration").toInt();
+	m_decelerate = this->ini->value("SWIR-Configuration/stepperMotorDeceleration").toInt();
+	m_resolution = this->ini->value("SWIR-Configuration/stepperMotorResolution").toInt();
+	//m_accelerate = accelerate;
+	//m_velocity = velocity;
+	//m_decelerate = decelerate;
+	//m_resolution = resolution;
 	m_homeadj = homeadj;
 	m_step = step;
 	if (ret)

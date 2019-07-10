@@ -24,6 +24,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -65,29 +66,29 @@ public:
     QGroupBox *groupBox_14;
     QGridLayout *gridLayout_10;
     QGridLayout *gridLayout_9;
-    QSlider *horizontalSlider_darkLevel;
-    QLineEdit *lineEdit_gain;
-    QLabel *label_imageSavePath;
-    QLabel *label_darkLevel;
-    QLineEdit *lineEdit_darkLevel;
-    QLabel *label_gain;
+    QSlider *horizontalSlider_gain;
     QLineEdit *lineEdit_imageSavePath;
+    QLabel *label_darkLevel;
+    QLabel *label_imageSavePath;
     QLabel *label_imageSaveFormat;
     QComboBox *comboBox_imageSaveFormat;
-    QSlider *horizontalSlider_gain;
+    QLabel *label_gain;
+    QSlider *horizontalSlider_darkLevel;
+    QSpinBox *spinBox_gain;
+    QSpinBox *spinBox_darkLevel;
     QGroupBox *groupBox_16;
     QGridLayout *gridLayout_8;
     QGridLayout *gridLayout_7;
+    QLabel *label_lightingSequence;
     QLineEdit *lineEdit_delaySetting;
-    QLabel *label_baudRate;
     QLabel *label_delaySetting;
+    QLabel *label_serialPortSelection;
+    QComboBox *comboBox_baudRate;
+    QLabel *label_baudRate;
+    QLabel *label_68;
     QLabel *label_6;
     QComboBox *comboBox_serialPortSelection;
     QLineEdit *lineEdit_lightingSequence;
-    QLabel *label_lightingSequence;
-    QLabel *label_68;
-    QLabel *label_serialPortSelection;
-    QComboBox *comboBox_baudRate;
     QGroupBox *groupBox_21;
     QGridLayout *gridLayout_48;
     QGridLayout *gridLayout_46;
@@ -213,21 +214,21 @@ public:
     QGroupBox *groupBox_17;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout_5;
-    QLabel *label_5;
-    QComboBox *comboBox_4;
-    QLabel *label_9;
     QLabel *label_4;
-    QLineEdit *lineEdit;
-    QComboBox *comboBox_5;
-    QLabel *label_8;
-    QRadioButton *radioButton;
-    QLineEdit *lineEdit_2;
-    QRadioButton *radioButton_2;
     QLineEdit *lineEdit_3;
+    QLabel *label_9;
+    QRadioButton *radioButton_2;
+    QLabel *label_8;
+    QComboBox *comboBox_4;
+    QLabel *label_5;
+    QComboBox *comboBox_5;
+    QLabel *label_31;
+    QRadioButton *radioButton;
+    QLineEdit *lineEdit;
     QLabel *label_7;
+    QLineEdit *lineEdit_2;
     QPushButton *pushButton_4;
     QPushButton *pushButton;
-    QLabel *label_31;
     QGroupBox *groupBox_19;
     QGridLayout *gridLayout_31;
     QGridLayout *gridLayout_32;
@@ -412,41 +413,26 @@ public:
         gridLayout_9 = new QGridLayout();
         gridLayout_9->setSpacing(6);
         gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
-        horizontalSlider_darkLevel = new QSlider(groupBox_14);
-        horizontalSlider_darkLevel->setObjectName(QStringLiteral("horizontalSlider_darkLevel"));
-        horizontalSlider_darkLevel->setOrientation(Qt::Horizontal);
+        horizontalSlider_gain = new QSlider(groupBox_14);
+        horizontalSlider_gain->setObjectName(QStringLiteral("horizontalSlider_gain"));
+        horizontalSlider_gain->setOrientation(Qt::Horizontal);
 
-        gridLayout_9->addWidget(horizontalSlider_darkLevel, 1, 1, 1, 1);
+        gridLayout_9->addWidget(horizontalSlider_gain, 0, 1, 1, 1);
 
-        lineEdit_gain = new QLineEdit(groupBox_14);
-        lineEdit_gain->setObjectName(QStringLiteral("lineEdit_gain"));
+        lineEdit_imageSavePath = new QLineEdit(groupBox_14);
+        lineEdit_imageSavePath->setObjectName(QStringLiteral("lineEdit_imageSavePath"));
 
-        gridLayout_9->addWidget(lineEdit_gain, 0, 2, 1, 1);
-
-        label_imageSavePath = new QLabel(groupBox_14);
-        label_imageSavePath->setObjectName(QStringLiteral("label_imageSavePath"));
-
-        gridLayout_9->addWidget(label_imageSavePath, 3, 0, 1, 1);
+        gridLayout_9->addWidget(lineEdit_imageSavePath, 3, 1, 1, 1);
 
         label_darkLevel = new QLabel(groupBox_14);
         label_darkLevel->setObjectName(QStringLiteral("label_darkLevel"));
 
         gridLayout_9->addWidget(label_darkLevel, 1, 0, 1, 1);
 
-        lineEdit_darkLevel = new QLineEdit(groupBox_14);
-        lineEdit_darkLevel->setObjectName(QStringLiteral("lineEdit_darkLevel"));
+        label_imageSavePath = new QLabel(groupBox_14);
+        label_imageSavePath->setObjectName(QStringLiteral("label_imageSavePath"));
 
-        gridLayout_9->addWidget(lineEdit_darkLevel, 1, 2, 1, 1);
-
-        label_gain = new QLabel(groupBox_14);
-        label_gain->setObjectName(QStringLiteral("label_gain"));
-
-        gridLayout_9->addWidget(label_gain, 0, 0, 1, 1);
-
-        lineEdit_imageSavePath = new QLineEdit(groupBox_14);
-        lineEdit_imageSavePath->setObjectName(QStringLiteral("lineEdit_imageSavePath"));
-
-        gridLayout_9->addWidget(lineEdit_imageSavePath, 3, 1, 1, 1);
+        gridLayout_9->addWidget(label_imageSavePath, 3, 0, 1, 1);
 
         label_imageSaveFormat = new QLabel(groupBox_14);
         label_imageSaveFormat->setObjectName(QStringLiteral("label_imageSaveFormat"));
@@ -458,11 +444,26 @@ public:
 
         gridLayout_9->addWidget(comboBox_imageSaveFormat, 2, 1, 1, 1);
 
-        horizontalSlider_gain = new QSlider(groupBox_14);
-        horizontalSlider_gain->setObjectName(QStringLiteral("horizontalSlider_gain"));
-        horizontalSlider_gain->setOrientation(Qt::Horizontal);
+        label_gain = new QLabel(groupBox_14);
+        label_gain->setObjectName(QStringLiteral("label_gain"));
 
-        gridLayout_9->addWidget(horizontalSlider_gain, 0, 1, 1, 1);
+        gridLayout_9->addWidget(label_gain, 0, 0, 1, 1);
+
+        horizontalSlider_darkLevel = new QSlider(groupBox_14);
+        horizontalSlider_darkLevel->setObjectName(QStringLiteral("horizontalSlider_darkLevel"));
+        horizontalSlider_darkLevel->setOrientation(Qt::Horizontal);
+
+        gridLayout_9->addWidget(horizontalSlider_darkLevel, 1, 1, 1, 1);
+
+        spinBox_gain = new QSpinBox(groupBox_14);
+        spinBox_gain->setObjectName(QStringLiteral("spinBox_gain"));
+
+        gridLayout_9->addWidget(spinBox_gain, 0, 2, 1, 1);
+
+        spinBox_darkLevel = new QSpinBox(groupBox_14);
+        spinBox_darkLevel->setObjectName(QStringLiteral("spinBox_darkLevel"));
+
+        gridLayout_9->addWidget(spinBox_darkLevel, 1, 2, 1, 1);
 
         gridLayout_9->setRowStretch(0, 1);
         gridLayout_9->setColumnStretch(0, 1);
@@ -481,20 +482,40 @@ public:
         gridLayout_7 = new QGridLayout();
         gridLayout_7->setSpacing(6);
         gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        label_lightingSequence = new QLabel(groupBox_16);
+        label_lightingSequence->setObjectName(QStringLiteral("label_lightingSequence"));
+
+        gridLayout_7->addWidget(label_lightingSequence, 3, 0, 1, 1);
+
         lineEdit_delaySetting = new QLineEdit(groupBox_16);
         lineEdit_delaySetting->setObjectName(QStringLiteral("lineEdit_delaySetting"));
 
         gridLayout_7->addWidget(lineEdit_delaySetting, 2, 1, 1, 1);
+
+        label_delaySetting = new QLabel(groupBox_16);
+        label_delaySetting->setObjectName(QStringLiteral("label_delaySetting"));
+
+        gridLayout_7->addWidget(label_delaySetting, 2, 0, 1, 1);
+
+        label_serialPortSelection = new QLabel(groupBox_16);
+        label_serialPortSelection->setObjectName(QStringLiteral("label_serialPortSelection"));
+
+        gridLayout_7->addWidget(label_serialPortSelection, 0, 0, 1, 1);
+
+        comboBox_baudRate = new QComboBox(groupBox_16);
+        comboBox_baudRate->setObjectName(QStringLiteral("comboBox_baudRate"));
+
+        gridLayout_7->addWidget(comboBox_baudRate, 1, 1, 1, 1);
 
         label_baudRate = new QLabel(groupBox_16);
         label_baudRate->setObjectName(QStringLiteral("label_baudRate"));
 
         gridLayout_7->addWidget(label_baudRate, 1, 0, 1, 1);
 
-        label_delaySetting = new QLabel(groupBox_16);
-        label_delaySetting->setObjectName(QStringLiteral("label_delaySetting"));
+        label_68 = new QLabel(groupBox_16);
+        label_68->setObjectName(QStringLiteral("label_68"));
 
-        gridLayout_7->addWidget(label_delaySetting, 2, 0, 1, 1);
+        gridLayout_7->addWidget(label_68, 1, 2, 1, 1);
 
         label_6 = new QLabel(groupBox_16);
         label_6->setObjectName(QStringLiteral("label_6"));
@@ -510,26 +531,6 @@ public:
         lineEdit_lightingSequence->setObjectName(QStringLiteral("lineEdit_lightingSequence"));
 
         gridLayout_7->addWidget(lineEdit_lightingSequence, 3, 1, 1, 1);
-
-        label_lightingSequence = new QLabel(groupBox_16);
-        label_lightingSequence->setObjectName(QStringLiteral("label_lightingSequence"));
-
-        gridLayout_7->addWidget(label_lightingSequence, 3, 0, 1, 1);
-
-        label_68 = new QLabel(groupBox_16);
-        label_68->setObjectName(QStringLiteral("label_68"));
-
-        gridLayout_7->addWidget(label_68, 1, 2, 1, 1);
-
-        label_serialPortSelection = new QLabel(groupBox_16);
-        label_serialPortSelection->setObjectName(QStringLiteral("label_serialPortSelection"));
-
-        gridLayout_7->addWidget(label_serialPortSelection, 0, 0, 1, 1);
-
-        comboBox_baudRate = new QComboBox(groupBox_16);
-        comboBox_baudRate->setObjectName(QStringLiteral("comboBox_baudRate"));
-
-        gridLayout_7->addWidget(comboBox_baudRate, 1, 1, 1, 1);
 
         gridLayout_7->setRowStretch(0, 1);
         gridLayout_7->setColumnStretch(0, 1);
@@ -1173,65 +1174,70 @@ public:
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setSpacing(6);
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
-        label_5 = new QLabel(groupBox_17);
-        label_5->setObjectName(QStringLiteral("label_5"));
-
-        gridLayout_5->addWidget(label_5, 2, 2, 1, 1);
-
-        comboBox_4 = new QComboBox(groupBox_17);
-        comboBox_4->setObjectName(QStringLiteral("comboBox_4"));
-
-        gridLayout_5->addWidget(comboBox_4, 0, 1, 1, 1);
-
-        label_9 = new QLabel(groupBox_17);
-        label_9->setObjectName(QStringLiteral("label_9"));
-
-        gridLayout_5->addWidget(label_9, 1, 0, 1, 1);
-
         label_4 = new QLabel(groupBox_17);
         label_4->setObjectName(QStringLiteral("label_4"));
 
         gridLayout_5->addWidget(label_4, 2, 0, 1, 1);
-
-        lineEdit = new QLineEdit(groupBox_17);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
-
-        gridLayout_5->addWidget(lineEdit, 2, 1, 1, 1);
-
-        comboBox_5 = new QComboBox(groupBox_17);
-        comboBox_5->setObjectName(QStringLiteral("comboBox_5"));
-
-        gridLayout_5->addWidget(comboBox_5, 1, 1, 1, 1);
-
-        label_8 = new QLabel(groupBox_17);
-        label_8->setObjectName(QStringLiteral("label_8"));
-
-        gridLayout_5->addWidget(label_8, 0, 0, 1, 1);
-
-        radioButton = new QRadioButton(groupBox_17);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
-
-        gridLayout_5->addWidget(radioButton, 3, 0, 1, 1);
-
-        lineEdit_2 = new QLineEdit(groupBox_17);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-
-        gridLayout_5->addWidget(lineEdit_2, 3, 1, 1, 1);
-
-        radioButton_2 = new QRadioButton(groupBox_17);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
-
-        gridLayout_5->addWidget(radioButton_2, 4, 0, 1, 1);
 
         lineEdit_3 = new QLineEdit(groupBox_17);
         lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
 
         gridLayout_5->addWidget(lineEdit_3, 4, 1, 1, 1);
 
+        label_9 = new QLabel(groupBox_17);
+        label_9->setObjectName(QStringLiteral("label_9"));
+
+        gridLayout_5->addWidget(label_9, 1, 0, 1, 1);
+
+        radioButton_2 = new QRadioButton(groupBox_17);
+        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+
+        gridLayout_5->addWidget(radioButton_2, 4, 0, 1, 1);
+
+        label_8 = new QLabel(groupBox_17);
+        label_8->setObjectName(QStringLiteral("label_8"));
+
+        gridLayout_5->addWidget(label_8, 0, 0, 1, 1);
+
+        comboBox_4 = new QComboBox(groupBox_17);
+        comboBox_4->setObjectName(QStringLiteral("comboBox_4"));
+
+        gridLayout_5->addWidget(comboBox_4, 0, 1, 1, 1);
+
+        label_5 = new QLabel(groupBox_17);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        gridLayout_5->addWidget(label_5, 2, 2, 1, 1);
+
+        comboBox_5 = new QComboBox(groupBox_17);
+        comboBox_5->setObjectName(QStringLiteral("comboBox_5"));
+
+        gridLayout_5->addWidget(comboBox_5, 1, 1, 1, 1);
+
+        label_31 = new QLabel(groupBox_17);
+        label_31->setObjectName(QStringLiteral("label_31"));
+
+        gridLayout_5->addWidget(label_31, 1, 2, 1, 1);
+
+        radioButton = new QRadioButton(groupBox_17);
+        radioButton->setObjectName(QStringLiteral("radioButton"));
+
+        gridLayout_5->addWidget(radioButton, 3, 0, 1, 1);
+
+        lineEdit = new QLineEdit(groupBox_17);
+        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+
+        gridLayout_5->addWidget(lineEdit, 2, 1, 1, 1);
+
         label_7 = new QLabel(groupBox_17);
         label_7->setObjectName(QStringLiteral("label_7"));
 
         gridLayout_5->addWidget(label_7, 4, 2, 1, 1);
+
+        lineEdit_2 = new QLineEdit(groupBox_17);
+        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
+
+        gridLayout_5->addWidget(lineEdit_2, 3, 1, 1, 1);
 
         pushButton_4 = new QPushButton(groupBox_17);
         pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
@@ -1242,11 +1248,6 @@ public:
         pushButton->setObjectName(QStringLiteral("pushButton"));
 
         gridLayout_5->addWidget(pushButton, 5, 1, 1, 1);
-
-        label_31 = new QLabel(groupBox_17);
-        label_31->setObjectName(QStringLiteral("label_31"));
-
-        gridLayout_5->addWidget(label_31, 1, 2, 1, 1);
 
         gridLayout_5->setRowStretch(0, 1);
         gridLayout_5->setRowStretch(1, 1);
@@ -1763,7 +1764,7 @@ public:
         toolBox->setObjectName(QStringLiteral("toolBox"));
         MaterialMeasurement = new QWidget();
         MaterialMeasurement->setObjectName(QStringLiteral("MaterialMeasurement"));
-        MaterialMeasurement->setGeometry(QRect(0, 0, 167, 720));
+        MaterialMeasurement->setGeometry(QRect(0, 0, 184, 783));
         gridLayout_14 = new QGridLayout(MaterialMeasurement);
         gridLayout_14->setSpacing(6);
         gridLayout_14->setContentsMargins(11, 11, 11, 11);
@@ -1818,7 +1819,7 @@ public:
         toolBox->addItem(MeterialModeling, QString::fromUtf8("\346\235\220\350\264\250\345\273\272\346\250\241"));
         SystemSettings = new QWidget();
         SystemSettings->setObjectName(QStringLiteral("SystemSettings"));
-        SystemSettings->setGeometry(QRect(0, 0, 184, 783));
+        SystemSettings->setGeometry(QRect(0, 0, 124, 740));
         gridLayout_16 = new QGridLayout(SystemSettings);
         gridLayout_16->setSpacing(6);
         gridLayout_16->setContentsMargins(11, 11, 11, 11);
@@ -1862,7 +1863,7 @@ public:
         retranslateUi(MainWindowClass);
 
         stackedWidget->setCurrentIndex(0);
-        toolBox->setCurrentIndex(2);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindowClass);
@@ -1891,9 +1892,8 @@ public:
         action4->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\207\350\256\260\345\217\212\346\232\227\347\224\265\345\271\263\345\244\204\347\220\206", Q_NULLPTR));
         action->setText(QApplication::translate("MainWindowClass", "\345\215\225\345\217\215\347\233\270\346\234\272\345\217\202\346\225\260\350\256\276\347\275\256", Q_NULLPTR));
         groupBox_14->setTitle(QApplication::translate("MainWindowClass", "\345\267\245\344\270\232\347\233\270\346\234\272", Q_NULLPTR));
-        label_imageSavePath->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
         label_darkLevel->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263", Q_NULLPTR));
-        label_gain->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
+        label_imageSavePath->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
         label_imageSaveFormat->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\346\240\274\345\274\217", Q_NULLPTR));
         comboBox_imageSaveFormat->clear();
         comboBox_imageSaveFormat->insertItems(0, QStringList()
@@ -1901,9 +1901,20 @@ public:
          << QApplication::translate("MainWindowClass", ".BMP", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", ".PNG", Q_NULLPTR)
         );
+        label_gain->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
         groupBox_16->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220", Q_NULLPTR));
-        label_baudRate->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        label_lightingSequence->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
         label_delaySetting->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_serialPortSelection->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        comboBox_baudRate->clear();
+        comboBox_baudRate->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "9600", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
+        );
+        comboBox_baudRate->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
+        label_baudRate->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        label_68->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         label_6->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_serialPortSelection->clear();
         comboBox_serialPortSelection->insertItems(0, QStringList()
@@ -1916,17 +1927,13 @@ public:
          << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
         );
-        label_lightingSequence->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
-        label_68->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
-        label_serialPortSelection->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
-        comboBox_baudRate->clear();
-        comboBox_baudRate->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "9600", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
-        );
-        comboBox_baudRate->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
         groupBox_21->setTitle(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\345\217\260\347\224\265\346\234\272\351\251\261\345\212\250", Q_NULLPTR));
+        comboBox_stepperMotorResolution->clear();
+        comboBox_stepperMotorResolution->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
+        );
         label_stepperMotorResolution->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
         label_86->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_83->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
@@ -1945,10 +1952,40 @@ public:
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
         );
         label_sampleRotationAngle->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
+        comboBox_sampleRotationAngle->clear();
+        comboBox_sampleRotationAngle->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "10", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "15", Q_NULLPTR)
+        );
         label_stepperMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         label_87->setText(QApplication::translate("MainWindowClass", "\302\260", Q_NULLPTR));
+        comboBox_stepperMotorSpeed->clear();
+        comboBox_stepperMotorSpeed->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
         label_stepperMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         label_stepperMotorSpeed->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_stepperMotorDeceleration->clear();
+        comboBox_stepperMotorDeceleration->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
+        comboBox_stepperMotorAcceleration->clear();
+        comboBox_stepperMotorAcceleration->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
         label_82->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
         groupBox_22->setTitle(QApplication::translate("MainWindowClass", "\346\273\221\350\275\250\347\224\265\346\234\272\351\251\261\345\212\250", Q_NULLPTR));
         label_servoMotorResolution->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
@@ -1969,6 +2006,36 @@ public:
          << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
+        );
+        comboBox_servoMotorSpeed->clear();
+        comboBox_servoMotorSpeed->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
+        comboBox_servoMotorAcceleration->clear();
+        comboBox_servoMotorAcceleration->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
+        comboBox_servoMotorDeceleration->clear();
+        comboBox_servoMotorDeceleration->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
+        comboBox_servoMotorResolution->clear();
+        comboBox_servoMotorResolution->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
         );
         label_79->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));
         label_77->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
@@ -2048,7 +2115,10 @@ public:
         pushButton_21->setText(QApplication::translate("MainWindowClass", "\346\232\202\345\201\234", Q_NULLPTR));
         pushButton_20->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
         groupBox_17->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220\346\265\213\350\257\225", Q_NULLPTR));
-        label_5->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_9->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        radioButton_2->setText(QApplication::translate("MainWindowClass", "\351\241\272\345\272\217\344\272\256\347\201\257", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_4->clear();
         comboBox_4->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -2060,8 +2130,7 @@ public:
          << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
         );
-        label_9->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_5->clear();
         comboBox_5->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
@@ -2069,13 +2138,11 @@ public:
          << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
         );
         comboBox_5->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
-        label_8->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        label_31->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         radioButton->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
-        radioButton_2->setText(QApplication::translate("MainWindowClass", "\351\241\272\345\272\217\344\272\256\347\201\257", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindowClass", "\357\274\210\350\276\223\345\205\2451-196\357\274\211", Q_NULLPTR));
         pushButton_4->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242", Q_NULLPTR));
-        label_31->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         groupBox_19->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\273\221\350\275\250\346\216\247\345\210\266", Q_NULLPTR));
         label_52->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
         label_51->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));

@@ -20,7 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="Settings">
          <layout class="QGridLayout" name="gridLayout_45" rowstretch="2,4,1">
@@ -32,22 +32,15 @@
             <layout class="QGridLayout" name="gridLayout_10">
              <item row="1" column="0">
               <layout class="QGridLayout" name="gridLayout_9" rowstretch="1,0,0,0" columnstretch="1,0,0">
-               <item row="1" column="1">
-                <widget class="QSlider" name="horizontalSlider_darkLevel">
+               <item row="0" column="1">
+                <widget class="QSlider" name="horizontalSlider_gain">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
-                <widget class="QLineEdit" name="lineEdit_gain"/>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_imageSavePath">
-                 <property name="text">
-                  <string>图像保存路径</string>
-                 </property>
-                </widget>
+               <item row="3" column="1">
+                <widget class="QLineEdit" name="lineEdit_imageSavePath"/>
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_darkLevel">
@@ -56,18 +49,12 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QLineEdit" name="lineEdit_darkLevel"/>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_gain">
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_imageSavePath">
                  <property name="text">
-                  <string>Gain</string>
+                  <string>图像保存路径</string>
                  </property>
                 </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="lineEdit_imageSavePath"/>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_imageSaveFormat">
@@ -95,12 +82,25 @@
                  </item>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QSlider" name="horizontalSlider_gain">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_gain">
+                 <property name="text">
+                  <string>Gain</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSlider" name="horizontalSlider_darkLevel">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QSpinBox" name="spinBox_gain"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QSpinBox" name="spinBox_darkLevel"/>
                </item>
               </layout>
              </item>
@@ -115,8 +115,51 @@
             <layout class="QGridLayout" name="gridLayout_8">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_7" rowstretch="1,0,0,0" columnstretch="1,0,0">
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_lightingSequence">
+                 <property name="text">
+                  <string>亮灯序列</string>
+                 </property>
+                </widget>
+               </item>
                <item row="2" column="1">
                 <widget class="QLineEdit" name="lineEdit_delaySetting"/>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_delaySetting">
+                 <property name="text">
+                  <string>延时设置</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_serialPortSelection">
+                 <property name="text">
+                  <string>串口选择</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="comboBox_baudRate">
+                 <property name="currentText">
+                  <string>4800</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>4800</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>9600</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>19200</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_baudRate">
@@ -125,10 +168,10 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_delaySetting">
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_68">
                  <property name="text">
-                  <string>延时设置</string>
+                  <string>Baut/s</string>
                  </property>
                 </widget>
                </item>
@@ -186,49 +229,6 @@
                <item row="3" column="1">
                 <widget class="QLineEdit" name="lineEdit_lightingSequence"/>
                </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_lightingSequence">
-                 <property name="text">
-                  <string>亮灯序列</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="label_68">
-                 <property name="text">
-                  <string>Baut/s</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_serialPortSelection">
-                 <property name="text">
-                  <string>串口选择</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="comboBox_baudRate">
-                 <property name="currentText">
-                  <string>4800</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>4800</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>9600</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>19200</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
               </layout>
              </item>
             </layout>
@@ -243,7 +243,23 @@
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_46">
                <item row="4" column="1">
-                <widget class="QComboBox" name="comboBox_stepperMotorResolution"/>
+                <widget class="QComboBox" name="comboBox_stepperMotorResolution">
+                 <item>
+                  <property name="text">
+                   <string>800</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>1600</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2400</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="label_stepperMotorResolution">
@@ -335,7 +351,23 @@
                 </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QComboBox" name="comboBox_sampleRotationAngle"/>
+                <widget class="QComboBox" name="comboBox_sampleRotationAngle">
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>10</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>15</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_stepperMotorAcceleration">
@@ -352,7 +384,33 @@
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QComboBox" name="comboBox_stepperMotorSpeed"/>
+                <widget class="QComboBox" name="comboBox_stepperMotorSpeed">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="0" column="0">
                 <widget class="QLabel" name="label_stepperMotorPortSelection">
@@ -369,10 +427,62 @@
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QComboBox" name="comboBox_stepperMotorDeceleration"/>
+                <widget class="QComboBox" name="comboBox_stepperMotorDeceleration">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QComboBox" name="comboBox_stepperMotorAcceleration"/>
+                <widget class="QComboBox" name="comboBox_stepperMotorAcceleration">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="1" column="2">
                 <widget class="QLabel" name="label_82">
@@ -491,16 +601,110 @@
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QComboBox" name="comboBox_servoMotorSpeed"/>
+                <widget class="QComboBox" name="comboBox_servoMotorSpeed">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QComboBox" name="comboBox_servoMotorAcceleration"/>
+                <widget class="QComboBox" name="comboBox_servoMotorAcceleration">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="4" column="1">
-                <widget class="QComboBox" name="comboBox_servoMotorDeceleration"/>
+                <widget class="QComboBox" name="comboBox_servoMotorDeceleration">
+                 <item>
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>4</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>5</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QComboBox" name="comboBox_servoMotorResolution"/>
+                <widget class="QComboBox" name="comboBox_servoMotorResolution">
+                 <item>
+                  <property name="text">
+                   <string>800</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>1600</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>2400</string>
+                  </property>
+                 </item>
+                </widget>
                </item>
                <item row="6" column="1">
                 <widget class="QLineEdit" name="lineEdit_slideTableMovingDistance"/>
@@ -1099,7 +1303,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
-              <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,1,1,1,1,1,0" columnstretch="1,1,1" columnminimumwidth="0,0,0">
+              <layout class="QGridLayout" name="gridLayout_5" rowstretch="1,1,1,1,1,1" columnstretch="1,1,1" columnminimumwidth="0,0,0">
                <item row="2" column="0">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
@@ -1957,8 +2161,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
-         <height>783</height>
+         <width>124</width>
+         <height>721</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1996,8 +2200,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
-         <height>783</height>
+         <width>124</width>
+         <height>740</height>
         </rect>
        </property>
        <attribute name="label">

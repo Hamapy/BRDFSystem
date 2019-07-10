@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "cnComm.h"
+#include <QSettings>
 
 #define SERVO_FEEDBACK           "DONE"      // 电机反馈标识
 #define SERVO_ACCELERATE		 100         // 伺服电机加速度
@@ -43,6 +44,7 @@ private:
 	// 等待（IsFinished中调用，为避免太过频繁访问串口而引起拥塞）
 	static void  Wait(int millisec);
 
+	QSettings	*ini;
 	int     _port;
 	int     _accelerate;       //电机加速度
 	int     _decelerate;       //电机减速度
