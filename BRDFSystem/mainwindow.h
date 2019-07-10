@@ -44,10 +44,14 @@ private slots:
 	void PushButton_SampleReset_Pressed();
 	void SendingMat(int workerID, QImage mat);
 
-
 	//相机预处理页面
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
+	void PushButton_Chess_Pressed();
+	void PushButton_WhiteBalance_Pressed();
+	void PushButton_DeadPixel_Pressed();
+	void PushButton_BlackLevel_Pressed();
+	void PushButton_FiniCCD_Pressed();
 
 	//槽函数的公用函数
 	void IsEdited();
@@ -56,6 +60,7 @@ private slots:
 private:
 	Ui::MainWindowClass ui;
 
+	//采集页面
 	WorkerMeasurement*			workerMeasurement;
 	QThread*					threadMeasurement;
 	WorkerCCD*					workerCCD[9];
@@ -66,6 +71,11 @@ private:
 	bool						_displayFlag;
 	int							_measureFlag;
 	QMutex						_mutex;
+
+	//相机预处理页面
+	string						_capturePath = "..\\imgs_calibration";
+	vector<float>				_trans;//白平衡校正系数
+	vector<vector<float>>		_transs;
 
 	void CreateFolds(int flag, string root, string fileName = "");
 	inline void ShowImgOnQLabel(QLabel* qlabel, QImage img);

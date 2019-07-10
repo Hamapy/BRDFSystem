@@ -180,12 +180,21 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
 
 	
-	////相机预处理页面
+///////////////////////////////////////////////相机预处理页面///////////////////////////////////////////////
 	this->ui.pushButton_captureContinuously->setEnabled(false);
+	this->ui.pushButton_chess->setEnabled(false);
+	this->ui.pushButton_whiteBalance->setEnabled(false);
+	this->ui.pushButton_deadPixels->setEnabled(false);
+	this->ui.pushButton_blackLevel->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
+
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
-	
+	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
+	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
+	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
+	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
+	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
 }
 
 MainWindow::~MainWindow()
@@ -218,6 +227,7 @@ MainWindow::~MainWindow()
 ////////////////////////////////私有槽函数/////////////////////////////////////
 
 ////////////////////////////////配置页面/////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：isEdited()
 // 描述：文本框参数有改动时，按钮控件可点击
@@ -542,11 +552,7 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_IniCCD_Pressed()
 {
-	ui.pushButton_captureContinuously->setEnabled(true);
-	ui.pushButton_finiCCD->setEnabled(true);
-
 	_displayFlag = 0;
-	CreateFolds(2, "..\\imgs_calibration");
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
@@ -554,10 +560,15 @@ void MainWindow::PushButton_IniCCD_Pressed()
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
 			emit startTimer();
 		}
 	}
+	this->ui.pushButton_captureContinuously->setEnabled(true);
+	this->ui.pushButton_chess->setEnabled(true);
+	this->ui.pushButton_whiteBalance->setEnabled(true);
+	this->ui.pushButton_deadPixels->setEnabled(true);
+	this->ui.pushButton_blackLevel->setEnabled(true);
+	this->ui.pushButton_finiCCD->setEnabled(true);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_captureContinuously_pressed
@@ -570,11 +581,90 @@ void MainWindow::PushButton_IniCCD_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_CaptureContinuously_Pressed()
 {
+	_capturePath = this->ui.lineEdit_capturePath->text().toStdString();
+	CreateFolds(2, _capturePath);
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		this->workerCCD[i]->_capture = 1;
 	}
 }
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Chess_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_WhiteBalance_Pressed()
+{
+	vector<Mat> mats;
+	Mat mat;
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		string path = _capturePath + "camera" + to_string(i);
+		mats = AVTCamera::ReadImages(path);
+		//mat = AVTCamera::AverageImage(mats);
+		_trans = AVTCamera::GetWhiteBalanceTrans(mats);
+	}
+	_transs.push_back(_trans);
+	//需要写在配置文件里
+	//...
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_DeadPixel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_BlackLevel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_FiniCCD_Pressed()
+{
+
+}
+
 
 /////////////////////////////槽函数的公用函数/////////////////////////////////
 

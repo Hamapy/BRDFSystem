@@ -15,6 +15,7 @@
 #include "IFrameObserver.h"
 //#include "VmbTransformTypes.h"
 #include "opencv2/opencv.hpp"
+#include "BasicImage.h"
 
 using namespace std;
 using namespace cv;
@@ -41,7 +42,9 @@ on a frame grabber card.Control is then possible via feature access methods.
 #define CAM8 DEV_0xA4701120BA03F
 
 
+
 //传入相机线程函数参数
+/*
 struct CameraThreadInfo
 {
 	CameraPtrVector cameras;
@@ -50,6 +53,13 @@ struct CameraThreadInfo
 	double gain;
 	double blackLevel;
 };
+*/
+
+typedef struct _tagPIXEL
+{
+	int i;   // i axis (row)
+	int j;   // j axis (column)
+}PIXEL;
 
 class AVTCamera
 {
@@ -95,26 +105,28 @@ public:
 	//相机标定校正部分
 	//辐射度标定
 	//白平衡校正（完美全反射）&均匀度校正（事先用白板标定，载物台上标记点仅用于仿射变换及采集过程中的白平衡检验）
+	static vector<float> GetWhiteBalanceTrans(vector<Mat> mats);
 	Mat WhiteBalance(Mat src);
 	//颜色校正（多项式回归） 返回变换矩阵
-	Mat ColorCorrection(CameraPtr& camera, int cameraID);
+	//Mat ColorCorrection(CameraPtr& camera, int cameraID);
 
 	//几何标定
 	//Zhang棋盘格标定 返回相机参数矩阵
 	Mat ChessCorrection(CameraPtr& camera, int cameraID);
 
 	//线性度测试（计算最大曝光时间、自动曝光时间） num曝光次数
-	bool LinearityTest(CameraPtr& camera, int cameraID, int num, float& k, float& tMax, float& tAuto);
+	//bool LinearityTest(CameraPtr& camera, int cameraID, int num, float& k, float& tMax, float& tAuto);
 
 	//CCD底噪校正
 	//坏点标记 返回坏点位置矩阵
-	Mat DeadPixelDetect(CameraPtr& camera, int cameraID);
+	void DeadPixelDetect(Mat src, int maxNum);
+	Mat DeadPixelCorrection();
 	//暗电平处理（Vimba SDK中提供了设置BlackLevel的功能，我们需要对其BlackLevel=0时留的pedestal进行处理，输出不能为负数）
 	//返回需要减去的基值
 	int BlackLevelCorrection(CameraPtr& camera, int cameraID);
 
 
-	//friend class ImageProcessing;  //采集图像处理类需要用到该类的校正矩阵
+	friend class MainWindow;
 
 
 
@@ -136,7 +148,7 @@ private:
 	//VmbError_t					err;
 	//VmbHandle_t					hCamera_;
 	
-	CameraThreadInfo			threadInfo;
+	//CameraThreadInfo			threadInfo;
 	static int					threadID;
 	Mat							captureMat;
 	
@@ -145,12 +157,21 @@ private:
 	float*						tMax;
 	float*						tAuto;
 	float*						k; //E-t曲线斜率
+	vector<float>				_trans;//白平衡校正系数
+	vector<vector<float>>		_transs;
+	int							_darkResponse;//暗电流响应值
+	vector<int*>				_deadPixelPos;//坏点位置
 
 	//采集前清空目录
 	static int EmptyFiles(string dirPath);
-	//寻找材质样品四个边界点的位置
-	vector<Point> FindCorner(int cameraID);
-	//寻找白色标记区域
-	int AVTCamera::WihteAreaDetection(Mat src, Rect wBlock);
+	//多张连续图像求平均
+	static Mat AverageImage(vector<Mat> mats);
+	//读取一个文件夹下所有图片
+	static vector<Mat> ReadImages(string path);
+	//判断该像素点是否被标记
+	static bool IsSelected(Mat src, int i, int j);
+	//选中标记像素点
+	static void Select(Mat src, int i, int j);
+
 };
 #endif
