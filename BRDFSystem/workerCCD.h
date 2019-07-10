@@ -3,8 +3,12 @@
 #ifndef WORKERCCD_H
 #define WORKERCCD_H
 
-#include "workerMeasurement.h"
 #include <QObject>
+#include <QImage>
+#include <QTimerEvent>
+#include <QThread>
+#include <QMutex>
+#include "ccd.h"
 
 class WorkerCCD : public QObject
 {
@@ -22,12 +26,10 @@ private slots:
 	void StartTimer();
 	void SetExposureTime();
 	void CloseWorker();
-	//void SaveAMat();
+	void Grab();
+	void GetMaterialName(QString materialName);
 
 private:
-	//WorkerMeasurement*		workerMeasurement;
-	//QThread*				threadMeasurement;
-
 	VimbaSystem&			_system;
 	int						_workerID;
 	AVTCamera*				cameraAVT;
@@ -35,16 +37,16 @@ private:
 	Mat						_mat;
 	Mat						_matWB;
 	bool					_capture;
-	//int framerate = 0;
+	string					_materialName;
 	int						_timerId;
 	unsigned char*			_pImageFrame;
 	int						_height;
 	int						_width;
 	//int						_saveName;
 	float					_exposureTime;
-	//string					_imageSavingPath1 = "..\\imgs_measurement1";
-	//string					_imageSavingPath2 = "..\\imgs_measurement2";
-	//string					_imageSavingPath3 = "..\\imgs_calibration";
+	string					_imageSavingPath1 = "..\\imgs_measurement1\\";
+	string					_imageSavingPath2 = "..\\imgs_measurement2\\";
+	string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	int						_measureFlag;//主界面传入的采集类型标记
 	QMutex					_mutex;
 
@@ -52,6 +54,7 @@ signals:
 	//void next();
 	void sendingMat(int workerID, /*Mat*/QImage mat);
 	void sendingImg(int workerID, QImage img);
+	void grabDone(int workerID);
 	//void startMeasurement(int measureFlag);
 };
 #endif

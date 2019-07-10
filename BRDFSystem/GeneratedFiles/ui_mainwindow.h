@@ -133,28 +133,27 @@ public:
     QGridLayout *gridLayout_44;
     QGridLayout *gridLayout_30;
     QPushButton *pushButton_3;
+    QPushButton *pushButton_6;
+    QComboBox *comboBox_3;
+    QPushButton *pushButton_5;
+    QLabel *label_15;
+    QPushButton *pushButton_captureContinuously;
     QHBoxLayout *horizontalLayout_2;
     QSlider *horizontalSlider_3;
     QLineEdit *lineEdit_17;
     QPushButton *pushButton_finiCCD;
-    QLabel *label_20;
-    QPushButton *pushButton_6;
     QLabel *label_19;
     QLabel *label_18;
-    QPushButton *pushButton_5;
     QLineEdit *lineEdit_18;
-    QPushButton *pushButton_2;
     QPushButton *pushButton_iniCCD;
-    QHBoxLayout *horizontalLayout_3;
-    QSlider *horizontalSlider_4;
-    QLineEdit *lineEdit_19;
-    QLabel *label_15;
-    QComboBox *comboBox_3;
-    QPushButton *pushButton_captureContinuously;
-    QPushButton *pushButton_stopCapture;
+    QPushButton *pushButton_2;
+    QLabel *label_20;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_21;
     QLineEdit *lineEdit_21;
+    QHBoxLayout *horizontalLayout_3;
+    QSlider *horizontalSlider_4;
+    QLineEdit *lineEdit_19;
     QGridLayout *gridLayout_3;
     QGroupBox *groupBox_precamera4;
     QGridLayout *gridLayout_39;
@@ -213,21 +212,21 @@ public:
     QGroupBox *groupBox_17;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout_5;
-    QLabel *label_5;
-    QComboBox *comboBox_4;
-    QLabel *label_9;
     QLabel *label_4;
-    QLineEdit *lineEdit;
-    QComboBox *comboBox_5;
-    QLabel *label_8;
-    QRadioButton *radioButton;
-    QLineEdit *lineEdit_2;
-    QRadioButton *radioButton_2;
     QLineEdit *lineEdit_3;
+    QLabel *label_9;
+    QRadioButton *radioButton_2;
+    QLabel *label_8;
+    QComboBox *comboBox_4;
+    QLabel *label_5;
+    QComboBox *comboBox_5;
+    QLabel *label_31;
+    QRadioButton *radioButton;
+    QLineEdit *lineEdit;
     QLabel *label_7;
+    QLineEdit *lineEdit_2;
     QPushButton *pushButton_4;
     QPushButton *pushButton;
-    QLabel *label_31;
     QGroupBox *groupBox_19;
     QGridLayout *gridLayout_31;
     QGridLayout *gridLayout_32;
@@ -294,11 +293,13 @@ public:
     QGridLayout *gridLayout_23;
     QLabel *label_camera8;
     QGridLayout *gridLayout_26;
+    QLabel *label_materialName;
     QLineEdit *lineEdit_materialName;
     QPushButton *pushButton_startMeasurement;
+    QPushButton *pushButton_sampleReset;
     QPushButton *pushButton_stopMeasurement;
     QLabel *label_state;
-    QLabel *label_materialName;
+    QLabel *label_measureState;
     QWidget *Modeling;
     QGridLayout *gridLayout_27;
     QTreeWidget *treeWidget;
@@ -765,7 +766,32 @@ public:
         pushButton_3 = new QPushButton(PreCamera);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
 
-        gridLayout_30->addWidget(pushButton_3, 9, 1, 1, 1);
+        gridLayout_30->addWidget(pushButton_3, 8, 1, 1, 1);
+
+        pushButton_6 = new QPushButton(PreCamera);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+
+        gridLayout_30->addWidget(pushButton_6, 11, 1, 1, 1);
+
+        comboBox_3 = new QComboBox(PreCamera);
+        comboBox_3->setObjectName(QStringLiteral("comboBox_3"));
+
+        gridLayout_30->addWidget(comboBox_3, 3, 1, 1, 1);
+
+        pushButton_5 = new QPushButton(PreCamera);
+        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+
+        gridLayout_30->addWidget(pushButton_5, 10, 1, 1, 1);
+
+        label_15 = new QLabel(PreCamera);
+        label_15->setObjectName(QStringLiteral("label_15"));
+
+        gridLayout_30->addWidget(label_15, 2, 0, 1, 1);
+
+        pushButton_captureContinuously = new QPushButton(PreCamera);
+        pushButton_captureContinuously->setObjectName(QStringLiteral("pushButton_captureContinuously"));
+
+        gridLayout_30->addWidget(pushButton_captureContinuously, 7, 1, 1, 1);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
@@ -789,17 +815,7 @@ public:
         pushButton_finiCCD = new QPushButton(PreCamera);
         pushButton_finiCCD->setObjectName(QStringLiteral("pushButton_finiCCD"));
 
-        gridLayout_30->addWidget(pushButton_finiCCD, 13, 1, 1, 1);
-
-        label_20 = new QLabel(PreCamera);
-        label_20->setObjectName(QStringLiteral("label_20"));
-
-        gridLayout_30->addWidget(label_20, 3, 0, 1, 1);
-
-        pushButton_6 = new QPushButton(PreCamera);
-        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
-
-        gridLayout_30->addWidget(pushButton_6, 12, 1, 1, 1);
+        gridLayout_30->addWidget(pushButton_finiCCD, 12, 1, 1, 1);
 
         label_19 = new QLabel(PreCamera);
         label_19->setObjectName(QStringLiteral("label_19"));
@@ -811,25 +827,41 @@ public:
 
         gridLayout_30->addWidget(label_18, 4, 0, 1, 1);
 
-        pushButton_5 = new QPushButton(PreCamera);
-        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
-
-        gridLayout_30->addWidget(pushButton_5, 11, 1, 1, 1);
-
         lineEdit_18 = new QLineEdit(PreCamera);
         lineEdit_18->setObjectName(QStringLiteral("lineEdit_18"));
 
         gridLayout_30->addWidget(lineEdit_18, 4, 1, 1, 1);
 
-        pushButton_2 = new QPushButton(PreCamera);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-
-        gridLayout_30->addWidget(pushButton_2, 10, 1, 1, 1);
-
         pushButton_iniCCD = new QPushButton(PreCamera);
         pushButton_iniCCD->setObjectName(QStringLiteral("pushButton_iniCCD"));
 
         gridLayout_30->addWidget(pushButton_iniCCD, 5, 1, 1, 1);
+
+        pushButton_2 = new QPushButton(PreCamera);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+
+        gridLayout_30->addWidget(pushButton_2, 9, 1, 1, 1);
+
+        label_20 = new QLabel(PreCamera);
+        label_20->setObjectName(QStringLiteral("label_20"));
+
+        gridLayout_30->addWidget(label_20, 3, 0, 1, 1);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        label_21 = new QLabel(PreCamera);
+        label_21->setObjectName(QStringLiteral("label_21"));
+
+        horizontalLayout_6->addWidget(label_21);
+
+        lineEdit_21 = new QLineEdit(PreCamera);
+        lineEdit_21->setObjectName(QStringLiteral("lineEdit_21"));
+
+        horizontalLayout_6->addWidget(lineEdit_21);
+
+
+        gridLayout_30->addLayout(horizontalLayout_6, 7, 0, 1, 1);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
@@ -849,42 +881,6 @@ public:
         horizontalLayout_3->setStretch(1, 1);
 
         gridLayout_30->addLayout(horizontalLayout_3, 2, 1, 1, 1);
-
-        label_15 = new QLabel(PreCamera);
-        label_15->setObjectName(QStringLiteral("label_15"));
-
-        gridLayout_30->addWidget(label_15, 2, 0, 1, 1);
-
-        comboBox_3 = new QComboBox(PreCamera);
-        comboBox_3->setObjectName(QStringLiteral("comboBox_3"));
-
-        gridLayout_30->addWidget(comboBox_3, 3, 1, 1, 1);
-
-        pushButton_captureContinuously = new QPushButton(PreCamera);
-        pushButton_captureContinuously->setObjectName(QStringLiteral("pushButton_captureContinuously"));
-
-        gridLayout_30->addWidget(pushButton_captureContinuously, 7, 1, 1, 1);
-
-        pushButton_stopCapture = new QPushButton(PreCamera);
-        pushButton_stopCapture->setObjectName(QStringLiteral("pushButton_stopCapture"));
-
-        gridLayout_30->addWidget(pushButton_stopCapture, 8, 1, 1, 1);
-
-        horizontalLayout_6 = new QHBoxLayout();
-        horizontalLayout_6->setSpacing(6);
-        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
-        label_21 = new QLabel(PreCamera);
-        label_21->setObjectName(QStringLiteral("label_21"));
-
-        horizontalLayout_6->addWidget(label_21);
-
-        lineEdit_21 = new QLineEdit(PreCamera);
-        lineEdit_21->setObjectName(QStringLiteral("lineEdit_21"));
-
-        horizontalLayout_6->addWidget(lineEdit_21);
-
-
-        gridLayout_30->addLayout(horizontalLayout_6, 7, 0, 1, 1);
 
         gridLayout_30->setRowStretch(0, 1);
         gridLayout_30->setColumnStretch(0, 1);
@@ -1173,65 +1169,70 @@ public:
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setSpacing(6);
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
-        label_5 = new QLabel(groupBox_17);
-        label_5->setObjectName(QStringLiteral("label_5"));
-
-        gridLayout_5->addWidget(label_5, 2, 2, 1, 1);
-
-        comboBox_4 = new QComboBox(groupBox_17);
-        comboBox_4->setObjectName(QStringLiteral("comboBox_4"));
-
-        gridLayout_5->addWidget(comboBox_4, 0, 1, 1, 1);
-
-        label_9 = new QLabel(groupBox_17);
-        label_9->setObjectName(QStringLiteral("label_9"));
-
-        gridLayout_5->addWidget(label_9, 1, 0, 1, 1);
-
         label_4 = new QLabel(groupBox_17);
         label_4->setObjectName(QStringLiteral("label_4"));
 
         gridLayout_5->addWidget(label_4, 2, 0, 1, 1);
-
-        lineEdit = new QLineEdit(groupBox_17);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
-
-        gridLayout_5->addWidget(lineEdit, 2, 1, 1, 1);
-
-        comboBox_5 = new QComboBox(groupBox_17);
-        comboBox_5->setObjectName(QStringLiteral("comboBox_5"));
-
-        gridLayout_5->addWidget(comboBox_5, 1, 1, 1, 1);
-
-        label_8 = new QLabel(groupBox_17);
-        label_8->setObjectName(QStringLiteral("label_8"));
-
-        gridLayout_5->addWidget(label_8, 0, 0, 1, 1);
-
-        radioButton = new QRadioButton(groupBox_17);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
-
-        gridLayout_5->addWidget(radioButton, 3, 0, 1, 1);
-
-        lineEdit_2 = new QLineEdit(groupBox_17);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-
-        gridLayout_5->addWidget(lineEdit_2, 3, 1, 1, 1);
-
-        radioButton_2 = new QRadioButton(groupBox_17);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
-
-        gridLayout_5->addWidget(radioButton_2, 4, 0, 1, 1);
 
         lineEdit_3 = new QLineEdit(groupBox_17);
         lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
 
         gridLayout_5->addWidget(lineEdit_3, 4, 1, 1, 1);
 
+        label_9 = new QLabel(groupBox_17);
+        label_9->setObjectName(QStringLiteral("label_9"));
+
+        gridLayout_5->addWidget(label_9, 1, 0, 1, 1);
+
+        radioButton_2 = new QRadioButton(groupBox_17);
+        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+
+        gridLayout_5->addWidget(radioButton_2, 4, 0, 1, 1);
+
+        label_8 = new QLabel(groupBox_17);
+        label_8->setObjectName(QStringLiteral("label_8"));
+
+        gridLayout_5->addWidget(label_8, 0, 0, 1, 1);
+
+        comboBox_4 = new QComboBox(groupBox_17);
+        comboBox_4->setObjectName(QStringLiteral("comboBox_4"));
+
+        gridLayout_5->addWidget(comboBox_4, 0, 1, 1, 1);
+
+        label_5 = new QLabel(groupBox_17);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        gridLayout_5->addWidget(label_5, 2, 2, 1, 1);
+
+        comboBox_5 = new QComboBox(groupBox_17);
+        comboBox_5->setObjectName(QStringLiteral("comboBox_5"));
+
+        gridLayout_5->addWidget(comboBox_5, 1, 1, 1, 1);
+
+        label_31 = new QLabel(groupBox_17);
+        label_31->setObjectName(QStringLiteral("label_31"));
+
+        gridLayout_5->addWidget(label_31, 1, 2, 1, 1);
+
+        radioButton = new QRadioButton(groupBox_17);
+        radioButton->setObjectName(QStringLiteral("radioButton"));
+
+        gridLayout_5->addWidget(radioButton, 3, 0, 1, 1);
+
+        lineEdit = new QLineEdit(groupBox_17);
+        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+
+        gridLayout_5->addWidget(lineEdit, 2, 1, 1, 1);
+
         label_7 = new QLabel(groupBox_17);
         label_7->setObjectName(QStringLiteral("label_7"));
 
         gridLayout_5->addWidget(label_7, 4, 2, 1, 1);
+
+        lineEdit_2 = new QLineEdit(groupBox_17);
+        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
+
+        gridLayout_5->addWidget(lineEdit_2, 3, 1, 1, 1);
 
         pushButton_4 = new QPushButton(groupBox_17);
         pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
@@ -1242,11 +1243,6 @@ public:
         pushButton->setObjectName(QStringLiteral("pushButton"));
 
         gridLayout_5->addWidget(pushButton, 5, 1, 1, 1);
-
-        label_31 = new QLabel(groupBox_17);
-        label_31->setObjectName(QStringLiteral("label_31"));
-
-        gridLayout_5->addWidget(label_31, 1, 2, 1, 1);
 
         gridLayout_5->setRowStretch(0, 1);
         gridLayout_5->setRowStretch(1, 1);
@@ -1606,6 +1602,11 @@ public:
         gridLayout_26 = new QGridLayout();
         gridLayout_26->setSpacing(6);
         gridLayout_26->setObjectName(QStringLiteral("gridLayout_26"));
+        label_materialName = new QLabel(Measurement);
+        label_materialName->setObjectName(QStringLiteral("label_materialName"));
+
+        gridLayout_26->addWidget(label_materialName, 0, 0, 1, 1);
+
         lineEdit_materialName = new QLineEdit(Measurement);
         lineEdit_materialName->setObjectName(QStringLiteral("lineEdit_materialName"));
 
@@ -1614,25 +1615,31 @@ public:
         pushButton_startMeasurement = new QPushButton(Measurement);
         pushButton_startMeasurement->setObjectName(QStringLiteral("pushButton_startMeasurement"));
 
-        gridLayout_26->addWidget(pushButton_startMeasurement, 1, 0, 1, 1);
+        gridLayout_26->addWidget(pushButton_startMeasurement, 0, 2, 1, 1);
+
+        pushButton_sampleReset = new QPushButton(Measurement);
+        pushButton_sampleReset->setObjectName(QStringLiteral("pushButton_sampleReset"));
+
+        gridLayout_26->addWidget(pushButton_sampleReset, 2, 2, 1, 1);
 
         pushButton_stopMeasurement = new QPushButton(Measurement);
         pushButton_stopMeasurement->setObjectName(QStringLiteral("pushButton_stopMeasurement"));
 
-        gridLayout_26->addWidget(pushButton_stopMeasurement, 1, 1, 1, 1);
+        gridLayout_26->addWidget(pushButton_stopMeasurement, 1, 2, 1, 1);
 
         label_state = new QLabel(Measurement);
         label_state->setObjectName(QStringLiteral("label_state"));
 
-        gridLayout_26->addWidget(label_state, 2, 0, 1, 1);
+        gridLayout_26->addWidget(label_state, 1, 0, 1, 1);
 
-        label_materialName = new QLabel(Measurement);
-        label_materialName->setObjectName(QStringLiteral("label_materialName"));
+        label_measureState = new QLabel(Measurement);
+        label_measureState->setObjectName(QStringLiteral("label_measureState"));
 
-        gridLayout_26->addWidget(label_materialName, 0, 0, 1, 1);
+        gridLayout_26->addWidget(label_measureState, 1, 1, 1, 1);
 
         gridLayout_26->setColumnStretch(0, 1);
-        gridLayout_26->setColumnStretch(1, 1);
+        gridLayout_26->setColumnStretch(1, 2);
+        gridLayout_26->setColumnStretch(2, 1);
 
         gridLayout_13->addLayout(gridLayout_26, 1, 0, 1, 1);
 
@@ -1763,7 +1770,7 @@ public:
         toolBox->setObjectName(QStringLiteral("toolBox"));
         MaterialMeasurement = new QWidget();
         MaterialMeasurement->setObjectName(QStringLiteral("MaterialMeasurement"));
-        MaterialMeasurement->setGeometry(QRect(0, 0, 167, 720));
+        MaterialMeasurement->setGeometry(QRect(0, 0, 184, 783));
         gridLayout_14 = new QGridLayout(MaterialMeasurement);
         gridLayout_14->setSpacing(6);
         gridLayout_14->setContentsMargins(11, 11, 11, 11);
@@ -1818,7 +1825,7 @@ public:
         toolBox->addItem(MeterialModeling, QString::fromUtf8("\346\235\220\350\264\250\345\273\272\346\250\241"));
         SystemSettings = new QWidget();
         SystemSettings->setObjectName(QStringLiteral("SystemSettings"));
-        SystemSettings->setGeometry(QRect(0, 0, 184, 783));
+        SystemSettings->setGeometry(QRect(0, 0, 124, 740));
         gridLayout_16 = new QGridLayout(SystemSettings);
         gridLayout_16->setSpacing(6);
         gridLayout_16->setContentsMargins(11, 11, 11, 11);
@@ -1861,8 +1868,8 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(0);
-        toolBox->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(3);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindowClass);
@@ -1977,23 +1984,22 @@ public:
         pushButton_save->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_defaults->setText(QApplication::translate("MainWindowClass", "\346\201\242\345\244\215\351\273\230\350\256\244\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_3->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\346\240\241\346\255\243\357\274\210\346\243\213\347\233\230\346\240\274\346\240\207\345\256\232\357\274\211", Q_NULLPTR));
-        pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
-        label_20->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\346\240\274\345\274\217", Q_NULLPTR));
         pushButton_6->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\346\240\241\346\255\243", Q_NULLPTR));
-        label_19->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
-        label_18->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\241\346\255\243", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindowClass", "\347\231\275\345\271\263\350\241\241\346\240\241\346\255\243", Q_NULLPTR));
-        pushButton_iniCCD->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245\347\233\270\346\234\272", Q_NULLPTR));
-        label_15->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263", Q_NULLPTR));
         comboBox_3->clear();
         comboBox_3->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", ".JPEG", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", ".BMP", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", ".PNG", Q_NULLPTR)
         );
+        pushButton_5->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\241\346\255\243", Q_NULLPTR));
+        label_15->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263", Q_NULLPTR));
         pushButton_captureContinuously->setText(QApplication::translate("MainWindowClass", "\350\277\236\347\273\255\351\207\207\351\233\206", Q_NULLPTR));
-        pushButton_stopCapture->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\351\207\207\351\233\206", Q_NULLPTR));
+        pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
+        label_19->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
+        label_18->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
+        pushButton_iniCCD->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245\347\233\270\346\234\272", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("MainWindowClass", "\347\231\275\345\271\263\350\241\241\346\240\241\346\255\243", Q_NULLPTR));
+        label_20->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\346\240\274\345\274\217", Q_NULLPTR));
         label_21->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\225\260\351\207\217", Q_NULLPTR));
         groupBox_precamera4->setTitle(QApplication::translate("MainWindowClass", "Camera4", Q_NULLPTR));
         label_precamera4->setText(QString());
@@ -2048,7 +2054,10 @@ public:
         pushButton_21->setText(QApplication::translate("MainWindowClass", "\346\232\202\345\201\234", Q_NULLPTR));
         pushButton_20->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
         groupBox_17->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220\346\265\213\350\257\225", Q_NULLPTR));
-        label_5->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_9->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        radioButton_2->setText(QApplication::translate("MainWindowClass", "\351\241\272\345\272\217\344\272\256\347\201\257", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_4->clear();
         comboBox_4->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -2060,8 +2069,7 @@ public:
          << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
         );
-        label_9->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_5->clear();
         comboBox_5->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
@@ -2069,13 +2077,11 @@ public:
          << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
         );
         comboBox_5->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
-        label_8->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
+        label_31->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         radioButton->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
-        radioButton_2->setText(QApplication::translate("MainWindowClass", "\351\241\272\345\272\217\344\272\256\347\201\257", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindowClass", "\357\274\210\350\276\223\345\205\2451-196\357\274\211", Q_NULLPTR));
         pushButton_4->setText(QApplication::translate("MainWindowClass", "\345\220\257\345\212\250", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242", Q_NULLPTR));
-        label_31->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
         groupBox_19->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\273\221\350\275\250\346\216\247\345\210\266", Q_NULLPTR));
         label_52->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
         label_51->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
@@ -2145,10 +2151,12 @@ public:
         label_camera5->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
         groupBox_camera8->setTitle(QApplication::translate("MainWindowClass", "Camera8", Q_NULLPTR));
         label_camera8->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
+        label_materialName->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\235\220\350\264\250\345\220\215\347\247\260\357\274\232", Q_NULLPTR));
         pushButton_startMeasurement->setText(QApplication::translate("MainWindowClass", "\345\274\200\345\247\213\351\207\207\351\233\206", Q_NULLPTR));
+        pushButton_sampleReset->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\345\275\222\344\275\215", Q_NULLPTR));
         pushButton_stopMeasurement->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\351\207\207\351\233\206", Q_NULLPTR));
-        label_state->setText(QApplication::translate("MainWindowClass", "\345\275\223\345\211\215\351\207\207\351\233\206\350\277\233\345\272\246\357\274\232\347\254\254i\344\270\252\345\200\276\346\226\234\350\247\222 \347\254\254j\344\270\252\351\253\230\345\272\246\350\247\222 \347\254\254k\344\270\252\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
-        label_materialName->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\235\220\350\264\250\345\220\215\347\247\260", Q_NULLPTR));
+        label_state->setText(QApplication::translate("MainWindowClass", "\345\275\223\345\211\215\351\207\207\351\233\206\350\277\233\345\272\246\357\274\232", Q_NULLPTR));
+        label_measureState->setText(QApplication::translate("MainWindowClass", "\347\254\254i\344\270\252\345\200\276\346\226\234\350\247\222 \347\254\254j\344\270\252\351\253\230\345\272\246\350\247\222 \347\254\254k\344\270\252\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
         QTreeWidgetItem *___qtreewidgetitem = treeWidget->headerItem();
         ___qtreewidgetitem->setText(3, QApplication::translate("MainWindowClass", "\346\234\254\345\234\260\350\267\257\345\276\204", Q_NULLPTR));
         ___qtreewidgetitem->setText(2, QApplication::translate("MainWindowClass", "\344\277\256\346\224\271\346\227\266\351\227\264", Q_NULLPTR));

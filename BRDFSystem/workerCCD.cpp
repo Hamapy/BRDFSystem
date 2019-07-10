@@ -39,27 +39,14 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 		cameraAVT->GetImageSize(_width, _height);
 		_pImageFrame = cameraAVT->CaptureImage();
 		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-		_matWB = cameraAVT->WhiteBalance(_mat);
-		//_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
-		_img = QImage((const unsigned char*)(_matWB.data), _matWB.cols, _matWB.rows, QImage::Format_RGB888);
+		//_matWB = cameraAVT->WhiteBalance(_mat);
+		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
+		//_img = QImage((const unsigned char*)(_matWB.data), _matWB.cols, _matWB.rows, QImage::Format_RGB888);
 
-		//if (_capture == 1)
-		//{
-		//	cameraAVT->SaveImage(_mat);
-		//}
+		//连续采集
+		if (_capture == 1)
+			cameraAVT->CaptureImages(_mat, _imageSavingPath3);
 
-		//if (_measureFlag != 0)
-		//{
-			//if (!threadMeasurement->isRunning())
-			//{
-			//	threadMeasurement->start();
-			//	connect(this, SIGNAL(startMeasurement(int)), workerMeasurement, SLOT(StartTimer(int)));
-			//	emit startMeasurement(_measureFlag);
-			//}
-			//_measureFlag = 0;
-		//}
-		
-		//emit next();
 		emit sendingMat(_workerID, /*_mat*/_img);//给采集线程传递
 		emit sendingImg(_workerID, _img);//给界面显示线程传递
 	}
@@ -72,25 +59,27 @@ void WorkerCCD::SetExposureTime()
 	Sleep(500);//等曝光时间生效
 }
 
-//void WorkerCCD::SaveAMat()
-//{
-//	char saveName[4] = { 0 };
-//	sprintf(saveName, "%4d", _saveName);
-//	char sPath[200];
-//
-//	sprintf(sPath, "//%s.bmp", saveName);
-//	string path;
-//	if (_measureFlag == 1)
-//		path = _imageSavingPath1 + "//camera" + to_string(workerID) + sPath;
-//	if (_measureFlag == 2)
-//		path = _imageSavingPath2 + "//camera" + to_string(workerID) + sPath;
-//	if (_measureFlag == 3)
-//		path = _imageSavingPath3 + "//camera" + to_string(workerID) + sPath;
-//	imwrite(path, _mat);
-//	_saveName++;
-//
-//	return;
-//}
+void WorkerCCD::GetMaterialName(QString materialName)
+{
+	_materialName = materialName.toStdString();
+}
+
+void WorkerCCD::Grab()
+{
+	//SetExposureTime();//调整曝光时间
+	string path;
+	if (_measureFlag == 1)
+		path = _imageSavingPath1 + _materialName + "//camera" + to_string(_workerID);
+	if (_measureFlag == 2)
+		path = _imageSavingPath2 + _materialName + "//camera" + to_string(_workerID);
+	if (_measureFlag == 3)
+		path = _imageSavingPath3 + "//camera" + to_string(_workerID);
+
+	cameraAVT->SaveAnImage(_mat, path, _workerID);
+
+	emit grabDone(_workerID);
+}
+
 void WorkerCCD::CloseWorker()
 {
 	this->killTimer(_timerId);//销毁计时器写在析构函数里会报错

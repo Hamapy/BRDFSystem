@@ -2,20 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets/QMainWindow>
-//#include <QThread>
 #include <QDebug>
-//#include <QTimerEvent>
 #include <QFileDialog>
 #include <QSettings>
 #include <time.h>
 #include <QMessageBox>
 #include "ui_mainwindow.h"
-#include "slideComm.h"
-//#include "sampleComm.h"
-//#include "ccd.h"
-
+#include "workerMeasurement.h"
 #include "workerCCD.h"
-//#include "configuration.h"
+
 
 #define CAM_NUM 9  //相机数量
 
@@ -45,15 +40,14 @@ private slots:
 
 	//材质采集页面
 	void PushButton_StartMeasurement_Pressed();
-	void StopMeasurement();
+	void PushButton_StopMeasurement_Pressed();
+	void PushButton_SampleReset_Pressed();
 	void SendingMat(int workerID, QImage mat);
-	void ConnectRGB();
 
 
 	//相机预处理页面
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
-
 
 	//槽函数的公用函数
 	void IsEdited();
@@ -64,23 +58,17 @@ private:
 
 	WorkerMeasurement*			workerMeasurement;
 	QThread*					threadMeasurement;
-	SlideComm*					slideComm;
-	SampleComm*					sampleComm;
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
-	//WorkerMeasurement*			workerMeasurement[9];
-	//QThread*					threadMeasurement[9];
 	VimbaSystem&				_system;
 	QSettings					*ini;
-	//VimbaSystem&				_system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
-	//为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
 	QString						_qMaterialName;
 	bool						_displayFlag;
 	int							_measureFlag;
 	QMutex						_mutex;
 
 	void CreateFolds(int flag, string root, string fileName = "");
-	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
+	inline void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 	/*
 	//配置文件参数

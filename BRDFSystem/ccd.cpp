@@ -168,15 +168,15 @@ bool AVTCamera::GetImageSize(int& width, int& height)
 		return 0;
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：SaveImage(Mat& captureMat)
-// 描述：采集一帧RGB图像
+// 函数：
+// 描述：
 // 输入：Null
-// 输出：一帧图像
+// 输出：
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveImage(Mat& captureMat, string imageSavingPath)
+bool AVTCamera::CaptureImages(Mat& captureMat, string imageSavingPath)
 {
 	if (_saveName < CAPTURE_NUM)
 	{
@@ -193,6 +193,28 @@ bool AVTCamera::SaveImage(Mat& captureMat, string imageSavingPath)
 	}
 	else
 		return 0;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：SaveAnImage(Mat& captureMat)
+// 描述：采集一帧RGB图像
+// 输入：Null
+// 输出：一帧图像
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID)
+{
+	char saveName[4] = { 0 };
+	sprintf(saveName, "%4d", _saveName);
+	char name[200];
+	sprintf(name, "//%s.bmp", saveName);
+	string spath = path + name;
+	bool isSaved = imwrite(spath, mat);
+	//mat.save(QString::fromStdString(path), "BMP", 100);
+	_saveName++;
+
+	return isSaved;
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：GetExposureTime(Mat mat, float time)

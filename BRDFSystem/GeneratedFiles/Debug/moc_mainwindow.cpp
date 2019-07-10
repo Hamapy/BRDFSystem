@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[29];
-    char stringdata0[453];
+    char stringdata0[492];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,14 +50,14 @@ QT_MOC_LITERAL(17, 220, 15), // "TurnToPreCamera"
 QT_MOC_LITERAL(18, 236, 23), // "PushButton_Save_Pressed"
 QT_MOC_LITERAL(19, 260, 27), // "PushButton_Defaults_Pressed"
 QT_MOC_LITERAL(20, 288, 35), // "PushButton_StartMeasurement_P..."
-QT_MOC_LITERAL(21, 324, 15), // "StopMeasurement"
-QT_MOC_LITERAL(22, 340, 10), // "SendingMat"
-QT_MOC_LITERAL(23, 351, 10), // "ConnectRGB"
-QT_MOC_LITERAL(24, 362, 25), // "PushButton_IniCCD_Pressed"
-QT_MOC_LITERAL(25, 388, 38), // "PushButton_CaptureContinuousl..."
-QT_MOC_LITERAL(26, 427, 8), // "IsEdited"
-QT_MOC_LITERAL(27, 436, 12), // "DisplayImage"
-QT_MOC_LITERAL(28, 449, 3) // "img"
+QT_MOC_LITERAL(21, 324, 34), // "PushButton_StopMeasurement_Pr..."
+QT_MOC_LITERAL(22, 359, 30), // "PushButton_SampleReset_Pressed"
+QT_MOC_LITERAL(23, 390, 10), // "SendingMat"
+QT_MOC_LITERAL(24, 401, 25), // "PushButton_IniCCD_Pressed"
+QT_MOC_LITERAL(25, 427, 38), // "PushButton_CaptureContinuousl..."
+QT_MOC_LITERAL(26, 466, 8), // "IsEdited"
+QT_MOC_LITERAL(27, 475, 12), // "DisplayImage"
+QT_MOC_LITERAL(28, 488, 3) // "img"
 
     },
     "MainWindow\0startTimer\0\0startMeasure\0"
@@ -70,8 +70,9 @@ QT_MOC_LITERAL(28, 449, 3) // "img"
     "PushButton_Save_Pressed\0"
     "PushButton_Defaults_Pressed\0"
     "PushButton_StartMeasurement_Pressed\0"
-    "StopMeasurement\0SendingMat\0ConnectRGB\0"
-    "PushButton_IniCCD_Pressed\0"
+    "PushButton_StopMeasurement_Pressed\0"
+    "PushButton_SampleReset_Pressed\0"
+    "SendingMat\0PushButton_IniCCD_Pressed\0"
     "PushButton_CaptureContinuously_Pressed\0"
     "IsEdited\0DisplayImage\0img"
 };
@@ -109,8 +110,8 @@ static const uint qt_meta_data_MainWindow[] = {
       19,    0,  145,    2, 0x08 /* Private */,
       20,    0,  146,    2, 0x08 /* Private */,
       21,    0,  147,    2, 0x08 /* Private */,
-      22,    2,  148,    2, 0x08 /* Private */,
-      23,    0,  153,    2, 0x08 /* Private */,
+      22,    0,  148,    2, 0x08 /* Private */,
+      23,    2,  149,    2, 0x08 /* Private */,
       24,    0,  154,    2, 0x08 /* Private */,
       25,    0,  155,    2, 0x08 /* Private */,
       26,    0,  156,    2, 0x08 /* Private */,
@@ -135,8 +136,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,    9,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,    9,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -166,9 +167,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 12: _t->PushButton_Save_Pressed(); break;
         case 13: _t->PushButton_Defaults_Pressed(); break;
         case 14: _t->PushButton_StartMeasurement_Pressed(); break;
-        case 15: _t->StopMeasurement(); break;
-        case 16: _t->SendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
-        case 17: _t->ConnectRGB(); break;
+        case 15: _t->PushButton_StopMeasurement_Pressed(); break;
+        case 16: _t->PushButton_SampleReset_Pressed(); break;
+        case 17: _t->SendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 18: _t->PushButton_IniCCD_Pressed(); break;
         case 19: _t->PushButton_CaptureContinuously_Pressed(); break;
         case 20: _t->IsEdited(); break;

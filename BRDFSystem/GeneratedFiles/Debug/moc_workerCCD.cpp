@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_WorkerCCD_t {
-    QByteArrayData data[10];
-    char stringdata0[89];
+    QByteArrayData data[14];
+    char stringdata0[132];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,14 +36,19 @@ QT_MOC_LITERAL(3, 22, 8), // "workerID"
 QT_MOC_LITERAL(4, 31, 3), // "mat"
 QT_MOC_LITERAL(5, 35, 10), // "sendingImg"
 QT_MOC_LITERAL(6, 46, 3), // "img"
-QT_MOC_LITERAL(7, 50, 10), // "StartTimer"
-QT_MOC_LITERAL(8, 61, 15), // "SetExposureTime"
-QT_MOC_LITERAL(9, 77, 11) // "CloseWorker"
+QT_MOC_LITERAL(7, 50, 8), // "grabDone"
+QT_MOC_LITERAL(8, 59, 10), // "StartTimer"
+QT_MOC_LITERAL(9, 70, 15), // "SetExposureTime"
+QT_MOC_LITERAL(10, 86, 11), // "CloseWorker"
+QT_MOC_LITERAL(11, 98, 4), // "Grab"
+QT_MOC_LITERAL(12, 103, 15), // "GetMaterialName"
+QT_MOC_LITERAL(13, 119, 12) // "materialName"
 
     },
     "WorkerCCD\0sendingMat\0\0workerID\0mat\0"
-    "sendingImg\0img\0StartTimer\0SetExposureTime\0"
-    "CloseWorker"
+    "sendingImg\0img\0grabDone\0StartTimer\0"
+    "SetExposureTime\0CloseWorker\0Grab\0"
+    "GetMaterialName\0materialName"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,30 +58,36 @@ static const uint qt_meta_data_WorkerCCD[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   39,    2, 0x06 /* Public */,
-       5,    2,   44,    2, 0x06 /* Public */,
+       1,    2,   54,    2, 0x06 /* Public */,
+       5,    2,   59,    2, 0x06 /* Public */,
+       7,    1,   64,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    0,   49,    2, 0x08 /* Private */,
-       8,    0,   50,    2, 0x08 /* Private */,
-       9,    0,   51,    2, 0x08 /* Private */,
+       8,    0,   67,    2, 0x08 /* Private */,
+       9,    0,   68,    2, 0x08 /* Private */,
+      10,    0,   69,    2, 0x08 /* Private */,
+      11,    0,   70,    2, 0x08 /* Private */,
+      12,    1,   71,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    3,    4,
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    3,    6,
+    QMetaType::Void, QMetaType::Int,    3,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   13,
 
        0        // eod
 };
@@ -89,9 +100,12 @@ void WorkerCCD::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         switch (_id) {
         case 0: _t->sendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 1: _t->sendingImg((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
-        case 2: _t->StartTimer(); break;
-        case 3: _t->SetExposureTime(); break;
-        case 4: _t->CloseWorker(); break;
+        case 2: _t->grabDone((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->StartTimer(); break;
+        case 4: _t->SetExposureTime(); break;
+        case 5: _t->CloseWorker(); break;
+        case 6: _t->Grab(); break;
+        case 7: _t->GetMaterialName((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -108,6 +122,13 @@ void WorkerCCD::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             typedef void (WorkerCCD::*_t)(int , QImage );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&WorkerCCD::sendingImg)) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            typedef void (WorkerCCD::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&WorkerCCD::grabDone)) {
+                *result = 2;
                 return;
             }
         }
@@ -139,13 +160,13 @@ int WorkerCCD::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 8;
     }
     return _id;
 }
@@ -162,5 +183,12 @@ void WorkerCCD::sendingImg(int _t1, QImage _t2)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void WorkerCCD::grabDone(int _t1)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_END_MOC_NAMESPACE

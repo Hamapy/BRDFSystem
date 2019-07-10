@@ -1,8 +1,6 @@
 ﻿#include "mainwindow.h"
 
 ////////////////////////////////主界面定义////////////////////////////
-//VimbaSystem& _system = VimbaSystem::GetInstance();
-
 MainWindow::MainWindow(VimbaSystem&	system, QWidget *parent) : 
 _system(system),
 QMainWindow(parent)
@@ -158,29 +156,36 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
 	////采集页面
-	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
-	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
-	
-	slideComm = new SlideComm();
-	slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
-
 	workerMeasurement = new WorkerMeasurement(_system);//指明每一个采集线程的父指针
 	threadMeasurement = new QThread();
 	workerMeasurement->moveToThread(threadMeasurement);
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		workerCCD[i] = new WorkerCCD(i, _system);
+		threadCCD[i] = new QThread();
+		workerCCD[i]->moveToThread(threadCCD[i]);
 
+		//用槽机制传递Mat保存下来的是空图？
+		//qRegisterMetaType<Mat>("Mat");
+		connect(this, SIGNAL(startTimer()), this->workerCCD[i], SLOT(StartTimer()));
+		connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//用队列方式会有延时
+		connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);//队列连接
+		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
+		connect(this->workerMeasurement, SIGNAL(readyForGrab()), this->workerCCD[i], SLOT(Grab()));
+		connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
+	}
+	connect(this, SIGNAL(startMeasure(int)), this->workerMeasurement, SLOT(StartTimer(int)));
+	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
+	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
+	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
+
+	
 	////相机预处理页面
 	this->ui.pushButton_captureContinuously->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
 	
-	for (int i = 0; i < CAM_NUM; i++)
-	{
-		workerCCD[i] = new WorkerCCD(i, _system);
-		threadCCD[i] = new QThread();
-		workerCCD[i]->moveToThread(threadCCD[i]);
-		connect(workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//用队列方式会有延时
-	}
 }
 
 MainWindow::~MainWindow()
@@ -199,7 +204,6 @@ MainWindow::~MainWindow()
 		threadCCD[i] = NULL;
 	}
 
-	delete slideComm;
 	delete workerMeasurement;
 	if (threadMeasurement->isFinished())
 		return;
@@ -212,6 +216,7 @@ MainWindow::~MainWindow()
 }
 
 ////////////////////////////////私有槽函数/////////////////////////////////////
+
 ////////////////////////////////配置页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 函数：isEdited()
@@ -346,7 +351,6 @@ void MainWindow::PushButton_Defaults_Pressed()
 	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
 	*/
 }
-
 ////////////////////////////////切换页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 函数：TurnToMeasurement1
@@ -359,6 +363,8 @@ void MainWindow::PushButton_Defaults_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement1()
 {
+	_measureFlag = 1;
+	_displayFlag = 1;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);	
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -367,6 +373,8 @@ void MainWindow::TurnToMeasurement1()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement2()
 {
+	_measureFlag = 2;
+	_displayFlag = 1;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -420,8 +428,9 @@ void MainWindow::TurnToPreCamera()
 
 
 ////////////////////////////////采集页面/////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
-// 函数：StartMeasurement
+// 函数：PushButton_StartMeasurement_Pressed()
 // 描述：开始采集
 // 输入：Null
 // 输出：Null
@@ -431,7 +440,6 @@ void MainWindow::TurnToPreCamera()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_StartMeasurement_Pressed()
 {
-	_displayFlag = 1;
 	_qMaterialName = this->ui.lineEdit_materialName->text();
 	if (_qMaterialName == "")
 	{
@@ -451,65 +459,36 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		CreateFolds(1, "..\\imgs_measurement2\\", _qMaterialName.toStdString());
 		CreateFolds(2, "..\\imgs_measurement2\\" + _qMaterialName.toStdString());
 	}
+	emit sendingMaterialName(_qMaterialName);
 
 	this->ui.lineEdit_materialName->setEnabled(false);
 	this->ui.pushButton_stopMeasurement->setEnabled(true);
 	this->ui.toolBox->setEnabled(false);
 	
-	//滑轨就位
-	//slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
-	slideComm->MoveToX2();
-	Sleep(15000);//等待滑轨就位
+	//开启光源与样品线程
+	if (!threadMeasurement->isRunning())
+	{
+		//_mutex.lock();
+		//this->workerMeasurement->_measureFlag = _measureFlag;
+		//_mutex.unlock();
+		threadMeasurement->start();	
+		emit startMeasure(_measureFlag);
+	}
 
+	//开启相机线程
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		if (!threadCCD[i]->isRunning())
 		{
-			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
+			threadCCD[i]->start();		
 			emit startTimer();
-
-			//用槽机制传递Mat保存下来的是空图？ 注册类型之后还是不行
-			////向槽机制注册一下Mat类型
-			//qRegisterMetaType<Mat>("Mat");
-			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, Mat)), this->workerMeasurement, SLOT(NextMeasureState(int, Mat)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
-			//connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
-
-			//connect(this->workerCCD[i], SIGNAL(next()), this->workerMeasurement, SLOT(NextMeasureState()));
-			connect(this->workerMeasurement, SIGNAL(readyForCapture()), this->workerCCD[i], SLOT(SetExposureTime()));
-
-			connect(this->workerCCD[i], SIGNAL(sendingMat(int, QImage)), this, SLOT(SendingMat(int, QImage)), Qt::UniqueConnection);//唯一连接
-
 		}
-		//if (!threadMeasurement[i]->isRunning())
-		//{
-		//	threadMeasurement[i]->start();
-		//	connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-		//	emit startTimer();
-		//	this->workerCCD[i]->_measurement = 1;
-		//}
 	}
-	//需要主线程中转一下，不然还是九个相机线程在抢光源和样品台串口
-	//这样其实还是并行采集串行保存
-	connect(this, SIGNAL(sendingMat(int, QImage)), this->workerMeasurement, SLOT(NextMeasureState(int, QImage)), Qt::UniqueConnection);//唯一连接，等我把槽函数执行完，别催
 
-	if (!threadMeasurement->isRunning())
-	{
-		_mutex.lock();
-		this->workerMeasurement->_measureFlag = _measureFlag;
-		_mutex.unlock();
-
-		threadMeasurement->start();
-		//connect(this, SIGNAL(startMeasurement(int)), workerMeasurement, SLOT(NextMeasureState(int, Mat)));
-		//emit startMeasure(_measureFlag);
-		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerMeasurement, SLOT(GetMaterialName(QString)));
-		emit sendingMaterialName(_qMaterialName);
-	}
-	Sleep(500);//等待相机初始化
-
+	//Sleep(500);//等待相机初始化
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：StopMeasurement
+// 函数：PushButton_StopMeasurement_Pressed()
 // 描述：停止采集
 // 输入：Null
 // 输出：Null
@@ -517,13 +496,27 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::StopMeasurement()
+void MainWindow::PushButton_StopMeasurement_Pressed()
 {
 
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：StopMeasurement
+// 函数：
 // 描述：停止采集
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_SampleReset_Pressed()
+{
+	this->workerMeasurement->sampleComm->Reset();
+	this->workerMeasurement->slideComm->MoveToX1();
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
 // 输入：Null
 // 输出：Null
 // 返回：Null
@@ -534,27 +527,10 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 {
 	emit sendingMat(workerID, mat);
 }
-////////////////////////////////////////////////////////////////////////////
-// 函数：ChangeWindows
-// 描述：根据菜单栏选项切换主窗口
-// 输入：Null
-// 输出：Null
-// 返回：Null
-// 备注：
-// Modified by 
-////////////////////////////////////////////////////////////////////////////
-void MainWindow::ConnectRGB()
-{
-	//workerCCD[0]->cameraRGB_->Init();
-	//workerCCD[0]->cameraRGB_->OpenCamera(0);
-	//workerCCD[0]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//图像格式老问题，5.9又踩坑
-	//if (!threadRGB[0]->isRunning())
-	//{
-	//	threadRGB[0]->start();
-	//}
-}
+
 
 /////////////////////////////相机预处理页面/////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_iniCCD_pressed
 // 描述：
@@ -601,6 +577,7 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 }
 
 /////////////////////////////槽函数的公用函数/////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：DisplayImage0
 // 描述：
@@ -655,216 +632,9 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 			ShowImgOnQLabel(this->ui.label_camera8, img);
 	}
 }
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage1
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage1(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera1->width(), ui.label_precamera1->height());
-//			this->ui.label_precamera1->setPixmap(pic);
-//			this->ui.label_precamera1->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera1->width(), ui.label_camera1->height());
-//			this->ui.label_camera1->setPixmap(pic);
-//			this->ui.label_camera1->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage2
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage2(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera2->width(), ui.label_precamera2->height());
-//			this->ui.label_precamera2->setPixmap(pic);
-//			this->ui.label_precamera2->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera2->width(), ui.label_camera2->height());
-//			this->ui.label_camera2->setPixmap(pic);
-//			this->ui.label_camera2->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage3
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage3(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera3->width(), ui.label_precamera3->height());
-//			this->ui.label_precamera3->setPixmap(pic);
-//			this->ui.label_precamera3->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera3->width(), ui.label_camera3->height());
-//			this->ui.label_camera3->setPixmap(pic);
-//			this->ui.label_camera3->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage4
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage4(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera4->width(), ui.label_precamera4->height());
-//			this->ui.label_precamera4->setPixmap(pic);
-//			this->ui.label_precamera4->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera4->width(), ui.label_camera4->height());
-//			this->ui.label_camera4->setPixmap(pic);
-//			this->ui.label_camera4->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage5
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage5(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera5->width(), ui.label_precamera5->height());
-//			this->ui.label_precamera5->setPixmap(pic);
-//			this->ui.label_precamera5->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera5->width(), ui.label_camera5->height());
-//			this->ui.label_camera5->setPixmap(pic);
-//			this->ui.label_camera5->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage6
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage6(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera6->width(), ui.label_precamera6->height());
-//			this->ui.label_precamera6->setPixmap(pic);
-//			this->ui.label_precamera6->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera6->width(), ui.label_camera6->height());
-//			this->ui.label_camera6->setPixmap(pic);
-//			this->ui.label_camera6->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage7
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage7(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera7->width(), ui.label_precamera7->height());
-//			this->ui.label_precamera7->setPixmap(pic);
-//			this->ui.label_precamera7->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera7->width(), ui.label_camera7->height());
-//			this->ui.label_camera7->setPixmap(pic);
-//			this->ui.label_camera7->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：DisplayImage8
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage8(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera8->width(), ui.label_precamera8->height());
-//			this->ui.label_precamera8->setPixmap(pic);
-//			this->ui.label_precamera8->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera8->width(), ui.label_camera8->height());
-//			this->ui.label_camera8->setPixmap(pic);
-//			this->ui.label_camera8->setScaledContents(true);
-//		}
-//	}
-//}
 
 ////////////////////////////////////私有函数////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：CreateFolds
 // 描述：在指定目录下创建相机对应文件夹
@@ -935,9 +705,8 @@ void MainWindow::CreateFolds(int flag, string root, string fileName)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
+inline void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 {
-	_mutex.lock();
 	if (!img.isNull())
 	{
 		QPixmap pic = QPixmap::fromImage(img);
@@ -945,5 +714,4 @@ void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 		qlabel->setPixmap(pic);
 		qlabel->setScaledContents(true);
 	}
-	_mutex.unlock();
 }

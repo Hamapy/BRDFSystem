@@ -73,7 +73,9 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& widthOutput, int& heightOutput);
 	//保存一帧图像
-	bool SaveImage(Mat& captureMat, string imageSavingPath);
+	bool SaveAnImage(Mat mat, string path, int cameraID);
+	//连续采集图像
+	bool CaptureImages(Mat& captureMat, string imageSavingPath);
 	//连续采集
 	void CaptureContinuously(int num, int millisecond);
 	//计算合适曝光时间

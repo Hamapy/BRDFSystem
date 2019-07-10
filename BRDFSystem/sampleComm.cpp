@@ -32,12 +32,12 @@ SampleComm::SampleComm()
 	m_step       = 0;
 	m_port       = 0;
 }
-
 SampleComm::~SampleComm()
 {
     Fini();
 }
 ///////////////////////////////////公有成员函数/////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Init
 // 描述：电机初始化
@@ -53,26 +53,23 @@ SampleComm::~SampleComm()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SampleComm::Init(int port, int step, double velocity, int accelerate, int decelerate, int resolution, int homeadj)
+bool SampleComm::Init(int port)
 {
 	bool ret = false;
 	char cmd[STEP_STRINGLEN];
+	char rdstr[STEP_STRINGLEN];
+
 	m_port = port;
+	m_accelerate = STEP_ACCELERATE;
+	m_velocity = STEP_VELOCITY;
+	m_decelerate = STEP_DECELERATE;
+	m_resolution = STEP_RESOLUTION;
+	m_homeadj = STEP_TOHOME;
+	m_step = 0;
 
-	if (IsOpen())
-	{
-		Close();
-	}
-	if (!Open(m_port))
-	{
-		ret = false;
-	}
-	else
-	{
-		ret = true;
-	}
-
+	/*
 	//先重置再设置PC控制
+	ret = InitA();
 	if (ret)
 	{
 		//重置电机驱动
@@ -81,39 +78,31 @@ bool SampleComm::Init(int port, int step, double velocity, int accelerate, int d
 		Write(cmd);
 		ret = IsFinished(STEP_TIMEOUT);
 	}
-	//Fini();
+	*/
 	
-	ret = Init(m_port);
-
-
+	//设置电机为计算机控制
+	ret = InitA();
 	if (ret)
 	{
-		//设置电机为计算机控制
 		ClearInputBuffer();
 		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", STEP_FEEDBACK);//该坑浪费我半个下午，先要设置为计算机控制
 		Write(cmd);
 		ret = IsFinished(STEP_TIMEOUT);
 	}
 
-	m_accelerate = accelerate;
-	m_velocity = velocity;
-	m_decelerate = decelerate;
-	m_resolution = resolution;
-	m_homeadj = homeadj;
-	m_step = step;
+	//设置电机参数
+	ret = InitA();
 	if (ret)
 	{
-		//设置电机参数
 		ClearInputBuffer();
-		//sprintf_s(cmd, "CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
-		sprintf_s(cmd, "AC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		sprintf_s(cmd, "CHR\rAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
 		Write(cmd);
 		ret = IsFinished(STEP_TIMEOUT);
 	}
 
 	if (ret)
 	{
-		//Fini();
+		Fini();
 		//ret = Reset();//一直转原来是这里的问题，找不到光电限位开关
 	}
 
@@ -128,7 +117,7 @@ bool SampleComm::Init(int port, int step, double velocity, int accelerate, int d
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SampleComm::Init(int port)
+bool SampleComm::InitA()
 {
 	bool ret = false;
 	char cmd[STEP_STRINGLEN];
@@ -146,33 +135,12 @@ bool SampleComm::Init(int port)
 		ret = true;
 	}
 	
-	/*
-	if (ret)
-	{
-		//设置电机为计算机控制
-		ClearInputBuffer();
-		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", STEP_FEEDBACK);//该坑浪费我半个下午，先要设置为计算机控制
-		Write(cmd);
-		ret = IsFinished(STEP_TIMEOUT);
-	}
-
-	if (ret)
-	{
-		//设置电机参数
-		ClearInputBuffer();
-		//sprintf_s(cmd, "CHRAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
-		sprintf_s(cmd, "AC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
-		Write(cmd);
-		ret = IsFinished(STEP_TIMEOUT);
-	}
-	*/
 	
 	return ret;
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：GotoNextPos
 // 描述：转到下一位置
-
 // 输入: 
 // 输出：
 // 返回：是否成功完成操作
@@ -185,12 +153,11 @@ bool SampleComm::GotoNextPos(int step)
 	bool ret = false;
 
 	// 初始化设备
-	ret = Init(m_port);
+	ret = InitA();
 	m_step = step;
 
 	ClearInputBuffer();
 	sprintf_s(cmd, "DI%d\rFL\rSS%s\r", step, STEP_FEEDBACK);	//写入转动步数
-	
 	Write(cmd);
 	if (IsFinished(STEP_TIMEOUT))
 	{
@@ -202,30 +169,7 @@ bool SampleComm::GotoNextPos(int step)
 
 	return ret;
 }
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：SetVel
-//// 描述：设置速度
-//// 输入: v: 电机速度
-//// 输出：
-//// 返回：是否成功完成操作
-//// 备注：
-//// Modified by 
-//////////////////////////////////////////////////////////////////////////////
-//bool SampleComm::SetVel(double v)
-//{
-//	char cmd[256];
-//	bool ret = false;
-//
-//	ClearInputBuffer();
-//	sprintf_s(cmd, "VE%.2f\rSS%s\r", v, STEP_FEEDBACK);
-//	Write(cmd);
-//
-//	if (IsFinished(STEP_TIMEOUT))
-//		ret = true;
-//	else 
-//		ret = false;
-//	return ret;
-//}
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Reset
 // 描述：样品平台归位
@@ -241,12 +185,13 @@ bool SampleComm::Reset()
 	char rdstr[STEP_STRINGLEN];
 	bool ret = false;
 
-	ret = Init(m_port);
+	ret = InitA();
 	ClearInputBuffer();	
-	//sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
 	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+	//sprintf_s(cmd, "DI%d\rFL%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
 
 	Write(cmd);
+	
 	if (IsFinished(STEP_TIMEOUT))
 	{
 		//报警复位，使能电机
@@ -287,6 +232,7 @@ bool SampleComm::Reset()
 			ret = false;
 	}
 	
+	
 	return ret;	
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -322,7 +268,7 @@ bool SampleComm::IsFinished(int timeout)
 	bool ret = false;
 	char rdstr[STEP_STRINGLEN];
 	int  time_start = GetTickCount();
-	//MSG  msg;
+	MSG  msg;
 	while(1)
 	{	
 		Wait(WAIT_DEAY);//避免串口繁忙,等待200ms
@@ -337,11 +283,11 @@ bool SampleComm::IsFinished(int timeout)
 			ret = false;           
 			break;
 		} 	
-		//while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
-		//{
-		//	TranslateMessage(&msg);
-		//	DispatchMessage(&msg);
-		//}	
+		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}	
     }
 	return ret;
 	#undef READ_WAIT_TIME
