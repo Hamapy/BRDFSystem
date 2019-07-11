@@ -28,6 +28,7 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 
 #include "stdafx.h"
 #include "cnComm.h"
+#include <QSettings>
 
 #define STEP_FEEDBACK      "DONE"    //电机反馈标识
 #define STEP_VELOCITY	   0.25		//电机速度
@@ -62,6 +63,7 @@ private:
 	//时间等待函数
 	void Wait(int millisec);
 
+	QSettings	*ini;
 	int m_step;             //转到下一通道电机需要移动的步数
 	int m_homeadj;          //归位时电机需要移动的步数
     int m_port;             //电机连接的串口	

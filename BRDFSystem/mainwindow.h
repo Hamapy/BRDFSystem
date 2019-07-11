@@ -12,9 +12,8 @@
 #include "workerCCD.h"
 
 
-#define CAM_NUM 9  //相机数量
+#define CAM_NUM 9
 
-////////////////////////////界面主线程类声明////////////////////////////
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -24,7 +23,7 @@ public:
 	virtual ~MainWindow();
 
 private slots:
-	//页面切换栏
+	
 	void TurnToMeasurement1();
 	void TurnToMeasurement2();
 	void TurnToMeasurement3();
@@ -34,17 +33,17 @@ private slots:
 	void TurnToTest();
 	void TurnToPreCamera();
 	
-	//配置文件
+	
 	void PushButton_Save_Pressed();
 	void PushButton_Defaults_Pressed();
 
-	//材质采集页面
+	
 	void PushButton_StartMeasurement_Pressed();
 	void PushButton_StopMeasurement_Pressed();
 	void PushButton_SampleReset_Pressed();
 	void SendingMat(int workerID, QImage mat);
 
-	//相机预处理页面
+	
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
 	void PushButton_Chess_Pressed();
@@ -53,14 +52,14 @@ private slots:
 	void PushButton_BlackLevel_Pressed();
 	void PushButton_FiniCCD_Pressed();
 
-	//槽函数的公用函数
+	
 	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
 
 private:
 	Ui::MainWindowClass ui;
 
-	//采集页面
+	
 	WorkerMeasurement*			workerMeasurement;
 	QThread*					threadMeasurement;
 	WorkerCCD*					workerCCD[9];
@@ -72,50 +71,67 @@ private:
 	int							_measureFlag;
 	QMutex						_mutex;
 
-	//相机预处理页面
+	
 	string						_capturePath = "..\\imgs_calibration";
-	vector<float>				_trans;//白平衡校正系数
+	vector<float>				_trans;
 	vector<vector<float>>		_transs;
 
 	void CreateFolds(int flag, string root, string fileName = "");
 	inline void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
-	/*
-	//配置文件参数
-	////工业相机配置保存
-	int gain;
-	int darkLevel;
-	QString imageSaveFormat;
-	QString imageSavePath;
-
-	////光源配置保存
-	QString serialPortSelection;
-	QString baudRate;
-	int delaySetting;
-	int lightingSequence;
-
-	////样品台电机驱动配置保存
-	QString stepperMotorPortSelection;
-	QString stepperMotorSpeed;
-	QString stepperMotorAcceleration;
-	QString stepperMotorDeceleration;
-	QString stepperMotorResolution;
-	QString sampleRotationAngle;
-
-	////滑轨电机驱动配置保存
-	QString servoMotorPortSelection;
-	QString servoMotorSpeed;
-	QString servoMotorAcceleration;
-	QString servoMotorDeceleration;
-	QString servoMotorResolution;
-	QString slideTableMovingDistance;
-	*/
+	
+	int gain = 0;
+	int gain_Int = 0;
+	QString gain_Str = "";
+	int darkLevel = 0;
+	int darkLevel_Int = 0;
+	QString darkLevel_Str = "";
+	QString imageSaveFormat = "";
+	QString imageSaveFormat_Str = "";
+	QString imageSavePath = "";
+	QString imageSavePath_Str = "";
+	QString serialPortSelection = "";
+	QString serialPortSelection_Str = "";
+	QString baudRate = "";
+	QString baudRate_Str = "";
+	int delaySetting = 0;
+	QString delaySetting_Str = "";
+	int lightingSequence = 0;
+	QString lightingSequence_Str = "";
+	QString stepperMotorPortSelection = "";
+	QString stepperMotorPortSelection_Str = "";
+	int stepperMotorSpeed_Int = 0;
+	QString stepperMotorSpeed = "";
+	QString stepperMotorSpeed_Str = "";
+	int stepperMotorAcceleration_Int = 0;
+	QString stepperMotorAcceleration = "";
+	QString stepperMotorAcceleration_Str = "";
+	int stepperMotorDeceleration_Int = 0;
+	QString stepperMotorDeceleration = "";
+	QString stepperMotorDeceleration_Str = "";
+	int stepperMotorResolution_Int = 0;
+	QString stepperMotorResolution = "";
+	QString stepperMotorResolution_Str = "";
+	QString sampleRotationAngle = "";
+	QString sampleRotationAngle_Str = "";
+	QString servoMotorPortSelection = "";
+	QString servoMotorPortSelection_Str = "";
+	QString servoMotorSpeed = "";
+	QString servoMotorSpeed_Str = "";
+	QString servoMotorAcceleration = "";
+	QString servoMotorAcceleration_Str = "";
+	QString servoMotorDeceleration = "";
+	QString servoMotorDeceleration_Str = "";
+	QString servoMotorResolution = "";
+	QString servoMotorResolution_Str = "";
+	int slideTableMovingDistance = 0;
+	QString slideTableMovingDistance_Str = "";
 
 signals:
 	void startTimer(/*int dispalyFlag*/);
 	void startMeasure(int measureFlag);
 	void sendingMaterialName(QString materialName);
-	void sendingMat(int workerID, QImage mat);//主界面转手一下
+	void sendingMat(int workerID, QImage mat);
 
 };
 #endif

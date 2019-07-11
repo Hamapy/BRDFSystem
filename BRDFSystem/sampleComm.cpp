@@ -55,15 +55,17 @@ SampleComm::~SampleComm()
 ////////////////////////////////////////////////////////////////////////////
 bool SampleComm::Init(int port)
 {
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+
 	bool ret = false;
 	char cmd[STEP_STRINGLEN];
 	char rdstr[STEP_STRINGLEN];
 
 	m_port = port;
-	m_accelerate = STEP_ACCELERATE;
-	m_velocity = STEP_VELOCITY;
-	m_decelerate = STEP_DECELERATE;
-	m_resolution = STEP_RESOLUTION;
+	//m_accelerate = STEP_ACCELERATE;
+	//m_velocity = STEP_VELOCITY;
+	//m_decelerate = STEP_DECELERATE;
+	//m_resolution = STEP_RESOLUTION;
 	m_homeadj = STEP_TOHOME;
 	m_step = 0;
 
@@ -90,7 +92,19 @@ bool SampleComm::Init(int port)
 		ret = IsFinished(STEP_TIMEOUT);
 	}
 
+
 	//设置电机参数
+
+	m_velocity = this->ini->value("SWIR-Configuration/stepperMotorSpeed").toInt();
+	m_accelerate = this->ini->value("SWIR-Configuration/stepperMotorAcceleration").toInt();
+	m_decelerate = this->ini->value("SWIR-Configuration/stepperMotorDeceleration").toInt();
+	m_resolution = this->ini->value("SWIR-Configuration/stepperMotorResolution").toInt();
+	//m_accelerate = accelerate;
+	//m_velocity = velocity;
+	//m_decelerate = decelerate;
+	//m_resolution = resolution;
+
+	
 	ret = InitA();
 	if (ret)
 	{
