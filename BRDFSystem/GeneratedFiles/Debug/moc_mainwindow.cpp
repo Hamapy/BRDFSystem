@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[34];
-    char stringdata0[635];
+    char stringdata0[639];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,41 +32,41 @@ static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
 QT_MOC_LITERAL(1, 11, 10), // "startTimer"
 QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 12), // "startMeasure"
-QT_MOC_LITERAL(4, 36, 11), // "measureFlag"
-QT_MOC_LITERAL(5, 48, 19), // "sendingMaterialName"
-QT_MOC_LITERAL(6, 68, 12), // "materialName"
-QT_MOC_LITERAL(7, 81, 10), // "sendingMat"
-QT_MOC_LITERAL(8, 92, 8), // "workerID"
-QT_MOC_LITERAL(9, 101, 3), // "mat"
-QT_MOC_LITERAL(10, 105, 18), // "TurnToMeasurement1"
-QT_MOC_LITERAL(11, 124, 18), // "TurnToMeasurement2"
-QT_MOC_LITERAL(12, 143, 18), // "TurnToMeasurement3"
-QT_MOC_LITERAL(13, 162, 15), // "TurnToModeling1"
-QT_MOC_LITERAL(14, 178, 15), // "TurnToModeling2"
-QT_MOC_LITERAL(15, 194, 14), // "TurnToSettings"
-QT_MOC_LITERAL(16, 209, 10), // "TurnToTest"
-QT_MOC_LITERAL(17, 220, 15), // "TurnToPreCamera"
-QT_MOC_LITERAL(18, 236, 23), // "PushButton_Save_Pressed"
-QT_MOC_LITERAL(19, 260, 27), // "PushButton_Defaults_Pressed"
-QT_MOC_LITERAL(20, 288, 35), // "PushButton_StartMeasurement_P..."
-QT_MOC_LITERAL(21, 324, 34), // "PushButton_StopMeasurement_Pr..."
-QT_MOC_LITERAL(22, 359, 30), // "PushButton_SampleReset_Pressed"
-QT_MOC_LITERAL(23, 390, 10), // "SendingMat"
-QT_MOC_LITERAL(24, 401, 25), // "PushButton_IniCCD_Pressed"
-QT_MOC_LITERAL(25, 427, 38), // "PushButton_CaptureContinuousl..."
-QT_MOC_LITERAL(26, 466, 24), // "PushButton_Chess_Pressed"
-QT_MOC_LITERAL(27, 491, 31), // "PushButton_WhiteBalance_Pressed"
-QT_MOC_LITERAL(28, 523, 28), // "PushButton_DeadPixel_Pressed"
-QT_MOC_LITERAL(29, 552, 29), // "PushButton_BlackLevel_Pressed"
-QT_MOC_LITERAL(30, 582, 26), // "PushButton_FiniCCD_Pressed"
-QT_MOC_LITERAL(31, 609, 8), // "IsEdited"
-QT_MOC_LITERAL(32, 618, 12), // "DisplayImage"
-QT_MOC_LITERAL(33, 631, 3) // "img"
+QT_MOC_LITERAL(3, 23, 11), // "measureFlag"
+QT_MOC_LITERAL(4, 35, 16), // "startMeasurement"
+QT_MOC_LITERAL(5, 52, 19), // "sendingMaterialName"
+QT_MOC_LITERAL(6, 72, 12), // "materialName"
+QT_MOC_LITERAL(7, 85, 10), // "sendingMat"
+QT_MOC_LITERAL(8, 96, 8), // "workerID"
+QT_MOC_LITERAL(9, 105, 3), // "mat"
+QT_MOC_LITERAL(10, 109, 18), // "TurnToMeasurement1"
+QT_MOC_LITERAL(11, 128, 18), // "TurnToMeasurement2"
+QT_MOC_LITERAL(12, 147, 18), // "TurnToMeasurement3"
+QT_MOC_LITERAL(13, 166, 15), // "TurnToModeling1"
+QT_MOC_LITERAL(14, 182, 15), // "TurnToModeling2"
+QT_MOC_LITERAL(15, 198, 14), // "TurnToSettings"
+QT_MOC_LITERAL(16, 213, 10), // "TurnToTest"
+QT_MOC_LITERAL(17, 224, 15), // "TurnToPreCamera"
+QT_MOC_LITERAL(18, 240, 23), // "PushButton_Save_Pressed"
+QT_MOC_LITERAL(19, 264, 27), // "PushButton_Defaults_Pressed"
+QT_MOC_LITERAL(20, 292, 35), // "PushButton_StartMeasurement_P..."
+QT_MOC_LITERAL(21, 328, 34), // "PushButton_StopMeasurement_Pr..."
+QT_MOC_LITERAL(22, 363, 30), // "PushButton_SampleReset_Pressed"
+QT_MOC_LITERAL(23, 394, 10), // "SendingMat"
+QT_MOC_LITERAL(24, 405, 25), // "PushButton_IniCCD_Pressed"
+QT_MOC_LITERAL(25, 431, 38), // "PushButton_CaptureContinuousl..."
+QT_MOC_LITERAL(26, 470, 24), // "PushButton_Chess_Pressed"
+QT_MOC_LITERAL(27, 495, 31), // "PushButton_WhiteBalance_Pressed"
+QT_MOC_LITERAL(28, 527, 28), // "PushButton_DeadPixel_Pressed"
+QT_MOC_LITERAL(29, 556, 29), // "PushButton_BlackLevel_Pressed"
+QT_MOC_LITERAL(30, 586, 26), // "PushButton_FiniCCD_Pressed"
+QT_MOC_LITERAL(31, 613, 8), // "IsEdited"
+QT_MOC_LITERAL(32, 622, 12), // "DisplayImage"
+QT_MOC_LITERAL(33, 635, 3) // "img"
 
     },
-    "MainWindow\0startTimer\0\0startMeasure\0"
-    "measureFlag\0sendingMaterialName\0"
+    "MainWindow\0startTimer\0\0measureFlag\0"
+    "startMeasurement\0sendingMaterialName\0"
     "materialName\0sendingMat\0workerID\0mat\0"
     "TurnToMeasurement1\0TurnToMeasurement2\0"
     "TurnToMeasurement3\0TurnToModeling1\0"
@@ -102,39 +102,39 @@ static const uint qt_meta_data_MainWindow[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  149,    2, 0x06 /* Public */,
-       3,    1,  150,    2, 0x06 /* Public */,
-       5,    1,  153,    2, 0x06 /* Public */,
-       7,    2,  156,    2, 0x06 /* Public */,
+       1,    1,  149,    2, 0x06 /* Public */,
+       4,    1,  152,    2, 0x06 /* Public */,
+       5,    1,  155,    2, 0x06 /* Public */,
+       7,    2,  158,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  161,    2, 0x08 /* Private */,
-      11,    0,  162,    2, 0x08 /* Private */,
-      12,    0,  163,    2, 0x08 /* Private */,
-      13,    0,  164,    2, 0x08 /* Private */,
-      14,    0,  165,    2, 0x08 /* Private */,
-      15,    0,  166,    2, 0x08 /* Private */,
-      16,    0,  167,    2, 0x08 /* Private */,
-      17,    0,  168,    2, 0x08 /* Private */,
-      18,    0,  169,    2, 0x08 /* Private */,
-      19,    0,  170,    2, 0x08 /* Private */,
-      20,    0,  171,    2, 0x08 /* Private */,
-      21,    0,  172,    2, 0x08 /* Private */,
-      22,    0,  173,    2, 0x08 /* Private */,
-      23,    2,  174,    2, 0x08 /* Private */,
-      24,    0,  179,    2, 0x08 /* Private */,
-      25,    0,  180,    2, 0x08 /* Private */,
-      26,    0,  181,    2, 0x08 /* Private */,
-      27,    0,  182,    2, 0x08 /* Private */,
-      28,    0,  183,    2, 0x08 /* Private */,
-      29,    0,  184,    2, 0x08 /* Private */,
-      30,    0,  185,    2, 0x08 /* Private */,
-      31,    0,  186,    2, 0x08 /* Private */,
-      32,    2,  187,    2, 0x08 /* Private */,
+      10,    0,  163,    2, 0x08 /* Private */,
+      11,    0,  164,    2, 0x08 /* Private */,
+      12,    0,  165,    2, 0x08 /* Private */,
+      13,    0,  166,    2, 0x08 /* Private */,
+      14,    0,  167,    2, 0x08 /* Private */,
+      15,    0,  168,    2, 0x08 /* Private */,
+      16,    0,  169,    2, 0x08 /* Private */,
+      17,    0,  170,    2, 0x08 /* Private */,
+      18,    0,  171,    2, 0x08 /* Private */,
+      19,    0,  172,    2, 0x08 /* Private */,
+      20,    0,  173,    2, 0x08 /* Private */,
+      21,    0,  174,    2, 0x08 /* Private */,
+      22,    0,  175,    2, 0x08 /* Private */,
+      23,    2,  176,    2, 0x08 /* Private */,
+      24,    0,  181,    2, 0x08 /* Private */,
+      25,    0,  182,    2, 0x08 /* Private */,
+      26,    0,  183,    2, 0x08 /* Private */,
+      27,    0,  184,    2, 0x08 /* Private */,
+      28,    0,  185,    2, 0x08 /* Private */,
+      29,    0,  186,    2, 0x08 /* Private */,
+      30,    0,  187,    2, 0x08 /* Private */,
+      31,    0,  188,    2, 0x08 /* Private */,
+      32,    2,  189,    2, 0x08 /* Private */,
 
  // signals: parameters
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    4,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::QString,    6,
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,    9,
 
@@ -172,8 +172,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->startTimer(); break;
-        case 1: _t->startMeasure((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->startTimer((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->startMeasurement((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->sendingMaterialName((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 3: _t->sendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 4: _t->TurnToMeasurement1(); break;
@@ -205,7 +205,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (MainWindow::*_t)();
+            typedef void (MainWindow::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startTimer)) {
                 *result = 0;
                 return;
@@ -213,7 +213,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         }
         {
             typedef void (MainWindow::*_t)(int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startMeasure)) {
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startMeasurement)) {
                 *result = 1;
                 return;
             }
@@ -272,13 +272,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void MainWindow::startTimer()
+void MainWindow::startTimer(int _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void MainWindow::startMeasure(int _t1)
+void MainWindow::startMeasurement(int _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

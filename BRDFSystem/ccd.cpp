@@ -195,7 +195,7 @@ bool AVTCamera::CaptureImages(Mat& captureMat, string imageSavingPath)
 		return 0;
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：SaveAnImage(Mat& captureMat)
+// 函数：SaveAnImage
 // 描述：采集一帧RGB图像
 // 输入：Null
 // 输出：一帧图像
@@ -203,16 +203,29 @@ bool AVTCamera::CaptureImages(Mat& captureMat, string imageSavingPath)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID)
+bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID)
 {
+	//000命名方式
 	char saveName[4] = { 0 };
 	sprintf(saveName, "%4d", _saveName);
 	char name[200];
 	sprintf(name, "//%s.bmp", saveName);
+
+	//out_相机角度-材质台角度_in_光源θ-光源σ命名方式
+	//光源36 36 32 28 24 18 12 6 4
+	/*
+	if (_saveName)
+	{
+
+	}
+	char name[200];
+	sprintf(name, "out_%d-%d_in%d-%d.bmp", saveName);
+	*/
 	string spath = path + name;
 	bool isSaved = imwrite(spath, mat);
 	//mat.save(QString::fromStdString(path), "BMP", 100);
 	_saveName++;
+	//emit something() //告诉界面线程该角度下的图像已采集，修改界面的Qlabel
 
 	return isSaved;
 }
@@ -806,4 +819,19 @@ void AVTCamera::Select(Mat src, int i, int j)
 	data[j] = 1;
 
 	return;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+bool AVTCamera::IsOverExposure(Mat src)
+{
+	//通过计算直方图判断采集图像是否过曝或过暗
+
+	return 0;
 }

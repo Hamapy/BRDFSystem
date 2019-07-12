@@ -23,10 +23,10 @@ public:
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 
 private slots:
-	void StartTimer();
-	void SetExposureTime();
+	void StartTimer(int measureFlag);
+	//void SetExposureTime();
 	void CloseWorker();
-	void Grab();
+	void Grab(int sID, int iID);
 	void GetMaterialName(QString materialName);
 
 private:
@@ -52,7 +52,7 @@ private:
 
 signals:
 	//void next();
-	void sendingMat(int workerID, /*Mat*/QImage mat);
+	//void sendingMat(int workerID, /*Mat*/QImage mat);
 	void sendingImg(int workerID, QImage img);
 	void grabDone(int workerID);
 	//void startMeasurement(int measureFlag);

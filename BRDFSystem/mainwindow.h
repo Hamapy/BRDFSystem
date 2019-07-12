@@ -11,9 +11,7 @@
 #include "workerMeasurement.h"
 #include "workerCCD.h"
 
-
-#define CAM_NUM 9
-
+//class workerCCD;//由于要用到worker类的变量，故此作前向声明
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -69,15 +67,14 @@ private:
 	QString						_qMaterialName;
 	bool						_displayFlag;
 	int							_measureFlag;
+	//QPixmap*					_pic;
 	QMutex						_mutex;
-
-	
 	string						_capturePath = "..\\imgs_calibration";
 	vector<float>				_trans;
 	vector<vector<float>>		_transs;
 
-	void CreateFolds(int flag, string root, string fileName = "");
-	inline void ShowImgOnQLabel(QLabel* qlabel, QImage img);
+	void CreateFolds(string root, string fileName);
+	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 	
 	int gain = 0;
@@ -128,8 +125,8 @@ private:
 	QString slideTableMovingDistance_Str = "";
 
 signals:
-	void startTimer(/*int dispalyFlag*/);
-	void startMeasure(int measureFlag);
+	void startTimer(int measureFlag);
+	void startMeasurement(int measureFlag);
 	void sendingMaterialName(QString materialName);
 	void sendingMat(int workerID, QImage mat);
 

@@ -1,13 +1,11 @@
 #include "slideComm.h"
 
 
-void main1()
+void mainq()
 {
 	SlideComm t;
-	t.Init(13, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
+	t.Init(9);
 	t.MoveToX2();
-	//Sleep(30000);
-	//t.servo_move_sensor_home_cw(13);//น้ฮป
 }
 
 

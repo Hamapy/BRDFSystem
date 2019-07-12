@@ -6,8 +6,10 @@ atomic<int>  Illuminant::_num = 0;
 int Illuminant::_steadyTime = 10;
 /** 当串口无数据时,sleep至下次查询间隔的时间,单位:毫秒 */
 const UINT SLEEP_TIME_INTERVAL = 50;
-Illuminant::Illuminant(UINT portNo):_portNo(portNo)
+Illuminant::Illuminant()
 {
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_portNo = this->ini->value("BRDFSystem-Configuration/serialPortSelection").toInt();
 	_hComm = INVALID_HANDLE_VALUE;
 	_hListenThread = INVALID_HANDLE_VALUE;
 	InitializeCriticalSection(&_csCommunicationSync);
@@ -31,12 +33,12 @@ Illuminant::~Illuminant()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool Illuminant::OpenCOM()
+bool Illuminant::OpenCOM(UINT portNo)
 {
-	UINT portNo = _portNo;
+	_portNo = portNo;
 	EnterCriticalSection(&_csCommunicationSync);
 	char szPort[50];
-	sprintf_s(szPort, "COM%d", portNo);
+	sprintf_s(szPort, "COM%d", _portNo);
 
 	///////Unicode字符集问题/////////
 	WCHAR wszPort[256];
@@ -70,9 +72,9 @@ bool Illuminant::OpenCOM()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool Illuminant::InitCOM()
+bool Illuminant::InitCOM(UINT portNo)
 {
-	if (!OpenCOM())
+	if (!OpenCOM(portNo))
 	{
 		return false;
 	}

@@ -24,9 +24,9 @@ public:
 	virtual ~SlideComm();
 
 	// 开启设备
-	bool Init(int port, double velocity, int accelerate, int decelerate, int resolution);
+	bool Init(int port = 9);
 	// 每次指令通信前再打开一次串口
-	bool Init(int port);
+	bool InitA();
 	// 顺时针(CW)转动电机X1光电开关位置处（材质台归位）
 	bool  MoveToX1(bool wait_feedback = true);
 	// 顺时针(CCW)转动电机X2光电开关位置处（材质台就位）
@@ -44,14 +44,12 @@ private:
 	// 等待（IsFinished中调用，为避免太过频繁访问串口而引起拥塞）
 	static void  Wait(int millisec);
 
-	QSettings	*ini;
-	int     _port;
-	int     _accelerate;       //电机加速度
-	int     _decelerate;       //电机减速度
-	double  _velocity;         //电机速度
-	int		_resolution;		//电机分辨率
-	//int		_timestart;			//记录电机开始转动时间
-	//int		_timestop;			//记录电机停止转动时间
-	double	_distance;			//滑台当前至起点的距离，单位cm
+	QSettings		*ini;
+	int				_port;
+	int				_accelerate;       //电机加速度
+	int				_decelerate;       //电机减速度
+	double			_velocity;         //电机速度
+	int				_resolution;		//电机分辨率
+	double			_distance;			//滑台当前至起点的距离，单位cm
 };
 #endif

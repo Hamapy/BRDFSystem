@@ -21,7 +21,7 @@ using namespace std;
 using namespace cv;
 using namespace AVT::VmbAPI;
 
-
+#define CAM_NUM 2 //连接相机数量
 #define CAPTURE_NUM 100 //采集图像数量 
 #define TIMEOUT 5000 //采集图像等待超时时间 
 
@@ -31,6 +31,7 @@ on a frame grabber card.Control is then possible via feature access methods.
 "pID" might be one of the following : "169.254.12.13" for an IP address,
 "000F314C4BE5" for a MAC address or "DEV_1234567890" for an ID as reported by Vimba*/
 
+/*
 #define CAM0 DEV_0xA4701120BA037 
 #define CAM1 DEV_0xA4701120BA038
 #define CAM2 DEV_0xA4701120BA039
@@ -40,7 +41,7 @@ on a frame grabber card.Control is then possible via feature access methods.
 #define CAM6 DEV_0xA4701120BA03D
 #define CAM7 DEV_0xA4701120BA03E
 #define CAM8 DEV_0xA4701120BA03F
-
+*/
 
 
 //传入相机线程函数参数
@@ -83,13 +84,15 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& widthOutput, int& heightOutput);
 	//保存一帧图像
-	bool SaveAnImage(Mat mat, string path, int cameraID);
+	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID);
 	//连续采集图像
 	bool CaptureImages(Mat& captureMat, string imageSavingPath);
 	//连续采集
 	void CaptureContinuously(int num, int millisecond);
 	//计算合适曝光时间
 	static float GetExposureTime(Mat mat);
+	//通过直方图方法判断采集图像是否过曝或过暗
+	static bool IsOverExposure(Mat src);
 	//自动曝光
 	vector<int> AutoExposure(int num, FeaturePtr feature);
 	//相机多线程函数

@@ -3,13 +3,14 @@
 /////////////////////////////////////构造函数//////////////////////////////////////////
 SlideComm::SlideComm()
 {
-	//Init(13, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
-	_accelerate = 0;
-	_decelerate = 0;
-	_resolution = 0;
-	_velocity = 0;
+	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_port = this->ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
+	_velocity = this->ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
+	_accelerate = this->ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
+	_decelerate = this->ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
+	_resolution = this->ini->value("SWIR-Configuration/servoMotorResolution").toInt();
 	_distance = 0;
-	_port = 0;
+
 }
 
 SlideComm::~SlideComm()
@@ -31,20 +32,10 @@ SlideComm::~SlideComm()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, int resolution)
+bool SlideComm::Init(int port)
 {
 	bool ret = true;
 
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-
-	_velocity = this->ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
-	_accelerate = this->ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
-	_decelerate = this->ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
-	_resolution = this->ini->value("SWIR-Configuration/servoMotorResolution").toInt();
-	//_accelerate = accelerate;
-	//_velocity = velocity;
-	//_decelerate = decelerate;
-	//_resolution = resolution;
 	_port = port;
 
 	// 打开串口
@@ -90,11 +81,10 @@ bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, 
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SlideComm::Init(int port)
+bool SlideComm::InitA()
 {
 	bool ret = false;
 	char cmd[STRING_LEN];
-	_port = port;
 
 	// 打开串口
 	if (IsOpen())
@@ -148,7 +138,7 @@ bool SlideComm::MoveToX1(bool Wait_feedback/* = true*/)
 	bool ret = false;
 
 	// 初始化设备
-	ret = Init(_port);
+	ret = InitA();
 
 	if (ret)
 	{
@@ -159,8 +149,8 @@ bool SlideComm::MoveToX1(bool Wait_feedback/* = true*/)
 		FS1R 当输入1电位信号变化时停止
 		SS 发送字符串
 		*/
-		sprintf(cmd, "STD\rDI%d\rFS1R\rSS%s\r", 10000, SERVO_FEEDBACK);
-		//sprintf(cmd, "STD\rDI%d\rFS1L\rSS%s\r", 10000, SERVO_FEEDBACK);
+		//sprintf(cmd, "STD\rDI%d\rFS1R\rSS%s\r", 10000, SERVO_FEEDBACK);
+		sprintf(cmd, "STD\rDI%d\rFS1L\rSS%s\r", 10000, SERVO_FEEDBACK);
 		//就位前先归位时的限位条件
 		//sprintf(cmd, "STD\rDI%d\rFS2R\rSS%s\r", 10000, SERVO_FEEDBACK);
 		Write(cmd);
@@ -196,11 +186,27 @@ bool SlideComm::MoveToX2(bool Wait_feedback/* = true*/)
 	bool ret = false;
 
 	// 设备初始化
-	ret = Init(_port);
+	ret = InitA();
+	//如果已经处于光电开关处，先调整一下位置
+	if (ret)
+	{
+		ClearInputBuffer();
+		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", 100000, SERVO_FEEDBACK);
+		Write(cmd);
 
-	//避免系统启动前滑轨处于其他位置，就位前先使滑轨归位
-	//ret = MoveToX1();
+		if (Wait_feedback)
+		{
+			ret = IsFinished(10000);
+		}
+		else
+		{
+			// 在发下一个指令前稍微等一下
+			Wait(200);
+		}
+	}
 
+	// 设备初始化
+	ret = InitA();
 	if (ret)
 	{
 		ClearInputBuffer();
@@ -242,39 +248,29 @@ bool SlideComm::MoveTest(double distance, bool Wait_feedback/* = true*/)
 	int rlr = _resolution / 2; //“R”寄存器匹配伺服驱动器中的EG设置
 	double distancePerRev = 10;//该值有待修正
 
-	if (distance < 0 || distance > MOVE_DISTANCE)
-		return ret;
-	else
+	mPulses = static_cast<int> (distance * rlr * SERVO_REDUCTION / distancePerRev);
+
+	// 初始化设备
+	ret = InitA();
+
+	if (ret)
 	{
-		mDistance = _distance - distance;
-		mPulses = static_cast<int> (mDistance * rlr * SERVO_REDUCTION / distancePerRev);
+		ClearInputBuffer();
+		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", mPulses, SERVO_FEEDBACK);
+		Write(cmd);
 
-		// 初始化设备
-		ret = Init(_port);
-
-		if (ret)
+		if (Wait_feedback)
 		{
-			ClearInputBuffer();
-			sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", mPulses, SERVO_FEEDBACK);
-			Write(cmd);
-
-			if (Wait_feedback)
-			{
-				ret = IsFinished(10000);
-			}
-			else
-			{
-				Wait(200);
-			}
+			ret = IsFinished(10000);
 		}
-		if (ret)
+		else
 		{
-			// 更新位置信息
-			_distance = distance;
+			Wait(200);
 		}
-		// 终止设备
-		Fini();
 	}
+
+	// 终止设备
+	Fini();
 
 	return ret;
 }
