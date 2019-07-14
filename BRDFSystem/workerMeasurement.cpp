@@ -15,6 +15,7 @@ QObject(parent)
 	illuminant->InitCOM(5);
 
 	//光源排布顺序
+	//这边写错了，不应该从0开始写
 	_illuminantID = new UINT[196] { 0, 1, 2, 3,    25, 26, 27, 28, 29,    50,51,52,53,       75,76,77,78,79,   100,101,102,103,      125,126,127,128,129,    150,151,152,153,      175,176,177,178,179,\
 									  4,5,6,7,8,     30,31,32,33,           54,55,56,57,58,    80,81,82,83,      104,105,106,107,108,  130,131,132,133,        154,155,156,157,158,  180,181,182,183,\
 									  9,10,11,12,    34,35,36,37,           59,60,61,62,       84,85,86,87,      109,110,111,112,      134,135,136,137,        159,160,161,162,      184,185,186,187,\
@@ -46,10 +47,10 @@ void WorkerMeasurement::StartTimer(int measureFlag)
 	slideComm->MoveToX2();//滑轨就位
 	Sleep(10000);//等待滑轨就位
 	_measureFlag = measureFlag;
-	if (_measureFlag == 1)
+	//if (_measureFlag == 1)
 		_timerId = this->startTimer(300);
-	if (_measureFlag == 2)
-		_timerId = this->startTimer(2100);
+	//if (_measureFlag == 2)
+		//_timerId = this->startTimer(2100);
 }
 
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
@@ -60,13 +61,14 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 		{
 			if (_iID != 196)
 			{
+				_isReady = 1;
 				illuminant->Suspend();
 				illuminant->SetSteadyTime(20);
-				illuminant->LightenById(_illuminantID[_iID]);
+				illuminant->LightenById(_illuminantID[_iID]+1);//光源序列是从0开始写的
 				illuminant->Start();
 				Sleep(200);
 				_iID++;
-				_isReady = 1;
+
 				emit readyForGrab(_sID, _iID);//通过主线程告诉相机咱切换到下一个灯了，你可以试试调整一下你的曝光时间
 			}
 			else if (_iID == 196)
@@ -83,17 +85,17 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				//////////这一块代码还有问题/////////////////
 				if (_sampleFlag == 0)
 				{
-					illuminant->Suspend();
-					illuminant->SetSteadyTime(200);//最长点亮时间25.5s
-					illuminant->LightenById(_illuminantID[_iID]);
-					illuminant->Start();
 					_isReady = 1;
+					illuminant->Suspend();
+					illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+					illuminant->LightenById(_illuminantID[_iID]+1);
+					illuminant->Start();
 					Sleep(200);
 				}
 				if (_sID != 18)//36个角度耗时太长
 				{
-					//sampleComm->GotoNextPos(3500);
-					//Sleep(1000);
+					sampleComm->GotoNextPos(3500);
+					Sleep(300);//留给相机的拍摄时间
 					emit readyForGrab(_sID, _iID);
 					_sID++;
 					_isReady = 1;
@@ -105,7 +107,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 					_sampleFlag = 0;
 					_sID = 0;//开始转下一圈
 					_iID++;
-					_isReady = 1;
+					_isReady = 0;
 				}
 			}
 			else if (_iID == 196)

@@ -1,4 +1,4 @@
-﻿生成启动时间为 2019/7/12 17:41:16。
+﻿生成启动时间为 2019/7/14 16:31:54。
      1>项目“E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtCore /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtGui /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt workerMeasurement.cpp
@@ -28,4 +28,4 @@
 
 生成成功。
 
-已用时间 00:00:02.46
+已用时间 00:00:02.55
