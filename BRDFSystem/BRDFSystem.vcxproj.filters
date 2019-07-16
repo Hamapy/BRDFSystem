@@ -93,6 +93,12 @@
     <ClCompile Include="whitebalance_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imageProcess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
@@ -137,6 +143,12 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imageProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

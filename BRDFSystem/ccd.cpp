@@ -99,15 +99,51 @@ bool AVTCamera::IniCamera()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void AVTCamera::CameraSettings(double exposureTime, double gain, double blackLevel)
+void AVTCamera::CameraSettings(float exposureTime, CameraParameters* cameraParameters)
 {
-	_camera->GetFeatureByName("ExposureTime", _feature);
-	_feature->SetValue(exposureTime);
-	_camera->GetFeatureByName("Gain", _feature);
-	_feature->SetValue(gain);
+	_camera->GetFeatureByName("AcquisitionFrameCount", _feature);
+	_feature->SetValue(cameraParameters->acquisitionFrameCount);
+	_camera->GetFeatureByName("AcquisitionFrameRate", _feature);
+	_feature->SetValue(cameraParameters->acquisitionFrameRate);
+	_camera->GetFeatureByName("AutofunctionAOIEnable", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIEnable);
+	_camera->GetFeatureByName("AutofunctionAOIHeight", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIHeight);
+	_camera->GetFeatureByName("AutofunctionAOIOffsetX", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIOffsetX);
+	_camera->GetFeatureByName("AutofunctionAOIOffsetY", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIOffsetY);
+	_camera->GetFeatureByName("AutofunctionAOIShowArea", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIShowArea);
+	_camera->GetFeatureByName("AutofunctionAOIWidth", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIWidth);
+	_camera->GetFeatureByName("AutofunctionTargetIntensity", _feature);
+	_feature->SetValue(cameraParameters->autofunctionTargetIntensity);
 	_camera->GetFeatureByName("BlackLevel", _feature);
-	_feature->SetValue(blackLevel);
-	
+	_feature->SetValue(cameraParameters->blackLevel);
+	_camera->GetFeatureByName("ColorTransformationEnable", _feature);
+	_feature->SetValue(cameraParameters->colorTransformationEnable);
+	_camera->GetFeatureByName("ExposureTime", _feature);
+	_feature->SetValue(cameraParameters->exposureTime);
+	_camera->GetFeatureByName("Gain", _feature);
+	_feature->SetValue(cameraParameters->gain);
+	_camera->GetFeatureByName("Gamma", _feature);
+	_feature->SetValue(cameraParameters->gamma);
+	_camera->GetFeatureByName("Height", _feature);
+	_feature->SetValue(cameraParameters->height);
+	_camera->GetFeatureByName("Width", _feature);
+	_feature->SetValue(cameraParameters->width);
+	_camera->GetFeatureByName("Hue", _feature);
+	_feature->SetValue(cameraParameters->hue);
+	_camera->GetFeatureByName("Saturation", _feature);
+	_feature->SetValue(cameraParameters->saturation);
+	_camera->GetFeatureByName("PixelFormat", _feature);
+	_feature->SetValue(cameraParameters->pixelFormat);
+	_camera->GetFeatureByName("ExposureAuto", _feature);
+	_feature->SetValue(cameraParameters->exposureAuto);
+	_camera->GetFeatureByName("GainAuto ", _feature);
+	_feature->SetValue(cameraParameters->gainAuto);
+
 	return;
 }
 ////////////////////////////////////////////////////////////////////////////

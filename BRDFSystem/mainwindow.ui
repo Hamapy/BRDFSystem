@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1311</width>
+    <width>1479</width>
     <height>913</height>
    </rect>
   </property>
@@ -20,9 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-
          <number>1</number>
-         <number>0</number>
         </property>
         <widget class="QWidget" name="Settings">
          <layout class="QGridLayout" name="gridLayout_45" rowstretch="2,4,1">
@@ -934,99 +932,70 @@
              </layout>
             </item>
             <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_30" rowstretch="1,0,0,0,0,0,0,0,0,0" columnstretch="1,0">
+             <layout class="QGridLayout" name="gridLayout_30" rowstretch="1,0,0,0,0,0,0,0,0,0,0" columnstretch="1,1">
               <property name="bottomMargin">
                <number>500</number>
               </property>
-              <item row="4" column="1">
+              <item row="1" column="1">
                <widget class="QPushButton" name="pushButton_captureContinuously">
                 <property name="text">
                  <string>开始连续采集</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
-               <widget class="QPushButton" name="pushButton_chess">
-                <property name="text">
-                 <string>畸变校正（棋盘格标定）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QPushButton" name="pushButton_whiteBalance">
-                <property name="text">
-                 <string>白平衡校正</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="1">
+              <item row="4" column="1">
                <widget class="QPushButton" name="pushButton_deadPixels">
                 <property name="text">
                  <string>坏点校正</string>
                 </property>
                </widget>
               </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_20">
-                <property name="text">
-                 <string>图像保存格式</string>
+              <item row="1" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5">
+                <property name="spacing">
+                 <number>0</number>
                 </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="lineEdit_capturePath"/>
+                <item>
+                 <widget class="QLabel" name="label_21">
+                  <property name="text">
+                   <string>采集数量（/台）</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_captureNum"/>
+                </item>
+               </layout>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="comboBox_3">
-                <item>
-                 <property name="text">
-                  <string>.JPEG</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>.BMP</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>.PNG</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_18">
-                <property name="text">
-                 <string>图像保存路径</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QPushButton" name="pushButton_iniCCD">
-                <property name="text">
-                 <string>连接相机</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="1">
                <widget class="QPushButton" name="pushButton_finiCCD">
                 <property name="text">
                  <string>断开相机</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="label_21">
+              <item row="2" column="1">
+               <widget class="QPushButton" name="pushButton_chess">
                 <property name="text">
-                 <string>采集数量（/台）</string>
+                 <string>畸变校正（棋盘格标定）</string>
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
-               <widget class="QLineEdit" name="lineEdit_captureNum"/>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="pushButton_iniCCD">
+                <property name="text">
+                 <string>连接相机</string>
+                </property>
+               </widget>
               </item>
-              <item row="8" column="1">
+              <item row="3" column="1">
+               <widget class="QPushButton" name="pushButton_whiteBalance">
+                <property name="text">
+                 <string>白平衡校正</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
                <widget class="QPushButton" name="pushButton_blackLevel">
                 <property name="text">
                  <string>暗电平校正</string>
@@ -2078,7 +2047,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>184</width>
+         <width>208</width>
          <height>783</height>
         </rect>
        </property>
@@ -2124,8 +2093,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>124</width>
-         <height>721</height>
+         <width>208</width>
+         <height>783</height>
         </rect>
        </property>
        <attribute name="label">
@@ -2163,8 +2132,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>124</width>
-         <height>740</height>
+         <width>208</width>
+         <height>783</height>
         </rect>
        </property>
        <attribute name="label">

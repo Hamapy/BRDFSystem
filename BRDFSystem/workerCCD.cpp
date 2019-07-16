@@ -12,7 +12,7 @@ QObject(parent)
 	_measureFlag = 0;
 	_mutex.lock();//防止9台相机抢占Vimba系统别名
 	cameraAVT = new AVTCamera(_workerID, _system);
-	cameraAVT->CameraSettings(50000);//设置初始曝光时间为50ms
+	cameraAVT->CameraSettings(30000);//设置初始曝光时间为50ms
 	_mutex.unlock();
 
 	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
@@ -30,7 +30,7 @@ QObject(parent)
 void WorkerCCD::StartTimer(int measureFlag)
 {
 	_measureFlag = measureFlag;
-	_timerId = this->startTimer(100);//设置定时器触发子线程capture  单位毫秒
+	_timerId = this->startTimer(60);//设置定时器触发子线程capture  单位毫秒
 }
 
 void WorkerCCD::timerEvent(QTimerEvent *event)
@@ -46,9 +46,11 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 
 		//连续采集
 		if (_capture == 1)
-			cameraAVT->CaptureImages(_mat, _imageSavingPath3);
+		{
+			string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+			cameraAVT->CaptureImages(_mat, capturePath);
+		}
 
-		//emit sendingMat(_workerID, /*_mat*/_img);//给采集线程传递
 		emit sendingImg(_workerID, _img);//给界面显示线程传递
 	}
 }
@@ -89,8 +91,8 @@ void WorkerCCD::Grab(int sID, int iID)
 		path = _imageSavingPath1 + _materialName;
 	if (_measureFlag == 2)
 		path = _imageSavingPath2 + _materialName;
-	if (_measureFlag == 3)
-		path = _imageSavingPath3;
+	//if (_measureFlag == 3)
+	//	path = _imageSavingPath3;
 
 	cameraAVT->SaveAnImage(_mat, path, _workerID, sID, iID);
 

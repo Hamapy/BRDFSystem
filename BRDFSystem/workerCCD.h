@@ -9,6 +9,7 @@
 #include <QThread>
 #include <QMutex>
 #include "ccd.h"
+#include "config.h"
 
 class WorkerCCD : public QObject
 {
@@ -49,6 +50,7 @@ private:
 	string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	int						_measureFlag;//主界面传入的采集类型标记
 	QMutex					_mutex;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
 signals:
 	//void next();

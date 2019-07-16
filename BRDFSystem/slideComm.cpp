@@ -3,12 +3,12 @@
 /////////////////////////////////////构造函数//////////////////////////////////////////
 SlideComm::SlideComm()
 {
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-	_port = this->ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
-	_velocity = this->ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
-	_accelerate = this->ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
-	_decelerate = this->ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
-	_resolution = this->ini->value("SWIR-Configuration/servoMotorResolution").toInt();
+	//ini = new QSettings("./config.ini", s::IniFormat);//读取配置文件
+	_port = ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
+	_velocity = ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
+	_accelerate = ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
+	_decelerate = ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
+	_resolution = ini->value("SWIR-Configuration/servoMotorResolution").toInt();
 	_distance = 0;
 
 }

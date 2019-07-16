@@ -24,13 +24,13 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 ////////////////////////////////构造函数////////////////////////////////////
 SampleComm::SampleComm()
 {
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-	_port = this->ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
-	_velocity = this->ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
-	_accelerate = this->ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
-	_decelerate = this->ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
-	_resolution = this->ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
-	_homeadj = this->ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_port = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
+	_velocity = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
+	_accelerate = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	_decelerate = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	_resolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	_homeadj = ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
 	_step = 0;
 	}
 SampleComm::~SampleComm()

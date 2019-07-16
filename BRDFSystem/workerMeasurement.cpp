@@ -87,15 +87,15 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				{
 					_isReady = 1;
 					illuminant->Suspend();
-					illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+					illuminant->SetSteadyTime(240);//最长点亮时间25.5s  18个采集角度时间不太够
 					illuminant->LightenById(_illuminantID[_iID]+1);
 					illuminant->Start();
 					Sleep(200);
 				}
-				if (_sID != 18)//36个角度耗时太长
+				if (_sID != 12)//36个角度耗时太长
 				{
-					sampleComm->GotoNextPos(3500);
-					Sleep(300);//留给相机的拍摄时间
+					sampleComm->GotoNextPos(5250);
+					Sleep(200);//留给相机的拍摄时间
 					emit readyForGrab(_sID, _iID);
 					_sID++;
 					_isReady = 1;
@@ -117,11 +117,6 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			}
 		}
 	}
-	//else //光源样品就位，保存相机线程发来的采集图像
-	//{
-		//SaveSeriesMat(workerID, mat);
-		//emit readyForGrab();
-	//}
 }
 
 void WorkerMeasurement::CheckDone(int workerID)

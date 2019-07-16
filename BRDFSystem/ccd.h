@@ -16,22 +16,22 @@
 //#include "VmbTransformTypes.h"
 #include "opencv2/opencv.hpp"
 #include "BasicImage.h"
+#include "config.h"
 
 using namespace std;
 using namespace cv;
 using namespace AVT::VmbAPI;
 
-#define CAM_NUM 2 //连接相机数量
-#define CAPTURE_NUM 100 //采集图像数量 
+#define CAM_NUM 9 //连接相机数量
+#define CAPTURE_NUM 150 //采集图像数量 
 #define TIMEOUT 5000 //采集图像等待超时时间 
 
 //相机编号
 /*A camera can be opened if camera-specific control is required, such as I/O pins
 on a frame grabber card.Control is then possible via feature access methods.
 "pID" might be one of the following : "169.254.12.13" for an IP address,
-"000F314C4BE5" for a MAC address or "DEV_1234567890" for an ID as reported by Vimba*/
+"000F314C4BE5" for a MAC address or "DEV_1234567890" for an ID as reported by Vimba
 
-/*
 #define CAM0 DEV_0xA4701120BA037 
 #define CAM1 DEV_0xA4701120BA038
 #define CAM2 DEV_0xA4701120BA039
@@ -41,19 +41,6 @@ on a frame grabber card.Control is then possible via feature access methods.
 #define CAM6 DEV_0xA4701120BA03D
 #define CAM7 DEV_0xA4701120BA03E
 #define CAM8 DEV_0xA4701120BA03F
-*/
-
-
-//传入相机线程函数参数
-/*
-struct CameraThreadInfo
-{
-	CameraPtrVector cameras;
-	int cameraID;
-	double exposureTime;
-	double gain;
-	double blackLevel;
-};
 */
 
 typedef struct _tagPIXEL
@@ -78,7 +65,7 @@ public:
 	//打开相机
 	//bool OpenCamera(int cameraID);
 	//设置相机参数
-	void CameraSettings(double exposureTime, double gain = 0, double blackLevel = 0);
+	void CameraSettings(float exposureTime = cameraParameters->exposureTime, CameraParameters* cameraParameters = cameraParameters);
 	//返回一帧图像
 	VmbUchar_t* CaptureImage();//typedef unsigned char VmbUchar_t
 	//返回图像尺寸
@@ -147,7 +134,6 @@ private:
 	//string						_imageSavingPath = "..\\imgs_calibration";
 	int							_saveName;
 	FeaturePtr					_feature;
-
 	//VmbError_t					err;
 	//VmbHandle_t					hCamera_;
 	

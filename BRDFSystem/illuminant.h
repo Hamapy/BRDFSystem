@@ -1,5 +1,4 @@
 #pragma once
-#include <QSettings>
 #include <vector>
 #include <windows.h>
 #include <iostream>
@@ -9,6 +8,7 @@
 #include <algorithm>
 #include <atomic>
 #include <thread>
+#include "config.h"
 
 using namespace std;
 class Illuminant
@@ -69,5 +69,6 @@ private:
 	CRITICAL_SECTION    _csCommunicationSync;//同步互斥，临界区保护
 	static    atomic<bool>      _flag;//判断光源点亮过程是否出错,应该为原子操作
 	static    atomic<int>       _num;//判断点亮到哪一个灯，起始灯为0
-	QSettings					*ini;
+	//QSettings					*ini;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 };

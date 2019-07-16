@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="brdfModeling.cpp" />
+    <ClCompile Include="config.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_mainwindow.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_workerCCD.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_workerMeasurement.cpp">
@@ -166,6 +167,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="imageProcess.cpp" />
     <ClCompile Include="whitebalance_test.cpp" />
     <ClCompile Include="workerCCD.cpp" />
     <ClCompile Include="ccd_test.cpp" />
@@ -221,9 +223,11 @@
     <ClInclude Include="BasicImage.h" />
     <ClInclude Include="brdfModeling.h" />
     <ClInclude Include="cnComm.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
     <ClInclude Include="illuminant.h" />
     <ClInclude Include="ccd.h" />
+    <ClInclude Include="imageProcess.h" />
     <ClInclude Include="sampleComm.h" />
     <ClInclude Include="slideComm.h" />
     <ClInclude Include="stdafx.h" />

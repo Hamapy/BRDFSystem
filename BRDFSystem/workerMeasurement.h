@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include <QThread>
 #include <QMutex>
+#include "config.h"
 #include "ccd.h"
 #include "illuminant.h"
 #include "sampleComm.h"
@@ -64,7 +65,7 @@ private:
 	UINT					_sID;//样品台角度序号
 	int						_measureFlag;
 	bool					_sampleFlag;
-
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	QMutex					_mutex;
 
 signals:

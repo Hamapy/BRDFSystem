@@ -4,12 +4,12 @@
 #include <QtWidgets/QMainWindow>
 #include <QDebug>
 #include <QFileDialog>
-#include <QSettings>
 #include <time.h>
 #include <QMessageBox>
 #include "ui_mainwindow.h"
 #include "workerMeasurement.h"
 #include "workerCCD.h"
+#include "config.h"
 
 //class workerCCD;//由于要用到worker类的变量，故此作前向声明
 class MainWindow : public QMainWindow
@@ -63,15 +63,15 @@ private:
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
 	VimbaSystem&				_system;
-	QSettings					*ini;
 	QString						_qMaterialName;
 	bool						_displayFlag;
 	int							_measureFlag;
 	//QPixmap*					_pic;
 	QMutex						_mutex;
-	string						_capturePath = "..\\imgs_calibration";
+	//string						_capturePath = "..\\imgs_calibration";
 	vector<float>				_trans;
 	vector<vector<float>>		_transs;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
 	void CreateFolds(string root, string fileName);
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);

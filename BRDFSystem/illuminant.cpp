@@ -8,8 +8,8 @@ int Illuminant::_steadyTime = 10;
 const UINT SLEEP_TIME_INTERVAL = 50;
 Illuminant::Illuminant()
 {
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-	_portNo = this->ini->value("BRDFSystem-Configuration/serialPortSelection").toInt();
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_portNo = ini->value("BRDFSystem-Configuration/serialPortSelection").toInt();
 	_hComm = INVALID_HANDLE_VALUE;
 	_hListenThread = INVALID_HANDLE_VALUE;
 	InitializeCriticalSection(&_csCommunicationSync);

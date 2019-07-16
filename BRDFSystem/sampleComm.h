@@ -26,9 +26,10 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #ifndef SAMPLECOMM_H
 #define SAMPLECOMM_H
 
-#include <QSettings>
+//#include <QSettings>
 #include "stdafx.h"
 #include "cnComm.h"
+#include "config.h"
 
 #define STEP_FEEDBACK      "DONE"    //电机反馈标识
 #define STEP_VELOCITY	   0.25		//电机速度
@@ -63,7 +64,7 @@ private:
 	//时间等待函数
 	void Wait(int millisec);
 
-	QSettings	*ini;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	int			_step;             //转到下一通道电机需要移动的步数
 	int			_homeadj;          //归位时电机需要移动的步数
     int			_port;             //电机连接的串口	
