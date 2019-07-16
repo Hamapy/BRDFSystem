@@ -1,16 +1,22 @@
 #include "sampleComm.h"
 
 
-void main()
+void mainA()
 {
 	SampleComm t;
-	t.Init(2, 0, 0.2, STEP_ACCELERATE, STEP_DECELERATE, STEP_RESOLUTION, 20000);
-
+	t.Init(2);
+	Sleep(1000);//等10s让样品台归位
+	//for (int i = 0; i < 36; i++)
+	//{
+	//	t.GotoNextPos(175);
+	//	Sleep(2000);
+	//}
 	for (int i = 0; i < 18; i++)
 	{
-		t.GotoNextPos(100);//20000步是一圈？
-		Sleep(10000);
+		t.GotoNextPos(3500);
+		Sleep(1000);
 	}
 	
 }
+
 

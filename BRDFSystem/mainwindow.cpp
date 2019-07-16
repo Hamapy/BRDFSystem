@@ -1,22 +1,165 @@
-#include "mainwindow.h"
+ï»¿#include "mainwindow.h"
 
-////////////////////////////////Ö÷½çÃæ¶¨Òå////////////////////////////
-//VimbaSystem& _system = VimbaSystem::GetInstance();
-
+////////////////////////////////ä¸»ç•Œé¢å®šä¹‰////////////////////////////
 MainWindow::MainWindow(VimbaSystem&	system, QWidget *parent) : 
 _system(system),
 QMainWindow(parent)
 {
 	ui.setupUi(this);
 	
-	//½çÃæ¼°Èí¼ş³õÊ¼»¯
+	//ç•Œé¢åŠè½¯ä»¶åˆå§‹åŒ–
 	AVTCamera::IniVimba(_system);
-	this->setAttribute(Qt::WA_DeleteOnClose, true);//¹Ø±Õ´°¿ÚÊ±Çå¿ÕÄÚ´æ
+	//extern QSettings *ini;
+	this->setAttribute(Qt::WA_DeleteOnClose, true);//å…³é—­çª—å£æ—¶æ¸…ç©ºå†…å­˜
 	TurnToMeasurement1();
-	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//¶ÁÈ¡ÅäÖÃÎÄ¼ş
 	
-	////Ò³ÃæÇĞ»»
+
+//////////////////////////////////////////////é…ç½®é¡µé¢/////////////////////////////////////////////////////
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//è¯»å–é…ç½®æ–‡ä»¶
+	////æ»‘åŠ¨æ¡ç›¸å…³è®¾ç½®
+	int nMin = 0;
+	int nMax = 50;
+	int nSingleStep = 10;
+
+	QSlider *pSlider1 = this->ui.horizontalSlider_gain;
+	pSlider1->setMinimum(nMin);  // æœ€å°å€¼
+	pSlider1->setMaximum(nMax);  // æœ€å¤§å€¼
+	pSlider1->setSingleStep(nSingleStep);  // æ­¥é•¿
+	pSlider1->setTickPosition(QSlider::TicksAbove);  //åˆ»åº¦åœ¨ä¸Šæ–¹
+
+	QSlider *pSlider2 = this->ui.horizontalSlider_darkLevel;
+	pSlider2->setMinimum(nMin);  // æœ€å°å€¼
+	pSlider2->setMaximum(nMax);  // æœ€å¤§å€¼
+	pSlider2->setSingleStep(nSingleStep);  // æ­¥é•¿
+	pSlider2->setTickPosition(QSlider::TicksAbove);  //åˆ»åº¦åœ¨ä¸Šæ–¹
+
+	////æ˜¾ç¤ºé…ç½®æ–‡ä»¶çš„å‚æ•°
+	////å·¥ä¸šç›¸æœºé…ç½®å‚æ•°
+	gain = ini->value("BRDFSystem-Configuration/gain").toInt();
+	gain_Int = gain;
+	this->ui.horizontalSlider_gain->setValue(gain);
+	this->ui.spinBox_gain->setValue(gain);
+	darkLevel = ini->value("BRDFSystem-Configuration/darkLevel").toInt();
+	darkLevel_Int = darkLevel;
+	this->ui.horizontalSlider_darkLevel->setValue(darkLevel);
+	this->ui.spinBox_darkLevel->setValue(darkLevel);
+	imageSaveFormat = ini->value("BRDFSystem-Configuration/imageSaveFormat").toString();
+	imageSaveFormat_Str = imageSaveFormat;
+	int index0 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat);
+	ui.comboBox_imageSaveFormat->setCurrentIndex(index0);
+	imageSavePath = ini->value("BRDFSystem-Configuration/imageSavePath").toString();
+	imageSavePath_Str = imageSavePath;
+	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
+
+
+	////å…‰æºé…ç½®å‚æ•°
+	serialPortSelection = ini->value("BRDFSystem-Configuration/serialPortSelection").toString();
+	serialPortSelection_Str = serialPortSelection;
+	int index1 = ui.comboBox_serialPortSelection->findText(serialPortSelection);
+	ui.comboBox_serialPortSelection->setCurrentIndex(index1);
+	baudRate = ini->value("BRDFSystem-Configuration/baudRate").toString();
+	baudRate_Str = baudRate;
+	int index2 = ui.comboBox_baudRate->findText(baudRate);
+	ui.comboBox_baudRate->setCurrentIndex(index2);
+	delaySetting = ini->value("BRDFSystem-Configuration/delaySetting").toInt();
+	delaySetting_Str = QString::number(delaySetting, 10);
+	this->ui.lineEdit_delaySetting->setText(delaySetting_Str);
+	lightingSequence = ini->value("BRDFSystem-Configuration/lightingSequence").toInt();
+	lightingSequence_Str = QString::number(lightingSequence, 10);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequence_Str);
+
+	////æ ·å“å°ç”µæœºé©±åŠ¨é…ç½®å‚æ•°
+	stepperMotorPortSelection = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toString();
+	stepperMotorPortSelection_Str = stepperMotorPortSelection;
+	int index3 = ui.comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
+	ui.comboBox_stepperMotorPortSelection->setCurrentIndex(index3);
+	stepperMotorSpeed = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toString();
+	stepperMotorSpeed_Int = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toInt();
+	stepperMotorSpeed_Str = stepperMotorSpeed;
+	int index4 = ui.comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
+	ui.comboBox_stepperMotorSpeed->setCurrentIndex(index4);
+	stepperMotorAcceleration = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toString();
+	stepperMotorAcceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	stepperMotorAcceleration_Str = stepperMotorAcceleration;
+	int index5 = ui.comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
+	ui.comboBox_stepperMotorAcceleration->setCurrentIndex(index5);
+	stepperMotorDeceleration = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toString();
+	stepperMotorDeceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	stepperMotorDeceleration_Str = stepperMotorDeceleration;
+	int index6 = ui.comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
+	ui.comboBox_stepperMotorDeceleration->setCurrentIndex(index6);
+	stepperMotorResolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toString();
+	stepperMotorResolution_Int = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	stepperMotorResolution_Str = stepperMotorResolution;
+	int index7 = ui.comboBox_stepperMotorResolution->findText(stepperMotorResolution);
+	ui.comboBox_stepperMotorResolution->setCurrentIndex(index7);
+	sampleRotationAngle = ini->value("BRDFSystem-Configuration/sampleRotationAngle").toString();
+	sampleRotationAngle_Str = sampleRotationAngle;
+	int index8 = ui.comboBox_sampleRotationAngle->findText(sampleRotationAngle);
+	ui.comboBox_sampleRotationAngle->setCurrentIndex(index8);
+
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é…ç½®å‚æ•°
+	servoMotorPortSelection = ini->value("BRDFSystem-Configuration/servoMotorPortSelection").toString();
+	servoMotorPortSelection_Str = servoMotorPortSelection;
+	int index9 = ui.comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
+	ui.comboBox_servoMotorPortSelection->setCurrentIndex(index9);
+	servoMotorSpeed = ini->value("BRDFSystem-Configuration/servoMotorSpeed").toString();
+	servoMotorSpeed_Str = servoMotorSpeed;
+	int index10 = ui.comboBox_servoMotorSpeed->findText(servoMotorSpeed);
+	ui.comboBox_servoMotorSpeed->setCurrentIndex(index10);
+	servoMotorAcceleration = ini->value("BRDFSystem-Configuration/servoMotorAcceleration").toString();
+	servoMotorAcceleration_Str = servoMotorAcceleration;
+	int index11 = ui.comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
+	ui.comboBox_servoMotorAcceleration->setCurrentIndex(index11);
+	servoMotorDeceleration = ini->value("BRDFSystem-Configuration/servoMotorDeceleration").toString();
+	servoMotorDeceleration_Str = servoMotorDeceleration;
+	int index12 = ui.comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
+	ui.comboBox_servoMotorDeceleration->setCurrentIndex(index12);
+	servoMotorResolution = ini->value("BRDFSystem-Configuration/servoMotorResolution").toString();
+	servoMotorResolution_Str = servoMotorResolution;
+	int index13 = ui.comboBox_servoMotorResolution->findText(servoMotorResolution);
+	ui.comboBox_servoMotorResolution->setCurrentIndex(index13);
+	slideTableMovingDistance = ini->value("BRDFSystem-Configuration/slideTableMovingDistance").toInt();
+	slideTableMovingDistance_Str = QString::number(slideTableMovingDistance, 10);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance_Str);
+
+	////è¿æ¥ä¿¡å·æ§½,ä¿å­˜å’Œæ¢å¤é»˜è®¤è®¾ç½®
+	connect(this->ui.pushButton_save, SIGNAL(pressed()), this, SLOT(PushButton_Save_Pressed()));
+	connect(this->ui.pushButton_defaults, SIGNAL(pressed()), this, SLOT(PushButton_Defaults_Pressed()));
+	////è¿æ¥ä¿¡å·æ§½ï¼ˆç›¸äº’æ”¹å˜ï¼‰
+	connect(this->ui.spinBox_gain, SIGNAL(valueChanged(int)), pSlider1, SLOT(setValue(int)));
+	connect(pSlider1, SIGNAL(valueChanged(int)), this->ui.spinBox_gain, SLOT(setValue(int)));
+	////è¿æ¥ä¿¡å·æ§½ï¼ˆç›¸äº’æ”¹å˜ï¼‰
+	connect(this->ui.spinBox_darkLevel, SIGNAL(valueChanged(int)), pSlider2, SLOT(setValue(int)));
+	connect(pSlider2, SIGNAL(valueChanged(int)), this->ui.spinBox_darkLevel, SLOT(setValue(int)));
+	connect(this->ui.comboBox_imageSaveFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_imageSavePath, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_imageSavePath, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+	connect(this->ui.comboBox_serialPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_baudRate, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_delaySetting, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_delaySetting, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_lightingSequence, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_lightingSequence, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+	connect(this->ui.comboBox_stepperMotorPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorSpeed, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorAcceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorDeceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_stepperMotorResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_sampleRotationAngle, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+
+	connect(this->ui.comboBox_servoMotorPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorSpeed, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorAcceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorDeceleration, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.comboBox_servoMotorResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+
+
+//////////////////////////////////////////////åˆ‡æ¢é¡µé¢/////////////////////////////////////////////////////
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
 	connect(this->ui.pushButton_measure2, SIGNAL(pressed()), this, SLOT(TurnToMeasurement2()));
 	connect(this->ui.pushButton_measure3, SIGNAL(pressed()), this, SLOT(TurnToMeasurement3()));
@@ -26,302 +169,526 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_test, SIGNAL(pressed()), this, SLOT(TurnToTest()));
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
-	////²É¼¯Ò³Ãæ
-	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
-	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
-
-	//for (int i = 0; i < CAM_NUM; i++)
-	//{
-	//	workerMeasurement[i] = new WorkerMeasurement(i, _system);
-	//	threadMeasurement[i] = new QThread();
-	//	workerMeasurement[i]->moveToThread(threadMeasurement[i]);
-	//}
-
-	////Ïà»úÔ¤´¦ÀíÒ³Ãæ
-	this->ui.pushButton_captureContinuously->setEnabled(false);
-	this->ui.pushButton_finiCCD->setEnabled(false);
-	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
-	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
-	
-	//*workerCCD = new WorkerCCD(workerID, this->_system)[CAM_NUM];
-	//*threadCCD = new QThread[CAM_NUM];
+//////////////////////////////////////////////é‡‡é›†é¡µé¢/////////////////////////////////////////////////////
+	workerMeasurement = new WorkerMeasurement();
+	threadMeasurement = new QThread();
+	workerMeasurement->moveToThread(threadMeasurement);
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		workerCCD[i] = new WorkerCCD(i, _system);
 		threadCCD[i] = new QThread();
 		workerCCD[i]->moveToThread(threadCCD[i]);
-		//if (threadCCD[i]->isRunning())
-		//{
-		//	threadCCD[i]->terminate();
-		//}
+
+		//ç”¨æ§½æœºåˆ¶ä¼ é€’Matä¿å­˜ä¸‹æ¥çš„æ˜¯ç©ºå›¾ï¼Ÿ
+		//qRegisterMetaType<Mat>("Mat");
+		connect(this, SIGNAL(startTimer(int)), this->workerCCD[i], SLOT(StartTimer(int)));
+		connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//é˜²æ­¢é‡å¤è¿æ¥ã€‚å¦‚æœå½“å‰ä¿¡å·å’Œæ§½å·²ç»è¿æ¥è¿‡äº†ï¼Œå°±ä¸å†è¿æ¥äº†;UniqueConnection æ¨¡å¼ï¼šä¸¥æ ¼è¯´ä¸ç®—è¿æ¥æ–¹å¼ï¼Œåªæ˜¯ä¸€ä¸ªé™„åŠ çš„å‚æ•°ã€‚
+		connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);
+		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
+		connect(this->workerMeasurement, SIGNAL(readyForGrab(int,int)), this->workerCCD[i], SLOT(Grab(int,int)), Qt::QueuedConnection);
+		connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
 	}
-	connect(workerCCD[0], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	connect(workerCCD[1], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[2], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage2(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[3], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage3(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[4], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage4(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[5], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage5(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[6], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage6(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[7], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage7(QImage)), Qt::QueuedConnection);
-	//connect(workerCCD[8], SIGNAL(sendingImg(QImage)), this, SLOT(DisplayImage8(QImage)), Qt::QueuedConnection);
+	connect(this, SIGNAL(startMeasurement(int)), this->workerMeasurement, SLOT(StartTimer(int)));
+	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
+	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
+	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
+
+	
+///////////////////////////////////////////////ç›¸æœºé¢„å¤„ç†é¡µé¢///////////////////////////////////////////////
+	this->ui.pushButton_captureContinuously->setEnabled(false);
+	this->ui.pushButton_chess->setEnabled(false);
+	this->ui.pushButton_whiteBalance->setEnabled(false);
+	this->ui.pushButton_deadPixels->setEnabled(false);
+	this->ui.pushButton_blackLevel->setEnabled(false);
+	this->ui.pushButton_finiCCD->setEnabled(false);
+
+	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
+	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
+	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
+	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
+	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
+	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
+	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
 }
 
 MainWindow::~MainWindow()
 {
 	for (int i = 0; i < CAM_NUM; i++)
 	{
+		delete workerCCD[i];
+		workerCCD[i] = NULL;
+
 		if (threadCCD[i]->isFinished())
 			return;
 		threadCCD[i]->quit();
 		threadCCD[i]->wait();
 
-		delete workerCCD[i]->_cameraAVT;
-		workerCCD[i]->_cameraAVT = NULL;
-
-		delete workerCCD[i];
-		workerCCD[i] = NULL;
-
 		delete threadCCD[i];
 		threadCCD[i] = NULL;
 	}
-	//delete[] workerCCD; //ÕâÑù¶¨Òå²»ºÃÈ·¶¨workerID
-	//delete[] threadCCD;
+
+	delete workerMeasurement;
+	if (threadMeasurement->isFinished())
+		return;
+	threadMeasurement->quit();
+	threadMeasurement->wait();
+	delete threadMeasurement;
+	threadMeasurement = NULL;
 
 	AVTCamera::FiniVimba(_system);
 }
 
-////////////////////////////////Ë½ÓĞ²Ûº¯Êı/////////////////////////////////////
-////////////////////////////////ÅäÖÃÒ³Ãæ/////////////////////////////////////
+////////////////////////////////ç§æœ‰æ§½å‡½æ•°/////////////////////////////////////
+
+////////////////////////////////é…ç½®é¡µé¢/////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_Save_Pressed
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šisEdited()
+// æè¿°ï¼šæ–‡æœ¬æ¡†å‚æ•°æœ‰æ”¹åŠ¨æ—¶ï¼ŒæŒ‰é’®æ§ä»¶å¯ç‚¹å‡»
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::IsEdited()
+{
+	this->ui.pushButton_defaults->setEnabled(true);
+	this->ui.pushButton_save->setEnabled(true);
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼šPushButton_Save_Pressed
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Save_Pressed()
 {
-	
+	////å·¥ä¸šç›¸æœºé…ç½®ä¿å­˜
+	gain = this->ui.spinBox_gain->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/gain", gain);
+	darkLevel = this->ui.spinBox_darkLevel->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/darkLevel", darkLevel);
+	imageSaveFormat = this->ui.comboBox_imageSaveFormat->currentText();
+	ini->setValue("/BRDFSystem-Configuration/imageSaveFormat", imageSaveFormat);
+	imageSavePath = this->ui.lineEdit_imageSavePath->text();
+	ini->setValue("/BRDFSystem-Configuration/imageSavePath", imageSavePath);
+
+	////å…‰æºé…ç½®ä¿å­˜
+	serialPortSelection = this->ui.comboBox_serialPortSelection->currentText();
+	ini->setValue("/BRDFSystem-Configuration/serialPortSelection", serialPortSelection);
+	baudRate = this->ui.comboBox_baudRate->currentText();
+	ini->setValue("/BRDFSystem-Configuration/baudRate", baudRate);
+	delaySetting = this->ui.lineEdit_delaySetting->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/delaySetting", delaySetting);
+	lightingSequence = this->ui.lineEdit_lightingSequence->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/lightingSequence", lightingSequence);
+
+	////æ ·å“å°ç”µæœºé©±åŠ¨é…ç½®ä¿å­˜
+	stepperMotorPortSelection = this->ui.comboBox_stepperMotorPortSelection->currentText();
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorPortSelection", stepperMotorPortSelection);
+	stepperMotorSpeed = this->ui.comboBox_stepperMotorSpeed->currentText();
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorSpeed", stepperMotorSpeed);
+	stepperMotorAcceleration = this->ui.comboBox_stepperMotorAcceleration->currentText();
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorAcceleration", stepperMotorAcceleration);
+	stepperMotorDeceleration = this->ui.comboBox_stepperMotorDeceleration->currentText();
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorDeceleration", stepperMotorDeceleration);
+	stepperMotorResolution = this->ui.comboBox_stepperMotorResolution->currentText();
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorResolution", stepperMotorResolution);
+	sampleRotationAngle = this->ui.comboBox_sampleRotationAngle->currentText();
+	ini->setValue("/BRDFSystem-Configuration/sampleRotationAngle", sampleRotationAngle);
+
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é…ç½®ä¿å­˜
+	servoMotorPortSelection = this->ui.comboBox_servoMotorPortSelection->currentText();
+	ini->setValue("/BRDFSystem-Configuration/servoMotorPortSelection", servoMotorPortSelection);
+	servoMotorSpeed = this->ui.comboBox_servoMotorSpeed->currentText();
+	ini->setValue("/BRDFSystem-Configuration/servoMotorSpeed", servoMotorSpeed);
+	servoMotorAcceleration = this->ui.comboBox_servoMotorAcceleration->currentText();
+	ini->setValue("/BRDFSystem-Configuration/servoMotorAcceleration", servoMotorAcceleration);
+	servoMotorDeceleration = this->ui.comboBox_servoMotorDeceleration->currentText();
+	ini->setValue("/BRDFSystem-Configuration/servoMotorDeceleration", servoMotorDeceleration);
+	servoMotorResolution = this->ui.comboBox_servoMotorResolution->currentText();
+	ini->setValue("/BRDFSystem-Configuration/servoMotorResolution", servoMotorResolution);
+	slideTableMovingDistance = this->ui.lineEdit_slideTableMovingDistance->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/slideTableMovingDistance", slideTableMovingDistance);
+
+	QMessageBox::information(NULL, "Save", "Saved Successfully.", QMessageBox::Ok, QMessageBox::Ok);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_Save_Pressed
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_Save_Pressed
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Defaults_Pressed()
 {
-	
-}
+	////å·¥ä¸šç›¸æœºé»˜è®¤é…ç½®
+	this->ui.horizontalSlider_gain->setValue(gain_Int);
+	this->ui.spinBox_gain->setValue(gain_Int);
+	this->ui.horizontalSlider_darkLevel->setValue(darkLevel_Int);
+	this->ui.spinBox_darkLevel->setValue(darkLevel_Int);
+	int index14 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat_Str);
+	ui.comboBox_imageSaveFormat->setCurrentIndex(index14);
+	this->ui.lineEdit_imageSavePath->setText(imageSavePath_Str);
 
-////////////////////////////////ÇĞ»»Ò³Ãæ/////////////////////////////////////
+	////å…‰æºé»˜è®¤é…ç½®
+	int index15 = ui.comboBox_serialPortSelection->findText(serialPortSelection_Str);
+	ui.comboBox_serialPortSelection->setCurrentIndex(index15);
+	int index16 = ui.comboBox_baudRate->findText(baudRate_Str);
+	ui.comboBox_baudRate->setCurrentIndex(index16);
+	this->ui.lineEdit_delaySetting->setText(delaySetting_Str);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequence_Str);
+
+	////æ ·å“å°ç”µæœºé©±åŠ¨é»˜è®¤é…ç½®
+	int index17 = ui.comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection_Str);
+	ui.comboBox_stepperMotorPortSelection->setCurrentIndex(index17);
+	int index18 = ui.comboBox_stepperMotorSpeed->findText(stepperMotorSpeed_Str);
+	ui.comboBox_stepperMotorSpeed->setCurrentIndex(index18);
+	int index19 = ui.comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration_Str);
+	ui.comboBox_stepperMotorAcceleration->setCurrentIndex(index19);
+	int index20 = ui.comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration_Str);
+	ui.comboBox_stepperMotorDeceleration->setCurrentIndex(index20);
+	int index21 = ui.comboBox_stepperMotorResolution->findText(stepperMotorResolution_Str);
+	ui.comboBox_stepperMotorResolution->setCurrentIndex(index21);
+	int index22 = ui.comboBox_sampleRotationAngle->findText(sampleRotationAngle_Str);
+	ui.comboBox_sampleRotationAngle->setCurrentIndex(index22);
+
+
+	////æ»‘è½¨ç”µæœºé©±åŠ¨é»˜è®¤é…ç½®
+	int index23 = ui.comboBox_servoMotorPortSelection->findText(servoMotorPortSelection_Str);
+	ui.comboBox_servoMotorPortSelection->setCurrentIndex(index23);
+	int index24 = ui.comboBox_servoMotorSpeed->findText(servoMotorSpeed_Str);
+	ui.comboBox_servoMotorSpeed->setCurrentIndex(index24);
+	int index25 = ui.comboBox_servoMotorAcceleration->findText(servoMotorAcceleration_Str);
+	ui.comboBox_servoMotorAcceleration->setCurrentIndex(index25);
+	int index26 = ui.comboBox_servoMotorDeceleration->findText(servoMotorDeceleration_Str);
+	ui.comboBox_servoMotorDeceleration->setCurrentIndex(index26);
+	int index27 = ui.comboBox_servoMotorResolution->findText(servoMotorResolution_Str);
+	ui.comboBox_servoMotorResolution->setCurrentIndex(index27);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance_Str);
+}
+////////////////////////////////åˆ‡æ¢é¡µé¢/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement1
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šTurnToMeasurement1
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement1()
 {
+	_measureFlag = 1;
+	_displayFlag = 1;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);	
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement2
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToMeasurement2
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement2()
 {
+	_measureFlag = 2;
+	_displayFlag = 1;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToMeasurement3
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToMeasurement3
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToMeasurement3()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToModeling1
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToModeling1
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling1()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToModeling2
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToModeling2
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToModeling2()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Modeling);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToSettings
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToSettings
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToSettings()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Settings);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToTest
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToTest
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToTest()
 {
 	this->ui.stackedWidget->setCurrentWidget(this->ui.Test);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºTurnToPreCamera
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
+// å‡½æ•°ï¼šTurnToPreCamera
+// æè¿°ï¼šæ ¹æ®èœå•æ é€‰é¡¹åˆ‡æ¢ä¸»çª—å£
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToPreCamera()
 {
+	_displayFlag = 0;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.PreCamera);
 }
 
 
-////////////////////////////////²É¼¯Ò³Ãæ/////////////////////////////////////
+////////////////////////////////é‡‡é›†é¡µé¢/////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºStartMeasurement
-// ÃèÊö£º¿ªÊ¼²É¼¯
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_StartMeasurement_Pressed()
+// æè¿°ï¼šå¼€å§‹é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_StartMeasurement_Pressed()
 {
-	_displayFlag = 1;
 	_qMaterialName = this->ui.lineEdit_materialName->text();
 	if (_qMaterialName == "")
 	{
-		QMessageBox::critical(NULL, QStringLiteral("¾¯¸æ"), QStringLiteral("ÇëÊäÈë²ÄÖÊÃû³Æ"), QMessageBox::Ok);
+		QMessageBox::critical(NULL, QStringLiteral("è­¦å‘Š"), QStringLiteral("è¯·è¾“å…¥æè´¨åç§°"), QMessageBox::Ok);
 		return;
 	}
-	this->ui.lineEdit_materialName->setEnabled(false);
-	
-	//slideComm->SlideMoveIn();
-	//Sleep(10000);//µÈ´ı»¬¹ì¾ÍÎ»
-	CreateFolds("..\\imgs_measurement");
 
+	this->ui.lineEdit_materialName->setEnabled(false);
+	this->ui.pushButton_startMeasurement->setEnabled(false);
+	this->ui.lineEdit_materialName->setEnabled(false);
+	this->ui.pushButton_stopMeasurement->setEnabled(true);
+	this->ui.toolBox->setEnabled(false);
+
+	string save_measurement1 = ini->value("BRDFSystem-Configuration/save_brdfiso").toString().toStdString();
+	string save_measurement2 = ini->value("BRDFSystem-Configuration/save_brdfiniso").toString().toStdString();
+
+	//åˆ›å»ºä»¥æè´¨åç§°å‘½åçš„æ–‡ä»¶å¤¹
+	if (_measureFlag == 1)
+	{
+		CreateFolds(save_measurement1, _qMaterialName.toStdString());
+	}	
+	if (_measureFlag == 2)
+	{
+		CreateFolds(save_measurement2, _qMaterialName.toStdString());
+	}
+	emit sendingMaterialName(_qMaterialName);
+
+	//å¼€å¯å…‰æºä¸æ ·å“çº¿ç¨‹
+	if (!threadMeasurement->isRunning())
+	{
+		threadMeasurement->start();	
+	}
+	emit startMeasurement(_measureFlag);
+
+	//å¼€å¯ç›¸æœºçº¿ç¨‹
 	for (int i = 0; i < CAM_NUM; i++)
 	{
 		if (!threadCCD[i]->isRunning())
 		{
-			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer();
-			this->workerCCD[i]->_measurement = 1;
+			threadCCD[i]->start();		
 		}
-		//if (!threadMeasurement[i]->isRunning())
-		//{
-		//	threadMeasurement[i]->start();
-		//	connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-		//	emit startTimer();
-		//	this->workerCCD[i]->_measurement = 1;
-		//}
 	}
+	emit startTimer(_measureFlag);
 
+	//Sleep(500);//ç­‰å¾…ç›¸æœºåˆå§‹åŒ–
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºStopMeasurement
-// ÃèÊö£ºÍ£Ö¹²É¼¯
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_StopMeasurement_Pressed()
+// æè¿°ï¼šåœæ­¢é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::StopMeasurement()
+void MainWindow::PushButton_StopMeasurement_Pressed()
 {
 
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºChangeWindows
-// ÃèÊö£º¸ù¾İ²Ëµ¥À¸Ñ¡ÏîÇĞ»»Ö÷´°¿Ú
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼š
+// æè¿°ï¼šåœæ­¢é‡‡é›†
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::ConnectRGB()
+void MainWindow::PushButton_SampleReset_Pressed()
 {
-	//workerCCD[0]->cameraRGB_->Init();
-	//workerCCD[0]->cameraRGB_->OpenCamera(0);
-	//workerCCD[0]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//Í¼Ïñ¸ñÊ½ÀÏÎÊÌâ£¬5.9ÓÖ²È¿Ó
-	//if (!threadRGB[0]->isRunning())
-	//{
-	//	threadRGB[0]->start();
-	//}
+	this->workerMeasurement->sampleComm->Reset();
+	this->workerMeasurement->slideComm->MoveToX1();
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::SendingMat(int workerID, QImage mat)
+{
+	emit sendingMat(workerID, mat);
 }
 
-/////////////////////////////Ïà»úÔ¤´¦ÀíÒ³Ãæ/////////////////////////////////
+
+/////////////////////////////ç›¸æœºé¢„å¤„ç†é¡µé¢/////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_iniCCD_pressed
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_iniCCD_pressed
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_IniCCD_Pressed()
 {
-	ui.pushButton_captureContinuously->setEnabled(true);
-	ui.pushButton_finiCCD->setEnabled(true);
-
 	_displayFlag = 0;
-	CreateFolds("..\\imgs_calibration");
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
-		//workerCCD[i]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//Í¼Ïñ¸ñÊ½ÀÏÎÊÌâ£¬5.9ÓÖ²È¿Ó
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer();
 		}
 	}
+	emit startTimer(_measureFlag);
+
+	this->ui.pushButton_captureContinuously->setEnabled(true);
+	this->ui.pushButton_chess->setEnabled(true);
+	this->ui.pushButton_whiteBalance->setEnabled(true);
+	this->ui.pushButton_deadPixels->setEnabled(true);
+	this->ui.pushButton_blackLevel->setEnabled(true);
+	this->ui.pushButton_finiCCD->setEnabled(true);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºPushButton_captureContinuously_pressed
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šPushButton_captureContinuously_pressed
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_CaptureContinuously_Pressed()
 {
 	for (int i = 0; i < CAM_NUM; i++)
 	{
+		string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+		char cameraPath[16];
+		sprintf(cameraPath, "camera%d", i);
+		CreateFolds(capturePath, cameraPath);
 		this->workerCCD[i]->_capture = 1;
 	}
 }
-
-/////////////////////////////²Ûº¯ÊıµÄ¹«ÓÃº¯Êı/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºDisplayImage0
-// ÃèÊö£º
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Chess_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_WhiteBalance_Pressed()
+{
+	vector<Mat> mats;
+	Mat mat;
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		//string path = _capturePath + "camera" + to_string(i);
+		//mats = AVTCamera::ReadImages(path);
+		//mat = AVTCamera::AverageImage(mats);
+		_trans = AVTCamera::GetWhiteBalanceTrans(mats);
+	}
+	_transs.push_back(_trans);
+	//éœ€è¦å†™åœ¨é…ç½®æ–‡ä»¶é‡Œ
+	//...
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_DeadPixel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_BlackLevel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼š
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_FiniCCD_Pressed()
+{
+
+}
+
+
+/////////////////////////////æ§½å‡½æ•°çš„å…¬ç”¨å‡½æ•°/////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// å‡½æ•°ï¼šDisplayImage0
+// æè¿°ï¼š
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::DisplayImage(int workerID, QImage img)
@@ -329,298 +696,161 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 	if (_displayFlag == 0)
 	{
 		if (workerID == 0)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera0, img);
+			_mutex.unlock();
+		}
 		if (workerID == 1)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera1, img);
+			_mutex.unlock();
+		}
 		if (workerID == 2)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera2, img);
+			_mutex.unlock();
+		}
 		if (workerID == 3)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera3, img);
+			_mutex.unlock();
+		}
 		if (workerID == 4)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera4, img);
+			_mutex.unlock();
+		}
 		if (workerID == 5)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera5, img);
+			_mutex.unlock();
+		}
 		if (workerID == 6)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera6, img);
+			_mutex.unlock();
+		}
 		if (workerID == 7)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera7, img);
+			_mutex.unlock();
+		}
 		if (workerID == 8)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera8, img);
+			_mutex.unlock();
+		}
 	}
 	else if (_displayFlag == 1)
 	{
 		if (workerID == 0)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera0, img);
+			_mutex.unlock();
+		}
 		if (workerID == 1)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera1, img);
+			_mutex.unlock();
+		}
 		if (workerID == 2)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera2, img);
+			_mutex.unlock();
+		}
 		if (workerID == 3)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera3, img);
+			_mutex.unlock();
+		}
 		if (workerID == 4)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera4, img);
+			_mutex.unlock();
+		}
 		if (workerID == 5)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera5, img);
+			_mutex.unlock();
+		}
 		if (workerID == 6)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera6, img);
+			_mutex.unlock();
+		}
 		if (workerID == 7)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera7, img);
+			_mutex.unlock();
+		}
 		if (workerID == 8)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera8, img);
+			_mutex.unlock();
+		}
 	}
+	connect(this->workerCCD[workerID], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);
 }
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage1
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage1(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera1->width(), ui.label_precamera1->height());
-//			this->ui.label_precamera1->setPixmap(pic);
-//			this->ui.label_precamera1->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera1->width(), ui.label_camera1->height());
-//			this->ui.label_camera1->setPixmap(pic);
-//			this->ui.label_camera1->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage2
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage2(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera2->width(), ui.label_precamera2->height());
-//			this->ui.label_precamera2->setPixmap(pic);
-//			this->ui.label_precamera2->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera2->width(), ui.label_camera2->height());
-//			this->ui.label_camera2->setPixmap(pic);
-//			this->ui.label_camera2->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage3
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage3(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera3->width(), ui.label_precamera3->height());
-//			this->ui.label_precamera3->setPixmap(pic);
-//			this->ui.label_precamera3->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera3->width(), ui.label_camera3->height());
-//			this->ui.label_camera3->setPixmap(pic);
-//			this->ui.label_camera3->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage4
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage4(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera4->width(), ui.label_precamera4->height());
-//			this->ui.label_precamera4->setPixmap(pic);
-//			this->ui.label_precamera4->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera4->width(), ui.label_camera4->height());
-//			this->ui.label_camera4->setPixmap(pic);
-//			this->ui.label_camera4->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage5
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage5(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera5->width(), ui.label_precamera5->height());
-//			this->ui.label_precamera5->setPixmap(pic);
-//			this->ui.label_precamera5->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera5->width(), ui.label_camera5->height());
-//			this->ui.label_camera5->setPixmap(pic);
-//			this->ui.label_camera5->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage6
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage6(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera6->width(), ui.label_precamera6->height());
-//			this->ui.label_precamera6->setPixmap(pic);
-//			this->ui.label_precamera6->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera6->width(), ui.label_camera6->height());
-//			this->ui.label_camera6->setPixmap(pic);
-//			this->ui.label_camera6->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage7
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage7(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera7->width(), ui.label_precamera7->height());
-//			this->ui.label_precamera7->setPixmap(pic);
-//			this->ui.label_precamera7->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera7->width(), ui.label_camera7->height());
-//			this->ui.label_camera7->setPixmap(pic);
-//			this->ui.label_camera7->setScaledContents(true);
-//		}
-//	}
-//}
-//////////////////////////////////////////////////////////////////////////////
-//// º¯Êı£ºDisplayImage8
-//////////////////////////////////////////////////////////////////////////////
-//void MainWindow::DisplayImage8(QImage img)
-//{
-//	if (_displayFlag == 0)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_precamera8->width(), ui.label_precamera8->height());
-//			this->ui.label_precamera8->setPixmap(pic);
-//			this->ui.label_precamera8->setScaledContents(true);
-//		}
-//	}
-//	else if (_displayFlag == 1)
-//	{
-//		if (!img.isNull())
-//		{
-//			QPixmap pic = QPixmap::fromImage(img);
-//			pic = pic.scaled(ui.label_camera8->width(), ui.label_camera8->height());
-//			this->ui.label_camera8->setPixmap(pic);
-//			this->ui.label_camera8->setScaledContents(true);
-//		}
-//	}
-//}
 
-////////////////////////////////////Ë½ÓĞº¯Êı////////////////////////////////////////
+////////////////////////////////////ç§æœ‰å‡½æ•°////////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºCreateFolds
-// ÃèÊö£ºÔÚÖ¸¶¨Ä¿Â¼ÏÂ´´½¨Ïà»ú¶ÔÓ¦ÎÄ¼ş¼Ğ
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šCreateFolds
+// æè¿°ï¼šåœ¨æŒ‡å®šç›®å½•ä¸‹åˆ›å»ºç›¸æœºå¯¹åº”æ–‡ä»¶å¤¹
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::CreateFolds(string root)
+void MainWindow::CreateFolds(string root, string fileName)
 {
-	for (int i = 0; i < CAM_NUM; i++)
+	///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
+	WCHAR wszStr[256];
+	memset(wszStr, 0, sizeof(wszStr));
+	MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
+		sizeof(wszStr) / sizeof(wszStr[0]));
+
+	if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //åˆ¤æ–­è·¯å¾„æ˜¯æ–‡ä»¶è¿˜æ˜¯ç›®å½•
 	{
-		///////Unicode×Ö·û¼¯ÎÊÌâ/////////
-		WCHAR wszStr[256];
-		memset(wszStr, 0, sizeof(wszStr));
-		MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
-			sizeof(wszStr) / sizeof(wszStr[0]));
+		string newFolderPath = root + fileName;
+		///////Unicodeå­—ç¬¦é›†é—®é¢˜/////////
+		WCHAR wszNewStr[256];
+		memset(wszNewStr, 0, sizeof(wszNewStr));
+		MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
+			sizeof(wszNewStr) / sizeof(wszNewStr[0]));
 
-		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //ÅĞ¶ÏÂ·¾¶ÊÇÎÄ¼ş»¹ÊÇÄ¿Â¼
+		if (!CreateDirectory(wszNewStr, NULL))
 		{
-			string newFolderPath = root + "\\camera" + to_string(i);
-			///////Unicode×Ö·û¼¯ÎÊÌâ/////////
-			WCHAR wszNewStr[256];
-			memset(wszNewStr, 0, sizeof(wszNewStr));
-			MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
-				sizeof(wszNewStr) / sizeof(wszNewStr[0]));
-
-			if (!CreateDirectory(wszNewStr, NULL))
-			{
-				cout << "ÎÄ¼ş¼ĞÒÑ´æÔÚ£¡" << endl;
-			}
+			cout << "æ–‡ä»¶å¤¹å·²å­˜åœ¨ï¼" << endl;
 		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºShowImgOnQLabel
-// ÃèÊö£ºÔÚÖ¸¶¨QlabelÉÏÏÔÊ¾²É¼¯Í¼Ïñ
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šShowImgOnQLabel
+// æè¿°ï¼šåœ¨æŒ‡å®šQlabelä¸Šæ˜¾ç¤ºé‡‡é›†å›¾åƒ
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)

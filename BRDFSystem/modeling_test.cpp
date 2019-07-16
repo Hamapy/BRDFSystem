@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-int test_modeling()
+int main3()
 {
 	
 	clock_t start, finish;

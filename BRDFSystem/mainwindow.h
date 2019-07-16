@@ -2,23 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets/QMainWindow>
-#include <QThread>
 #include <QDebug>
-//#include <QTimerEvent>
 #include <QFileDialog>
-#include <QSettings>
 #include <time.h>
 #include <QMessageBox>
 #include "ui_mainwindow.h"
-#include "slideComm.h"
-#include "sampleComm.h"
-#include "ccd.h"
+#include "workerMeasurement.h"
 #include "workerCCD.h"
-//#include "configuration.h"
+#include "config.h"
 
-#define CAM_NUM 2  //相机数量
-
-////////////////////////////界面主线程类声明////////////////////////////
+//class workerCCD;//由于要用到worker类的变量，故此作前向声明
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -28,7 +21,7 @@ public:
 	virtual ~MainWindow();
 
 private slots:
-	//页面切换栏
+	
 	void TurnToMeasurement1();
 	void TurnToMeasurement2();
 	void TurnToMeasurement3();
@@ -38,52 +31,104 @@ private slots:
 	void TurnToTest();
 	void TurnToPreCamera();
 	
-	//配置文件
+	
 	void PushButton_Save_Pressed();
 	void PushButton_Defaults_Pressed();
 
-	//材质采集页面
+	
 	void PushButton_StartMeasurement_Pressed();
-	void StopMeasurement();
-	void ConnectRGB();
+	void PushButton_StopMeasurement_Pressed();
+	void PushButton_SampleReset_Pressed();
+	void SendingMat(int workerID, QImage mat);
 
-	//相机预处理页面
+	
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
+	void PushButton_Chess_Pressed();
+	void PushButton_WhiteBalance_Pressed();
+	void PushButton_DeadPixel_Pressed();
+	void PushButton_BlackLevel_Pressed();
+	void PushButton_FiniCCD_Pressed();
 
-
-	//槽函数的公用函数
+	
+	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
-	//void DisplayImage1(QImage img);
-	//void DisplayImage2(QImage img);
-	//void DisplayImage3(QImage img);
-	//void DisplayImage4(QImage img);
-	//void DisplayImage5(QImage img);
-	//void DisplayImage6(QImage img);
-	//void DisplayImage7(QImage img);
-	//void DisplayImage8(QImage img);
 
 private:
 	Ui::MainWindowClass ui;
 
-	SlideComm*					slideComm;
-	SampleComm*					sampleComm;
+	
+	WorkerMeasurement*			workerMeasurement;
+	QThread*					threadMeasurement;
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
-	//WorkerMeasurement*			workerMeasurement[9];
-	//QThread*					threadMeasurement[9];
 	VimbaSystem&				_system;
-	QSettings					*ini;
-	//VimbaSystem&				_system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统
-	//为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
-	QString _qMaterialName;
-	bool _displayFlag;
+	QString						_qMaterialName;
+	bool						_displayFlag;
+	int							_measureFlag;
+	//QPixmap*					_pic;
+	QMutex						_mutex;
+	//string						_capturePath = "..\\imgs_calibration";
+	vector<float>				_trans;
+	vector<vector<float>>		_transs;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
-	void CreateFolds(string root);
+	void CreateFolds(string root, string fileName);
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
+	
+	int gain = 0;
+	int gain_Int = 0;
+	QString gain_Str = "";
+	int darkLevel = 0;
+	int darkLevel_Int = 0;
+	QString darkLevel_Str = "";
+	QString imageSaveFormat = "";
+	QString imageSaveFormat_Str = "";
+	QString imageSavePath = "";
+	QString imageSavePath_Str = "";
+	QString serialPortSelection = "";
+	QString serialPortSelection_Str = "";
+	QString baudRate = "";
+	QString baudRate_Str = "";
+	int delaySetting = 0;
+	QString delaySetting_Str = "";
+	int lightingSequence = 0;
+	QString lightingSequence_Str = "";
+	QString stepperMotorPortSelection = "";
+	QString stepperMotorPortSelection_Str = "";
+	int stepperMotorSpeed_Int = 0;
+	QString stepperMotorSpeed = "";
+	QString stepperMotorSpeed_Str = "";
+	int stepperMotorAcceleration_Int = 0;
+	QString stepperMotorAcceleration = "";
+	QString stepperMotorAcceleration_Str = "";
+	int stepperMotorDeceleration_Int = 0;
+	QString stepperMotorDeceleration = "";
+	QString stepperMotorDeceleration_Str = "";
+	int stepperMotorResolution_Int = 0;
+	QString stepperMotorResolution = "";
+	QString stepperMotorResolution_Str = "";
+	QString sampleRotationAngle = "";
+	QString sampleRotationAngle_Str = "";
+	QString servoMotorPortSelection = "";
+	QString servoMotorPortSelection_Str = "";
+	QString servoMotorSpeed = "";
+	QString servoMotorSpeed_Str = "";
+	QString servoMotorAcceleration = "";
+	QString servoMotorAcceleration_Str = "";
+	QString servoMotorDeceleration = "";
+	QString servoMotorDeceleration_Str = "";
+	QString servoMotorResolution = "";
+	QString servoMotorResolution_Str = "";
+	int slideTableMovingDistance = 0;
+	QString slideTableMovingDistance_Str = "";
+
 signals:
-	void startTimer();
-	//void startMeasureMent();
+	void startTimer(int measureFlag);
+	void startMeasurement(int measureFlag);
+	void sendingMaterialName(QString materialName);
+	void sendingMat(int workerID, QImage mat);
+
 };
 #endif

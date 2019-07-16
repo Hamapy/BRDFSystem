@@ -2,11 +2,14 @@
 /** 线程退出标志 */
 bool Illuminant::_bExit = false;
 atomic<bool> Illuminant::_flag = 1;
+atomic<int>  Illuminant::_num = 0;
 int Illuminant::_steadyTime = 10;
-/** 当串口无数据时,sleep至下次查询间隔的时间,单位:秒 */
+/** 当串口无数据时,sleep至下次查询间隔的时间,单位:毫秒 */
 const UINT SLEEP_TIME_INTERVAL = 50;
-Illuminant::Illuminant(UINT portNo):_portNo(portNo)
+Illuminant::Illuminant()
 {
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_portNo = ini->value("BRDFSystem-Configuration/serialPortSelection").toInt();
 	_hComm = INVALID_HANDLE_VALUE;
 	_hListenThread = INVALID_HANDLE_VALUE;
 	InitializeCriticalSection(&_csCommunicationSync);
@@ -30,16 +33,18 @@ Illuminant::~Illuminant()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool Illuminant::OpenCOM()
+bool Illuminant::OpenCOM(UINT portNo)
 {
-	UINT portNo = _portNo;
+	_portNo = portNo;
 	EnterCriticalSection(&_csCommunicationSync);
 	char szPort[50];
-	sprintf_s(szPort, "COM%d", portNo);
-	//字符集问题
+	sprintf_s(szPort, "COM%d", _portNo);
+
+	///////Unicode字符集问题/////////
 	WCHAR wszPort[256];
 	memset(wszPort, 0, sizeof(wszPort));
-	MultiByteToWideChar(CP_ACP, 0, szPort, strlen(szPort) + 1, wszPort, sizeof(wszPort) / sizeof(wszPort[0]));//char* 转换为 LPCWSTR
+	MultiByteToWideChar(CP_ACP, 0, szPort, strlen(szPort) + 1, wszPort,
+		sizeof(wszPort) / sizeof(wszPort[0]));
 
 	_hComm = CreateFile(wszPort,
 		GENERIC_READ | GENERIC_WRITE,
@@ -67,9 +72,9 @@ bool Illuminant::OpenCOM()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool Illuminant::InitCOM()
+bool Illuminant::InitCOM(UINT portNo)
 {
-	if (!OpenCOM())
+	if (!OpenCOM(portNo))
 	{
 		return false;
 	}
@@ -182,6 +187,23 @@ bool Illuminant::LightenById(UINT id)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
+// 函数：LightenNext
+// 描述：用定时器来点亮灯顺序
+// 输入：
+// 输出：
+// 返回：是否成功完成操作
+// 备注：在这个函数里面定义了灯的顺序
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void Illuminant::LightNext(int num)
+{
+	UINT IdOrder[] = {1,2,3,4,5,6,7,8,9};//这个数组定义的是灯点亮的顺序,按照需要点亮顺序来
+	EnterCriticalSection(&_csCommunicationSync);
+	LightenById(IdOrder[_num]);
+	Start();
+	LeaveCriticalSection(&_csCommunicationSync);
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：LightenByOrder
 // 描述：按顺序亮灯
 // 输入：num 输入的顺序亮灯数量
@@ -196,7 +218,7 @@ bool Illuminant::LightenByOrder(int num)
 	temp[0] = 0x05;
 	temp[1] = 0x01;//机位号
 	temp[2] = 0xBb;
-	temp[3] = (char)num;//光源的数量
+	temp[3] = (unsigned char)num;//光源的数量
 	temp[4] = Xor(temp + 1, 3);//光源字节的校验值
 	if (!WriteData(temp, 5))
 	{
@@ -218,8 +240,8 @@ bool Illuminant::LightenByOrder(int num)
 ////////////////////////////////////////////////////////////////////////////
 bool Illuminant::LightenByCustomOrder(unsigned char* Order, int length)
 {
-	unsigned char *temp = new unsigned char[13];
-	temp[0] = (char)(length+4);
+	unsigned char *temp = new unsigned char[length+4];
+	temp[0] = (unsigned char)(length+4);
 	temp[1] = 0x01;//机位号
 	temp[2] = 0xFb;
 	memcpy(temp + 3, Order, length);
@@ -255,6 +277,7 @@ bool Illuminant::Suspend()
 	{
 		return false;
 	}
+	Sleep(2 * 100);
 	delete[]temp1;
 	return true;
 }
@@ -470,28 +493,29 @@ UINT WINAPI Illuminant::ListenThread(void* pParam)
 			//++i;
 			//continue;
 		}
-		else
+		else if(BytesInQue>3)
 		{
 			//cout << " ||" << BytesInQue << "||  " << endl;;
 			times[i] = clock();
 			pIlluminant->Clear();
 			Sleep(200);
-			if (i!=0)
+			if (i>0)
 			{
 				clock_t difference = times[i] - times[i - 1];
 				double interval = (double)(difference / CLOCKS_PER_SEC);
 				cout << interval << endl;
-				if (!(interval <= _steadyTime * 0.2 && interval >= _steadyTime * 0.05))
+				if (!(interval <= _steadyTime * 2 && interval >= _steadyTime * 0.5))
 				{
 					//cout << "第" << i << "个亮灯出错" << endl;
 					_flag = 0;
-					i = 0;
-					pIlluminant->Suspend();
+					i = i-1;
+					//pIlluminant->Suspend();
 				}
 			}
 			++i;
+			++_num;//用于判断点亮了num个灯
 		}
-		if (i == 9)//这个是和所需要点亮光源的数量相等
+		if (i == 196)//这个是和所需要点亮光源的数量相等
 			return 0;
 	}
 	return 0;

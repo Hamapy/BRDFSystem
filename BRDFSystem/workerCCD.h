@@ -7,8 +7,9 @@
 #include <QImage>
 #include <QTimerEvent>
 #include <QThread>
+#include <QMutex>
 #include "ccd.h"
-#include "workerMeasurement.h"
+#include "config.h"
 
 class WorkerCCD : public QObject
 {
@@ -23,29 +24,40 @@ public:
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 
 private slots:
-	void StartTimer();
+	void StartTimer(int measureFlag);
+	//void SetExposureTime();
+	void CloseWorker();
+	void Grab(int sID, int iID);
+	void GetMaterialName(QString materialName);
 
 private:
-	WorkerMeasurement*		workerMeasurement;
-	QThread*				threadMeasurement;
-
 	VimbaSystem&			_system;
 	int						_workerID;
-	AVTCamera				*_cameraAVT;
+	AVTCamera*				cameraAVT;
 	QImage					_img;
 	Mat						_mat;
+	Mat						_matWB;
 	bool					_capture;
-	bool					_measurement;
-	//int framerate = 0;
+	string					_materialName;
 	int						_timerId;
 	unsigned char*			_pImageFrame;
 	int						_height;
 	int						_width;
+	//int						_saveName;
+	float					_exposureTime;
+	string					_imageSavingPath1 = "..\\imgs_measurement1\\";
+	string					_imageSavingPath2 = "..\\imgs_measurement2\\";
+	string					_imageSavingPath3 = "..\\imgs_calibration\\";
+	int						_measureFlag;//主界面传入的采集类型标记
+	QMutex					_mutex;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
 signals:
-	void sendingMat(int workerID, Mat mat);
+	//void next();
+	//void sendingMat(int workerID, /*Mat*/QImage mat);
 	void sendingImg(int workerID, QImage img);
-	void startMeasurement();
+	void grabDone(int workerID);
+	//void startMeasurement(int measureFlag);
 };
 #endif
 

@@ -3,12 +3,14 @@
 /////////////////////////////////////构造函数//////////////////////////////////////////
 SlideComm::SlideComm()
 {
-	m_accelerate = 0;
-	m_decelerate = 0;
-	m_resolution = 0;
-	m_velocity = 0;
-	m_distance = 0;
-	m_port = 0;
+	//ini = new QSettings("./config.ini", s::IniFormat);//读取配置文件
+	_port = ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
+	_velocity = ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
+	_accelerate = ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
+	_decelerate = ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
+	_resolution = ini->value("SWIR-Configuration/servoMotorResolution").toInt();
+	_distance = 0;
+
 }
 
 SlideComm::~SlideComm()
@@ -30,22 +32,18 @@ SlideComm::~SlideComm()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, int resolution)
+bool SlideComm::Init(int port)
 {
 	bool ret = true;
 
-	m_accelerate = accelerate;
-	m_velocity = velocity;
-	m_decelerate = decelerate;
-	m_resolution = resolution;
-	m_port = port;
+	_port = port;
 
 	// 打开串口
 	if (IsOpen())
 	{
 		Close();
 	}
-	if (!Open(m_port))
+	if (!Open(_port))
 	{
 		return false;
 	}
@@ -56,19 +54,20 @@ bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, 
 	{
 		ClearInputBuffer();
 		//sprintf(cmd, "PM2\rSI3\rCM21\rSS%s\r", SERVO_FEEDBACK);
-		sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
+		//sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
+		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", SERVO_FEEDBACK);
 		Write(cmd);  // 设置电机为计算机控制
-		//ret = IsFinished(get_feedback_timeout());
+		ret = IsFinished(10000);
 	}
 
 	if (ret)
 	{
 		//设置伺服电机参数
 		ClearInputBuffer();
-		sprintf(cmd, "AC%d\rVE%.2f\rDE%d\rEG%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, SERVO_FEEDBACK);
+		sprintf(cmd, "AC%d\rVE%.2f\rDE%d\rEG%d\rSS%s\r", _accelerate, _velocity, _decelerate, _resolution, SERVO_FEEDBACK);
 		Write(cmd);
 
-		ret = IsFinished(get_feedback_timeout());
+		ret = IsFinished(10000);
 	}
 
 	return ret;
@@ -76,50 +75,204 @@ bool SlideComm::Init(int port, double velocity, int accelerate, int decelerate, 
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Init
 // 描述：电机初始化
-// 输入:    port:     电机需要连接的串口
-//          velocity:     电机速度
-//          accelerate:   电机加速度
-//          decelerate:   电机减速度
-//          resolution：  电机分辨率  
+// 输入: port:     电机需要连接的串口
 // 输出：
 // 返回：是否成功完成操作
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool SlideComm::Init(int port)
+bool SlideComm::InitA()
 {
-	//bool ret = true;
+	bool ret = false;
+	char cmd[STRING_LEN];
 
 	// 打开串口
 	if (IsOpen())
+	{
 		Close();
-	if (Open(m_port))
-		return true;
+	}
+	if (!Open(_port))
+	{
+		ret = false;
+	}
 	else
-		return false;
+		ret = true;
 
+	//以下注释加了就有问题
 	/*
-	char cmd[STRING_LEN];
-
 	if (ret)
 	{
 		ClearInputBuffer();
-		sprintf(cmd, "PM2\rSI3\rCM21\rSS%s\r", SERVO_FEEDBACK);
+		//sprintf(cmd, "PM2\rSI3\rCM21\rSS%s\r", SERVO_FEEDBACK);
+		//sprintf_s(cmd, "PM%d\r", 2);//Power-up Mode以Q/SCL模式上电
+		sprintf(cmd, "CHR\rPM2\rSA\rSS%s\r", SERVO_FEEDBACK);
 		Write(cmd);  // 设置电机为计算机控制
-		ret = IsFinished(get_feedback_timeout());
+		ret = IsFinished(10000);
 	}
 
 	if (ret)
 	{
 		//设置伺服电机参数
 		ClearInputBuffer();
-		sprintf(cmd, "AC%d\rVE%.2f\rDE%d\rEG%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, SERVO_FEEDBACK);
+		sprintf(cmd, "AC%d\rVE%.2f\rDE%d\rEG%d\rSS%s\r", _accelerate, _velocity, _decelerate, _resolution, SERVO_FEEDBACK);
 		Write(cmd);
 
-		ret = IsFinished(get_feedback_timeout());
+		ret = IsFinished(10000);
 	}
 	*/
-	//return ret;
+
+	return ret;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：MoveToX1
+// 描述：
+// 输入: 
+// 输出：
+// 返回：是否成功完成操作
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool SlideComm::MoveToX1(bool Wait_feedback/* = true*/)
+{
+	char cmd[STRING_LEN];
+	bool ret = false;
+
+	// 初始化设备
+	ret = InitA();
+
+	if (ret)
+	{
+		ClearInputBuffer();
+		/*
+		STD DI 移动一定距离后停止
+		FS1L 当输入1的信号为LOW时停止
+		FS1R 当输入1电位信号变化时停止
+		SS 发送字符串
+		*/
+		//sprintf(cmd, "STD\rDI%d\rFS1R\rSS%s\r", 10000, SERVO_FEEDBACK);
+		sprintf(cmd, "STD\rDI%d\rFS1L\rSS%s\r", 10000, SERVO_FEEDBACK);
+		//就位前先归位时的限位条件
+		//sprintf(cmd, "STD\rDI%d\rFS2R\rSS%s\r", 10000, SERVO_FEEDBACK);
+		Write(cmd);
+
+		if (Wait_feedback)
+		{
+			ret = IsFinished(10000);
+		}
+		else
+		{
+			// 在发下一个指令前稍微等一下
+			Wait(200);
+		}
+	}
+
+	// 终止设备
+	Fini();
+
+	return ret;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：MoveToX2
+// 描述：
+// 输入：
+// 输出：
+// 返回：是否成功完成操作
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool SlideComm::MoveToX2(bool Wait_feedback/* = true*/)
+{
+	char cmd[STRING_LEN];
+	bool ret = false;
+
+	// 设备初始化
+	ret = InitA();
+	//如果已经处于光电开关处，先调整一下位置
+	if (ret)
+	{
+		ClearInputBuffer();
+		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", 100000, SERVO_FEEDBACK);
+		Write(cmd);
+
+		if (Wait_feedback)
+		{
+			ret = IsFinished(10000);
+		}
+		else
+		{
+			// 在发下一个指令前稍微等一下
+			Wait(200);
+		}
+	}
+
+	// 设备初始化
+	ret = InitA();
+	if (ret)
+	{
+		ClearInputBuffer();
+		sprintf(cmd, "STD\rDI%d\rFS2R\rSS%s\r", -10000, SERVO_FEEDBACK);
+		//sprintf(cmd, "STD\rDI%d\rFS2L\rSS%s\r", -10000, SERVO_FEEDBACK);
+		Write(cmd);
+
+		if (Wait_feedback)
+		{
+			ret = IsFinished(10000);
+		}
+		else
+		{
+			// 在发下一个指令前稍微等一下
+			Wait(200);
+		}
+	}
+
+	// 终止设备
+	Fini();
+
+	return ret;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：MoveTest
+// 描述：
+// 输入：
+// 输出：
+// 返回：是否成功完成操作
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool SlideComm::MoveTest(double distance, bool Wait_feedback/* = true*/)
+{
+	char cmd[STRING_LEN];
+	bool ret = false;
+	double mDistance; //需要移动距离
+	int mPulses; //需要转动的脉冲步数SI
+	int rlr = _resolution / 2; //“R”寄存器匹配伺服驱动器中的EG设置
+	double distancePerRev = 10;//该值有待修正
+
+	mPulses = static_cast<int> (distance * rlr * SERVO_REDUCTION / distancePerRev);
+
+	// 初始化设备
+	ret = InitA();
+
+	if (ret)
+	{
+		ClearInputBuffer();
+		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", mPulses, SERVO_FEEDBACK);
+		Write(cmd);
+
+		if (Wait_feedback)
+		{
+			ret = IsFinished(10000);
+		}
+		else
+		{
+			Wait(200);
+		}
+	}
+
+	// 终止设备
+	Fini();
+
+	return ret;
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Fini
@@ -151,11 +304,11 @@ void SlideComm::Fini()
 // 返回：是否成功完成操作
 // 备注：
 // Modified by 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 bool SlideComm::IsFinished(int timeout)
 {
-#define READ_WAITTIME    20
-#define WAITDELAY        200
+	#define READ_WAITTIME    20
+	#define WAITDELAY        200
 
 	bool ret = false;
 	char rdstr[STRING_LEN];
@@ -165,9 +318,7 @@ bool SlideComm::IsFinished(int timeout)
 	while (1)
 	{
 		Wait(WAITDELAY);//避免串口繁忙,等待200ms
-
 		Read(rdstr, STRING_LEN, READ_WAITTIME);
-
 		if (strstr(rdstr, SERVO_FEEDBACK))
 		{
 			ret = true;
@@ -183,8 +334,8 @@ bool SlideComm::IsFinished(int timeout)
 
 	return ret;
 
-#undef READ_WAITTIME
-#undef WAITDELAY
+	#undef READ_WAITTIME
+	#undef WAITDELAY
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,418 +356,8 @@ void SlideComm::Wait(int millisec)
 	}
 }
 
-//**********************************************************************//
-// 函数:    servo_move_sensor_home_cw();
-// 描述:    顺时针转动电机回到光电开关位置
-//**********************************************************************//
-bool SlideComm::servo_move_sensor_home_cw(int com_port, bool Wait_feedback/* = true*/)
-{
-	char cmd[STRING_LEN];
-	bool ret = false;
-
-	// 初始化设备
-	m_port = com_port;
-	ret = Init(m_port);
-
-	if (ret)
-	{
-		ClearInputBuffer();
-		/*
-		STD 立刻停止
-		DI 距离位置
-		FS1L 当输入1的传感信号为LOW时，减速停止
-		SS 发送字符串
-		*/
-		sprintf(cmd, "STD\rDI%d\rFS1L\rSS%s\r", 1000, SERVO_FEEDBACK);
-		Write(cmd);
-
-		if (Wait_feedback)
-		{
-			ret = IsFinished(get_feedback_timeout());
-		}
-		else
-		{
-			// 在发下一个指令前稍微等一下
-			Wait(200);
-		}
-	}
-
-	// 返回至光电开关位置
-	if (ret)
-	{
-		ClearInputBuffer();
-		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", -1000, SERVO_FEEDBACK);
-		Write(cmd);
-
-		if (Wait_feedback)
-		{
-			ret = IsFinished(get_feedback_timeout());
-		}
-		else
-		{
-			// 在发下一个指令前稍微等一下
-			Wait(200);
-		}
-	}
-
-	// 记录位置
-	if (ret)
-	{
-		m_distance = 0;
-	}
-
-	// 终止化设备
-	Fini();
-
-	return ret;
-}
 
 
-//**********************************************************************//
-// 函数:    servo_move_sensor_home_ccw();
-// 描述:    逆时针转动电机回到光电开关位置
-//**********************************************************************//
-bool SlideComm::servo_move_sensor_home_ccw(int com_port, bool Wait_feedback/* = true*/)
-{
-	char cmd[STRING_LEN];
-	bool ret = false;
 
-	// 设备初始化
-	m_port = com_port;
-	ret = Init(m_port);
-
-	if (ret)
-	{
-		ClearInputBuffer();
-		sprintf(cmd, "STD\rDI%d\rFS2L\rSS%s\r", -1000, SERVO_FEEDBACK);
-		Write(cmd);
-
-		if (Wait_feedback)
-		{
-			ret = IsFinished(get_feedback_timeout());
-		}
-		else
-		{
-			// 在发下一个指令前稍微等一下
-			Wait(200);
-		}
-	}
-
-	// 返回至光电开关位置
-	if (ret)
-	{
-		ClearInputBuffer();
-		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", 1000, SERVO_FEEDBACK);
-		Write(cmd);
-
-		if (Wait_feedback)
-		{
-			ret = IsFinished(get_feedback_timeout());
-		}
-		else
-		{
-			// 在发下一个指令前稍微等一下
-			Wait(200);
-		}
-	}
-
-	if (ret)
-	{
-		// 记录位置
-		m_distance = MOVE_DISTANCE;
-	}
-
-	// 终止化设备
-	Fini();
-
-	return ret;
-}
-
-
-////// 函数:    servo_move_cw();
-////// 描述:    顺时针转动电机，降
-////
-////bool SlideComm::servo_move_cw(int com_port, bool Wait_feedback/* = true*/)
-////{
-////	char cmd[STRING_LEN];
-////	bool ret = false;
-////
-////	// 初始化设备
-////	m_port = com_port;
-////	ret = init_devices(m_port);
-////
-////	if (ret)
-////	{
-////		ClearInputBuffer();
-////		sprintf(cmd, "STD\rDI%d\rFS1L\r", 1000);
-////
-////		m_timestart = GetTickCount();   //记录开始转动时间
-////
-////		Write(cmd);
-////
-////		// 在发下一个指令前稍微等一下
-////		Wait(200);
-////	}
-////
-////	// 终止化设备
-////	Fini();
-////
-////	return ret;
-////}
-////
-////
-////
-////// 函数:    servo_move_ccw();
-////// 描述:    逆时针转动电机，升
-////bool SlideComm::servo_move_ccw(int com_port, bool Wait_feedback/* = true*/)
-////{
-////	char cmd[STRING_LEN];
-////	bool ret = false;
-////
-////	// 设备初始化
-////	m_port = com_port;
-////	ret = init_devices(m_port);
-////
-////	if (ret)
-////	{
-////		ClearInputBuffer();
-////		sprintf(cmd, "STD\rDI%d\rFS2L\rSS%s\r", -1000, SERVO_FEEDBACK);
-////
-////		m_timestart = GetTickCount(); //记录开始转动时间
-////
-////		Write(cmd);
-////
-////		// 在发下一个指令前稍微等一下
-////		Wait(200);
-////	}
-////
-////	// 终止化设备
-////	Fini();
-////
-////	return ret;
-////}
-//
-//
-////**********************************************************************//
-//// 函数:   servo_stop_and_update_distance_cw();
-//// 描述:   停止电机顺时针转动，并更新位置
-////**********************************************************************//
-//bool SlideComm::servo_stop_and_update_distance_cw(double distance_per_rev, int com_port, bool Wait_feedback/* = true*/)
-//{
-//	char cmd[STRING_LEN];
-//	bool ret = false;
-//	int move_time = 0;
-//	double move_distance;
-//
-//	m_port = com_port;
-//	//ret = open_port();
-//
-//	if (ret)
-//	{
-//		ClearInputBuffer();
-//		sprintf(cmd, "STD\rSS%s\r", SERVO_FEEDBACK);
-//		Write(cmd);
-//
-//		m_timestop = GetTickCount();  //记录停止时间
-//
-//		if (Wait_feedback)
-//		{
-//			ret = IsFinished(get_feedback_timeout());
-//		}
-//		else
-//		{
-//			// 在发下一个指令前稍微等一下
-//			Wait(200);
-//		}
-//	}
-//
-//	//更新位置
-//	move_time = m_timestop - m_timestart;
-//	move_distance = (double)(move_time * distance_per_rev * SERVO_VELOCITY / SERVO_REDUCTION / 1000);
-//	m_distance = m_distance - move_distance;
-//
-//	// 判断是否已超过光电开关位置
-//	if (m_distance < 0)
-//	{
-//		// 返回至光电开关位置
-//		ClearInputBuffer();
-//		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", -1000, SERVO_FEEDBACK);
-//		Write(cmd);
-//
-//		if (Wait_feedback)
-//		{
-//			ret = IsFinished(get_feedback_timeout());
-//		}
-//		else
-//		{
-//			// 在发下一个指令前稍微等一下
-//			Wait(200);
-//		}
-//
-//		if (ret)
-//		{
-//			// 位置置为0
-//			m_distance = 0;
-//		}
-//	}
-//
-//	// 终止化设备
-//	Fini();
-//
-//	return ret;
-//}
-//
-////**********************************************************************//
-//// 函数:   servo_stop_and_update_distance_ccw();
-//// 描述:   停止电机逆时针转动，并更新位置
-////**********************************************************************//
-//bool SlideComm::servo_stop_and_update_distance_ccw(double distance_per_rev, int com_port, bool Wait_feedback/* = true*/)
-//{
-//	char cmd[STRING_LEN];
-//	bool ret = false;
-//	int move_time = 0;
-//	double move_distance;
-//
-//	m_port = com_port;
-//	//ret = open_port();
-//
-//	if (ret)
-//	{
-//		ClearInputBuffer();
-//		sprintf(cmd, "STD\rSS%s\r", SERVO_FEEDBACK);
-//		Write(cmd);
-//
-//		m_timestop = GetTickCount();  //记录停止时间
-//
-//		if (Wait_feedback)
-//		{
-//			ret = IsFinished(get_feedback_timeout());
-//		}
-//		else
-//		{
-//			// 在发下一个指令前稍微等一下
-//			Wait(200);
-//		}
-//	}
-//
-//	//更新位置
-//	move_time = m_timestop - m_timestart;
-//	move_distance = (double)(move_time * distance_per_rev * SERVO_VELOCITY / SERVO_REDUCTION / 1000);
-//	m_distance = m_distance + move_distance;
-//
-//	// 判断是否已超过光电开关位置
-//	if (m_distance > MOVE_DISTANCE)
-//	{
-//		// 返回至光电开关位置
-//		ClearInputBuffer();
-//		sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", 1000, SERVO_FEEDBACK);
-//		Write(cmd);
-//
-//		if (Wait_feedback)
-//		{
-//			ret = IsFinished(get_feedback_timeout());
-//		}
-//		else
-//		{
-//			// 在发下一个指令前稍微等一下
-//			Wait(200);
-//		}
-//
-//		if (ret)
-//		{
-//			// 位置置为最高
-//			m_distance = MOVE_DISTANCE;
-//		}
-//	}
-//
-//	// 终止化设备
-//	Fini();
-//
-//	return ret;
-//}
-////**********************************************************************//
-//// 函数:    servo_move_distance();
-//// 输入:		distance_per_rev，为同步轮转一圈滑台升降的高度，义乌义正为10cm深圳久宸为12.5cm
-//// 描述:    移动滑台一定距离
-////**********************************************************************//
-//bool SlideComm::servo_move_distance(double distance, double distance_per_rev, int com_port, bool Wait_feedback/* = true*/)
-//{
-//	char cmd[STRING_LEN];
-//	bool ret = false;
-//	double move_distance; //需要移动的高度
-//	int move_pulses; //需要转动的脉冲步数SI
-//	int rlr = m_resolution / 2; //“R”寄存器匹配伺服驱动器中的EG设置
-//
-//	//double d = MOVE_DISTANCE;
-//	if (distance < 0 || distance > MOVE_DISTANCE)
-//	{
-//		//MessageBox(NULL, "Please set the lift height between 0 to 120 cm!", "IAS", MB_ICONWARNING);
-//		return ret;
-//	}
-//	else
-//	{
-//		move_distance = m_distance - distance;
-//		move_pulses = static_cast<int> (move_distance * rlr * SERVO_REDUCTION / distance_per_rev);  
-//
-//		// 初始化设备
-//		ret = Init(com_port);
-//
-//		if (ret)
-//		{
-//			ClearInputBuffer();
-//			sprintf(cmd, "STD\rDI%d\rFL\rSS%s\r", move_pulses, SERVO_FEEDBACK);
-//			Write(cmd);
-//
-//			if (Wait_feedback)
-//			{
-//				ret = IsFinished(get_feedback_timeout());
-//			}
-//			else
-//			{
-//				// 在发下一个指令前稍微等一下
-//				Wait(200);
-//			}
-//		}
-//		if (ret)
-//		{
-//			// 更新位置信息
-//			m_distance = distance;
-//		}
-//
-//		// 终止化设备
-//		Fini();
-//	}
-//
-//	return ret;
-//}
-
-//**********************************************************************//
-// 函数:    servo_return_current_position();						 
-// 描述:    返回当前滑台位置
-//**********************************************************************//
-double SlideComm::servo_return_current_position()
-{
-	return m_distance;
-}
-
-////**********************************************************************//
-//// 函数:    servo_get_last_position();						 
-//// 描述:    获取上次关机器时滑台所在的位置
-////**********************************************************************//
-//void SlideComm::servo_get_last_position(double last_distance)
-//{
-//	m_distance = last_distance;
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// 函数:    get_feedback_timeout
-// 描述:    获得色轮连接的超时阈值
-////////////////////////////////////////////////////////////////////////////////////////////////
-int SlideComm::get_feedback_timeout()
-{
-	const int	servo_timeout = 10000;
-
-	return servo_timeout;
-}
 
 

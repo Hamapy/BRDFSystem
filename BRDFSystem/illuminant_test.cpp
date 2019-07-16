@@ -2,17 +2,18 @@
 #include<windows.h> 
 #include "Illuminant.h"
 using namespace std;
-int test_illuminant()
+int main4()
 {
 	//此程序的使用方法1.首先调用InitiCOM()，打开和初始化串口 2.调用SetSteadyTime设置所需要的亮灯时间
 	//3.使用Collection函数实现正式的采集顺序
-	Illuminant a(5);
+	Illuminant a;
 	//a.OpenCOM();
-	a.InitCOM();
-	a.SetSteadyTime(30);
-	//a.LightenById(2);
-	//a.Start();
+	a.InitCOM(5);
+	a.SetSteadyTime(200);
+	a.LightenById(2);
+	a.Start();
 	Sleep(200);
+	/*
 	unsigned char *temp = new unsigned char[9];//动态创建一个数组
 	temp[0] = 0x91;
 	temp[1] = 0x92;
@@ -39,5 +40,7 @@ int test_illuminant()
 	//a.Suspend();
 	system("pause");
 	//cout << "ok" << endl;
+	*/
 	return 0;
+	
 }

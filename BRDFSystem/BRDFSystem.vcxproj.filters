@@ -90,14 +90,14 @@
     <ClCompile Include="GeneratedFiles\Release\moc_workerMeasurement.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="configuration.cpp">
+    <ClCompile Include="whitebalance_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_configuration.cpp">
-      <Filter>Generated Files\Debug</Filter>
+    <ClCompile Include="config.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_configuration.cpp">
-      <Filter>Generated Files\Release</Filter>
+    <ClCompile Include="imageProcess.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +114,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="workerMeasurement.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="configuration.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -144,6 +141,15 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imageProcess.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

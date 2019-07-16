@@ -99,15 +99,51 @@ bool AVTCamera::IniCamera()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void AVTCamera::CameraSettings(double exposureTime, double gain, double blackLevel)
+void AVTCamera::CameraSettings(float exposureTime, CameraParameters* cameraParameters)
 {
-	_camera->GetFeatureByName("ExposureTime", _feature);
-	_feature->SetValue(exposureTime);
-	_camera->GetFeatureByName("Gain", _feature);
-	_feature->SetValue(gain);
+	_camera->GetFeatureByName("AcquisitionFrameCount", _feature);
+	_feature->SetValue(cameraParameters->acquisitionFrameCount);
+	_camera->GetFeatureByName("AcquisitionFrameRate", _feature);
+	_feature->SetValue(cameraParameters->acquisitionFrameRate);
+	_camera->GetFeatureByName("AutofunctionAOIEnable", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIEnable);
+	_camera->GetFeatureByName("AutofunctionAOIHeight", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIHeight);
+	_camera->GetFeatureByName("AutofunctionAOIOffsetX", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIOffsetX);
+	_camera->GetFeatureByName("AutofunctionAOIOffsetY", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIOffsetY);
+	_camera->GetFeatureByName("AutofunctionAOIShowArea", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIShowArea);
+	_camera->GetFeatureByName("AutofunctionAOIWidth", _feature);
+	_feature->SetValue(cameraParameters->autofunctionAOIWidth);
+	_camera->GetFeatureByName("AutofunctionTargetIntensity", _feature);
+	_feature->SetValue(cameraParameters->autofunctionTargetIntensity);
 	_camera->GetFeatureByName("BlackLevel", _feature);
-	_feature->SetValue(blackLevel);
-	
+	_feature->SetValue(cameraParameters->blackLevel);
+	_camera->GetFeatureByName("ColorTransformationEnable", _feature);
+	_feature->SetValue(cameraParameters->colorTransformationEnable);
+	_camera->GetFeatureByName("ExposureTime", _feature);
+	_feature->SetValue(cameraParameters->exposureTime);
+	_camera->GetFeatureByName("Gain", _feature);
+	_feature->SetValue(cameraParameters->gain);
+	_camera->GetFeatureByName("Gamma", _feature);
+	_feature->SetValue(cameraParameters->gamma);
+	_camera->GetFeatureByName("Height", _feature);
+	_feature->SetValue(cameraParameters->height);
+	_camera->GetFeatureByName("Width", _feature);
+	_feature->SetValue(cameraParameters->width);
+	_camera->GetFeatureByName("Hue", _feature);
+	_feature->SetValue(cameraParameters->hue);
+	_camera->GetFeatureByName("Saturation", _feature);
+	_feature->SetValue(cameraParameters->saturation);
+	_camera->GetFeatureByName("PixelFormat", _feature);
+	_feature->SetValue(cameraParameters->pixelFormat);
+	_camera->GetFeatureByName("ExposureAuto", _feature);
+	_feature->SetValue(cameraParameters->exposureAuto);
+	_camera->GetFeatureByName("GainAuto ", _feature);
+	_feature->SetValue(cameraParameters->gainAuto);
+
 	return;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -168,15 +204,15 @@ bool AVTCamera::GetImageSize(int& width, int& height)
 		return 0;
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：SaveImage(Mat& captureMat)
-// 描述：采集一帧RGB图像
+// 函数：
+// 描述：
 // 输入：Null
-// 输出：一帧图像
+// 输出：
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveImage(Mat& captureMat)
+bool AVTCamera::CaptureImages(Mat& captureMat, string imageSavingPath)
 {
 	if (_saveName < CAPTURE_NUM)
 	{
@@ -185,7 +221,7 @@ bool AVTCamera::SaveImage(Mat& captureMat)
 		char sPath[200];
 		//strcpy(sPath, imageSavingPath.c_str());
 		sprintf(sPath, "//%s.bmp", saveName);
-		string path = _imageSavingPath + "//camera" + to_string(_cameraID) + sPath;
+		string path = imageSavingPath + "//camera" + to_string(_cameraID) + sPath;
 		bool isSaved = imwrite(path, captureMat);
 		_saveName++;
 
@@ -193,6 +229,61 @@ bool AVTCamera::SaveImage(Mat& captureMat)
 	}
 	else
 		return 0;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：SaveAnImage
+// 描述：采集一帧RGB图像
+// 输入：Null
+// 输出：一帧图像
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID)
+{
+	//000命名方式
+	char saveName[4] = { 0 };
+	sprintf(saveName, "%4d", _saveName);
+	char name[200];
+	sprintf(name, "//%s.bmp", saveName);
+
+	//out_相机角度-材质台角度_in_光源θ-光源σ命名方式
+	//光源36 36 32 28 24 18 12 6 4
+	/*
+	if (_saveName)
+	{
+
+	}
+	char name[200];
+	sprintf(name, "out_%d-%d_in%d-%d.bmp", saveName);
+	*/
+	string spath = path + name;
+	bool isSaved = imwrite(spath, mat);
+	//mat.save(QString::fromStdString(path), "BMP", 100);
+	_saveName++;
+	//emit something() //告诉界面线程该角度下的图像已采集，修改界面的Qlabel
+
+	return isSaved;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：GetExposureTime(Mat mat, float time)
+// 描述：计算相机在一定角度光源下的合适曝光时间
+// 输入：Null
+// 输出：曝光时间
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+float AVTCamera::GetExposureTime(Mat mat)
+{
+	Mat gray;
+	cvtColor(mat, gray, CV_RGB2GRAY);
+	Scalar scalar = mean(gray);
+	float ave = scalar.val[0];
+	float k = 50.00 / ave;//50ms下拍摄图像
+	float t = k * 255 * 0.60;
+
+	return t;
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：AutoExposure(CameraPtr& camera, int cameraID, int num)
@@ -410,173 +501,373 @@ int AVTCamera::EmptyFiles(string dirPath)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：EmptyFiles(string dirPath)
-//// 描述：采集前清空文件夹
+//// 函数：
+//// 描述：
 //// 输入：
 //// 输出：
 //// 返回：
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-Mat AVTCamera::WhiteBalance(Mat src, Rect wBlock)
+vector<float> AVTCamera::GetWhiteBalanceTrans(vector<Mat> mats)
 {
-	Mat roi(src, Rect(wBlock.x, wBlock.y, wBlock.width, wBlock.height));
-	Mat rR(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	Mat rG(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	Mat rB(roi.rows, roi.cols, CV_8UC1, Scalar::all(0));
-	uchar *pRoi, *prR, *prG, *prB;
+	Mat src = AverageImage(mats);
+
+#define WHITE_NUM 500
+	//暂时取全图亮度最高的一定数量像素点均值作为白点
+	//...
+	const int height = src.rows;
+	const int width = src.cols;
+
+	vector<Mat> channels;
+	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+	Mat B = srcB.clone();
+	Mat G = srcG.clone();
+	Mat R = srcR.clone();
+
+	//把Mat矩阵拉成一维数组
+	unsigned char *arrayB = new unsigned char[srcB.rows*srcB.cols];
+	if (srcB.isContinuous())
+		arrayB = B.data;//防止修改原图像素顺序
+	unsigned char *arrayG = new unsigned char[srcG.rows*srcG.cols];
+	if (srcG.isContinuous())
+		arrayG = G.data;
+	unsigned char *arrayR = new unsigned char[srcR.rows*srcR.cols];
+	if (srcR.isContinuous())
+		arrayR = R.data;
+
+
+	//计算亮度值最大像素点集合平均亮度
+	sort(arrayB, arrayB + srcB.rows*srcB.cols);
+	reverse(arrayB, arrayB + srcB.rows*srcB.cols);
+	//sort(arrayB[0], arrayB[srcB.rows*srcB.cols - 1]);
+	//reverse(arrayB[0], arrayB[srcB.rows*srcB.cols - 1]);
 	int sumB = 0;
+	for (int i = 0; i < WHITE_NUM; i++)
+	{
+		sumB += (int)arrayB[i];
+	}
+	uchar aveB = (float)sumB / (float)WHITE_NUM;
+
+	sort(arrayG, arrayG + srcG.rows*srcG.cols);
+	reverse(arrayG, arrayG + srcG.rows*srcG.cols);
 	int sumG = 0;
+	for (int i = 0; i < WHITE_NUM; i++)
+	{
+		sumG += (int)arrayG[i];
+	}
+	uchar aveG = (float)sumG / (float)WHITE_NUM;
+
+	sort(arrayR, arrayR + srcR.rows*srcR.cols);
+	reverse(arrayR, arrayR + srcR.rows*srcR.cols);
 	int sumR = 0;
-	int i, j;
-	int amount = 0;
-	for (i = 0; i < roi.rows; i++)
+	for (int i = 0; i < WHITE_NUM; i++)
 	{
-		pRoi = roi.ptr<uchar>(i);
-		prR = rR.ptr<uchar>(i);
-		prG = rG.ptr<uchar>(i);
-		prB = rB.ptr<uchar>(i);
-		for (j = 0; j < roi.cols; j++)
+		sumR += (int)arrayR[i];
+	}
+	uchar aveR = (float)sumR / (float)WHITE_NUM;
+
+	float transB = 255 / (float)aveB;
+	float transG = 255 / (float)aveG;
+	float transR = 255 / (float)aveR;
+
+	vector<float> trans;
+	trans.push_back(transB);
+	trans.push_back(transG);
+	trans.push_back(transR);
+
+	return trans;
+
+#undef WHITE_NUM
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat AVTCamera::WhiteBalance(Mat src)
+{
+	const int height = src.rows;
+	const int width = src.cols;
+
+	vector<Mat> channels;
+	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+	float transB = _trans[0];
+	float transG = _trans[1];
+	float transR = _trans[2];
+
+	//对每个点将像素拉到[0,255]之间
+	//针对超出1的像素，重新归一化
+	vector<vector<float>> fBGR(height,vector<float>(width,0));
+	float max = 0;
+	//float s = 255 / (float)aveB;
+	for (int i = 0; i < srcB.rows; i++)
+	{
+		for (int j = 0; j < srcB.cols; j++)
 		{
-			//在Mat中是按照BGR的顺序存储的          
-			prB[j] = pRoi[j*roi.channels()];
-			prG[j] = pRoi[j*roi.channels() + 1];
-			prR[j] = pRoi[j*roi.channels() + 2];
-			sumB += prB[j];
-			sumG += prG[j];
-			sumR += prR[j];
-			amount++;
+			fBGR[i][j] = srcB.at<uchar>(i, j) / 255.00 * transB;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
 		}
 	}
-	double avgB = (double)sumB / amount;
-	double avgG = (double)sumG / amount;
-	double avgR = (double)sumR / amount;
+	for (int i = 0; i < srcB.rows; i++)
+	{
+		for (int j = 0; j < srcB.cols; j++)
+		{
+			srcB.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
 
-	//对每个点将像素量化到[0,255]之间
-	uchar blue, green, red;
-	double maxVal;
-	minMaxLoc(roi, NULL, &maxVal, NULL, NULL);
-	uchar *pSrc, *psR, *psG, *psB, *pDst;
-	Mat sR(src.rows, src.cols, CV_8UC1, Scalar::all(0));
-	Mat sG(src.rows, src.cols, CV_8UC1, Scalar::all(0));
-	Mat sB(src.rows, src.cols, CV_8UC1, Scalar::all(0));
+	max = 0;
+	//s = 255 / (float)aveG;
+	for (int i = 0; i < srcG.rows; i++)
+	{
+		for (int j = 0; j < srcG.cols; j++)
+		{
+			fBGR[i][j] = srcG.at<uchar>(i, j) / 255.00 * transG;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
+		}
+	}
+	for (int i = 0; i < srcG.rows; i++)
+	{
+		for (int j = 0; j < srcG.cols; j++)
+		{
+			srcG.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
+
+	max = 0;
+	//s = 255 / (float)aveR;
+	for (int i = 0; i < srcR.rows; i++)
+	{
+		for (int j = 0; j < srcR.cols; j++)
+		{
+			fBGR[i][j] = srcR.at<uchar>(i, j) / 255.00 * transR;
+			//srcB.at<uchar>(i, j) = srcB.at<uchar>(i, j) / 255 * s;
+			if (fBGR[i][j] > max)
+				max = fBGR[i][j];
+		}
+	}
+	for (int i = 0; i < srcR.rows; i++)
+	{
+		for (int j = 0; j < srcR.cols; j++)
+		{
+			srcR.at<uchar>(i, j) = fBGR[i][j] / max * 255;
+		}
+	}
+
 	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
-	for (i = 0; i < src.rows; i++)
-	{
-		pSrc = src.ptr<uchar>(i);
-		pDst = dst.ptr<uchar>(i);
-		psR = sR.ptr<uchar>(i);
-		psG = sG.ptr<uchar>(i);
-		psB = sB.ptr<uchar>(i);
-		for (j = 0; j < src.cols; j++)
-		{
-			psB[j] = pSrc[j*src.channels()];
-			psG[j] = pSrc[j*src.channels() + 1];
-			psR[j] = pSrc[j*src.channels() + 2];
-
-			if (psB[j] > avgB) blue = maxVal;
-			else blue = (double)psB[j] * maxVal / avgB;
-
-			if (psG[j] > avgG) green = maxVal;
-			else green = (double)psG[j] * maxVal / avgG;
-
-			if (psR[j] > avgR) red = maxVal;
-			else red = (double)psR[j] * maxVal / avgR;
-
-			////if (red > 255) red = 255;
-			////else if (red < 0) red = 0;
-			////if (green > 255) green = 255;
-			////else if (green < 0) green = 0;
-			////if (blue > 255)	blue = 255;
-			////else if (blue < 0) blue = 0;
-
-			////if (red > 255 || green > 255 || blue > 255)
-			////{
-			////	red = 255;
-			////	green = 255;
-			////	blue = 255;
-			////}
-
-			//if (red > 255)
-			//{
-			//	blue = (double)blue * red / 255;
-			//	green = (double)green * red / 255;
-			//	if (blue > 255 || green > 255)
-			//	{
-			//		blue = 255;
-			//		green = 255;
-			//	}
-			//	red = 255;
-			//}
-
-			//if (blue > 255)
-			//{
-			//	red = (double)red * blue / 255;
-			//	green = (double)green * blue / 255;
-			//	if (red > 255 || green > 255)
-			//	{
-			//		red = 255;
-			//		green = 255;
-			//	}
-			//	blue = 255;
-			//}
-
-			//if (green > 255)
-			//{
-			//	blue = (double)blue * green / 255;
-			//	red = (double)red * green / 255;
-			//	if (blue > 255 || red > 255)
-			//	{
-			//		blue = 255;
-			//		red = 255;
-			//	}
-			//	green = 255;
-			//}
-
-			pDst[j*src.channels()] = blue;
-			pDst[j*src.channels() + 1] = green;
-			pDst[j*src.channels() + 2] = red;
-		}
-	}
+	merge({ srcB, srcG, srcR }, dst);
 
 	return dst;
 }
-
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：EmptyFiles(string dirPath)
-//// 描述：采集前清空文件夹
+//// 函数：
+//// 描述：多幅图像求平均
 //// 输入：
 //// 输出：
 //// 返回：
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-int AVTCamera::WihteAreaDetection(Mat src, Rect wBlock)
+Mat AVTCamera::AverageImage(vector<Mat> mats)
 {
-	Mat img;
-	cvtColor(src, img, CV_BGR2GRAY);
-	Mat roi(img, Rect(wBlock.x, wBlock.y, wBlock.width, wBlock.height));
-	threshold(roi, roi, 180, 255, CV_THRESH_BINARY);//灰度变二值，阈值180，最大值255
-	int counter = 0;
-	Mat_<uchar>::iterator it = roi.begin<uchar>();
-	Mat_<uchar>::iterator itend = roi.end<uchar>();	//定义迭代器访问像素点  
-	for (; it != itend; ++it)
+	Mat aver = Mat::zeros(mats[0].size(), CV_32FC3);
+	for (int i = 0; i < mats.size(); i++)
 	{
-		if ((*it)>0)
-			counter += 1;
+		accumulate(mats[i], aver);
 	}
-	int num1 = wBlock.width*wBlock.height;
-	int num2 = num1 * 95.00 / 100.00;
-	if (counter <= num1 && counter > num2)//Rect框内像素点数，考虑容许误差90%
+	aver /= mats.size();
+	aver.convertTo(aver, CV_8UC3);
+
+	return aver;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+vector<Mat> AVTCamera::ReadImages(string path)
+{
+	vector<Mat> mats;
+	string imgPattern = "//*.jpg";
+	vector<cv::String> imgFiles;
+	imgPattern = path + imgPattern ;
+	glob(imgPattern, imgFiles);
+	for (int i = 0; i<imgFiles.size(); i++)
 	{
-		cout << "小白块位置正常" << endl;
-		system("pause");
+		Mat mat = imread(imgFiles[i]);
+		mats.push_back(mat);
 	}
+
+	return mats;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+void AVTCamera::DeadPixelDetect(Mat src, int maxNum)
+{
+#define LAMDA 5.0  //亮度值 > mean + LAMDA * sigma 被视为坏点
+#define MASK_SEL 1 
+#define MASK_UNSEL 0 //是否已选像素
+
+	//对均匀图像可暂时不用滑动窗口
+	/*
+	int count = 0;  //记录滑动窗口的数目
+	int x_step = cvCeil(x_percent*wndSize.width);
+	int y_step = cvCeil(y_percent*wndSize.height);
+	//利用窗口对图像进行遍历
+	for (int i = 0; i < src.cols - wndSize.width; i += y_step)
+	{
+		for (int j = 0; j < src.rows - wndSize.height; j += x_step)
+		{
+			Rect roi(Point(j, i), wndSize);
+			Mat ROI = src(roi);
+			wnd.push_back(ROI);
+			count++;
+		}
+	}
+	*/
+
+	//坏点不受通道影响，直接看灰度图就好
+	/*
+	//求出图像三通道均值和方差
+	Scalar mean;
+	Scalar stddev;
+	meanStdDev(src, mean, stddev);
+	float meanB = mean.val[0];
+	float stddevB = stddev.val[0];
+	float meanG = mean.val[1];
+	float stddevG = stddev.val[1];
+	float meanR = mean.val[2];
+	float stddevR = stddev.val[2];
+
+	vector<Mat> channels;
+	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+	int ch = src.channels;
+	*/
+
+	PIXEL pSel;
+	Mat gray;
+	Mat zeroMat = Mat::zeros(gray.size(), CV_8UC1);
+	cvtColor(src, gray, CV_BGR2GRAY);
+	Scalar mean;
+	Scalar stddev;
+	meanStdDev(src, mean, stddev);
+	float m = mean.val[0];
+	float sigma = stddev.val[0];
+
+	//通过循环找最大值的方法，确定坏点
+	for (int k = 0; k < maxNum; k++)
+	{
+		int maxVal = 0;
+		for (int i = 0; i < src.rows; i++)
+		{
+			uchar* data = gray.ptr<uchar>(i);
+			for (int j = 0; j < src.cols; j++)
+			{
+				if (IsSelected(zeroMat, i, j) == MASK_UNSEL)
+				{
+					if (data[j] > maxVal)
+					{
+						maxVal = data[j];
+						pSel.i = i;
+						pSel.j = j;
+					}
+				}
+			}
+		}
+
+		if (maxVal > m + LAMDA * sigma)  // 若该点满足坏点条件
+		{
+			int deadPos[2] = {pSel.i, pSel.j};
+			_deadPixelPos.push_back(deadPos);
+			Select(zeroMat, pSel.i, pSel.j);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return;
+#undef LAMDA
+#undef MASK_SEL
+#undef MASK_UNSEL
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+bool AVTCamera::IsSelected(Mat src, int i, int j)
+{
+	uchar* data = src.ptr<uchar>(i);
+	if (data[j] == 1)
+		return true;
 	else
-	{
-		cout << "小白块位置偏移" << endl;
-		system("pause");
-	}
+		return false;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+void AVTCamera::Select(Mat src, int i, int j)
+{
+	uchar* data = src.ptr<uchar>(i);
+	data[j] = 1;
+
+	return;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+bool AVTCamera::IsOverExposure(Mat src)
+{
+	//通过计算直方图判断采集图像是否过曝或过暗
 
 	return 0;
 }
