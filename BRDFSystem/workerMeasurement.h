@@ -14,6 +14,8 @@
 #include "sampleComm.h"
 #include "slideComm.h"
 
+#define SAMPLE_NUM 36
+#define ILLUMINANT_NUM 196
 
 class WorkerMeasurement : public QObject
 {
@@ -51,7 +53,7 @@ private:
 	//string					_imageSavingPath2 = "..\\imgs_measurement2\\";
 	//string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	bool					_isReady;
-	bool					_captureDone;
+	//bool					_captureDone;
 	//byte					_seriesCam; //表示已收到的9台相机中的图像数量，byte只有8位，只能暂时用数组标记
 	bool*					_seriesCAM;
 	Illuminant*				illuminant;
@@ -64,7 +66,8 @@ private:
 	UINT					_iID;//亮灯序号
 	UINT					_sID;//样品台角度序号
 	int						_measureFlag;
-	bool					_sampleFlag;
+	//bool					_sampleFlag;
+	bool					_illuminantFlag;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	QMutex					_mutex;
 

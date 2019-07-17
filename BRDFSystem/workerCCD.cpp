@@ -38,7 +38,7 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 	if (event->timerId() == _timerId)
 	{
 		cameraAVT->GetImageSize(_width, _height);
-		_pImageFrame = cameraAVT->CaptureImage();
+		_pImageFrame = cameraAVT->CaptureAnImage();
 		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 		//_matWB = cameraAVT->WhiteBalance(_mat);
 		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
@@ -48,7 +48,7 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 		if (_capture == 1)
 		{
 			string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
-			cameraAVT->CaptureImages(_mat, capturePath);
+			cameraAVT->SaveImages(_mat, capturePath);
 		}
 
 		emit sendingImg(_workerID, _img);//给界面显示线程传递
@@ -70,18 +70,18 @@ void WorkerCCD::GetMaterialName(QString materialName)
 void WorkerCCD::Grab(int sID, int iID)
 {
 	cameraAVT->GetImageSize(_width, _height);
-	uchar* pImageFrame = cameraAVT->CaptureImage();
+	uchar* pImageFrame = cameraAVT->CaptureAnImage();
 	Mat mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 
-	if (AVTCamera::IsOverExposure(mat))
+	if (ImageProcess::IsOverExposure(mat))
 	{
-		_exposureTime = AVTCamera::GetExposureTime(_mat);//更新曝光时间
+		_exposureTime = ImageProcess::ComputeExposureTime(_mat);//更新曝光时间
 		cameraAVT->CameraSettings(_exposureTime * 1000);
 		Sleep(500);//等曝光时间生效
 
 		//重新拍摄
 		cameraAVT->GetImageSize(_width, _height);
-		pImageFrame = cameraAVT->CaptureImage();
+		pImageFrame = cameraAVT->CaptureAnImage();
 		mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 	}
 	

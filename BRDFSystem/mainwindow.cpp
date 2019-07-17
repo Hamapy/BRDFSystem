@@ -633,7 +633,7 @@ void MainWindow::PushButton_WhiteBalance_Pressed()
 		//string path = _capturePath + "camera" + to_string(i);
 		//mats = AVTCamera::ReadImages(path);
 		//mat = AVTCamera::AverageImage(mats);
-		_trans = AVTCamera::GetWhiteBalanceTrans(mats);
+		_trans = ImageProcess::ComputeWhiteTrans(mats);
 	}
 	_transs.push_back(_trans);
 	//需要写在配置文件里

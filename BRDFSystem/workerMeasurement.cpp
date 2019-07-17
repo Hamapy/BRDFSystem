@@ -28,9 +28,9 @@ QObject(parent)
 	_iID = 0;
 	_sID = 0;
 	_isReady = 0;
-	_captureDone = 0;
+	//_captureDone = 0;
 	_measureFlag = 0;
-	_sampleFlag = 0;
+	//_sampleFlag = 0;
 	_seriesCAM = new bool[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 WorkerMeasurement::~WorkerMeasurement()
@@ -59,7 +59,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 	{
 		if (_measureFlag == 1)
 		{
-			if (_iID != 196)
+			if (_iID != ILLUMINANT_NUM)
 			{
 				_isReady = 1;
 				illuminant->Suspend();
@@ -71,18 +71,19 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 
 				emit readyForGrab(_sID, _iID);//通过主线程告诉相机咱切换到下一个灯了，你可以试试调整一下你的曝光时间
 			}
-			else if (_iID == 196)
+			else if (_iID == ILLUMINANT_NUM)
 			{
 				emit done();
 				_isReady = 1;
 			}
 		}
 
+		//每个光源旋转样品台18个角度
+		/*
 		if (_measureFlag == 2)
 		{
 			if (_iID != 196)
 			{
-				//////////这一块代码还有问题/////////////////
 				if (_sampleFlag == 0)
 				{
 					_isReady = 1;
@@ -101,7 +102,6 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 					_isReady = 1;
 					_sampleFlag = 1;
 				}
-				/////////////////////////////////////////////
 				else
 				{
 					_sampleFlag = 0;
@@ -111,6 +111,39 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				}
 			}
 			else if (_iID == 196)
+			{
+				emit done();
+				_isReady = 1;
+			}
+		}
+		*/
+
+		//每个样品台角度点亮196个光源
+		if (_measureFlag == 2)
+		{
+			if (_sID != SAMPLE_NUM)
+			{
+				if (_iID != ILLUMINANT_NUM)
+				{
+					_isReady = 1;
+					illuminant->Suspend();
+					illuminant->SetSteadyTime(20);//最长点亮时间25.5s  18个采集角度时间不太够
+					illuminant->LightenById(_illuminantID[_iID] + 1);
+					illuminant->Start();
+					Sleep(200);
+					_iID++;
+
+					emit readyForGrab(_sID, _iID);
+				}
+				else if (_iID == ILLUMINANT_NUM)//36个角度耗时太长
+				{
+					sampleComm->GotoNextPos(5250);
+					//Sleep(200);//留给相机的拍摄时间			
+					_iID = 0;
+					_sID++;
+				}
+			}
+			else if (_sID == 36)
 			{
 				emit done();
 				_isReady = 1;
