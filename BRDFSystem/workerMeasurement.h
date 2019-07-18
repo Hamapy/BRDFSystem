@@ -1,6 +1,13 @@
 ////////////////////////////材质采集线程类声明////////////////////////////
 
 #pragma once
+//定义的常量
+const int               thetaOutNum = 9;
+const int               fiOutNum = 18;
+const int               thetaInNum = 9;
+const int               lightSourceNum = 196;
+
+
 
 #ifndef WORKERMEASUREMENT_H
 
@@ -33,13 +40,13 @@ public:
 	void CheckDone(int workerID);
 	void StartTimer(int measureFlag);
 	void CloseWorker();
-	void ContributeBRDF();
-	void AverageRGB(const Mat& inputImage);
-	bool read_brdf(const char *filename, double* &brdf);
-	void lookup_brdf_val(double* brdf, double theta_in, double fi_in,
-		double theta_out, double fi_out,
+	//void ContributeBRDF();
+	vector<double> AverageRGB(const Mat& inputImage);
+	bool ReadBrdf(const char *filename, double* &brdf);
+	void LookupBrdfVal(double* brdf, int theta_in, int fi_in,
+		int theta_out, int fi_out,
 		double& red_val, double& green_val, double& blue_val);
-	bool WriteBRDF(string path, string savePath)
+	bool WriteBRDF()
 		//void GetExposureTime(int workerID, Mat mat);
 private:
 	VimbaSystem&			_system;
@@ -70,10 +77,8 @@ private:
 	int						_measureFlag;
 	bool					_sampleFlag;
 	QMutex					_mutex;
-	const int               thetaOutNum = 9;
-	const int               fiOutNum = 12;
-	const int               thetaInNum = 9;
-	const int               lightSourceNum = 196;
+	string                  path;//读取图片的路径
+	char*                   savePath;//保存.binary文件的路径
 	int theta_out_index(int theta_out);
 	inline int  fi_out_index(int fi_out);
 	inline int theta_in_index(int theta_in);

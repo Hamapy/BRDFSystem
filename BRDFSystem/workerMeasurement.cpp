@@ -177,21 +177,28 @@ void WorkerMeasurement::CloseWorker()
 {
 	this->killTimer(_timerId);
 }
-
-double* WorkerMeasurement::AverageRGB(const Mat& inputImage)
+////////////////////////////////////////////////////////////////////////////
+// 函数：AverageRGB()
+// 描述：对采集得到的图像进行RGB三通道取平均得到RGB三通道的BRDF
+// 输入：采集得到的图片
+// 输出：Null
+// 返回：返回RGB三通道BRDF值的向量
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+vector<double> WorkerMeasurement::AverageRGB(const Mat& inputImage)
 {
-	double temp[3] = { 0, 0, 0 };
-	outputImage = inputImage.clone();
-	int rowNumber = outputImage.rows;
-	int colNumber = outputImage.cols;
+	vector<double> temp = { 0, 0, 0 };
+	int rowNumber = inputImage.rows;
+	int colNumber = inputImage.cols;
 	//对RGB三通道进行取平均值操作
 	for (int i = 0; i<rowNumber; i++)
 	{
 		for (int j = 0; j<colNumber; j++)
 		{
-			temp[0] += inputImage.at<Vec3f>(i, j)[0];
-			temp[1] += inputImage.at<Vec3f>(i, j)[1];
-			temp[2] += inputImage.at<Vec3f>(i, j)[2];
+			temp[0] += inputImage.at<Vec3b>(i, j)[0];
+			temp[1] += inputImage.at<Vec3b>(i, j)[1];
+			temp[2] += inputImage.at<Vec3b>(i, j)[2];
 		}
 	}
 	temp[0] = temp[0] / (rowNumber*colNumber);
@@ -199,17 +206,27 @@ double* WorkerMeasurement::AverageRGB(const Mat& inputImage)
 	temp[2] = temp[2] / (rowNumber*colNumber);
 	return temp;
 }
-
-bool WorkerMeasurement::WriteBRDF(string path, string savePath)
+////////////////////////////////////////////////////////////////////////////
+// 函数：WriteBRDF()
+// 描述：将一种材质在各个(光源-相机)角度下的BRDF值写进.binary文件
+// 输入：
+// 输出：Null
+// 返回：是否读写成功
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool WorkerMeasurement::WriteBRDF()
 {
+	Mat Image;
 	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
-	FILE *f = fopen(savePath, "a+");
+	FILE *f = fopen(savePath, "wa+");
 	if (f == 0)
 	{
 		return false;
 	}
 	string filename;
-	double* data;
+	double data[3] = { 0 };
+	vector<double> tmp;
 	int theta_out, fi_out, theta_in, fi_in;
 	for (int i = 0; i<thetaOutNum; i++)
 	{
@@ -225,11 +242,14 @@ bool WorkerMeasurement::WriteBRDF(string path, string savePath)
 				theta_in = k * 10;
 				for (int m = 0; m<num[k]; m++)
 				{
-					phi_in = (360 / num[k])*m;
+					fi_in = (360 / num[k])*m;
 					filename = path + "out" + to_string(theta_out) + "_" + to_string(fi_out) +
 						"in" + to_string(theta_in) + "_" + to_string(fi_in) + ".tiff";
-					Mat Image = imread(filename);
-					data = AverageRGB(Image);
+					cout << filename << endl;
+					Image = imread(filename);
+					tmp = AverageRGB(Image);
+					for (int n = 0; n < 3; n++)
+						data[n] = tmp[n];
 					fwrite(data, sizeof(double), 3, f);
 				}
 			}
@@ -238,8 +258,16 @@ bool WorkerMeasurement::WriteBRDF(string path, string savePath)
 	fclose(f);
 	return true;
 }
-// Read BRDF data,头三个int为数据库的维度，后面的为数据double
-bool WorkerMeasurement::read_brdf(const char *filename, double* &brdf)
+////////////////////////////////////////////////////////////////////////////
+// 函数：ReadBrdf()
+// 描述：从.binary文件读取出材质的BRDF数值
+// 输入：
+// 输出：Null
+// 返回：是否读写成功
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+bool WorkerMeasurement::ReadBrdf(const char *filename, double* &brdf)
 {
 	FILE *f = fopen(filename, "rb");
 	if (!f)
@@ -250,26 +278,59 @@ bool WorkerMeasurement::read_brdf(const char *filename, double* &brdf)
 	fclose(f);
 	return true;
 }
-//first index
+
+////////////////////////////////////////////////////////////////////////////
+// 函数：theta_out_index()
+// 描述：计算根据文件夹的命名中相机的theta角，得到当前角度的索引
+// 输入：
+// 输出：Null
+// 返回：返回索引
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_out_index(int theta_out)
 {
 	int index = theta_out / 10;
 	return index;
 }
-//second index
+////////////////////////////////////////////////////////////////////////////
+// 函数：fi_out_index()
+// 描述：计算根据文件夹的命名中相机的fi角，得到当前角度的索引
+// 输入：
+// 输出：Null
+// 返回：返回索引
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_out_index(int fi_out)
 {
 	int index = 0;
 	index = fi_out / (360 / fiOutNum);
 	return index;
 }
-// third index
+////////////////////////////////////////////////////////////////////////////
+// 函数：theta_in_index()
+// 描述：计算根据文件夹的命名中光源的theta角，得到当前角度的索引
+// 输入：
+// 输出：Null
+// 返回：返回索引
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_in_index(int theta_in)
 {
 	int index = theta_in / 10;
 	return index;
 }
-//fourth index
+////////////////////////////////////////////////////////////////////////////
+// 函数：fi_in_index()
+// 描述：计算根据文件夹的命名中相机的fi角，得到当前角度的索引
+// 输入：
+// 输出：Null
+// 返回：返回索引
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
 {
 	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
@@ -278,24 +339,32 @@ inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
 	index = fi_in / (360 / num[thetaInIndex]);
 	return index;
 }
-// Given a pair of incoming/outgoing angles, look up the BRDF.
-void WorkerMeasurement::lookup_brdf_val(double* brdf, double theta_in, double fi_in,
-	double theta_out, double fi_out,
+////////////////////////////////////////////////////////////////////////////
+// 函数：LookupBrdfVal()
+// 描述：根据给出的光源和相机的角度，计算出当前角度下的BRDF值
+// 输入：光源和相机的角度以及所得到的BRDF数组。
+// 输出：Null
+// 返回：返回索引
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void WorkerMeasurement::LookupBrdfVal(double* brdf, int theta_in, int fi_in,
+	int theta_out, int fi_out,
 	double& red_val, double& green_val, double& blue_val)
 {
 	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
 	// Find index.
-	int ind = theta_out_index(theta_out) * 196 * 12 +
-		fi_out_index(fi_out) * 196;
+	int ind = theta_out_index(theta_out) * lightSourceNum * fiOutNum +
+		fi_out_index(fi_out) * lightSourceNum;
 	int thetaInIndex = theta_in_index(theta_in);
 	for (int i = 0; i<thetaInIndex - 1; i++)
 	{
 		ind += num[i];
 	}
 	ind += fi_in_index(fi_in, theta_in);
-	red_val = brdf[ind];
-	green_val = brdf[ind + 1];
-	blue_val = brdf[ind + 2];
+	red_val = brdf[3 * ind];
+	green_val = brdf[3 * ind + 1];
+	blue_val = brdf[3 * ind + 2];
 }
 
 
