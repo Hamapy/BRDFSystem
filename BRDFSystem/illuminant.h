@@ -8,15 +8,16 @@
 #include <algorithm>
 #include <atomic>
 #include <thread>
+#include "config.h"
 
 using namespace std;
 class Illuminant
 {
 public:
-	Illuminant(UINT portNo);
+	Illuminant();
 	~Illuminant();
 	//串口初始化
-	bool InitCOM();
+	bool InitCOM(UINT portNo);
 	//设置延时
 	bool SetSteadyTime(int steadyTime);
 	//按ID亮灯	
@@ -43,7 +44,7 @@ private:
 	//获取输入缓冲区的字节数
 	UINT GetBytesInCOM();
 	//打开串口
-	bool OpenCOM();
+	bool OpenCOM(UINT portNo);
 	//关闭监听线程
 	bool CloseListenTread();
 	//清空串口输入缓冲区
@@ -68,4 +69,6 @@ private:
 	CRITICAL_SECTION    _csCommunicationSync;//同步互斥，临界区保护
 	static    atomic<bool>      _flag;//判断光源点亮过程是否出错,应该为原子操作
 	static    atomic<int>       _num;//判断点亮到哪一个灯，起始灯为0
+	//QSettings					*ini;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 };

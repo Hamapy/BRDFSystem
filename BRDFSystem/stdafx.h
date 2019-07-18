@@ -2,6 +2,7 @@
 #pragma once
 #include <iostream>
 #include <windows.h>
+#include <direct.h>
 
 //#define _CRT_SECURE_NO_WARNINGS  //屏蔽CRT警告
 #define WIN32_LEAN_AND_MEAN   //排除不太常用的API，减小Win32头文件大小，加速生成过程

@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include <QThread>
 #include <QMutex>
+#include "config.h"
 #include "ccd.h"
 #include "illuminant.h"
 #include "sampleComm.h"
@@ -19,8 +20,7 @@ class WorkerMeasurement : public QObject
 	Q_OBJECT
 
 public:
-	//WorkerMeasurement(QObject *parent = 0);
-	WorkerMeasurement(VimbaSystem& system, QObject *parent = 0);
+	WorkerMeasurement(QObject *parent = 0);
 	virtual ~WorkerMeasurement();
 	virtual void timerEvent(QTimerEvent *event);
 	//virtual void run();
@@ -38,7 +38,6 @@ private slots:
 	//void GetExposureTime(int workerID, Mat mat);
 
 private:
-	VimbaSystem&			_system;
 	int						_workerID;
 	//AVTCamera*				cameraAVT;
 	QImage					_img;
@@ -66,11 +65,11 @@ private:
 	UINT					_sID;//样品台角度序号
 	int						_measureFlag;
 	bool					_sampleFlag;
-
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	QMutex					_mutex;
 
 signals:
 	void					done(); //通知其他线程采集结束
-	void					readyForGrab();
+	void					readyForGrab(int sID, int iID);
 };
 #endif

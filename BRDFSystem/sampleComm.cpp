@@ -24,14 +24,15 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 ////////////////////////////////构造函数////////////////////////////////////
 SampleComm::SampleComm()
 {
-	m_accelerate = 0;
-	m_decelerate = 0;
-	m_resolution = 0;
-	m_velocity   = 0;
-	m_homeadj    = 0;
-	m_step       = 0;
-	m_port       = 0;
-}
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	_port = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
+	_velocity = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
+	_accelerate = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	_decelerate = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	_resolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	_homeadj = ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
+	_step = 0;
+	}
 SampleComm::~SampleComm()
 {
     Fini();
@@ -59,13 +60,13 @@ bool SampleComm::Init(int port)
 	char cmd[STEP_STRINGLEN];
 	char rdstr[STEP_STRINGLEN];
 
-	m_port = port;
-	m_accelerate = STEP_ACCELERATE;
-	m_velocity = STEP_VELOCITY;
-	m_decelerate = STEP_DECELERATE;
-	m_resolution = STEP_RESOLUTION;
-	m_homeadj = STEP_TOHOME;
-	m_step = 0;
+	_port = port;
+	//_accelerate = STEP_ACCELERATE;
+	//_velocity = STEP_VELOCITY;
+	//_decelerate = STEP_DECELERATE;
+	//_resolution = STEP_RESOLUTION;
+	//_homeadj = STEP_TOHOME;
+	//_step = 0;
 
 	/*
 	//先重置再设置PC控制
@@ -95,7 +96,7 @@ bool SampleComm::Init(int port)
 	if (ret)
 	{
 		ClearInputBuffer();
-		sprintf_s(cmd, "CHR\rAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", m_accelerate, m_velocity, m_decelerate, m_resolution, STEP_FEEDBACK);
+		sprintf_s(cmd, "CHR\rAC%d\rVE%.2f\rDE%d\rMR%d\rSS%s\r", _accelerate, _velocity, _decelerate, _resolution, STEP_FEEDBACK);
 		Write(cmd);
 		ret = IsFinished(STEP_TIMEOUT);
 	}
@@ -126,7 +127,7 @@ bool SampleComm::InitA()
 	{
 		Close();
 	}
-	if (!Open(m_port))
+	if (!Open(_port))
 	{
 		ret = false;
 	}
@@ -154,7 +155,7 @@ bool SampleComm::GotoNextPos(int step)
 
 	// 初始化设备
 	ret = InitA();
-	m_step = step;
+	_step = step;
 
 	ClearInputBuffer();
 	sprintf_s(cmd, "DI%d\rFL\rSS%s\r", step, STEP_FEEDBACK);	//写入转动步数
@@ -187,8 +188,8 @@ bool SampleComm::Reset()
 
 	ret = InitA();
 	ClearInputBuffer();	
-	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
-	//sprintf_s(cmd, "DI%d\rFL%d\rFY3L\rSS%s\r", m_homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", _homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+	//sprintf_s(cmd, "DI%d\rFL%d\rFY3L\rSS%s\r", _homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
 
 	Write(cmd);
 	
@@ -268,7 +269,7 @@ bool SampleComm::IsFinished(int timeout)
 	bool ret = false;
 	char rdstr[STEP_STRINGLEN];
 	int  time_start = GetTickCount();
-	MSG  msg;
+	//MSG  msg;
 	while(1)
 	{	
 		Wait(WAIT_DEAY);//避免串口繁忙,等待200ms
@@ -283,11 +284,11 @@ bool SampleComm::IsFinished(int timeout)
 			ret = false;           
 			break;
 		} 	
-		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}	
+		//while(PeekMessage(&msg,NULL,NULL,NULL,P_REMOVE))
+		//{
+		//	TranslateMessage(&msg);
+		//	DispatchMessage(&msg);
+		//}	
     }
 	return ret;
 	#undef READ_WAIT_TIME
@@ -312,11 +313,11 @@ void SampleComm::Wait(int millisec)
 		{
 			break;
 		}
-		while(PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+		//while(PeekMessage(&msg,NULL,NULL,NULL,P_REMOVE))
+		//{
+		//	TranslateMessage(&msg);
+		//	DispatchMessage(&msg);
+		//}
 	}
 }
 

@@ -9,6 +9,7 @@
 #include <QThread>
 #include <QMutex>
 #include "ccd.h"
+#include "config.h"
 
 class WorkerCCD : public QObject
 {
@@ -23,10 +24,10 @@ public:
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 
 private slots:
-	void StartTimer();
-	void SetExposureTime();
+	void StartTimer(int measureFlag);
+	//void SetExposureTime();
 	void CloseWorker();
-	void Grab();
+	void Grab(int sID, int iID);
 	void GetMaterialName(QString materialName);
 
 private:
@@ -49,10 +50,11 @@ private:
 	string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	int						_measureFlag;//主界面传入的采集类型标记
 	QMutex					_mutex;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
 signals:
 	//void next();
-	void sendingMat(int workerID, /*Mat*/QImage mat);
+	//void sendingMat(int workerID, /*Mat*/QImage mat);
 	void sendingImg(int workerID, QImage img);
 	void grabDone(int workerID);
 	//void startMeasurement(int measureFlag);

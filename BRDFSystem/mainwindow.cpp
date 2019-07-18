@@ -9,117 +9,131 @@ QMainWindow(parent)
 	
 	//界面及软件初始化
 	AVTCamera::IniVimba(_system);
+	//extern QSettings *ini;
 	this->setAttribute(Qt::WA_DeleteOnClose, true);//关闭窗口时清空内存
 	TurnToMeasurement1();
-	//this->ui.stackedWidget->setCurrentWidget(this->ui.Measurement);
-	ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	
 
-
-
+//////////////////////////////////////////////配置页面/////////////////////////////////////////////////////
+	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	////滑动条相关设置
 	int nMin = 0;
-	int nMax = 200;
+	int nMax = 50;
 	int nSingleStep = 10;
-
 
 	QSlider *pSlider1 = this->ui.horizontalSlider_gain;
 	pSlider1->setMinimum(nMin);  // 最小值
 	pSlider1->setMaximum(nMax);  // 最大值
 	pSlider1->setSingleStep(nSingleStep);  // 步长
+	pSlider1->setTickPosition(QSlider::TicksAbove);  //刻度在上方
 
 	QSlider *pSlider2 = this->ui.horizontalSlider_darkLevel;
 	pSlider2->setMinimum(nMin);  // 最小值
 	pSlider2->setMaximum(nMax);  // 最大值
 	pSlider2->setSingleStep(nSingleStep);  // 步长
+	pSlider2->setTickPosition(QSlider::TicksAbove);  //刻度在上方
 
-
-	/*
 	////显示配置文件的参数
 	////工业相机配置参数
-	gain = this->ini->value("SWIR-Configuration/gain").toInt();
-	gain = QString::number(gain, 10);
-	this->ui.lineEdit_gain->setText(gain);
-	darkLevel = this->ini->value("SWIR-Configuration/darkLevel").toInt();
-	darkLevel = QString::number(darkLevel, 10);
-	this->ui.lineEdit_darkLevel->setText(darkLevel);
-	imageSaveFormat = this->ini->value("SWIR-Configuration/imageSaveFormat").toString();
-	int index = ui->comboBox_imageSaveFormat->findText(imageSaveFormat);
-	ui->comboBox_imageSaveFormat->setCurrentIndex(index);
-	imageSavePath = this->ini->value("SWIR-Configuration/imageSavePath").toString();
+	gain = ini->value("BRDFSystem-Configuration/gain").toInt();
+	gain_Int = gain;
+	this->ui.horizontalSlider_gain->setValue(gain);
+	this->ui.spinBox_gain->setValue(gain);
+	darkLevel = ini->value("BRDFSystem-Configuration/darkLevel").toInt();
+	darkLevel_Int = darkLevel;
+	this->ui.horizontalSlider_darkLevel->setValue(darkLevel);
+	this->ui.spinBox_darkLevel->setValue(darkLevel);
+	imageSaveFormat = ini->value("BRDFSystem-Configuration/imageSaveFormat").toString();
+	imageSaveFormat_Str = imageSaveFormat;
+	int index0 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat);
+	ui.comboBox_imageSaveFormat->setCurrentIndex(index0);
+	imageSavePath = ini->value("BRDFSystem-Configuration/imageSavePath").toString();
+	imageSavePath_Str = imageSavePath;
 	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
 
 
 	////光源配置参数
-	serialPortSelection = this->ini->value("SWIR-Configuration/serialPortSelection").toString();
-	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
-	ui->comboBox_serialPortSelection->setCurrentIndex(index);
-	baudRate = this->ini->value("SWIR-Configuration/baudRate").toString();
-	int index = ui->comboBox_baudRate->findText(baudRate);
-	ui->comboBox_baudRate->setCurrentIndex(index);
-	delaySetting = this->ini->value("SWIR-Configuration/delaySetting").toInt();
-	delaySetting = QString::number(delaySetting, 10);
-	this->ui.lineEdit_delaySetting->setText(delaySetting);
-	lightingSequence = this->ini->value("SWIR-Configuration/lightingSequence").toInt();
-	lightingSequence = QString::number(lightingSequence, 10);
-	this->ui.lineEdit_lightingSequence->setText(lightingSequence);
-
+	serialPortSelection = ini->value("BRDFSystem-Configuration/serialPortSelection").toString();
+	serialPortSelection_Str = serialPortSelection;
+	int index1 = ui.comboBox_serialPortSelection->findText(serialPortSelection);
+	ui.comboBox_serialPortSelection->setCurrentIndex(index1);
+	baudRate = ini->value("BRDFSystem-Configuration/baudRate").toString();
+	baudRate_Str = baudRate;
+	int index2 = ui.comboBox_baudRate->findText(baudRate);
+	ui.comboBox_baudRate->setCurrentIndex(index2);
+	delaySetting = ini->value("BRDFSystem-Configuration/delaySetting").toInt();
+	delaySetting_Str = QString::number(delaySetting, 10);
+	this->ui.lineEdit_delaySetting->setText(delaySetting_Str);
+	lightingSequence = ini->value("BRDFSystem-Configuration/lightingSequence").toInt();
+	lightingSequence_Str = QString::number(lightingSequence, 10);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequence_Str);
 
 	////样品台电机驱动配置参数
-	stepperMotorPortSelection = this->ini->value("SWIR-Configuration/stepperMotorPortSelection").toString();
-	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
-	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
-	stepperMotorSpeed = this->ini->value("SWIR-Configuration/stepperMotorSpeed").toString();
-	int index = ui->comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
-	ui->comboBox_stepperMotorSpeed->setCurrentIndex(index);
-	stepperMotorAcceleration = this->ini->value("SWIR-Configuration/stepperMotorAcceleration").toString();
-	int index = ui->comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
-	ui->comboBox_stepperMotorAcceleration->setCurrentIndex(index);
-	stepperMotorDeceleration = this->ini->value("SWIR-Configuration/stepperMotorDeceleration").toString();
-	int index = ui->comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
-	ui->comboBox_stepperMotorDeceleration->setCurrentIndex(index);
-	stepperMotorResolution = this->ini->value("SWIR-Configuration/stepperMotorResolution").toString();
-	int index = ui->comboBox_stepperMotorResolution->findText(stepperMotorResolution);
-	ui->comboBox_stepperMotorResolution->setCurrentIndex(index);
-	sampleRotationAngle = this->ini->value("SWIR-Configuration/sampleRotationAngle").toString();
-	int index = ui->comboBox_sampleRotationAngle->findText(sampleRotationAngle);
-	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
-	
+	stepperMotorPortSelection = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toString();
+	stepperMotorPortSelection_Str = stepperMotorPortSelection;
+	int index3 = ui.comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
+	ui.comboBox_stepperMotorPortSelection->setCurrentIndex(index3);
+	stepperMotorSpeed = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toString();
+	stepperMotorSpeed_Int = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toInt();
+	stepperMotorSpeed_Str = stepperMotorSpeed;
+	int index4 = ui.comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
+	ui.comboBox_stepperMotorSpeed->setCurrentIndex(index4);
+	stepperMotorAcceleration = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toString();
+	stepperMotorAcceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	stepperMotorAcceleration_Str = stepperMotorAcceleration;
+	int index5 = ui.comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
+	ui.comboBox_stepperMotorAcceleration->setCurrentIndex(index5);
+	stepperMotorDeceleration = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toString();
+	stepperMotorDeceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	stepperMotorDeceleration_Str = stepperMotorDeceleration;
+	int index6 = ui.comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
+	ui.comboBox_stepperMotorDeceleration->setCurrentIndex(index6);
+	stepperMotorResolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toString();
+	stepperMotorResolution_Int = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	stepperMotorResolution_Str = stepperMotorResolution;
+	int index7 = ui.comboBox_stepperMotorResolution->findText(stepperMotorResolution);
+	ui.comboBox_stepperMotorResolution->setCurrentIndex(index7);
+	sampleRotationAngle = ini->value("BRDFSystem-Configuration/sampleRotationAngle").toString();
+	sampleRotationAngle_Str = sampleRotationAngle;
+	int index8 = ui.comboBox_sampleRotationAngle->findText(sampleRotationAngle);
+	ui.comboBox_sampleRotationAngle->setCurrentIndex(index8);
 
 	////滑轨电机驱动配置参数
-	servoMotorPortSelection = this->ini->value("SWIR-Configuration/servoMotorPortSelection").toString();
-	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
-	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
-	servoMotorSpeed = this->ini->value("SWIR-Configuration/servoMotorSpeed").toString();
-	int index = ui->comboBox_servoMotorSpeed->findText(servoMotorSpeed);
-	ui->comboBox_servoMotorSpeed->setCurrentIndex(index);
-	servoMotorAcceleration = this->ini->value("SWIR-Configuration/servoMotorAcceleration").toString();
-	int index = ui->comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
-	ui->comboBox_servoMotorAcceleration->setCurrentIndex(index);
-	servoMotorDeceleration = this->ini->value("SWIR-Configuration/servoMotorDeceleration").toString();
-	int index = ui->comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
-	ui->comboBox_servoMotorDeceleration->setCurrentIndex(index);
-	servoMotorResolution = this->ini->value("SWIR-Configuration/servoMotorResolution").toString();
-	int index = ui->comboBox_servoMotorResolution->findText(servoMotorResolution);
-	ui->comboBox_servoMotorResolution->setCurrentIndex(index);
-	slideTableMovingDistance = this->ini->value("SWIR-Configuration/slideTableMovingDistance").toInt();
-	slideTableMovingDistance = QString::number(slideTableMovingDistance, 10);
-	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
+	servoMotorPortSelection = ini->value("BRDFSystem-Configuration/servoMotorPortSelection").toString();
+	servoMotorPortSelection_Str = servoMotorPortSelection;
+	int index9 = ui.comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
+	ui.comboBox_servoMotorPortSelection->setCurrentIndex(index9);
+	servoMotorSpeed = ini->value("BRDFSystem-Configuration/servoMotorSpeed").toString();
+	servoMotorSpeed_Str = servoMotorSpeed;
+	int index10 = ui.comboBox_servoMotorSpeed->findText(servoMotorSpeed);
+	ui.comboBox_servoMotorSpeed->setCurrentIndex(index10);
+	servoMotorAcceleration = ini->value("BRDFSystem-Configuration/servoMotorAcceleration").toString();
+	servoMotorAcceleration_Str = servoMotorAcceleration;
+	int index11 = ui.comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
+	ui.comboBox_servoMotorAcceleration->setCurrentIndex(index11);
+	servoMotorDeceleration = ini->value("BRDFSystem-Configuration/servoMotorDeceleration").toString();
+	servoMotorDeceleration_Str = servoMotorDeceleration;
+	int index12 = ui.comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
+	ui.comboBox_servoMotorDeceleration->setCurrentIndex(index12);
+	servoMotorResolution = ini->value("BRDFSystem-Configuration/servoMotorResolution").toString();
+	servoMotorResolution_Str = servoMotorResolution;
+	int index13 = ui.comboBox_servoMotorResolution->findText(servoMotorResolution);
+	ui.comboBox_servoMotorResolution->setCurrentIndex(index13);
+	slideTableMovingDistance = ini->value("BRDFSystem-Configuration/slideTableMovingDistance").toInt();
+	slideTableMovingDistance_Str = QString::number(slideTableMovingDistance, 10);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance_Str);
 
-	
 	////连接信号槽,保存和恢复默认设置
 	connect(this->ui.pushButton_save, SIGNAL(pressed()), this, SLOT(PushButton_Save_Pressed()));
 	connect(this->ui.pushButton_defaults, SIGNAL(pressed()), this, SLOT(PushButton_Defaults_Pressed()));
 	////连接信号槽（相互改变）
-	connect(this->ui.lineEdit_gain, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_gain, SLOT(setValue(int)));
-	connect(this->ui.horizontalSlider_gain, SIGNAL(valueChanged(int)), this->ui.lineEdit_gain, SLOT(setValue(int)));
-	connect(this->ui.lineEdit_gain, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
-	connect(this->ui.lineEdit_gain, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.spinBox_gain, SIGNAL(valueChanged(int)), pSlider1, SLOT(setValue(int)));
+	connect(pSlider1, SIGNAL(valueChanged(int)), this->ui.spinBox_gain, SLOT(setValue(int)));
 	////连接信号槽（相互改变）
-	connect(this->ui.lineEdit_darkLevel, SIGNAL(valueChanged(int)), this->ui.horizontalSlider_darkLevel, SLOT(setValue(int)));
-	connect(this->ui.horizontalSlider_darkLevel, SIGNAL(valueChanged(int)), this->ui.lineEdit_darkLevel, SLOT(setValue(int)));
-	connect(this->ui.lineEdit_darkLevel, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
-	connect(this->ui.lineEdit_darkLevel, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
+	connect(this->ui.spinBox_darkLevel, SIGNAL(valueChanged(int)), pSlider2, SLOT(setValue(int)));
+	connect(pSlider2, SIGNAL(valueChanged(int)), this->ui.spinBox_darkLevel, SLOT(setValue(int)));
 	connect(this->ui.comboBox_imageSaveFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
+	connect(this->ui.lineEdit_imageSavePath, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_imageSavePath, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
 
 	connect(this->ui.comboBox_serialPortSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
@@ -143,9 +157,10 @@ QMainWindow(parent)
 	connect(this->ui.comboBox_servoMotorResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(deal(int)));
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
-	*/
 
-	////页面切换
+	connect(this->ui.label_measureState, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
+
+//////////////////////////////////////////////切换页面/////////////////////////////////////////////////////
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
 	connect(this->ui.pushButton_measure2, SIGNAL(pressed()), this, SLOT(TurnToMeasurement2()));
 	connect(this->ui.pushButton_measure3, SIGNAL(pressed()), this, SLOT(TurnToMeasurement3()));
@@ -155,8 +170,8 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_test, SIGNAL(pressed()), this, SLOT(TurnToTest()));
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
 
-	////采集页面
-	workerMeasurement = new WorkerMeasurement(_system);//指明每一个采集线程的父指针
+//////////////////////////////////////////////采集页面/////////////////////////////////////////////////////
+	workerMeasurement = new WorkerMeasurement();
 	threadMeasurement = new QThread();
 	workerMeasurement->moveToThread(threadMeasurement);
 	for (int i = 0; i < CAM_NUM; i++)
@@ -167,25 +182,34 @@ QMainWindow(parent)
 
 		//用槽机制传递Mat保存下来的是空图？
 		//qRegisterMetaType<Mat>("Mat");
-		connect(this, SIGNAL(startTimer()), this->workerCCD[i], SLOT(StartTimer()));
-		connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//用队列方式会有延时
-		connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);//队列连接
+		connect(this, SIGNAL(startTimer(int)), this->workerCCD[i], SLOT(StartTimer(int)));
+		connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//防止重复连接。如果当前信号和槽已经连接过了，就不再连接了;UniqueConnection 模式：严格说不算连接方式，只是一个附加的参数。
+		connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);
 		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
-		connect(this->workerMeasurement, SIGNAL(readyForGrab()), this->workerCCD[i], SLOT(Grab()));
+		connect(this->workerMeasurement, SIGNAL(readyForGrab(int,int)), this->workerCCD[i], SLOT(Grab(int,int)), Qt::QueuedConnection);
 		connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
 	}
-	connect(this, SIGNAL(startMeasure(int)), this->workerMeasurement, SLOT(StartTimer(int)));
+	connect(this, SIGNAL(startMeasurement(int)), this->workerMeasurement, SLOT(StartTimer(int)));
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
 	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
 
 	
-	////相机预处理页面
+///////////////////////////////////////////////相机预处理页面///////////////////////////////////////////////
 	this->ui.pushButton_captureContinuously->setEnabled(false);
+	this->ui.pushButton_chess->setEnabled(false);
+	this->ui.pushButton_whiteBalance->setEnabled(false);
+	this->ui.pushButton_deadPixels->setEnabled(false);
+	this->ui.pushButton_blackLevel->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
+
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
-	
+	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
+	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
+	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
+	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
+	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
 }
 
 MainWindow::~MainWindow()
@@ -218,6 +242,7 @@ MainWindow::~MainWindow()
 ////////////////////////////////私有槽函数/////////////////////////////////////
 
 ////////////////////////////////配置页面/////////////////////////////////////
+
 ////////////////////////////////////////////////////////////////////////////
 // 函数：isEdited()
 // 描述：文本框参数有改动时，按钮控件可点击
@@ -243,55 +268,53 @@ void MainWindow::IsEdited()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Save_Pressed()
 {
-	/*
 	////工业相机配置保存
-	gain = this->ui.lineEdit_gain->text().toInt();
-	this->ini->setValue("/SWIR-Configuration/gain", gain);
-	darkLevel = this->ui.lineEdit_darkLevel->text().toInt();
-	this->ini->setValue("/SWIR-Configuration/darkLevel", darkLevel);
+	gain = this->ui.spinBox_gain->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/gain", gain);
+	darkLevel = this->ui.spinBox_darkLevel->text().toInt();
+	ini->setValue("/BRDFSystem-Configuration/darkLevel", darkLevel);
 	imageSaveFormat = this->ui.comboBox_imageSaveFormat->currentText();
-	this->ini->setValue("/SWIR-Configuration/imageSaveFormat", imageSaveFormat);
-	imageSavePath = this->ui.lineEdit_imageSavePath->text().toString();
-	this->ini->setValue("/SWIR-Configuration/imageSavePath", imageSavePath);
+	ini->setValue("/BRDFSystem-Configuration/imageSaveFormat", imageSaveFormat);
+	imageSavePath = this->ui.lineEdit_imageSavePath->text();
+	ini->setValue("/BRDFSystem-Configuration/imageSavePath", imageSavePath);
 
 	////光源配置保存
 	serialPortSelection = this->ui.comboBox_serialPortSelection->currentText();
-	this->ini->setValue("/SWIR-Configuration/serialPortSelection", serialPortSelection);
+	ini->setValue("/BRDFSystem-Configuration/serialPortSelection", serialPortSelection);
 	baudRate = this->ui.comboBox_baudRate->currentText();
-	this->ini->setValue("/SWIR-Configuration/baudRate", baudRate);
+	ini->setValue("/BRDFSystem-Configuration/baudRate", baudRate);
 	delaySetting = this->ui.lineEdit_delaySetting->text().toInt();
-	this->ini->setValue("/SWIR-Configuration/delaySetting", delaySetting);
+	ini->setValue("/BRDFSystem-Configuration/delaySetting", delaySetting);
 	lightingSequence = this->ui.lineEdit_lightingSequence->text().toInt();
-	this->ini->setValue("/SWIR-Configuration/lightingSequence", lightingSequence);
+	ini->setValue("/BRDFSystem-Configuration/lightingSequence", lightingSequence);
 
 	////样品台电机驱动配置保存
 	stepperMotorPortSelection = this->ui.comboBox_stepperMotorPortSelection->currentText();
-	this->ini->setValue("/SWIR-Configuration/stepperMotorPortSelection", stepperMotorPortSelection);
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorPortSelection", stepperMotorPortSelection);
 	stepperMotorSpeed = this->ui.comboBox_stepperMotorSpeed->currentText();
-	this->ini->setValue("/SWIR-Configuration/stepperMotorSpeed", stepperMotorSpeed);
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorSpeed", stepperMotorSpeed);
 	stepperMotorAcceleration = this->ui.comboBox_stepperMotorAcceleration->currentText();
-	this->ini->setValue("/SWIR-Configuration/stepperMotorAcceleration", stepperMotorAcceleration);
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorAcceleration", stepperMotorAcceleration);
 	stepperMotorDeceleration = this->ui.comboBox_stepperMotorDeceleration->currentText();
-	this->ini->setValue("/SWIR-Configuration/stepperMotorDeceleration", stepperMotorDeceleration);
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorDeceleration", stepperMotorDeceleration);
 	stepperMotorResolution = this->ui.comboBox_stepperMotorResolution->currentText();
-	this->ini->setValue("/SWIR-Configuration/stepperMotorResolution", stepperMotorResolution);
+	ini->setValue("/BRDFSystem-Configuration/stepperMotorResolution", stepperMotorResolution);
 	sampleRotationAngle = this->ui.comboBox_sampleRotationAngle->currentText();
-	this->ini->setValue("/SWIR-Configuration/sampleRotationAngle", sampleRotationAngle);
+	ini->setValue("/BRDFSystem-Configuration/sampleRotationAngle", sampleRotationAngle);
 
 	////滑轨电机驱动配置保存
 	servoMotorPortSelection = this->ui.comboBox_servoMotorPortSelection->currentText();
-	this->ini->setValue("/SWIR-Configuration/servoMotorPortSelection", servoMotorPortSelection);
+	ini->setValue("/BRDFSystem-Configuration/servoMotorPortSelection", servoMotorPortSelection);
 	servoMotorSpeed = this->ui.comboBox_servoMotorSpeed->currentText();
-	this->ini->setValue("/SWIR-Configuration/servoMotorSpeed", servoMotorSpeed);
+	ini->setValue("/BRDFSystem-Configuration/servoMotorSpeed", servoMotorSpeed);
 	servoMotorAcceleration = this->ui.comboBox_servoMotorAcceleration->currentText();
-	this->ini->setValue("/SWIR-Configuration/servoMotorAcceleration", servoMotorAcceleration);
+	ini->setValue("/BRDFSystem-Configuration/servoMotorAcceleration", servoMotorAcceleration);
 	servoMotorDeceleration = this->ui.comboBox_servoMotorDeceleration->currentText();
-	this->ini->setValue("/SWIR-Configuration/servoMotorDeceleration", servoMotorDeceleration);
+	ini->setValue("/BRDFSystem-Configuration/servoMotorDeceleration", servoMotorDeceleration);
 	servoMotorResolution = this->ui.comboBox_servoMotorResolution->currentText();
-	this->ini->setValue("/SWIR-Configuration/servoMotorResolution", servoMotorResolution);
+	ini->setValue("/BRDFSystem-Configuration/servoMotorResolution", servoMotorResolution);
 	slideTableMovingDistance = this->ui.lineEdit_slideTableMovingDistance->text().toInt();
-	this->ini->setValue("/SWIR-Configuration/slideTableMovingDistance", slideTableMovingDistance);
-	*/
+	ini->setValue("/BRDFSystem-Configuration/slideTableMovingDistance", slideTableMovingDistance);
 
 	QMessageBox::information(NULL, "Save", "Saved Successfully.", QMessageBox::Ok, QMessageBox::Ok);
 }
@@ -306,50 +329,50 @@ void MainWindow::PushButton_Save_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_Defaults_Pressed()
 {
-	/*
 	////工业相机默认配置
-	this->ui.lineEdit_gain->setText(gain);
-	this->ui.lineEdit_darkLevel->setText(darkLevel);
-	int index = ui->comboBox_imageSaveFormat->findText(imageSaveFormat);
-	ui->comboBox_imageSaveFormat->setCurrentIndex(index);
-	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
+	this->ui.horizontalSlider_gain->setValue(gain_Int);
+	this->ui.spinBox_gain->setValue(gain_Int);
+	this->ui.horizontalSlider_darkLevel->setValue(darkLevel_Int);
+	this->ui.spinBox_darkLevel->setValue(darkLevel_Int);
+	int index14 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat_Str);
+	ui.comboBox_imageSaveFormat->setCurrentIndex(index14);
+	this->ui.lineEdit_imageSavePath->setText(imageSavePath_Str);
 
 	////光源默认配置
-	int index = ui->comboBox_serialPortSelection->findText(serialPortSelection);
-	ui->comboBox_serialPortSelection->setCurrentIndex(index);
-	int index = ui->comboBox_baudRate->findText(baudRate);
-	ui->comboBox_baudRate->setCurrentIndex(index);
-	this->ui.lineEdit_delaySetting->setText(delaySetting);
-	this->ui.lineEdit_lightingSequence->setText(lightingSequencel);
+	int index15 = ui.comboBox_serialPortSelection->findText(serialPortSelection_Str);
+	ui.comboBox_serialPortSelection->setCurrentIndex(index15);
+	int index16 = ui.comboBox_baudRate->findText(baudRate_Str);
+	ui.comboBox_baudRate->setCurrentIndex(index16);
+	this->ui.lineEdit_delaySetting->setText(delaySetting_Str);
+	this->ui.lineEdit_lightingSequence->setText(lightingSequence_Str);
 
 	////样品台电机驱动默认配置
-	int index = ui->comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
-	ui->comboBox_stepperMotorPortSelection->setCurrentIndex(index);
-	int index = ui->comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
-	ui->comboBox_stepperMotorSpeed->setCurrentIndex(index);
-	int index = ui->comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
-	ui->comboBox_stepperMotorAcceleration->setCurrentIndex(index);
-	int index = ui->comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
-	ui->comboBox_stepperMotorDeceleration->setCurrentIndex(index);
-	int index = ui->comboBox_stepperMotorResolution->findText(stepperMotorResolution);
-	ui->comboBox_stepperMotorResolution->setCurrentIndex(index);
-	int index = ui->comboBox_sampleRotationAngle->findText(sampleRotationAngle);
-	ui->comboBox_sampleRotationAngle->setCurrentIndex(index);
+	int index17 = ui.comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection_Str);
+	ui.comboBox_stepperMotorPortSelection->setCurrentIndex(index17);
+	int index18 = ui.comboBox_stepperMotorSpeed->findText(stepperMotorSpeed_Str);
+	ui.comboBox_stepperMotorSpeed->setCurrentIndex(index18);
+	int index19 = ui.comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration_Str);
+	ui.comboBox_stepperMotorAcceleration->setCurrentIndex(index19);
+	int index20 = ui.comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration_Str);
+	ui.comboBox_stepperMotorDeceleration->setCurrentIndex(index20);
+	int index21 = ui.comboBox_stepperMotorResolution->findText(stepperMotorResolution_Str);
+	ui.comboBox_stepperMotorResolution->setCurrentIndex(index21);
+	int index22 = ui.comboBox_sampleRotationAngle->findText(sampleRotationAngle_Str);
+	ui.comboBox_sampleRotationAngle->setCurrentIndex(index22);
 
 
 	////滑轨电机驱动默认配置
-	int index = ui->comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
-	ui->comboBox_servoMotorPortSelection->setCurrentIndex(index);
-	int index = ui->comboBox_servoMotorSpeed->findText(servoMotorSpeed);
-	ui->comboBox_servoMotorSpeed->setCurrentIndex(index);
-	int index = ui->comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
-	ui->comboBox_servoMotorAcceleration->setCurrentIndex(index);
-	int index = ui->comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
-	ui->comboBox_servoMotorDeceleration->setCurrentIndex(index);
-	int index = ui->comboBox_servoMotorResolution->findText(servoMotorResolution);
-	ui->comboBox_servoMotorResolution->setCurrentIndex(index);
-	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance);
-	*/
+	int index23 = ui.comboBox_servoMotorPortSelection->findText(servoMotorPortSelection_Str);
+	ui.comboBox_servoMotorPortSelection->setCurrentIndex(index23);
+	int index24 = ui.comboBox_servoMotorSpeed->findText(servoMotorSpeed_Str);
+	ui.comboBox_servoMotorSpeed->setCurrentIndex(index24);
+	int index25 = ui.comboBox_servoMotorAcceleration->findText(servoMotorAcceleration_Str);
+	ui.comboBox_servoMotorAcceleration->setCurrentIndex(index25);
+	int index26 = ui.comboBox_servoMotorDeceleration->findText(servoMotorDeceleration_Str);
+	ui.comboBox_servoMotorDeceleration->setCurrentIndex(index26);
+	int index27 = ui.comboBox_servoMotorResolution->findText(servoMotorResolution_Str);
+	ui.comboBox_servoMotorResolution->setCurrentIndex(index27);
+	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance_Str);
 }
 ////////////////////////////////切换页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -423,6 +446,7 @@ void MainWindow::TurnToTest()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::TurnToPreCamera()
 {
+	_displayFlag = 0;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.PreCamera);
 }
 
@@ -449,31 +473,30 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 
 	this->ui.lineEdit_materialName->setEnabled(false);
 	this->ui.pushButton_startMeasurement->setEnabled(false);
-	if (_measureFlag == 1)
-	{
-		CreateFolds(1, "..\\imgs_measurement1\\", _qMaterialName.toStdString());
-		CreateFolds(2, "..\\imgs_measurement1\\" + _qMaterialName.toStdString());
-	}	
-	if (_measureFlag == 2)
-	{
-		CreateFolds(1, "..\\imgs_measurement2\\", _qMaterialName.toStdString());
-		CreateFolds(2, "..\\imgs_measurement2\\" + _qMaterialName.toStdString());
-	}
-	emit sendingMaterialName(_qMaterialName);
-
 	this->ui.lineEdit_materialName->setEnabled(false);
 	this->ui.pushButton_stopMeasurement->setEnabled(true);
 	this->ui.toolBox->setEnabled(false);
-	
+
+	string save_measurement1 = ini->value("BRDFSystem-Configuration/save_brdfiso").toString().toStdString();
+	string save_measurement2 = ini->value("BRDFSystem-Configuration/save_brdfiniso").toString().toStdString();
+
+	//创建以材质名称命名的文件夹
+	if (_measureFlag == 1)
+	{
+		CreateFolds(save_measurement1, _qMaterialName.toStdString());
+	}	
+	if (_measureFlag == 2)
+	{
+		CreateFolds(save_measurement2, _qMaterialName.toStdString());
+	}
+	emit sendingMaterialName(_qMaterialName);
+
 	//开启光源与样品线程
 	if (!threadMeasurement->isRunning())
 	{
-		//_mutex.lock();
-		//this->workerMeasurement->_measureFlag = _measureFlag;
-		//_mutex.unlock();
 		threadMeasurement->start();	
-		emit startMeasure(_measureFlag);
 	}
+	emit startMeasurement(_measureFlag);
 
 	//开启相机线程
 	for (int i = 0; i < CAM_NUM; i++)
@@ -481,9 +504,9 @@ void MainWindow::PushButton_StartMeasurement_Pressed()
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();		
-			emit startTimer();
 		}
 	}
+	emit startTimer(_measureFlag);
 
 	//Sleep(500);//等待相机初始化
 }
@@ -527,7 +550,23 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 {
 	emit sendingMat(workerID, mat);
 }
-
+////////////////////////////////////////////////////////////////////////////
+// 函数：DisplayMeasureState
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::DisplayMeasureState(int cameraID, int sampleID, int illuminantID)
+{
+	char name[100];
+	sprintf(name, "第%d个倾斜角 第%d个高度角 第%d个样品旋转角度", cameraID, sampleID, illuminantID);
+	QString a;
+	a = QString(QLatin1String(name));
+	this->ui.label_measureState->setText(a);
+}
 
 /////////////////////////////相机预处理页面/////////////////////////////////
 
@@ -542,22 +581,23 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_IniCCD_Pressed()
 {
-	ui.pushButton_captureContinuously->setEnabled(true);
-	ui.pushButton_finiCCD->setEnabled(true);
-
 	_displayFlag = 0;
-	CreateFolds(2, "..\\imgs_calibration");
 	
 	for (int i = 0; i < CAM_NUM; i++)
 	{
-		//workerCCD[i]->cameraRGB_->SetCameraSettings(0, 40000, 0.00, 0.00);//图像格式老问题，5.9又踩坑
 		if (!threadCCD[i]->isRunning())
 		{
 			threadCCD[i]->start();
-			connect(this, SIGNAL(startTimer()), workerCCD[i], SLOT(StartTimer()));
-			emit startTimer();
 		}
 	}
+	emit startTimer(_measureFlag);
+
+	this->ui.pushButton_captureContinuously->setEnabled(true);
+	this->ui.pushButton_chess->setEnabled(true);
+	this->ui.pushButton_whiteBalance->setEnabled(true);
+	this->ui.pushButton_deadPixels->setEnabled(true);
+	this->ui.pushButton_blackLevel->setEnabled(true);
+	this->ui.pushButton_finiCCD->setEnabled(true);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_captureContinuously_pressed
@@ -572,9 +612,90 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 {
 	for (int i = 0; i < CAM_NUM; i++)
 	{
+		string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+		char cameraPath[16];
+		sprintf(cameraPath, "camera%d", i);
+		CreateFolds(capturePath, cameraPath);
 		this->workerCCD[i]->_capture = 1;
 	}
 }
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Chess_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_WhiteBalance_Pressed()
+{
+	vector<Mat> mats;
+	Mat mat;
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		//string path = _capturePath + "camera" + to_string(i);
+		//mats = AVTCamera::ReadImages(path);
+		//mat = AVTCamera::AverageImage(mats);
+		_trans = AVTCamera::GetWhiteBalanceTrans(mats);
+	}
+	_transs.push_back(_trans);
+	//需要写在配置文件里
+	//...
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_DeadPixel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_BlackLevel_Pressed()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_FiniCCD_Pressed()
+{
+
+}
+
 
 /////////////////////////////槽函数的公用函数/////////////////////////////////
 
@@ -592,45 +713,118 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 	if (_displayFlag == 0)
 	{
 		if (workerID == 0)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera0, img);
+			_mutex.unlock();
+		}
 		if (workerID == 1)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera1, img);
+			_mutex.unlock();
+		}
 		if (workerID == 2)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera2, img);
+			_mutex.unlock();
+		}
 		if (workerID == 3)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera3, img);
+			_mutex.unlock();
+		}
 		if (workerID == 4)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera4, img);
+			_mutex.unlock();
+		}
 		if (workerID == 5)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera5, img);
+			_mutex.unlock();
+		}
 		if (workerID == 6)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera6, img);
+			_mutex.unlock();
+		}
 		if (workerID == 7)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera7, img);
+			_mutex.unlock();
+		}
 		if (workerID == 8)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_precamera8, img);
+			_mutex.unlock();
+		}
 	}
 	else if (_displayFlag == 1)
 	{
 		if (workerID == 0)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera0, img);
+			_mutex.unlock();
+		}
 		if (workerID == 1)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera1, img);
+			_mutex.unlock();
+		}
 		if (workerID == 2)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera2, img);
+			_mutex.unlock();
+		}
 		if (workerID == 3)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera3, img);
+			_mutex.unlock();
+		}
 		if (workerID == 4)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera4, img);
+			_mutex.unlock();
+		}
 		if (workerID == 5)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera5, img);
+			_mutex.unlock();
+		}
 		if (workerID == 6)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera6, img);
+			_mutex.unlock();
+		}
 		if (workerID == 7)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera7, img);
+			_mutex.unlock();
+		}
 		if (workerID == 8)
+		{
+			_mutex.lock();
 			ShowImgOnQLabel(this->ui.label_camera8, img);
+			_mutex.unlock();
+		}
 	}
+	connect(this->workerCCD[workerID], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);
 }
 
 ////////////////////////////////////私有函数////////////////////////////////////////
@@ -644,55 +838,26 @@ void MainWindow::DisplayImage(int workerID, QImage img)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::CreateFolds(int flag, string root, string fileName)
+void MainWindow::CreateFolds(string root, string fileName)
 {
-	if (flag == 1)
+	///////Unicode字符集问题/////////
+	WCHAR wszStr[256];
+	memset(wszStr, 0, sizeof(wszStr));
+	MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
+		sizeof(wszStr) / sizeof(wszStr[0]));
+
+	if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
 	{
+		string newFolderPath = root + fileName;
 		///////Unicode字符集问题/////////
-		WCHAR wszStr[256];
-		memset(wszStr, 0, sizeof(wszStr));
-		MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
-			sizeof(wszStr) / sizeof(wszStr[0]));
+		WCHAR wszNewStr[256];
+		memset(wszNewStr, 0, sizeof(wszNewStr));
+		MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
+			sizeof(wszNewStr) / sizeof(wszNewStr[0]));
 
-		if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
+		if (!CreateDirectory(wszNewStr, NULL))
 		{
-			string newFolderPath = root + fileName;
-			///////Unicode字符集问题/////////
-			WCHAR wszNewStr[256];
-			memset(wszNewStr, 0, sizeof(wszNewStr));
-			MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
-				sizeof(wszNewStr) / sizeof(wszNewStr[0]));
-
-			if (!CreateDirectory(wszNewStr, NULL))
-			{
-				cout << "文件夹已存在！" << endl;
-			}
-		}
-	}
-	if (flag == 2)
-	{
-		for (int i = 0; i < CAM_NUM; i++)
-		{
-			///////Unicode字符集问题/////////
-			WCHAR wszStr[256];
-			memset(wszStr, 0, sizeof(wszStr));
-			MultiByteToWideChar(CP_ACP, 0, root.c_str(), strlen(root.c_str()) + 1, wszStr,
-				sizeof(wszStr) / sizeof(wszStr[0]));
-
-			if (GetFileAttributes(wszStr) & FILE_ATTRIBUTE_DIRECTORY) //判断路径是文件还是目录
-			{
-				string newFolderPath = root + "\\camera" + to_string(i);
-				///////Unicode字符集问题/////////
-				WCHAR wszNewStr[256];
-				memset(wszNewStr, 0, sizeof(wszNewStr));
-				MultiByteToWideChar(CP_ACP, 0, newFolderPath.c_str(), strlen(newFolderPath.c_str()) + 1, wszNewStr,
-					sizeof(wszNewStr) / sizeof(wszNewStr[0]));
-
-				if (!CreateDirectory(wszNewStr, NULL))
-				{
-					cout << "文件夹已存在！" << endl;
-				}
-			}
+			cout << "文件夹已存在！" << endl;
 		}
 	}
 }
@@ -705,7 +870,7 @@ void MainWindow::CreateFolds(int flag, string root, string fileName)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-inline void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
+void MainWindow::ShowImgOnQLabel(QLabel* qlabel, QImage img)
 {
 	if (!img.isNull())
 	{

@@ -12,6 +12,7 @@ QObject(parent)
 	_measureFlag = 0;
 	_mutex.lock();//防止9台相机抢占Vimba系统别名
 	cameraAVT = new AVTCamera(_workerID, _system);
+	cameraAVT->CameraSettings(30000);//设置初始曝光时间为50ms
 	_mutex.unlock();
 
 	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
@@ -26,10 +27,10 @@ QObject(parent)
 	//connect(this, SIGNAL(startMeasurement(int)), workerMeasurement, SLOT(StartTimer(int)));
 }
 
-void WorkerCCD::StartTimer(/*int measureFlag*/)
+void WorkerCCD::StartTimer(int measureFlag)
 {
-	//_measureFlag = measureFlag;
-	_timerId = this->startTimer(1000);//设置定时器触发子线程capture  单位毫秒
+	_measureFlag = measureFlag;
+	_timerId = this->startTimer(60);//设置定时器触发子线程capture  单位毫秒
 }
 
 void WorkerCCD::timerEvent(QTimerEvent *event)
@@ -45,37 +46,55 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 
 		//连续采集
 		if (_capture == 1)
-			cameraAVT->CaptureImages(_mat, _imageSavingPath3);
+		{
+			string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+			cameraAVT->CaptureImages(_mat, capturePath);
+		}
 
-		emit sendingMat(_workerID, /*_mat*/_img);//给采集线程传递
 		emit sendingImg(_workerID, _img);//给界面显示线程传递
 	}
 }
 
-void WorkerCCD::SetExposureTime()
-{
-	_exposureTime = AVTCamera::GetExposureTime(_mat);//更新曝光时间
-	cameraAVT->CameraSettings(_exposureTime * 1000);
-	Sleep(500);//等曝光时间生效
-}
+//void WorkerCCD::SetExposureTime()
+//{
+//	_exposureTime = AVTCamera::GetExposureTime(_mat);//更新曝光时间
+//	cameraAVT->CameraSettings(_exposureTime * 1000);
+//	Sleep(500);//等曝光时间生效
+//}
 
 void WorkerCCD::GetMaterialName(QString materialName)
 {
 	_materialName = materialName.toStdString();
 }
 
-void WorkerCCD::Grab()
+void WorkerCCD::Grab(int sID, int iID)
 {
-	//SetExposureTime();//调整曝光时间
+	cameraAVT->GetImageSize(_width, _height);
+	uchar* pImageFrame = cameraAVT->CaptureImage();
+	Mat mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+
+	if (AVTCamera::IsOverExposure(mat))
+	{
+		_exposureTime = AVTCamera::GetExposureTime(_mat);//更新曝光时间
+		cameraAVT->CameraSettings(_exposureTime * 1000);
+		Sleep(500);//等曝光时间生效
+
+		//重新拍摄
+		cameraAVT->GetImageSize(_width, _height);
+		pImageFrame = cameraAVT->CaptureImage();
+		mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+	}
+	
+	//extern string _materialName;
 	string path;
 	if (_measureFlag == 1)
-		path = _imageSavingPath1 + _materialName + "//camera" + to_string(_workerID);
+		path = _imageSavingPath1 + _materialName;
 	if (_measureFlag == 2)
-		path = _imageSavingPath2 + _materialName + "//camera" + to_string(_workerID);
-	if (_measureFlag == 3)
-		path = _imageSavingPath3 + "//camera" + to_string(_workerID);
+		path = _imageSavingPath2 + _materialName;
+	//if (_measureFlag == 3)
+	//	path = _imageSavingPath3;
 
-	cameraAVT->SaveAnImage(_mat, path, _workerID);
+	cameraAVT->SaveAnImage(_mat, path, _workerID, sID, iID, 1);
 
 	emit grabDone(_workerID);
 }

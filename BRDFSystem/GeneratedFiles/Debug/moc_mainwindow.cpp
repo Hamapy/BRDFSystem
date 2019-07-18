@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[29];
-    char stringdata0[492];
+    QByteArrayData data[38];
+    char stringdata0[690];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,36 +32,45 @@ static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
 QT_MOC_LITERAL(0, 0, 10), // "MainWindow"
 QT_MOC_LITERAL(1, 11, 10), // "startTimer"
 QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 12), // "startMeasure"
-QT_MOC_LITERAL(4, 36, 11), // "measureFlag"
-QT_MOC_LITERAL(5, 48, 19), // "sendingMaterialName"
-QT_MOC_LITERAL(6, 68, 12), // "materialName"
-QT_MOC_LITERAL(7, 81, 10), // "sendingMat"
-QT_MOC_LITERAL(8, 92, 8), // "workerID"
-QT_MOC_LITERAL(9, 101, 3), // "mat"
-QT_MOC_LITERAL(10, 105, 18), // "TurnToMeasurement1"
-QT_MOC_LITERAL(11, 124, 18), // "TurnToMeasurement2"
-QT_MOC_LITERAL(12, 143, 18), // "TurnToMeasurement3"
-QT_MOC_LITERAL(13, 162, 15), // "TurnToModeling1"
-QT_MOC_LITERAL(14, 178, 15), // "TurnToModeling2"
-QT_MOC_LITERAL(15, 194, 14), // "TurnToSettings"
-QT_MOC_LITERAL(16, 209, 10), // "TurnToTest"
-QT_MOC_LITERAL(17, 220, 15), // "TurnToPreCamera"
-QT_MOC_LITERAL(18, 236, 23), // "PushButton_Save_Pressed"
-QT_MOC_LITERAL(19, 260, 27), // "PushButton_Defaults_Pressed"
-QT_MOC_LITERAL(20, 288, 35), // "PushButton_StartMeasurement_P..."
-QT_MOC_LITERAL(21, 324, 34), // "PushButton_StopMeasurement_Pr..."
-QT_MOC_LITERAL(22, 359, 30), // "PushButton_SampleReset_Pressed"
-QT_MOC_LITERAL(23, 390, 10), // "SendingMat"
-QT_MOC_LITERAL(24, 401, 25), // "PushButton_IniCCD_Pressed"
-QT_MOC_LITERAL(25, 427, 38), // "PushButton_CaptureContinuousl..."
-QT_MOC_LITERAL(26, 466, 8), // "IsEdited"
-QT_MOC_LITERAL(27, 475, 12), // "DisplayImage"
-QT_MOC_LITERAL(28, 488, 3) // "img"
+QT_MOC_LITERAL(3, 23, 11), // "measureFlag"
+QT_MOC_LITERAL(4, 35, 16), // "startMeasurement"
+QT_MOC_LITERAL(5, 52, 19), // "sendingMaterialName"
+QT_MOC_LITERAL(6, 72, 12), // "materialName"
+QT_MOC_LITERAL(7, 85, 10), // "sendingMat"
+QT_MOC_LITERAL(8, 96, 8), // "workerID"
+QT_MOC_LITERAL(9, 105, 3), // "mat"
+QT_MOC_LITERAL(10, 109, 18), // "TurnToMeasurement1"
+QT_MOC_LITERAL(11, 128, 18), // "TurnToMeasurement2"
+QT_MOC_LITERAL(12, 147, 18), // "TurnToMeasurement3"
+QT_MOC_LITERAL(13, 166, 15), // "TurnToModeling1"
+QT_MOC_LITERAL(14, 182, 15), // "TurnToModeling2"
+QT_MOC_LITERAL(15, 198, 14), // "TurnToSettings"
+QT_MOC_LITERAL(16, 213, 10), // "TurnToTest"
+QT_MOC_LITERAL(17, 224, 15), // "TurnToPreCamera"
+QT_MOC_LITERAL(18, 240, 23), // "PushButton_Save_Pressed"
+QT_MOC_LITERAL(19, 264, 27), // "PushButton_Defaults_Pressed"
+QT_MOC_LITERAL(20, 292, 35), // "PushButton_StartMeasurement_P..."
+QT_MOC_LITERAL(21, 328, 34), // "PushButton_StopMeasurement_Pr..."
+QT_MOC_LITERAL(22, 363, 30), // "PushButton_SampleReset_Pressed"
+QT_MOC_LITERAL(23, 394, 10), // "SendingMat"
+QT_MOC_LITERAL(24, 405, 25), // "PushButton_IniCCD_Pressed"
+QT_MOC_LITERAL(25, 431, 38), // "PushButton_CaptureContinuousl..."
+QT_MOC_LITERAL(26, 470, 24), // "PushButton_Chess_Pressed"
+QT_MOC_LITERAL(27, 495, 31), // "PushButton_WhiteBalance_Pressed"
+QT_MOC_LITERAL(28, 527, 28), // "PushButton_DeadPixel_Pressed"
+QT_MOC_LITERAL(29, 556, 29), // "PushButton_BlackLevel_Pressed"
+QT_MOC_LITERAL(30, 586, 26), // "PushButton_FiniCCD_Pressed"
+QT_MOC_LITERAL(31, 613, 8), // "IsEdited"
+QT_MOC_LITERAL(32, 622, 12), // "DisplayImage"
+QT_MOC_LITERAL(33, 635, 3), // "img"
+QT_MOC_LITERAL(34, 639, 19), // "DisplayMeasureState"
+QT_MOC_LITERAL(35, 659, 8), // "cameraID"
+QT_MOC_LITERAL(36, 668, 8), // "sampleID"
+QT_MOC_LITERAL(37, 677, 12) // "illuminantID"
 
     },
-    "MainWindow\0startTimer\0\0startMeasure\0"
-    "measureFlag\0sendingMaterialName\0"
+    "MainWindow\0startTimer\0\0measureFlag\0"
+    "startMeasurement\0sendingMaterialName\0"
     "materialName\0sendingMat\0workerID\0mat\0"
     "TurnToMeasurement1\0TurnToMeasurement2\0"
     "TurnToMeasurement3\0TurnToModeling1\0"
@@ -74,7 +83,13 @@ QT_MOC_LITERAL(28, 488, 3) // "img"
     "PushButton_SampleReset_Pressed\0"
     "SendingMat\0PushButton_IniCCD_Pressed\0"
     "PushButton_CaptureContinuously_Pressed\0"
-    "IsEdited\0DisplayImage\0img"
+    "PushButton_Chess_Pressed\0"
+    "PushButton_WhiteBalance_Pressed\0"
+    "PushButton_DeadPixel_Pressed\0"
+    "PushButton_BlackLevel_Pressed\0"
+    "PushButton_FiniCCD_Pressed\0IsEdited\0"
+    "DisplayImage\0img\0DisplayMeasureState\0"
+    "cameraID\0sampleID\0illuminantID"
 };
 #undef QT_MOC_LITERAL
 
@@ -84,7 +99,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      28,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -92,34 +107,40 @@ static const uint qt_meta_data_MainWindow[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  124,    2, 0x06 /* Public */,
-       3,    1,  125,    2, 0x06 /* Public */,
-       5,    1,  128,    2, 0x06 /* Public */,
-       7,    2,  131,    2, 0x06 /* Public */,
+       1,    1,  154,    2, 0x06 /* Public */,
+       4,    1,  157,    2, 0x06 /* Public */,
+       5,    1,  160,    2, 0x06 /* Public */,
+       7,    2,  163,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  136,    2, 0x08 /* Private */,
-      11,    0,  137,    2, 0x08 /* Private */,
-      12,    0,  138,    2, 0x08 /* Private */,
-      13,    0,  139,    2, 0x08 /* Private */,
-      14,    0,  140,    2, 0x08 /* Private */,
-      15,    0,  141,    2, 0x08 /* Private */,
-      16,    0,  142,    2, 0x08 /* Private */,
-      17,    0,  143,    2, 0x08 /* Private */,
-      18,    0,  144,    2, 0x08 /* Private */,
-      19,    0,  145,    2, 0x08 /* Private */,
-      20,    0,  146,    2, 0x08 /* Private */,
-      21,    0,  147,    2, 0x08 /* Private */,
-      22,    0,  148,    2, 0x08 /* Private */,
-      23,    2,  149,    2, 0x08 /* Private */,
-      24,    0,  154,    2, 0x08 /* Private */,
-      25,    0,  155,    2, 0x08 /* Private */,
-      26,    0,  156,    2, 0x08 /* Private */,
-      27,    2,  157,    2, 0x08 /* Private */,
+      10,    0,  168,    2, 0x08 /* Private */,
+      11,    0,  169,    2, 0x08 /* Private */,
+      12,    0,  170,    2, 0x08 /* Private */,
+      13,    0,  171,    2, 0x08 /* Private */,
+      14,    0,  172,    2, 0x08 /* Private */,
+      15,    0,  173,    2, 0x08 /* Private */,
+      16,    0,  174,    2, 0x08 /* Private */,
+      17,    0,  175,    2, 0x08 /* Private */,
+      18,    0,  176,    2, 0x08 /* Private */,
+      19,    0,  177,    2, 0x08 /* Private */,
+      20,    0,  178,    2, 0x08 /* Private */,
+      21,    0,  179,    2, 0x08 /* Private */,
+      22,    0,  180,    2, 0x08 /* Private */,
+      23,    2,  181,    2, 0x08 /* Private */,
+      24,    0,  186,    2, 0x08 /* Private */,
+      25,    0,  187,    2, 0x08 /* Private */,
+      26,    0,  188,    2, 0x08 /* Private */,
+      27,    0,  189,    2, 0x08 /* Private */,
+      28,    0,  190,    2, 0x08 /* Private */,
+      29,    0,  191,    2, 0x08 /* Private */,
+      30,    0,  192,    2, 0x08 /* Private */,
+      31,    0,  193,    2, 0x08 /* Private */,
+      32,    2,  194,    2, 0x08 /* Private */,
+      34,    3,  199,    2, 0x08 /* Private */,
 
  // signals: parameters
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    4,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::QString,    6,
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,    9,
 
@@ -141,7 +162,13 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,   28,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,   33,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,   35,   36,   37,
 
        0        // eod
 };
@@ -152,8 +179,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->startTimer(); break;
-        case 1: _t->startMeasure((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->startTimer((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->startMeasurement((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->sendingMaterialName((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 3: _t->sendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 4: _t->TurnToMeasurement1(); break;
@@ -172,15 +199,21 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 17: _t->SendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 18: _t->PushButton_IniCCD_Pressed(); break;
         case 19: _t->PushButton_CaptureContinuously_Pressed(); break;
-        case 20: _t->IsEdited(); break;
-        case 21: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
+        case 20: _t->PushButton_Chess_Pressed(); break;
+        case 21: _t->PushButton_WhiteBalance_Pressed(); break;
+        case 22: _t->PushButton_DeadPixel_Pressed(); break;
+        case 23: _t->PushButton_BlackLevel_Pressed(); break;
+        case 24: _t->PushButton_FiniCCD_Pressed(); break;
+        case 25: _t->IsEdited(); break;
+        case 26: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
+        case 27: _t->DisplayMeasureState((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (MainWindow::*_t)();
+            typedef void (MainWindow::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startTimer)) {
                 *result = 0;
                 return;
@@ -188,7 +221,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         }
         {
             typedef void (MainWindow::*_t)(int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startMeasure)) {
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::startMeasurement)) {
                 *result = 1;
                 return;
             }
@@ -235,25 +268,26 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 28)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 28;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 28)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 28;
     }
     return _id;
 }
 
 // SIGNAL 0
-void MainWindow::startTimer()
+void MainWindow::startTimer(int _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void MainWindow::startMeasure(int _t1)
+void MainWindow::startMeasurement(int _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);

@@ -7,38 +7,52 @@
         <LoggingLevel Value="4" Description="All messages will be logged (Info, Error, Warning, Debug, Trace)" />
     </Logging>
 </SettingsStruct>
-<CameraSettings CameraID="DEV_0xA4701120BA03E" CameraModel="Guppy PRO F201C" FeatureCount="131">
-    <FeatureGroup Count="28">
+<CameraSettings CameraID="DEV_0xA4701120BA03F" CameraModel="Guppy PRO F201C" FeatureCount="131">
+    <FeatureGroup Count="42">
         <Feature Name="AcquisitionFrameCount" Type="Integer" Access="R/W">1</Feature>
+        <Feature Name="AcquisitionFrameRate" Type="Float" Access="R/W">5.000000</Feature>
+        <Feature Name="AcquisitionMode" Type="Enumeration" Access="R/W">Continuous</Feature>
         <Feature Name="AutofunctionAOIEnable" Type="Boolean" Access="R/W">False</Feature>
-        <Feature Name="AutofunctionAOIHeight" Type="Integer" Access="R/W">960</Feature>
+        <Feature Name="AutofunctionAOIHeight" Type="Integer" Access="R/W">1234</Feature>
         <Feature Name="AutofunctionAOIOffsetX" Type="Integer" Access="R/W">0</Feature>
         <Feature Name="AutofunctionAOIOffsetY" Type="Integer" Access="R/W">0</Feature>
         <Feature Name="AutofunctionAOIShowArea" Type="Boolean" Access="R/W">False</Feature>
-        <Feature Name="AutofunctionAOIWidth" Type="Integer" Access="R/W">1280</Feature>
-        <Feature Name="AutofunctionTargetIntensity" Type="Integer" Access="R/W">125</Feature>
-        <Feature Name="BlackLevel" Type="Float" Access="R/W">16.000000</Feature>
+        <Feature Name="AutofunctionAOIWidth" Type="Integer" Access="R/W">1624</Feature>
+        <Feature Name="AutofunctionTargetIntensity" Type="Integer" Access="R/W">50</Feature>
+        <Feature Name="BlackLevel" Type="Float" Access="R/W">0.000000</Feature>
         <Feature Name="ColorTransformationEnable" Type="Boolean" Access="R/W">True</Feature>
         <Feature Name="ColorTransformationSelector" Type="Enumeration" Access="R/W">RGBtoRGB</Feature>
         <Feature Name="DeviceAccessRegisterAddress" Type="Integer" Access="R/W">4042293260</Feature>
         <Feature Name="DeviceAccessRegisterValue" Type="Integer" Access="R/W">83887040</Feature>
         <Feature Name="DeviceStatusLightEnable" Type="Boolean" Access="R/W">True</Feature>
+        <Feature Name="DriverBuffersCount" Type="Integer" Access="R/W">4</Feature>
         <Feature Name="ExposureAuto" Type="Enumeration" Access="R/W">Off</Feature>
         <Feature Name="ExposureAutoMax" Type="Float" Access="R/W">81945.000000</Feature>
         <Feature Name="ExposureAutoMin" Type="Float" Access="R/W">65.000000</Feature>
-        <Feature Name="ExposureTime" Type="Float" Access="R/W">7229.000000</Feature>
+        <Feature Name="ExposureAutoTimebase" Type="Enumeration" Access="R/W">tb20us</Feature>
+        <Feature Name="ExposureTime" Type="Float" Access="R/W">30000.000000</Feature>
         <Feature Name="Gain" Type="Float" Access="R/W">0.000000</Feature>
         <Feature Name="GainAuto" Type="Enumeration" Access="R/W">Off</Feature>
         <Feature Name="GainSelector" Type="Enumeration" Access="R/W">All</Feature>
         <Feature Name="Gamma" Type="Float" Access="R/W">1.000000</Feature>
+        <Feature Name="Height" Type="Integer" Access="R/W">960</Feature>
         <Feature Name="Hue" Type="Float" Access="R/W">0.000000</Feature>
         <Feature Name="IIDCCameraAcceptDelay" Type="Integer" Access="R/W">3</Feature>
+        <Feature Name="IIDCIsoChannelAuto" Type="Enumeration" Access="R/W">On</Feature>
+        <Feature Name="IIDCMode" Type="Enumeration" Access="R/W">Mode0</Feature>
+        <Feature Name="IIDCPacketSize" Type="Integer" Access="R/W">2560</Feature>
+        <Feature Name="IIDCPacketSizeAuto" Type="Enumeration" Access="R/W">Off</Feature>
+        <Feature Name="IIDCPhyspeed" Type="Enumeration" Access="R/W">S800</Feature>
         <Feature Name="IntEnaDelayEnable" Type="Boolean" Access="R/W">False</Feature>
         <Feature Name="IntEnaDelayTime" Type="Float" Access="R/W">0.000000</Feature>
+        <Feature Name="OffsetX" Type="Integer" Access="R/W">0</Feature>
+        <Feature Name="OffsetY" Type="Integer" Access="R/W">0</Feature>
+        <Feature Name="PixelFormat" Type="Enumeration" Access="R/W">RGB8Packed</Feature>
         <Feature Name="Saturation" Type="Float" Access="R/W">1.000000</Feature>
         <Feature Name="TestImageSelector" Type="Enumeration" Access="R/W">Off</Feature>
+        <Feature Name="Width" Type="Integer" Access="R/W">1280</Feature>
     </FeatureGroup>
-    <SelectorGroup Count="3" SelectedFeatures="12">
+    <SelectorGroup Count="4" SelectedFeatures="18">
         <Selector Name="BalanceRatioSelector" Type="Enumeration" SelectedFeatures="2">
             <SelectorCombination Entry="Green_Red" Feature="BalanceWhiteAuto" Type="Enumeration">Continuous</SelectorCombination>
             <SelectorCombination Entry="Green_Blue" Feature="BalanceWhiteAuto" Type="Enumeration">Continuous</SelectorCombination>
@@ -80,11 +94,26 @@
             <SelectorCombination Entry="Line7" Feature="LineInverter" Type="Boolean">False</SelectorCombination>
             <SelectorCombination Entry="Line7" Feature="LineSource" Type="Enumeration">Busy</SelectorCombination>
         </Selector>
+        <Selector Name="TriggerSelector" Type="Enumeration" SelectedFeatures="6">
+            <SelectorCombination Entry="ExposureStart" Feature="TriggerMode" Type="Enumeration">Off</SelectorCombination>
+            <SelectorCombination Entry="ExposureStart" Feature="TriggerSource" Type="Enumeration">InputLines</SelectorCombination>
+            <SelectorCombination Entry="ExposureStart" Feature="TriggerActivation" Type="Enumeration">FallingEdge</SelectorCombination>
+            <SelectorCombination Entry="ExposureStart" Feature="ExposureMode" Type="Enumeration">Timed</SelectorCombination>
+            <SelectorCombination Entry="ExposureStart" Feature="TriggerDelay" Type="Float">0.000000</SelectorCombination>
+            <SelectorCombination Entry="ExposureActive" Feature="TriggerMode" Type="Enumeration">Off</SelectorCombination>
+            <SelectorCombination Entry="ExposureActive" Feature="TriggerSource" Type="Enumeration">InputLines</SelectorCombination>
+            <SelectorCombination Entry="ExposureActive" Feature="TriggerActivation" Type="Enumeration">FallingEdge</SelectorCombination>
+            <SelectorCombination Entry="ExposureActive" Feature="ExposureMode" Type="Enumeration">Timed</SelectorCombination>
+            <SelectorCombination Entry="ExposureActive" Feature="TriggerDelay" Type="Float">0.000000</SelectorCombination>
+            <SelectorCombination Entry="AcquisitionStart" Feature="TriggerMode" Type="Enumeration">Off</SelectorCombination>
+            <SelectorCombination Entry="AcquisitionStart" Feature="TriggerSource" Type="Enumeration">InputLines</SelectorCombination>
+            <SelectorCombination Entry="AcquisitionStart" Feature="TriggerActivation" Type="Enumeration">FallingEdge</SelectorCombination>
+            <SelectorCombination Entry="AcquisitionStart" Feature="ExposureMode" Type="Enumeration">Timed</SelectorCombination>
+            <SelectorCombination Entry="AcquisitionStart" Feature="TriggerDelay" Type="Float">0.000000</SelectorCombination>
+        </Selector>
     </SelectorGroup>
-    <IgnoredFeatures Count="94">
-        <Feature Name="AcquisitionFrameRate" Type="Float" Access="R"></Feature>
+    <IgnoredFeatures Count="74">
         <Feature Name="AcquisitionFrameRateLimit" Type="Float" Access="R"></Feature>
-        <Feature Name="AcquisitionMode" Type="Enumeration" Access="R"></Feature>
         <Feature Name="AcquisitionStart" Type="Command" Access="W"></Feature>
         <Feature Name="AcquisitionStop" Type="Command" Access="R/W"></Feature>
         <Feature Name="BalanceRatioRaw" Type="Integer" Access="R"></Feature>
@@ -103,10 +132,7 @@
         <Feature Name="DeviceScanType" Type="Enumeration" Access="R"></Feature>
         <Feature Name="DeviceSerialNumber" Type="Integer" Access="R"></Feature>
         <Feature Name="DeviceVendorName" Type="String" Access="R"></Feature>
-        <Feature Name="DriverBuffersCount" Type="Integer" Access="R"></Feature>
         <Feature Name="ExposureAutoAlg" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="ExposureAutoTimebase" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="ExposureMode" Type="Enumeration" Access="R"></Feature>
         <Feature Name="ExposureOffset" Type="Float" Access="R"></Feature>
         <Feature Name="FileAccessBuffer" Type="Raw" Access="R/W"></Feature>
         <Feature Name="FileAccessLength" Type="Integer" Access="R/W"></Feature>
@@ -122,18 +148,12 @@
         <Feature Name="FirmwareVerBuild" Type="Integer" Access="R"></Feature>
         <Feature Name="FirmwareVerMajor" Type="Integer" Access="R"></Feature>
         <Feature Name="FirmwareVerMinor" Type="Integer" Access="R"></Feature>
-        <Feature Name="Height" Type="Integer" Access="R"></Feature>
         <Feature Name="HeightMax" Type="Integer" Access="R"></Feature>
         <Feature Name="IIDCBusNumber" Type="Integer" Access="R"></Feature>
         <Feature Name="IIDCFreeBandwidth" Type="Integer" Access="R"></Feature>
         <Feature Name="IIDCIsoChannel" Type="Integer" Access="R"></Feature>
-        <Feature Name="IIDCIsoChannelAuto" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="IIDCMode" Type="Enumeration" Access="R"></Feature>
         <Feature Name="IIDCModeDescription" Type="Enumeration" Access="R"></Feature>
         <Feature Name="IIDCPacketCount" Type="Integer" Access="R"></Feature>
-        <Feature Name="IIDCPacketSize" Type="Integer" Access="R"></Feature>
-        <Feature Name="IIDCPacketSizeAuto" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="IIDCPhyspeed" Type="Enumeration" Access="R"></Feature>
         <Feature Name="LUTBitDepthIn" Type="Integer" Access="R"></Feature>
         <Feature Name="LUTBitDepthOut" Type="Integer" Access="R"></Feature>
         <Feature Name="LUTCount" Type="Integer" Access="R"></Feature>
@@ -146,12 +166,9 @@
         <Feature Name="LineModulationPulseWidth" Type="Integer" Access="None"></Feature>
         <Feature Name="LineSource" Type="Enumeration" Access="None"></Feature>
         <Feature Name="LineStatus" Type="Boolean" Access="R"></Feature>
-        <Feature Name="OffsetX" Type="Integer" Access="R"></Feature>
-        <Feature Name="OffsetY" Type="Integer" Access="R"></Feature>
         <Feature Name="PayloadSize" Type="Integer" Access="R"></Feature>
         <Feature Name="PixelColorFilter" Type="Enumeration" Access="R"></Feature>
         <Feature Name="PixelColorFilterAuto" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="PixelFormat" Type="Enumeration" Access="R"></Feature>
         <Feature Name="SensorBits" Type="Integer" Access="R"></Feature>
         <Feature Name="SensorHeight" Type="Integer" Access="R"></Feature>
         <Feature Name="SensorTaps" Type="Enumeration" Access="R"></Feature>
@@ -162,19 +179,13 @@
         <Feature Name="StreamID" Type="String" Access="R"></Feature>
         <Feature Name="StreamIsGrabbing" Type="Boolean" Access="R"></Feature>
         <Feature Name="StreamType" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="TriggerActivation" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="TriggerDelay" Type="Float" Access="R"></Feature>
-        <Feature Name="TriggerMode" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="TriggerSelector" Type="Enumeration" Access="R"></Feature>
         <Feature Name="TriggerSoftware" Type="Command" Access="None"></Feature>
-        <Feature Name="TriggerSource" Type="Enumeration" Access="R"></Feature>
-        <Feature Name="UserSetLoad" Type="Command" Access="R"></Feature>
+        <Feature Name="UserSetLoad" Type="Command" Access="R/W"></Feature>
         <Feature Name="UserSetMakeDefault" Type="Command" Access="R/W"></Feature>
         <Feature Name="UserSetOperationResult" Type="Integer" Access="R"></Feature>
         <Feature Name="UserSetOperationStatus" Type="Enumeration" Access="R"></Feature>
         <Feature Name="UserSetSave" Type="Command" Access="None"></Feature>
         <Feature Name="UserSetSelector" Type="Enumeration" Access="R/W"></Feature>
-        <Feature Name="Width" Type="Integer" Access="R"></Feature>
         <Feature Name="WidthMax" Type="Integer" Access="R"></Feature>
     </IgnoredFeatures>
 </CameraSettings>
