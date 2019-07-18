@@ -53,6 +53,7 @@ private slots:
 	
 	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
+	void DisplayMeasureState(int cameraID, int sampleID, int illuminantID);
 
 private:
 	Ui::MainWindowClass ui;

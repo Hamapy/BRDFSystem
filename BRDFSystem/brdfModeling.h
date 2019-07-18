@@ -33,51 +33,54 @@ using namespace cv;
 #define GREEN_SCALE (1.15/1500.0)
 #define BLUE_SCALE (1.66/1500.0)
 #define PI	3.1415926535897932384626433832795
-#define SIZE 7875     //根据采样角度得到的数据量
+#define SIZE 7875      // 根据采样角度得到的数据量,SIZE=thetaInNumber * thetaInNumber *phiInNumber
+
+
 
 class BRDFFitting
 {
 public:
 
-	//根据BRDF文件名序号读取相应文件开始拟合
-	void StartFitting(int BRDFSerialNumber);
-	//根据BRDF文件名序号进行采样和保存，并读取BRDF数据
-	Mat  BRDFSample(int BRDFSerialNumber);
+	// 根据BRDF文件名序号读取相应文件,开始拟合,传入参数还包括采样角度信息，入射角度和观测角度中的theta采用一样的信息，theta和phi采用一样的采样间隔Gap，
+	// thetaInLowerLimit为theta的采样角度下限，thetaInNumber为theta的采样数量，phiInLowerLimit为入射角度phi的采样角度下限，phiInNumber为入射角度phi的采样数量
+	void StartFitting(int BRDFSerialNumber, int thetaInLowerLimit, int thetaInNumber,
+		int phiInLowerLimit, int phiInNumber, int Gap);
+
+	// 根据BRDF文件名序号以及采样信息进行采样和保存，并读取BRDF数据
+	Mat  BRDFSample(int BRDFSerialNumber, int thetaInLowerLimit, int thetaInNumber,
+		int phiInLowerLimit, int phiInNumber, int Gap);
 
 
-	
+
 
 private:
-	const int _thetaIn = 15;             //3个采样角度的数量
-	const int _thetaOut = 15;
-	const int _phiIn = 35;
-	const double _flatAngle = 180.0;            
+
+	const double _flatAngle = 180.0;
+	const double _redScale = 1.0;
 	const double _greenScale = 1.15;
 	const double _blueScale = 1.66;
-	static double		_T[SIZE * 3];   //存储模型相关变量_l、_G、_delta
-	static double       _p[7];          //7个参数值
-	double				_alpha; 
-	Mat					_Lth0;          //对应_thetaIn
-	Mat					_Lph0;          //对应_phiIn
-	Mat					_Vth0;          //对应_thetaOut
-	Mat					_l,_G,_delta;   //模型计算用到的一些参数
-	Mat                 _brdfandAngle,_brdf;  //_brdfandAngle存储角度信息和brdf数据，_brdf存储brdf数据 
-	Mat                 _Ad, _As;         //漫反射、镜面反射系数初值
-	CString				_file_fold = "..\\..\\..\\Param\\";     //BRDF原始数据文件路径
-	CString				_save_fold = "..\\..\\..\\Param\\";     //拟合结果存储路径
+
+	static double		_T[SIZE * 3];   // 存储模型相关变量_l、_G、_delta
+	static double       _p[7];          // 7个参数值
+	double				_alpha;
+	Mat					_lth0;          // 对应_thetaIn
+	Mat					_lph0;          // 对应_phiIn
+	Mat					_vth0;          // 对应_thetaOut
+	Mat					_l, _G, _delta;   // 模型计算用到的一些参数
+	Mat                 _brdfandAngle, _brdf;  // _brdfandAngle存储角度信息和brdf数据，_brdf存储brdf数据 
+	Mat                 _Ad, _As;         // 漫反射、镜面反射系数初值
+	CString				_file_fold = "..\\..\\..\\Param\\";     // BRDF原始数据文件路径
+	CString				_save_fold = "..\\..\\..\\Param\\";     // 拟合结果存储路径
 	CString				_s_tmp, _filename, _savename;
-	//string				_file_fold = "..\\..\\..\\Param\\";     //BRDF原始数据文件路径
-	//string				_save_fold = "..\\..\\..\\Param\\";     //拟合结果存储路径
-	//string				_s_tmp, _filename, _savename;
 
 
-	//获得brdf_simple数据的采样角度
-	void ComputeSamplingAngle();
-	//最小二乘法求初值
+	// 获得brdf_simple数据的采样角度
+	void ComputeSamplingAngle(int thetaInNumber, int phiInNumber, int Gap);
+	// 最小二乘法求初值
 	void GetOriginValue();
-	//LM求最优值
+	// LM求最优值
 	void GetFinalValue();
-	//WardDuer模型函数
+	// WardDuer模型函数
 	static void WardDuerfun(double *p, double *hx, int m, int n, void *adata);
 
 
@@ -111,4 +114,3 @@ private:
 
 
 };
-

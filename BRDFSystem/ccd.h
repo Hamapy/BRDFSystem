@@ -17,6 +17,7 @@
 #include "BasicImage.h"
 #include "config.h"
 #include "stdafx.h"
+//#include <QtWidgets/QMainWindow>
 
 using namespace std;
 using namespace cv;
@@ -43,6 +44,7 @@ on a frame grabber card.Control is then possible via feature access methods.
 #define CAM8 DEV_0xA4701120BA03F
 */
 
+
 class AVTCamera : public QObject
 {
 	Q_OBJECT
@@ -64,7 +66,7 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& width, int& height);
 	//保存一帧图像
-	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID);
+	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex);
 	//连续采集图像
 	bool SaveImages(Mat& captureMat, string imageSavingPath);
 	//相机多线程函数
@@ -96,5 +98,9 @@ private:
 	
 	//采集前清空目录
 	static int EmptyFiles(string dirPath);
+
+signals:
+	void sendingMeasureState(int cameraID, int sampleID, int illuminantID);
+
 };
 #endif
