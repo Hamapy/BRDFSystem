@@ -693,6 +693,7 @@ void MainWindow::PushButton_FiniCCD_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::DisplayImage(int workerID, QImage img)
 {
+	//这里这么多if可以有化成map
 	if (_displayFlag == 0)
 	{
 		if (workerID == 0)

@@ -1,4 +1,4 @@
-﻿生成启动时间为 2019/7/17 20:35:11。
+﻿生成启动时间为 2019/7/18 15:11:49。
      1>项目“E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>CustomBuild:
          Moc'ing workerMeasurement.h...
@@ -10,7 +10,7 @@
      1>RCC : warning : No resources in 'E:\IVLab\鍩轰簬鍑犱綍涓庢潗璐ㄥ缓妯＄殑鐪熷疄鎰熸覆鏌揬BRDF绯荤粺鎼缓\绯荤粺纭欢鎺у埗鍙婅蒋浠剁紪绋媆BRDFSystem\BRDFSystem\mainwindow.qrc'.
          
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtCore /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtGui /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt brdfModeling.cpp config.cpp GeneratedFiles\Debug\moc_ccd.cpp GeneratedFiles\Debug\moc_mainwindow.cpp GeneratedFiles\Debug\moc_workerCCD.cpp GeneratedFiles\Debug\moc_workerMeasurement.cpp imageProcess.cpp whitebalance_test.cpp workerCCD.cpp ccd_test.cpp illuminant.cpp illuminant_test.cpp main.cpp mainwindow.cpp ccd.cpp modeling_test.cpp sampleComm.cpp sampleComm_test.cpp slideComm.cpp slideComm_test.cpp workerMeasurement.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtCore /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtGui /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt brdfModeling.cpp config.cpp GeneratedFiles\Debug\moc_ccd.cpp GeneratedFiles\Debug\moc_mainwindow.cpp GeneratedFiles\Debug\moc_workerCCD.cpp GeneratedFiles\Debug\moc_workerMeasurement.cpp imageProcess.cpp isp_test.cpp workerCCD.cpp ccd_test.cpp illuminant.cpp illuminant_test.cpp main.cpp mainwindow.cpp ccd.cpp modeling_test.cpp sampleComm.cpp sampleComm_test.cpp slideComm.cpp slideComm_test.cpp workerMeasurement.cpp
          brdfModeling.cpp
          config.cpp
          moc_ccd.cpp
@@ -18,7 +18,7 @@
          moc_workerCCD.cpp
          moc_workerMeasurement.cpp
          imageProcess.cpp
-         whitebalance_test.cpp
+         isp_test.cpp
          workerCCD.cpp
          ccd_test.cpp
          illuminant.cpp
@@ -46,7 +46,7 @@
          x64\Debug\moc_workerMeasurement.obj
          x64\Debug\qrc_mainwindow.obj
          x64\Debug\imageProcess.obj
-         x64\Debug\whitebalance_test.obj
+         x64\Debug\isp_test.obj
          x64\Debug\workerCCD.obj
          x64\Debug\ccd_test.obj
          x64\Debug\illuminant.obj
@@ -65,4 +65,4 @@
 
 生成成功。
 
-已用时间 00:00:32.72
+已用时间 00:00:39.04
