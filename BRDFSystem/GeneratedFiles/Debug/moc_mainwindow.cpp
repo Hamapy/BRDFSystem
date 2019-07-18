@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[34];
-    char stringdata0[639];
+    QByteArrayData data[38];
+    char stringdata0[690];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -62,7 +62,11 @@ QT_MOC_LITERAL(29, 556, 29), // "PushButton_BlackLevel_Pressed"
 QT_MOC_LITERAL(30, 586, 26), // "PushButton_FiniCCD_Pressed"
 QT_MOC_LITERAL(31, 613, 8), // "IsEdited"
 QT_MOC_LITERAL(32, 622, 12), // "DisplayImage"
-QT_MOC_LITERAL(33, 635, 3) // "img"
+QT_MOC_LITERAL(33, 635, 3), // "img"
+QT_MOC_LITERAL(34, 639, 19), // "DisplayMeasureState"
+QT_MOC_LITERAL(35, 659, 8), // "cameraID"
+QT_MOC_LITERAL(36, 668, 8), // "sampleID"
+QT_MOC_LITERAL(37, 677, 12) // "illuminantID"
 
     },
     "MainWindow\0startTimer\0\0measureFlag\0"
@@ -84,7 +88,8 @@ QT_MOC_LITERAL(33, 635, 3) // "img"
     "PushButton_DeadPixel_Pressed\0"
     "PushButton_BlackLevel_Pressed\0"
     "PushButton_FiniCCD_Pressed\0IsEdited\0"
-    "DisplayImage\0img"
+    "DisplayImage\0img\0DisplayMeasureState\0"
+    "cameraID\0sampleID\0illuminantID"
 };
 #undef QT_MOC_LITERAL
 
@@ -94,7 +99,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      27,   14, // methods
+      28,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -102,35 +107,36 @@ static const uint qt_meta_data_MainWindow[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  149,    2, 0x06 /* Public */,
-       4,    1,  152,    2, 0x06 /* Public */,
-       5,    1,  155,    2, 0x06 /* Public */,
-       7,    2,  158,    2, 0x06 /* Public */,
+       1,    1,  154,    2, 0x06 /* Public */,
+       4,    1,  157,    2, 0x06 /* Public */,
+       5,    1,  160,    2, 0x06 /* Public */,
+       7,    2,  163,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  163,    2, 0x08 /* Private */,
-      11,    0,  164,    2, 0x08 /* Private */,
-      12,    0,  165,    2, 0x08 /* Private */,
-      13,    0,  166,    2, 0x08 /* Private */,
-      14,    0,  167,    2, 0x08 /* Private */,
-      15,    0,  168,    2, 0x08 /* Private */,
-      16,    0,  169,    2, 0x08 /* Private */,
-      17,    0,  170,    2, 0x08 /* Private */,
-      18,    0,  171,    2, 0x08 /* Private */,
-      19,    0,  172,    2, 0x08 /* Private */,
-      20,    0,  173,    2, 0x08 /* Private */,
-      21,    0,  174,    2, 0x08 /* Private */,
-      22,    0,  175,    2, 0x08 /* Private */,
-      23,    2,  176,    2, 0x08 /* Private */,
-      24,    0,  181,    2, 0x08 /* Private */,
-      25,    0,  182,    2, 0x08 /* Private */,
-      26,    0,  183,    2, 0x08 /* Private */,
-      27,    0,  184,    2, 0x08 /* Private */,
-      28,    0,  185,    2, 0x08 /* Private */,
-      29,    0,  186,    2, 0x08 /* Private */,
-      30,    0,  187,    2, 0x08 /* Private */,
-      31,    0,  188,    2, 0x08 /* Private */,
-      32,    2,  189,    2, 0x08 /* Private */,
+      10,    0,  168,    2, 0x08 /* Private */,
+      11,    0,  169,    2, 0x08 /* Private */,
+      12,    0,  170,    2, 0x08 /* Private */,
+      13,    0,  171,    2, 0x08 /* Private */,
+      14,    0,  172,    2, 0x08 /* Private */,
+      15,    0,  173,    2, 0x08 /* Private */,
+      16,    0,  174,    2, 0x08 /* Private */,
+      17,    0,  175,    2, 0x08 /* Private */,
+      18,    0,  176,    2, 0x08 /* Private */,
+      19,    0,  177,    2, 0x08 /* Private */,
+      20,    0,  178,    2, 0x08 /* Private */,
+      21,    0,  179,    2, 0x08 /* Private */,
+      22,    0,  180,    2, 0x08 /* Private */,
+      23,    2,  181,    2, 0x08 /* Private */,
+      24,    0,  186,    2, 0x08 /* Private */,
+      25,    0,  187,    2, 0x08 /* Private */,
+      26,    0,  188,    2, 0x08 /* Private */,
+      27,    0,  189,    2, 0x08 /* Private */,
+      28,    0,  190,    2, 0x08 /* Private */,
+      29,    0,  191,    2, 0x08 /* Private */,
+      30,    0,  192,    2, 0x08 /* Private */,
+      31,    0,  193,    2, 0x08 /* Private */,
+      32,    2,  194,    2, 0x08 /* Private */,
+      34,    3,  199,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -162,6 +168,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,   33,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,   35,   36,   37,
 
        0        // eod
 };
@@ -199,6 +206,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 24: _t->PushButton_FiniCCD_Pressed(); break;
         case 25: _t->IsEdited(); break;
         case 26: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
+        case 27: _t->DisplayMeasureState((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -260,13 +268,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 27)
+        if (_id < 28)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 27;
+        _id -= 28;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 27)
+        if (_id < 28)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 27;
+        _id -= 28;
     }
     return _id;
 }

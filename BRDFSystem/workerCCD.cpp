@@ -94,7 +94,7 @@ void WorkerCCD::Grab(int sID, int iID)
 	//if (_measureFlag == 3)
 	//	path = _imageSavingPath3;
 
-	cameraAVT->SaveAnImage(_mat, path, _workerID, sID, iID);
+	cameraAVT->SaveAnImage(_mat, path, _workerID, sID, iID, 1);
 
 	emit grabDone(_workerID);
 }
