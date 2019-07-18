@@ -62,71 +62,68 @@ public:
     QVBoxLayout *verticalLayout;
     QStackedWidget *stackedWidget;
     QWidget *Settings;
-    QGridLayout *gridLayout_45;
     QGroupBox *groupBox_14;
-    QGridLayout *gridLayout_10;
     QGridLayout *gridLayout_9;
+    QLabel *label_gain;
     QSlider *horizontalSlider_gain;
-    QLineEdit *lineEdit_imageSavePath;
+    QSpinBox *spinBox_gain;
     QLabel *label_darkLevel;
-    QLabel *label_imageSavePath;
+    QSlider *horizontalSlider_darkLevel;
+    QSpinBox *spinBox_darkLevel;
     QLabel *label_imageSaveFormat;
     QComboBox *comboBox_imageSaveFormat;
-    QLabel *label_gain;
-    QSlider *horizontalSlider_darkLevel;
-    QSpinBox *spinBox_gain;
-    QSpinBox *spinBox_darkLevel;
+    QLabel *label_imageSavePath;
+    QLineEdit *lineEdit_imageSavePath;
     QGroupBox *groupBox_16;
-    QGridLayout *gridLayout_8;
     QGridLayout *gridLayout_7;
-    QLabel *label_lightingSequence;
-    QLineEdit *lineEdit_delaySetting;
-    QLabel *label_delaySetting;
     QLabel *label_serialPortSelection;
-    QComboBox *comboBox_baudRate;
-    QLabel *label_baudRate;
-    QLabel *label_68;
-    QLabel *label_6;
     QComboBox *comboBox_serialPortSelection;
+    QLabel *label_baudRate;
+    QComboBox *comboBox_baudRate;
+    QLabel *label_68;
+    QLabel *label_delaySetting;
+    QLineEdit *lineEdit_delaySetting;
+    QLabel *label_6;
+    QLabel *label_lightingSequence;
     QLineEdit *lineEdit_lightingSequence;
     QGroupBox *groupBox_21;
-    QGridLayout *gridLayout_48;
-    QGridLayout *gridLayout_46;
-    QComboBox *comboBox_stepperMotorResolution;
-    QLabel *label_stepperMotorResolution;
-    QLabel *label_86;
+    QGridLayout *gridLayout_8;
+    QLabel *label_stepperMotorPortSelection;
+    QComboBox *comboBox_stepperMotorPortSelection;
+    QLabel *label_stepperMotorSpeed;
+    QComboBox *comboBox_stepperMotorSpeed;
+    QLabel *label_82;
+    QLabel *label_stepperMotorAcceleration;
+    QComboBox *comboBox_stepperMotorAcceleration;
     QLabel *label_83;
     QLabel *label_stepperMotorDeceleration;
-    QComboBox *comboBox_stepperMotorPortSelection;
+    QComboBox *comboBox_stepperMotorDeceleration;
+    QLabel *label_86;
+    QLabel *label_stepperMotorResolution;
+    QComboBox *comboBox_stepperMotorResolution;
     QLabel *label_sampleRotationAngle;
     QComboBox *comboBox_sampleRotationAngle;
-    QLabel *label_stepperMotorAcceleration;
     QLabel *label_87;
-    QComboBox *comboBox_stepperMotorSpeed;
-    QLabel *label_stepperMotorPortSelection;
-    QLabel *label_stepperMotorSpeed;
-    QComboBox *comboBox_stepperMotorDeceleration;
-    QComboBox *comboBox_stepperMotorAcceleration;
-    QLabel *label_82;
     QGroupBox *groupBox_22;
-    QGridLayout *gridLayout_50;
-    QGridLayout *gridLayout_47;
-    QLabel *label_servoMotorResolution;
-    QLabel *label_servoMotorDeceleration;
-    QLabel *label_slideTableMovingDistance;
+    QGridLayout *gridLayout_10;
     QLabel *label_servoMotorPortSelection;
-    QLabel *label_servoMotorAcceleration;
-    QLabel *label_servoMotorSpeed;
     QComboBox *comboBox_servoMotorPortSelection;
+    QLabel *label_servoMotorSpeed;
     QComboBox *comboBox_servoMotorSpeed;
+    QLabel *label_75;
+    QLabel *label_servoMotorAcceleration;
     QComboBox *comboBox_servoMotorAcceleration;
+    QLabel *label_78;
+    QLabel *label_servoMotorDeceleration;
     QComboBox *comboBox_servoMotorDeceleration;
+    QLabel *label_77;
+    QLabel *label_servoMotorResolution;
     QComboBox *comboBox_servoMotorResolution;
+    QLabel *label_slideTableMovingDistance;
     QLineEdit *lineEdit_slideTableMovingDistance;
     QLabel *label_79;
-    QLabel *label_77;
-    QLabel *label_78;
-    QLabel *label_75;
+    QWidget *gridLayoutWidget;
+    QGridLayout *gridLayout_45;
     QPushButton *pushButton_save;
     QPushButton *pushButton_defaults;
     QWidget *PreCamera;
@@ -389,39 +386,44 @@ public:
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
         Settings = new QWidget();
         Settings->setObjectName(QStringLiteral("Settings"));
-        gridLayout_45 = new QGridLayout(Settings);
-        gridLayout_45->setSpacing(6);
-        gridLayout_45->setContentsMargins(11, 11, 11, 11);
-        gridLayout_45->setObjectName(QStringLiteral("gridLayout_45"));
         groupBox_14 = new QGroupBox(Settings);
         groupBox_14->setObjectName(QStringLiteral("groupBox_14"));
-        gridLayout_10 = new QGridLayout(groupBox_14);
-        gridLayout_10->setSpacing(6);
-        gridLayout_10->setContentsMargins(11, 11, 11, 11);
-        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
-        gridLayout_9 = new QGridLayout();
+        groupBox_14->setGeometry(QRect(20, 30, 521, 261));
+        gridLayout_9 = new QGridLayout(groupBox_14);
         gridLayout_9->setSpacing(6);
+        gridLayout_9->setContentsMargins(11, 11, 11, 11);
         gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        label_gain = new QLabel(groupBox_14);
+        label_gain->setObjectName(QStringLiteral("label_gain"));
+
+        gridLayout_9->addWidget(label_gain, 0, 0, 1, 1);
+
         horizontalSlider_gain = new QSlider(groupBox_14);
         horizontalSlider_gain->setObjectName(QStringLiteral("horizontalSlider_gain"));
         horizontalSlider_gain->setOrientation(Qt::Horizontal);
 
         gridLayout_9->addWidget(horizontalSlider_gain, 0, 1, 1, 1);
 
-        lineEdit_imageSavePath = new QLineEdit(groupBox_14);
-        lineEdit_imageSavePath->setObjectName(QStringLiteral("lineEdit_imageSavePath"));
+        spinBox_gain = new QSpinBox(groupBox_14);
+        spinBox_gain->setObjectName(QStringLiteral("spinBox_gain"));
 
-        gridLayout_9->addWidget(lineEdit_imageSavePath, 3, 1, 1, 1);
+        gridLayout_9->addWidget(spinBox_gain, 0, 2, 1, 1);
 
         label_darkLevel = new QLabel(groupBox_14);
         label_darkLevel->setObjectName(QStringLiteral("label_darkLevel"));
 
         gridLayout_9->addWidget(label_darkLevel, 1, 0, 1, 1);
 
-        label_imageSavePath = new QLabel(groupBox_14);
-        label_imageSavePath->setObjectName(QStringLiteral("label_imageSavePath"));
+        horizontalSlider_darkLevel = new QSlider(groupBox_14);
+        horizontalSlider_darkLevel->setObjectName(QStringLiteral("horizontalSlider_darkLevel"));
+        horizontalSlider_darkLevel->setOrientation(Qt::Horizontal);
 
-        gridLayout_9->addWidget(label_imageSavePath, 3, 0, 1, 1);
+        gridLayout_9->addWidget(horizontalSlider_darkLevel, 1, 1, 1, 1);
+
+        spinBox_darkLevel = new QSpinBox(groupBox_14);
+        spinBox_darkLevel->setObjectName(QStringLiteral("spinBox_darkLevel"));
+
+        gridLayout_9->addWidget(spinBox_darkLevel, 1, 2, 1, 1);
 
         label_imageSaveFormat = new QLabel(groupBox_14);
         label_imageSaveFormat->setObjectName(QStringLiteral("label_imageSaveFormat"));
@@ -433,311 +435,286 @@ public:
 
         gridLayout_9->addWidget(comboBox_imageSaveFormat, 2, 1, 1, 1);
 
-        label_gain = new QLabel(groupBox_14);
-        label_gain->setObjectName(QStringLiteral("label_gain"));
+        label_imageSavePath = new QLabel(groupBox_14);
+        label_imageSavePath->setObjectName(QStringLiteral("label_imageSavePath"));
 
-        gridLayout_9->addWidget(label_gain, 0, 0, 1, 1);
+        gridLayout_9->addWidget(label_imageSavePath, 3, 0, 1, 1);
 
-        horizontalSlider_darkLevel = new QSlider(groupBox_14);
-        horizontalSlider_darkLevel->setObjectName(QStringLiteral("horizontalSlider_darkLevel"));
-        horizontalSlider_darkLevel->setOrientation(Qt::Horizontal);
+        lineEdit_imageSavePath = new QLineEdit(groupBox_14);
+        lineEdit_imageSavePath->setObjectName(QStringLiteral("lineEdit_imageSavePath"));
 
-        gridLayout_9->addWidget(horizontalSlider_darkLevel, 1, 1, 1, 1);
-
-        spinBox_gain = new QSpinBox(groupBox_14);
-        spinBox_gain->setObjectName(QStringLiteral("spinBox_gain"));
-
-        gridLayout_9->addWidget(spinBox_gain, 0, 2, 1, 1);
-
-        spinBox_darkLevel = new QSpinBox(groupBox_14);
-        spinBox_darkLevel->setObjectName(QStringLiteral("spinBox_darkLevel"));
-
-        gridLayout_9->addWidget(spinBox_darkLevel, 1, 2, 1, 1);
+        gridLayout_9->addWidget(lineEdit_imageSavePath, 3, 1, 1, 1);
 
         gridLayout_9->setRowStretch(0, 1);
+        gridLayout_9->setRowStretch(1, 1);
+        gridLayout_9->setRowStretch(2, 1);
+        gridLayout_9->setRowStretch(3, 1);
         gridLayout_9->setColumnStretch(0, 1);
-
-        gridLayout_10->addLayout(gridLayout_9, 1, 0, 1, 1);
-
-
-        gridLayout_45->addWidget(groupBox_14, 0, 0, 1, 1);
-
+        gridLayout_9->setColumnStretch(1, 1);
+        gridLayout_9->setColumnStretch(2, 1);
         groupBox_16 = new QGroupBox(Settings);
         groupBox_16->setObjectName(QStringLiteral("groupBox_16"));
-        gridLayout_8 = new QGridLayout(groupBox_16);
-        gridLayout_8->setSpacing(6);
-        gridLayout_8->setContentsMargins(11, 11, 11, 11);
-        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
-        gridLayout_7 = new QGridLayout();
+        groupBox_16->setGeometry(QRect(610, 30, 561, 261));
+        gridLayout_7 = new QGridLayout(groupBox_16);
         gridLayout_7->setSpacing(6);
+        gridLayout_7->setContentsMargins(11, 11, 11, 11);
         gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
-        label_lightingSequence = new QLabel(groupBox_16);
-        label_lightingSequence->setObjectName(QStringLiteral("label_lightingSequence"));
-
-        gridLayout_7->addWidget(label_lightingSequence, 3, 0, 1, 1);
-
-        lineEdit_delaySetting = new QLineEdit(groupBox_16);
-        lineEdit_delaySetting->setObjectName(QStringLiteral("lineEdit_delaySetting"));
-
-        gridLayout_7->addWidget(lineEdit_delaySetting, 2, 1, 1, 1);
-
-        label_delaySetting = new QLabel(groupBox_16);
-        label_delaySetting->setObjectName(QStringLiteral("label_delaySetting"));
-
-        gridLayout_7->addWidget(label_delaySetting, 2, 0, 1, 1);
-
         label_serialPortSelection = new QLabel(groupBox_16);
         label_serialPortSelection->setObjectName(QStringLiteral("label_serialPortSelection"));
 
         gridLayout_7->addWidget(label_serialPortSelection, 0, 0, 1, 1);
-
-        comboBox_baudRate = new QComboBox(groupBox_16);
-        comboBox_baudRate->setObjectName(QStringLiteral("comboBox_baudRate"));
-
-        gridLayout_7->addWidget(comboBox_baudRate, 1, 1, 1, 1);
-
-        label_baudRate = new QLabel(groupBox_16);
-        label_baudRate->setObjectName(QStringLiteral("label_baudRate"));
-
-        gridLayout_7->addWidget(label_baudRate, 1, 0, 1, 1);
-
-        label_68 = new QLabel(groupBox_16);
-        label_68->setObjectName(QStringLiteral("label_68"));
-
-        gridLayout_7->addWidget(label_68, 1, 2, 1, 1);
-
-        label_6 = new QLabel(groupBox_16);
-        label_6->setObjectName(QStringLiteral("label_6"));
-
-        gridLayout_7->addWidget(label_6, 2, 2, 1, 1);
 
         comboBox_serialPortSelection = new QComboBox(groupBox_16);
         comboBox_serialPortSelection->setObjectName(QStringLiteral("comboBox_serialPortSelection"));
 
         gridLayout_7->addWidget(comboBox_serialPortSelection, 0, 1, 1, 1);
 
+        label_baudRate = new QLabel(groupBox_16);
+        label_baudRate->setObjectName(QStringLiteral("label_baudRate"));
+
+        gridLayout_7->addWidget(label_baudRate, 1, 0, 1, 1);
+
+        comboBox_baudRate = new QComboBox(groupBox_16);
+        comboBox_baudRate->setObjectName(QStringLiteral("comboBox_baudRate"));
+
+        gridLayout_7->addWidget(comboBox_baudRate, 1, 1, 1, 1);
+
+        label_68 = new QLabel(groupBox_16);
+        label_68->setObjectName(QStringLiteral("label_68"));
+
+        gridLayout_7->addWidget(label_68, 1, 2, 1, 1);
+
+        label_delaySetting = new QLabel(groupBox_16);
+        label_delaySetting->setObjectName(QStringLiteral("label_delaySetting"));
+
+        gridLayout_7->addWidget(label_delaySetting, 2, 0, 1, 1);
+
+        lineEdit_delaySetting = new QLineEdit(groupBox_16);
+        lineEdit_delaySetting->setObjectName(QStringLiteral("lineEdit_delaySetting"));
+
+        gridLayout_7->addWidget(lineEdit_delaySetting, 2, 1, 1, 1);
+
+        label_6 = new QLabel(groupBox_16);
+        label_6->setObjectName(QStringLiteral("label_6"));
+
+        gridLayout_7->addWidget(label_6, 2, 2, 1, 1);
+
+        label_lightingSequence = new QLabel(groupBox_16);
+        label_lightingSequence->setObjectName(QStringLiteral("label_lightingSequence"));
+
+        gridLayout_7->addWidget(label_lightingSequence, 3, 0, 1, 1);
+
         lineEdit_lightingSequence = new QLineEdit(groupBox_16);
         lineEdit_lightingSequence->setObjectName(QStringLiteral("lineEdit_lightingSequence"));
 
         gridLayout_7->addWidget(lineEdit_lightingSequence, 3, 1, 1, 1);
 
-        gridLayout_7->setRowStretch(0, 1);
         gridLayout_7->setColumnStretch(0, 1);
-
-        gridLayout_8->addLayout(gridLayout_7, 0, 0, 1, 1);
-
-
-        gridLayout_45->addWidget(groupBox_16, 0, 1, 1, 1);
-
+        gridLayout_7->setColumnStretch(1, 1);
+        gridLayout_7->setColumnStretch(2, 1);
         groupBox_21 = new QGroupBox(Settings);
         groupBox_21->setObjectName(QStringLiteral("groupBox_21"));
-        gridLayout_48 = new QGridLayout(groupBox_21);
-        gridLayout_48->setSpacing(6);
-        gridLayout_48->setContentsMargins(11, 11, 11, 11);
-        gridLayout_48->setObjectName(QStringLiteral("gridLayout_48"));
-        gridLayout_46 = new QGridLayout();
-        gridLayout_46->setSpacing(6);
-        gridLayout_46->setObjectName(QStringLiteral("gridLayout_46"));
-        comboBox_stepperMotorResolution = new QComboBox(groupBox_21);
-        comboBox_stepperMotorResolution->setObjectName(QStringLiteral("comboBox_stepperMotorResolution"));
+        groupBox_21->setGeometry(QRect(20, 370, 521, 301));
+        gridLayout_8 = new QGridLayout(groupBox_21);
+        gridLayout_8->setSpacing(6);
+        gridLayout_8->setContentsMargins(11, 11, 11, 11);
+        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        label_stepperMotorPortSelection = new QLabel(groupBox_21);
+        label_stepperMotorPortSelection->setObjectName(QStringLiteral("label_stepperMotorPortSelection"));
 
-        gridLayout_46->addWidget(comboBox_stepperMotorResolution, 4, 1, 1, 1);
-
-        label_stepperMotorResolution = new QLabel(groupBox_21);
-        label_stepperMotorResolution->setObjectName(QStringLiteral("label_stepperMotorResolution"));
-
-        gridLayout_46->addWidget(label_stepperMotorResolution, 4, 0, 1, 1);
-
-        label_86 = new QLabel(groupBox_21);
-        label_86->setObjectName(QStringLiteral("label_86"));
-
-        gridLayout_46->addWidget(label_86, 3, 2, 1, 1);
-
-        label_83 = new QLabel(groupBox_21);
-        label_83->setObjectName(QStringLiteral("label_83"));
-
-        gridLayout_46->addWidget(label_83, 2, 2, 1, 1);
-
-        label_stepperMotorDeceleration = new QLabel(groupBox_21);
-        label_stepperMotorDeceleration->setObjectName(QStringLiteral("label_stepperMotorDeceleration"));
-
-        gridLayout_46->addWidget(label_stepperMotorDeceleration, 3, 0, 1, 1);
+        gridLayout_8->addWidget(label_stepperMotorPortSelection, 0, 0, 1, 1);
 
         comboBox_stepperMotorPortSelection = new QComboBox(groupBox_21);
         comboBox_stepperMotorPortSelection->setObjectName(QStringLiteral("comboBox_stepperMotorPortSelection"));
 
-        gridLayout_46->addWidget(comboBox_stepperMotorPortSelection, 0, 1, 1, 1);
-
-        label_sampleRotationAngle = new QLabel(groupBox_21);
-        label_sampleRotationAngle->setObjectName(QStringLiteral("label_sampleRotationAngle"));
-
-        gridLayout_46->addWidget(label_sampleRotationAngle, 5, 0, 1, 1);
-
-        comboBox_sampleRotationAngle = new QComboBox(groupBox_21);
-        comboBox_sampleRotationAngle->setObjectName(QStringLiteral("comboBox_sampleRotationAngle"));
-
-        gridLayout_46->addWidget(comboBox_sampleRotationAngle, 5, 1, 1, 1);
-
-        label_stepperMotorAcceleration = new QLabel(groupBox_21);
-        label_stepperMotorAcceleration->setObjectName(QStringLiteral("label_stepperMotorAcceleration"));
-
-        gridLayout_46->addWidget(label_stepperMotorAcceleration, 2, 0, 1, 1);
-
-        label_87 = new QLabel(groupBox_21);
-        label_87->setObjectName(QStringLiteral("label_87"));
-
-        gridLayout_46->addWidget(label_87, 5, 2, 1, 1);
-
-        comboBox_stepperMotorSpeed = new QComboBox(groupBox_21);
-        comboBox_stepperMotorSpeed->setObjectName(QStringLiteral("comboBox_stepperMotorSpeed"));
-
-        gridLayout_46->addWidget(comboBox_stepperMotorSpeed, 1, 1, 1, 1);
-
-        label_stepperMotorPortSelection = new QLabel(groupBox_21);
-        label_stepperMotorPortSelection->setObjectName(QStringLiteral("label_stepperMotorPortSelection"));
-
-        gridLayout_46->addWidget(label_stepperMotorPortSelection, 0, 0, 1, 1);
+        gridLayout_8->addWidget(comboBox_stepperMotorPortSelection, 0, 1, 1, 1);
 
         label_stepperMotorSpeed = new QLabel(groupBox_21);
         label_stepperMotorSpeed->setObjectName(QStringLiteral("label_stepperMotorSpeed"));
 
-        gridLayout_46->addWidget(label_stepperMotorSpeed, 1, 0, 1, 1);
+        gridLayout_8->addWidget(label_stepperMotorSpeed, 1, 0, 1, 1);
 
-        comboBox_stepperMotorDeceleration = new QComboBox(groupBox_21);
-        comboBox_stepperMotorDeceleration->setObjectName(QStringLiteral("comboBox_stepperMotorDeceleration"));
+        comboBox_stepperMotorSpeed = new QComboBox(groupBox_21);
+        comboBox_stepperMotorSpeed->setObjectName(QStringLiteral("comboBox_stepperMotorSpeed"));
 
-        gridLayout_46->addWidget(comboBox_stepperMotorDeceleration, 3, 1, 1, 1);
-
-        comboBox_stepperMotorAcceleration = new QComboBox(groupBox_21);
-        comboBox_stepperMotorAcceleration->setObjectName(QStringLiteral("comboBox_stepperMotorAcceleration"));
-
-        gridLayout_46->addWidget(comboBox_stepperMotorAcceleration, 2, 1, 1, 1);
+        gridLayout_8->addWidget(comboBox_stepperMotorSpeed, 1, 1, 1, 1);
 
         label_82 = new QLabel(groupBox_21);
         label_82->setObjectName(QStringLiteral("label_82"));
 
-        gridLayout_46->addWidget(label_82, 1, 2, 1, 1);
+        gridLayout_8->addWidget(label_82, 1, 2, 1, 1);
 
+        label_stepperMotorAcceleration = new QLabel(groupBox_21);
+        label_stepperMotorAcceleration->setObjectName(QStringLiteral("label_stepperMotorAcceleration"));
 
-        gridLayout_48->addLayout(gridLayout_46, 0, 0, 1, 1);
+        gridLayout_8->addWidget(label_stepperMotorAcceleration, 2, 0, 1, 1);
 
+        comboBox_stepperMotorAcceleration = new QComboBox(groupBox_21);
+        comboBox_stepperMotorAcceleration->setObjectName(QStringLiteral("comboBox_stepperMotorAcceleration"));
 
-        gridLayout_45->addWidget(groupBox_21, 1, 0, 1, 1);
+        gridLayout_8->addWidget(comboBox_stepperMotorAcceleration, 2, 1, 1, 1);
 
+        label_83 = new QLabel(groupBox_21);
+        label_83->setObjectName(QStringLiteral("label_83"));
+
+        gridLayout_8->addWidget(label_83, 2, 2, 1, 1);
+
+        label_stepperMotorDeceleration = new QLabel(groupBox_21);
+        label_stepperMotorDeceleration->setObjectName(QStringLiteral("label_stepperMotorDeceleration"));
+
+        gridLayout_8->addWidget(label_stepperMotorDeceleration, 3, 0, 1, 1);
+
+        comboBox_stepperMotorDeceleration = new QComboBox(groupBox_21);
+        comboBox_stepperMotorDeceleration->setObjectName(QStringLiteral("comboBox_stepperMotorDeceleration"));
+
+        gridLayout_8->addWidget(comboBox_stepperMotorDeceleration, 3, 1, 1, 1);
+
+        label_86 = new QLabel(groupBox_21);
+        label_86->setObjectName(QStringLiteral("label_86"));
+
+        gridLayout_8->addWidget(label_86, 3, 2, 1, 1);
+
+        label_stepperMotorResolution = new QLabel(groupBox_21);
+        label_stepperMotorResolution->setObjectName(QStringLiteral("label_stepperMotorResolution"));
+
+        gridLayout_8->addWidget(label_stepperMotorResolution, 4, 0, 1, 1);
+
+        comboBox_stepperMotorResolution = new QComboBox(groupBox_21);
+        comboBox_stepperMotorResolution->setObjectName(QStringLiteral("comboBox_stepperMotorResolution"));
+
+        gridLayout_8->addWidget(comboBox_stepperMotorResolution, 4, 1, 1, 1);
+
+        label_sampleRotationAngle = new QLabel(groupBox_21);
+        label_sampleRotationAngle->setObjectName(QStringLiteral("label_sampleRotationAngle"));
+
+        gridLayout_8->addWidget(label_sampleRotationAngle, 5, 0, 1, 1);
+
+        comboBox_sampleRotationAngle = new QComboBox(groupBox_21);
+        comboBox_sampleRotationAngle->setObjectName(QStringLiteral("comboBox_sampleRotationAngle"));
+
+        gridLayout_8->addWidget(comboBox_sampleRotationAngle, 5, 1, 1, 1);
+
+        label_87 = new QLabel(groupBox_21);
+        label_87->setObjectName(QStringLiteral("label_87"));
+
+        gridLayout_8->addWidget(label_87, 5, 2, 1, 1);
+
+        gridLayout_8->setColumnStretch(0, 1);
+        gridLayout_8->setColumnStretch(1, 1);
+        gridLayout_8->setColumnStretch(2, 1);
         groupBox_22 = new QGroupBox(Settings);
         groupBox_22->setObjectName(QStringLiteral("groupBox_22"));
-        gridLayout_50 = new QGridLayout(groupBox_22);
-        gridLayout_50->setSpacing(6);
-        gridLayout_50->setContentsMargins(11, 11, 11, 11);
-        gridLayout_50->setObjectName(QStringLiteral("gridLayout_50"));
-        gridLayout_47 = new QGridLayout();
-        gridLayout_47->setSpacing(6);
-        gridLayout_47->setObjectName(QStringLiteral("gridLayout_47"));
-        label_servoMotorResolution = new QLabel(groupBox_22);
-        label_servoMotorResolution->setObjectName(QStringLiteral("label_servoMotorResolution"));
-
-        gridLayout_47->addWidget(label_servoMotorResolution, 5, 0, 1, 1);
-
-        label_servoMotorDeceleration = new QLabel(groupBox_22);
-        label_servoMotorDeceleration->setObjectName(QStringLiteral("label_servoMotorDeceleration"));
-
-        gridLayout_47->addWidget(label_servoMotorDeceleration, 4, 0, 1, 1);
-
-        label_slideTableMovingDistance = new QLabel(groupBox_22);
-        label_slideTableMovingDistance->setObjectName(QStringLiteral("label_slideTableMovingDistance"));
-
-        gridLayout_47->addWidget(label_slideTableMovingDistance, 6, 0, 1, 1);
-
+        groupBox_22->setGeometry(QRect(610, 370, 571, 301));
+        gridLayout_10 = new QGridLayout(groupBox_22);
+        gridLayout_10->setSpacing(6);
+        gridLayout_10->setContentsMargins(11, 11, 11, 11);
+        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
         label_servoMotorPortSelection = new QLabel(groupBox_22);
         label_servoMotorPortSelection->setObjectName(QStringLiteral("label_servoMotorPortSelection"));
 
-        gridLayout_47->addWidget(label_servoMotorPortSelection, 0, 0, 1, 1);
-
-        label_servoMotorAcceleration = new QLabel(groupBox_22);
-        label_servoMotorAcceleration->setObjectName(QStringLiteral("label_servoMotorAcceleration"));
-
-        gridLayout_47->addWidget(label_servoMotorAcceleration, 3, 0, 1, 1);
-
-        label_servoMotorSpeed = new QLabel(groupBox_22);
-        label_servoMotorSpeed->setObjectName(QStringLiteral("label_servoMotorSpeed"));
-
-        gridLayout_47->addWidget(label_servoMotorSpeed, 2, 0, 1, 1);
+        gridLayout_10->addWidget(label_servoMotorPortSelection, 0, 0, 1, 1);
 
         comboBox_servoMotorPortSelection = new QComboBox(groupBox_22);
         comboBox_servoMotorPortSelection->setObjectName(QStringLiteral("comboBox_servoMotorPortSelection"));
 
-        gridLayout_47->addWidget(comboBox_servoMotorPortSelection, 0, 1, 1, 1);
+        gridLayout_10->addWidget(comboBox_servoMotorPortSelection, 0, 1, 1, 1);
+
+        label_servoMotorSpeed = new QLabel(groupBox_22);
+        label_servoMotorSpeed->setObjectName(QStringLiteral("label_servoMotorSpeed"));
+
+        gridLayout_10->addWidget(label_servoMotorSpeed, 1, 0, 1, 1);
 
         comboBox_servoMotorSpeed = new QComboBox(groupBox_22);
         comboBox_servoMotorSpeed->setObjectName(QStringLiteral("comboBox_servoMotorSpeed"));
 
-        gridLayout_47->addWidget(comboBox_servoMotorSpeed, 2, 1, 1, 1);
-
-        comboBox_servoMotorAcceleration = new QComboBox(groupBox_22);
-        comboBox_servoMotorAcceleration->setObjectName(QStringLiteral("comboBox_servoMotorAcceleration"));
-
-        gridLayout_47->addWidget(comboBox_servoMotorAcceleration, 3, 1, 1, 1);
-
-        comboBox_servoMotorDeceleration = new QComboBox(groupBox_22);
-        comboBox_servoMotorDeceleration->setObjectName(QStringLiteral("comboBox_servoMotorDeceleration"));
-
-        gridLayout_47->addWidget(comboBox_servoMotorDeceleration, 4, 1, 1, 1);
-
-        comboBox_servoMotorResolution = new QComboBox(groupBox_22);
-        comboBox_servoMotorResolution->setObjectName(QStringLiteral("comboBox_servoMotorResolution"));
-
-        gridLayout_47->addWidget(comboBox_servoMotorResolution, 5, 1, 1, 1);
-
-        lineEdit_slideTableMovingDistance = new QLineEdit(groupBox_22);
-        lineEdit_slideTableMovingDistance->setObjectName(QStringLiteral("lineEdit_slideTableMovingDistance"));
-
-        gridLayout_47->addWidget(lineEdit_slideTableMovingDistance, 6, 1, 1, 1);
-
-        label_79 = new QLabel(groupBox_22);
-        label_79->setObjectName(QStringLiteral("label_79"));
-
-        gridLayout_47->addWidget(label_79, 6, 2, 1, 1);
-
-        label_77 = new QLabel(groupBox_22);
-        label_77->setObjectName(QStringLiteral("label_77"));
-
-        gridLayout_47->addWidget(label_77, 4, 2, 1, 1);
-
-        label_78 = new QLabel(groupBox_22);
-        label_78->setObjectName(QStringLiteral("label_78"));
-
-        gridLayout_47->addWidget(label_78, 3, 2, 1, 1);
+        gridLayout_10->addWidget(comboBox_servoMotorSpeed, 1, 1, 1, 1);
 
         label_75 = new QLabel(groupBox_22);
         label_75->setObjectName(QStringLiteral("label_75"));
 
-        gridLayout_47->addWidget(label_75, 2, 2, 1, 1);
+        gridLayout_10->addWidget(label_75, 1, 2, 1, 1);
 
-        gridLayout_47->setColumnStretch(0, 1);
+        label_servoMotorAcceleration = new QLabel(groupBox_22);
+        label_servoMotorAcceleration->setObjectName(QStringLiteral("label_servoMotorAcceleration"));
 
-        gridLayout_50->addLayout(gridLayout_47, 0, 0, 1, 1);
+        gridLayout_10->addWidget(label_servoMotorAcceleration, 2, 0, 1, 1);
 
+        comboBox_servoMotorAcceleration = new QComboBox(groupBox_22);
+        comboBox_servoMotorAcceleration->setObjectName(QStringLiteral("comboBox_servoMotorAcceleration"));
 
-        gridLayout_45->addWidget(groupBox_22, 1, 1, 1, 1);
+        gridLayout_10->addWidget(comboBox_servoMotorAcceleration, 2, 1, 1, 1);
 
-        pushButton_save = new QPushButton(Settings);
+        label_78 = new QLabel(groupBox_22);
+        label_78->setObjectName(QStringLiteral("label_78"));
+
+        gridLayout_10->addWidget(label_78, 2, 2, 1, 1);
+
+        label_servoMotorDeceleration = new QLabel(groupBox_22);
+        label_servoMotorDeceleration->setObjectName(QStringLiteral("label_servoMotorDeceleration"));
+
+        gridLayout_10->addWidget(label_servoMotorDeceleration, 3, 0, 1, 1);
+
+        comboBox_servoMotorDeceleration = new QComboBox(groupBox_22);
+        comboBox_servoMotorDeceleration->setObjectName(QStringLiteral("comboBox_servoMotorDeceleration"));
+
+        gridLayout_10->addWidget(comboBox_servoMotorDeceleration, 3, 1, 1, 1);
+
+        label_77 = new QLabel(groupBox_22);
+        label_77->setObjectName(QStringLiteral("label_77"));
+
+        gridLayout_10->addWidget(label_77, 3, 2, 1, 1);
+
+        label_servoMotorResolution = new QLabel(groupBox_22);
+        label_servoMotorResolution->setObjectName(QStringLiteral("label_servoMotorResolution"));
+
+        gridLayout_10->addWidget(label_servoMotorResolution, 4, 0, 1, 1);
+
+        comboBox_servoMotorResolution = new QComboBox(groupBox_22);
+        comboBox_servoMotorResolution->setObjectName(QStringLiteral("comboBox_servoMotorResolution"));
+
+        gridLayout_10->addWidget(comboBox_servoMotorResolution, 4, 1, 1, 1);
+
+        label_slideTableMovingDistance = new QLabel(groupBox_22);
+        label_slideTableMovingDistance->setObjectName(QStringLiteral("label_slideTableMovingDistance"));
+
+        gridLayout_10->addWidget(label_slideTableMovingDistance, 5, 0, 1, 1);
+
+        lineEdit_slideTableMovingDistance = new QLineEdit(groupBox_22);
+        lineEdit_slideTableMovingDistance->setObjectName(QStringLiteral("lineEdit_slideTableMovingDistance"));
+
+        gridLayout_10->addWidget(lineEdit_slideTableMovingDistance, 5, 1, 1, 1);
+
+        label_79 = new QLabel(groupBox_22);
+        label_79->setObjectName(QStringLiteral("label_79"));
+
+        gridLayout_10->addWidget(label_79, 5, 2, 1, 1);
+
+        gridLayout_10->setColumnStretch(0, 1);
+        gridLayout_10->setColumnStretch(1, 1);
+        gridLayout_10->setColumnStretch(2, 1);
+        gridLayoutWidget = new QWidget(Settings);
+        gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(780, 710, 241, 71));
+        gridLayout_45 = new QGridLayout(gridLayoutWidget);
+        gridLayout_45->setSpacing(6);
+        gridLayout_45->setContentsMargins(11, 11, 11, 11);
+        gridLayout_45->setObjectName(QStringLiteral("gridLayout_45"));
+        gridLayout_45->setContentsMargins(0, 0, 0, 0);
+        pushButton_save = new QPushButton(gridLayoutWidget);
         pushButton_save->setObjectName(QStringLiteral("pushButton_save"));
         QFont font;
         font.setFamily(QStringLiteral("Times New Roman"));
         font.setPointSize(9);
         pushButton_save->setFont(font);
 
-        gridLayout_45->addWidget(pushButton_save, 2, 0, 1, 1);
+        gridLayout_45->addWidget(pushButton_save, 0, 0, 1, 1);
 
-        pushButton_defaults = new QPushButton(Settings);
+        pushButton_defaults = new QPushButton(gridLayoutWidget);
         pushButton_defaults->setObjectName(QStringLiteral("pushButton_defaults"));
         pushButton_defaults->setFont(font);
 
-        gridLayout_45->addWidget(pushButton_defaults, 2, 1, 1, 1);
+        gridLayout_45->addWidget(pushButton_defaults, 0, 1, 1, 1);
 
-        gridLayout_45->setRowStretch(0, 2);
-        gridLayout_45->setRowStretch(1, 4);
-        gridLayout_45->setRowStretch(2, 1);
         stackedWidget->addWidget(Settings);
         PreCamera = new QWidget();
         PreCamera->setObjectName(QStringLiteral("PreCamera"));
@@ -1792,7 +1769,7 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
         toolBox->setCurrentIndex(0);
 
 
@@ -1822,8 +1799,8 @@ public:
         action4->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\207\350\256\260\345\217\212\346\232\227\347\224\265\345\271\263\345\244\204\347\220\206", Q_NULLPTR));
         action->setText(QApplication::translate("MainWindowClass", "\345\215\225\345\217\215\347\233\270\346\234\272\345\217\202\346\225\260\350\256\276\347\275\256", Q_NULLPTR));
         groupBox_14->setTitle(QApplication::translate("MainWindowClass", "\345\267\245\344\270\232\347\233\270\346\234\272", Q_NULLPTR));
+        label_gain->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
         label_darkLevel->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263", Q_NULLPTR));
-        label_imageSavePath->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
         label_imageSaveFormat->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\346\240\274\345\274\217", Q_NULLPTR));
         comboBox_imageSaveFormat->clear();
         comboBox_imageSaveFormat->insertItems(0, QStringList()
@@ -1831,21 +1808,9 @@ public:
          << QApplication::translate("MainWindowClass", ".BMP", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", ".PNG", Q_NULLPTR)
         );
-        label_gain->setText(QApplication::translate("MainWindowClass", "Gain", Q_NULLPTR));
+        label_imageSavePath->setText(QApplication::translate("MainWindowClass", "\345\233\276\345\203\217\344\277\235\345\255\230\350\267\257\345\276\204", Q_NULLPTR));
         groupBox_16->setTitle(QApplication::translate("MainWindowClass", "\345\205\211\346\272\220", Q_NULLPTR));
-        label_lightingSequence->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
-        label_delaySetting->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
         label_serialPortSelection->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
-        comboBox_baudRate->clear();
-        comboBox_baudRate->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "9600", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
-        );
-        comboBox_baudRate->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
-        label_baudRate->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
-        label_68->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
-        label_6->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
         comboBox_serialPortSelection->clear();
         comboBox_serialPortSelection->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -1857,17 +1822,20 @@ public:
          << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
         );
-        groupBox_21->setTitle(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\345\217\260\347\224\265\346\234\272\351\251\261\345\212\250", Q_NULLPTR));
-        comboBox_stepperMotorResolution->clear();
-        comboBox_stepperMotorResolution->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
+        label_baudRate->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
+        comboBox_baudRate->clear();
+        comboBox_baudRate->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "4800", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "9600", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "19200", Q_NULLPTR)
         );
-        label_stepperMotorResolution->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
-        label_86->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_83->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_stepperMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_baudRate->setCurrentText(QApplication::translate("MainWindowClass", "4800", Q_NULLPTR));
+        label_68->setText(QApplication::translate("MainWindowClass", "Baut/s", Q_NULLPTR));
+        label_delaySetting->setText(QApplication::translate("MainWindowClass", "\345\273\266\346\227\266\350\256\276\347\275\256", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MainWindowClass", "*100ms", Q_NULLPTR));
+        label_lightingSequence->setText(QApplication::translate("MainWindowClass", "\344\272\256\347\201\257\345\272\217\345\210\227", Q_NULLPTR));
+        groupBox_21->setTitle(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\345\217\260\347\224\265\346\234\272\351\251\261\345\212\250", Q_NULLPTR));
+        label_stepperMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_stepperMotorPortSelection->clear();
         comboBox_stepperMotorPortSelection->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -1881,15 +1849,7 @@ public:
          << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
         );
-        label_sampleRotationAngle->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
-        comboBox_sampleRotationAngle->clear();
-        comboBox_sampleRotationAngle->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "10", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "15", Q_NULLPTR)
-        );
-        label_stepperMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
-        label_87->setText(QApplication::translate("MainWindowClass", "\302\260", Q_NULLPTR));
+        label_stepperMotorSpeed->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_stepperMotorSpeed->clear();
         comboBox_stepperMotorSpeed->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
@@ -1898,16 +1858,8 @@ public:
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
         );
-        label_stepperMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
-        label_stepperMotorSpeed->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
-        comboBox_stepperMotorDeceleration->clear();
-        comboBox_stepperMotorDeceleration->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
-        );
+        label_82->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
+        label_stepperMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_stepperMotorAcceleration->clear();
         comboBox_stepperMotorAcceleration->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
@@ -1916,14 +1868,34 @@ public:
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
         );
-        label_82->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
+        label_83->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_stepperMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_stepperMotorDeceleration->clear();
+        comboBox_stepperMotorDeceleration->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+        );
+        label_86->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_stepperMotorResolution->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
+        comboBox_stepperMotorResolution->clear();
+        comboBox_stepperMotorResolution->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
+        );
+        label_sampleRotationAngle->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
+        comboBox_sampleRotationAngle->clear();
+        comboBox_sampleRotationAngle->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "10", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "15", Q_NULLPTR)
+        );
+        label_87->setText(QApplication::translate("MainWindowClass", "\302\260", Q_NULLPTR));
         groupBox_22->setTitle(QApplication::translate("MainWindowClass", "\346\273\221\350\275\250\347\224\265\346\234\272\351\251\261\345\212\250", Q_NULLPTR));
-        label_servoMotorResolution->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
-        label_servoMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
-        label_slideTableMovingDistance->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\350\267\235\347\246\273", Q_NULLPTR));
         label_servoMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
-        label_servoMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
-        label_servoMotorSpeed->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorPortSelection->clear();
         comboBox_servoMotorPortSelection->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
@@ -1937,6 +1909,7 @@ public:
          << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
         );
+        label_servoMotorSpeed->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorSpeed->clear();
         comboBox_servoMotorSpeed->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
@@ -1945,6 +1918,8 @@ public:
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
         );
+        label_75->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
+        label_servoMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorAcceleration->clear();
         comboBox_servoMotorAcceleration->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
@@ -1953,6 +1928,8 @@ public:
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
         );
+        label_78->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_servoMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorDeceleration->clear();
         comboBox_servoMotorDeceleration->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
@@ -1961,16 +1938,16 @@ public:
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
         );
+        label_77->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
+        label_servoMotorResolution->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
         comboBox_servoMotorResolution->clear();
         comboBox_servoMotorResolution->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
         );
+        label_slideTableMovingDistance->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\350\267\235\347\246\273", Q_NULLPTR));
         label_79->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));
-        label_77->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_78->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
-        label_75->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
         pushButton_save->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_defaults->setText(QApplication::translate("MainWindowClass", "\346\201\242\345\244\215\351\273\230\350\256\244\351\205\215\347\275\256", Q_NULLPTR));
         groupBox_precamera4->setTitle(QApplication::translate("MainWindowClass", "Camera4", Q_NULLPTR));

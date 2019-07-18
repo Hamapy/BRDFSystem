@@ -17,6 +17,7 @@
 #include "opencv2/opencv.hpp"
 #include "BasicImage.h"
 #include "config.h"
+#include <QtWidgets/QMainWindow>
 
 using namespace std;
 using namespace cv;
@@ -49,9 +50,9 @@ typedef struct _tagPIXEL
 	int j;   // j axis (column)
 }PIXEL;
 
-class AVTCamera
+class AVTCamera : public QObject
 {
-
+	Q_OBJECT
 public:
 	//AVTCamera();
 	AVTCamera(VimbaSystem& system);
@@ -71,7 +72,7 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& widthOutput, int& heightOutput);
 	//保存一帧图像
-	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID);
+	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex);
 	//连续采集图像
 	bool CaptureImages(Mat& captureMat, string imageSavingPath);
 	//连续采集
@@ -162,5 +163,7 @@ private:
 	//选中标记像素点
 	static void Select(Mat src, int i, int j);
 
+signals:
+	void sendingMeasureState(int cameraID, int sampleID, int illuminantID);
 };
 #endif

@@ -158,6 +158,7 @@ QMainWindow(parent)
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
 
+	connect(this->ui.label_measureState, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
 
 //////////////////////////////////////////////切换页面/////////////////////////////////////////////////////
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
@@ -549,7 +550,23 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 {
 	emit sendingMat(workerID, mat);
 }
-
+////////////////////////////////////////////////////////////////////////////
+// 函数：DisplayMeasureState
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::DisplayMeasureState(int cameraID, int sampleID, int illuminantID)
+{
+	char name[100];
+	sprintf(name, "第%d个倾斜角 第%d个高度角 第%d个样品旋转角度", cameraID, sampleID, illuminantID);
+	QString a;
+	a = QString(QLatin1String(name));
+	this->ui.label_measureState->setText(a);
+}
 
 /////////////////////////////相机预处理页面/////////////////////////////////
 

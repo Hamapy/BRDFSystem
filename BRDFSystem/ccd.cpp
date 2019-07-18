@@ -239,29 +239,100 @@ bool AVTCamera::CaptureImages(Mat& captureMat, string imageSavingPath)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID)
+bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex)
 {
-	//000命名方式
-	char saveName[4] = { 0 };
-	sprintf(saveName, "%4d", _saveName);
-	char name[200];
-	sprintf(name, "//%s.bmp", saveName);
 
-	//out_相机角度-材质台角度_in_光源θ-光源σ命名方式
-	//光源36 36 32 28 24 18 12 6 4
-	/*
-	if (_saveName)
+	char name[200];
+	double outTheta;
+	//出射角Theta
+	if (cameraID == 0)  outTheta = 0.0;
+	else   outTheta = 5.0 + cameraID * 10.0;
+
+	//出射角Phi
+	double outPhi = sampleID * 30.0;
+	//各向同性材质出射角Phi为0
+	if (mutex == 1) outPhi = 0.0;
+
+
+	double inTheta, inPhi;
+	int i;
+
+	//光源每层数量分布36 36 32 28 24 18 12 6 4
+	//光源排布顺序
+	int illuminant[196] = { 0, 1, 2, 3, 25, 26, 27, 28, 29, 50, 51, 52, 53, 75, 76, 77, 78, 79, 100, 101, 102, 103, 125, 126, 127, 128, 129, 150, 151, 152, 153, 175, 176, 177, 178, 179, \
+		4, 5, 6, 7, 8, 30, 31, 32, 33, 54, 55, 56, 57, 58, 80, 81, 82, 83, 104, 105, 106, 107, 108, 130, 131, 132, 133, 154, 155, 156, 157, 158, 180, 181, 182, 183, \
+		9, 10, 11, 12, 34, 35, 36, 37, 59, 60, 61, 62, 84, 85, 86, 87, 109, 110, 111, 112, 134, 135, 136, 137, 159, 160, 161, 162, 184, 185, 186, 187, \
+		13, 14, 15, 38, 39, 40, 41, 63, 64, 65, 88, 89, 90, 91, 113, 114, 115, 138, 139, 140, 141, 163, 164, 165, 188, 189, 190, 191, \
+		16, 17, 18, 42, 43, 44, 66, 67, 68, 92, 93, 94, 116, 117, 118, 142, 143, 144, 166, 167, 168, 192, 193, 194, \
+		19, 20, 21, 45, 46, 69, 70, 95, 96, 119, 120, 121, 145, 146, 169, 170, 195, 196, \
+		22, 23, 47, 71, 72, 97, 122, 123, 147, 171, 172, 197, \
+		24, 48, 73, 124, 148, 173, \
+		49, 98, 149, 198 };
+	//入射角Theta和Phi
+	for (i = 0; i < 196; i++)
 	{
+		if (illuminantID == illuminant[i])
+		{
+			if (i < 36)
+			{
+				inTheta = 80.0;
+				inPhi = i * 10.0;
 
+			}
+			else if (i >= 36 && i < 72)
+			{
+				inTheta = 70.0;
+				inPhi = (i - 36) * 10.0;
+			}
+			else if (i >= 72 && i < 104)
+			{
+				inTheta = 60.0;
+				inPhi = (i - 72) * 360.0 / 32;
+			}
+			else if (i >= 104 && i < 132)
+			{
+				inTheta = 50.0;
+				inPhi = (i - 104) * 360.0 / 28;
+			}
+			else if (i >= 132 && i < 156)
+			{
+				inTheta = 40.0;
+				inPhi = (i - 132) * 15.0;
+			}
+			else if (i >= 156 && i < 174)
+			{
+				inTheta = 30.0;
+				inPhi = (i - 156) * 20.0;
+			}
+			else if (i >= 174 && i < 186)
+			{
+				inTheta = 20.0;
+				inPhi = (i - 174) * 30.0;
+			}
+			else if (i >= 186 && i < 192)
+			{
+				inTheta = 10.0;
+				inPhi = (i - 186) * 60.0;
+			}
+			else
+			{
+				inTheta = 5.0;
+				inPhi = (i - 192) * 90.0;
+			}
+		}
 	}
-	char name[200];
-	sprintf(name, "out_%d-%d_in%d-%d.bmp", saveName);
-	*/
+
+
+
+	//命名方式：out_相机角度-材质台角度_in_光源θ-光源σ
+	sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", outTheta, outPhi, inTheta, inPhi);
 	string spath = path + name;
 	bool isSaved = imwrite(spath, mat);
 	//mat.save(QString::fromStdString(path), "BMP", 100);
-	_saveName++;
-	//emit something() //告诉界面线程该角度下的图像已采集，修改界面的Qlabel
+	//_saveName++;
+
+
+	emit sendingMeasureState(cameraID, sampleID, illuminantID); //告诉界面线程该角度下的图像已采集，修改界面的Qlabel
 
 	return isSaved;
 }

@@ -1,41 +1,17 @@
-﻿生成启动时间为 2019/7/16 17:33:56。
-     1>项目“E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Rebuild 个目标)。
+﻿生成启动时间为 2019/7/18 10:30:05。
+     1>项目“F:\BRDF001\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Build 个目标)。
      1>CustomBuild:
-         Moc'ing workerMeasurement.h...
-         Moc'ing workerCCD.h...
-         Moc'ing mainwindow.h...
          Uic'ing mainwindow.ui...
-         Rcc'ing mainwindow.qrc...
-     1>RCC : warning : No resources in 'E:\IVLab\鍩轰簬鍑犱綍涓庢潗璐ㄥ缓妯＄殑鐪熷疄鎰熸覆鏌揬BRDF绯荤粺鎼缓\绯荤粺纭欢鎺у埗鍙婅蒋浠剁紪绋媆BRDFSystem\BRDFSystem\mainwindow.qrc'.
-         
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtCore /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtGui /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt brdfModeling.cpp config.cpp GeneratedFiles\Debug\moc_mainwindow.cpp GeneratedFiles\Debug\moc_workerCCD.cpp GeneratedFiles\Debug\moc_workerMeasurement.cpp imageProcess.cpp whitebalance_test.cpp workerCCD.cpp ccd_test.cpp illuminant.cpp illuminant_test.cpp main.cpp mainwindow.cpp ccd.cpp modeling_test.cpp sampleComm.cpp sampleComm_test.cpp slideComm.cpp slideComm_test.cpp workerMeasurement.cpp
-         brdfModeling.cpp
-         config.cpp
+         C:\Program Files (x86)\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtCore /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtGui /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D x64 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt GeneratedFiles\Debug\moc_mainwindow.cpp main.cpp mainwindow.cpp
          moc_mainwindow.cpp
-         moc_workerCCD.cpp
-         moc_workerMeasurement.cpp
-         imageProcess.cpp
-         whitebalance_test.cpp
-         workerCCD.cpp
-         ccd_test.cpp
-         illuminant.cpp
-         illuminant_test.cpp
          main.cpp
          mainwindow.cpp
-         ccd.cpp
-         modeling_test.cpp
-         sampleComm.cpp
-         sampleComm_test.cpp
-         slideComm.cpp
-         slideComm_test.cpp
-         workerMeasurement.cpp
          正在生成代码...
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtCore /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtGui /ID:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt GeneratedFiles\qrc_mainwindow.cpp
-         qrc_mainwindow.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\x64\Debug\\BRDFSystem.exe" /NOLOGO /LIBPATH:D:\Qt\Qt_5.6.3_msvc2013_64\5.6.3\msvc2013_64\lib qtmaind.lib Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib opencv_calib3d2413d.lib opencv_contrib2413d.lib opencv_core2413d.lib opencv_features2d2413d.lib opencv_flann2413d.lib opencv_gpu2413d.lib opencv_highgui2413d.lib opencv_imgproc2413d.lib opencv_legacy2413d.lib opencv_ml2413d.lib opencv_nonfree2413d.lib opencv_objdetect2413d.lib opencv_ocl2413d.lib opencv_photo2413d.lib opencv_stitching2413d.lib opencv_superres2413d.lib opencv_ts2413d.lib opencv_video2413d.lib opencv_videostab2413d.lib VimbaC.lib VimbaCPP.lib VimbaImageTransform.lib EDSDK.lib ServoRs232Comm.lib lapack.lib blas.lib f2c.lib tmglib.lib levmar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\x64\Debug\BRDFSystem.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\x64\Debug\BRDFSystem.lib" /MACHINE:X64 /NODEFAULTLIB:msvcrt.lib x64\Debug\brdfModeling.obj
+         C:\Program Files (x86)\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"F:\BRDF001\BRDFSystem\x64\Debug\\BRDFSystem.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib qtmaind.lib Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib opencv_calib3d2413d.lib opencv_contrib2413d.lib opencv_core2413d.lib opencv_features2d2413d.lib opencv_flann2413d.lib opencv_gpu2413d.lib opencv_highgui2413d.lib opencv_imgproc2413d.lib opencv_legacy2413d.lib opencv_ml2413d.lib opencv_nonfree2413d.lib opencv_objdetect2413d.lib opencv_ocl2413d.lib opencv_photo2413d.lib opencv_stitching2413d.lib opencv_superres2413d.lib opencv_ts2413d.lib opencv_video2413d.lib opencv_videostab2413d.lib VimbaC.lib VimbaCPP.lib VimbaImageTransform.lib EDSDK.lib ServoRs232Comm.lib lapack.lib blas.lib f2c.lib tmglib.lib levmar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\BRDF001\BRDFSystem\x64\Debug\BRDFSystem.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\BRDF001\BRDFSystem\x64\Debug\BRDFSystem.lib" /MACHINE:X64 /NODEFAULTLIB:msvcrt.lib x64\Debug\brdfModeling.obj
          x64\Debug\config.obj
+         x64\Debug\moc_ccd.obj
          x64\Debug\moc_mainwindow.obj
          x64\Debug\moc_workerCCD.obj
          x64\Debug\moc_workerMeasurement.obj
@@ -55,9 +31,9 @@
          x64\Debug\slideComm.obj
          x64\Debug\slideComm_test.obj
          x64\Debug\workerMeasurement.obj
-         BRDFSystem.vcxproj -> E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\x64\Debug\BRDFSystem.exe
-     1>已完成生成项目“E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”(Rebuild 个目标)的操作。
+         BRDFSystem.vcxproj -> F:\BRDF001\BRDFSystem\x64\Debug\BRDFSystem.exe
+     1>已完成生成项目“F:\BRDF001\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”(Build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:35.19
+已用时间 00:00:08.80
