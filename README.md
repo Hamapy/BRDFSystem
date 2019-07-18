@@ -43,7 +43,6 @@
 五（附）、BRDF模型详细说明（model文件夹暂未添加）
 1、文件夹C++程序中是用WardDuer模型拟合BRDF模型参数的C++工程，使用了LM算法库levmar-2.6和opencv 2.4.13，其中附上了opencv库和LM算法库（编译过）。
     工程中需要用到compiler.h、levmar.h、lm.h、misc.h和Axb.c、lm.c、misc.c。
-
     其中BRDFfitting.cpp是BRDF参数拟合类的具体函数定义，BRDFfitting.h是对该类的声明。
     该类的公有成员函数StartFitting(int BRDFSerialNumber)和BRDFSample(int BRDFSerialNumber)传入参数为需要拟合的原始数据的文件的序号（序号为1-100之间）。
     该类的私有函数ComputeSamplingAngle()目前是对thetaOut和thetaIn以10:5:80、phiIn以5:5:175采样的，剔除了仰角低于10度和高于80度的数据，因为这些数据误差较大，而且采用每隔5度均匀采样以提高可靠性。
