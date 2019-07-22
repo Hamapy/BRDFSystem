@@ -1,51 +1,37 @@
 #include "workerMeasurement.h"
 
-////////////////////////////////AVTÏà»úÏß³ÌÀà¶¨Òå////////////////////////////
-WorkerMeasurement::WorkerMeasurement(VimbaSystem&	system, QObject *parent) :
-_system(system),
+////////////////////////////////AVTç›¸æœºçº¿ç¨‹ç±»å®šä¹‰////////////////////////////
+WorkerMeasurement::WorkerMeasurement(QObject *parent) :
 QObject(parent)
 {
-	_mutex.lock();
-	//cameraAVT = new AVTCamera(_workerID, _system);
 	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
 	connect(this, SIGNAL(done()), this, SLOT(ContributeBRDF()));
 
 	sampleComm = new SampleComm();
 	sampleComm->Init(2);
 	slideComm = new SlideComm();
-	slideComm->Init(9, SERVO_VELOCITY, SERVO_ACCELERATE, SERVO_DECELERATE, SERVO_RESOLUTION);
-	illuminant = new Illuminant(5);
-	illuminant->InitCOM();
-	//illuminant->SetSteadyTime(30);
-	//¹âÔ´ÅÅ²¼Ë³Ğò
-	_illuminantID = new UINT[196] { 0, 1, 2, 3, 25, 26, 27, 28, 29, 50, 51, 52, 53, 75, 76, 77, 78, 79, 100, 101, 102, 103, 125, 126, 127, 128, 129, 150, 151, 152, 153, 175, 176, 177, 178, 179, \
-		4, 5, 6, 7, 8, 30, 31, 32, 33, 54, 55, 56, 57, 58, 80, 81, 82, 83, 104, 105, 106, 107, 108, 130, 131, 132, 133, 154, 155, 156, 157, 158, 180, 181, 182, 183, \
-		9, 10, 11, 12, 34, 35, 36, 37, 59, 60, 61, 62, 84, 85, 86, 87, 109, 110, 111, 112, 134, 135, 136, 137, 159, 160, 161, 162, 184, 185, 186, 187, \
-		13, 14, 15, 38, 39, 40, 41, 63, 64, 65, 88, 89, 90, 91, 113, 114, 115, 138, 139, 140, 141, 163, 164, 165, 188, 189, 190, 191, \
-		16, 17, 18, 42, 43, 44, 66, 67, 68, 92, 93, 94, 116, 117, 118, 142, 143, 144, 166, 167, 168, 192, 193, 194, \
-		19, 20, 21, 45, 46, 69, 70, 95, 96, 119, 120, 121, 145, 146, 169, 170, 195, 196, \
-		22, 23, 47, 71, 72, 97, 122, 123, 147, 171, 172, 197, \
-		24, 48, 73, 124, 148, 173, \
-		49, 98, 149, 198 };
+	slideComm->Init(9);
+	illuminant = new Illuminant();
+	illuminant->InitCOM(5);
+
+	//å…‰æºæ’å¸ƒé¡ºåº
+	//è¿™è¾¹å†™é”™äº†ï¼Œä¸åº”è¯¥ä»0å¼€å§‹å†™
+	_illuminantID = new UINT[196] { 0, 1, 2, 3,    25, 26, 27, 28, 29,    50,51,52,53,       75,76,77,78,79,   100,101,102,103,      125,126,127,128,129,    150,151,152,153,      175,176,177,178,179,\
+									  4,5,6,7,8,     30,31,32,33,           54,55,56,57,58,    80,81,82,83,      104,105,106,107,108,  130,131,132,133,        154,155,156,157,158,  180,181,182,183,\
+									  9,10,11,12,    34,35,36,37,           59,60,61,62,       84,85,86,87,      109,110,111,112,      134,135,136,137,        159,160,161,162,      184,185,186,187,\
+									  13,14,15,      38,39,40,41,           63,64,65,          88,89,90,91,      113,114,115,          138,139,140,141,        163,164,165,          188,189,190,191,\
+									  16,17,18,      42,43,44,              66,67,68,          92,93,94,         116,117,118,          142,143,144,            166,167,168,          192,193,194,\
+									  19,20,21,      45,46,                 69,70,             95,96,            119,120,121,          145,146,                169,170,              195,196,\
+									  22,23,         47,                    71,72,             97,               122,123,              147,                    171,172,              197,\
+									  24,            48,                    73,                                  124,                  148,                    173,                  \
+										    		 49,                                       98,                                     149,                                          198 };
 	_iID = 0;
 	_sID = 0;
 	_isReady = 0;
-	_captureDone = 0;
+	//_captureDone = 0;
 	_measureFlag = 0;
-	_sampleFlag = 0;
-	//_exposureTime = 50;
-	//_saveName = 0;
-	//_saveName = new int[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+	//_sampleFlag = 0;
 	_seriesCAM = new bool[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
-	/*
-	//_measureFlag = measureFlag;
-	illuminant->InitCOM();
-	if (_measureFlag == 1)
-	illuminant->SetSteadyTime(10);
-	if (_measureFlag == 2)
-	illuminant->SetSteadyTime(360);
-	_timerId = this->startTimer(10000);//ÉèÖÃ¶¨Ê±Æ÷´¥·¢×ÓÏß³Ìcapture
-	*/
 }
 WorkerMeasurement::~WorkerMeasurement()
 {
@@ -53,19 +39,18 @@ WorkerMeasurement::~WorkerMeasurement()
 	delete _illuminantID;
 	delete sampleComm;
 	delete slideComm;
-	//delete cameraAVT;
-
+	delete _seriesCAM;
 }
 
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
-	//slideComm->MoveToX2();//»¬¹ì¾ÍÎ»
+	slideComm->MoveToX2();//æ»‘è½¨å°±ä½
+	Sleep(10000);//ç­‰å¾…æ»‘è½¨å°±ä½
 	_measureFlag = measureFlag;
 	//if (_measureFlag == 1)
-	//	illuminant->SetSteadyTime(30);
+		_timerId = this->startTimer(300);
 	//if (_measureFlag == 2)
-	//	illuminant->SetSteadyTime(200);
-	_timerId = this->startTimer(8000);
+		//_timerId = this->startTimer(2100);
 }
 
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
@@ -74,43 +59,45 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 	{
 		if (_measureFlag == 1)
 		{
-			if (_iID != 196)
+			if (_iID != ILLUMINANT_NUM)
 			{
-				illuminant->Suspend();
-				//Sleep(500);
-				illuminant->SetSteadyTime(30);
-				illuminant->LightenById(_illuminantID[_iID]);
-				illuminant->Start();
-				Sleep(500);//±ÜÃâ½ÓÊÕµ½µÆÁÁÇ°µÄÍ¼Ïñ
-				_iID++;
 				_isReady = 1;
-				emit readyForGrab();//Í¨¹ıÖ÷Ïß³Ì¸æËßÏà»úÔÛÇĞ»»µ½ÏÂÒ»¸öµÆÁË£¬Äã¿ÉÒÔÊÔÊÔµ÷ÕûÒ»ÏÂÄãµÄÆØ¹âÊ±¼ä
+				illuminant->Suspend();
+				illuminant->SetSteadyTime(20);
+				illuminant->LightenById(_illuminantID[_iID]+1);//å…‰æºåºåˆ—æ˜¯ä»0å¼€å§‹å†™çš„
+				illuminant->Start();
+				Sleep(200);
+				_iID++;
+
+				emit readyForGrab(_sID, _iID);//é€šè¿‡ä¸»çº¿ç¨‹å‘Šè¯‰ç›¸æœºå’±åˆ‡æ¢åˆ°ä¸‹ä¸€ä¸ªç¯äº†ï¼Œä½ å¯ä»¥è¯•è¯•è°ƒæ•´ä¸€ä¸‹ä½ çš„æ›å…‰æ—¶é—´
 			}
-			else if (_iID == 196)
+			else if (_iID == ILLUMINANT_NUM)
 			{
 				emit done();
 				_isReady = 1;
 			}
 		}
 
+		//æ¯ä¸ªå…‰æºæ—‹è½¬æ ·å“å°18ä¸ªè§’åº¦
+		/*
 		if (_measureFlag == 2)
 		{
 			if (_iID != 196)
 			{
 				if (_sampleFlag == 0)
 				{
+					_isReady = 1;
 					illuminant->Suspend();
-					illuminant->SetSteadyTime(200);
-					illuminant->LightenById(_illuminantID[_iID]);
+					illuminant->SetSteadyTime(240);//æœ€é•¿ç‚¹äº®æ—¶é—´25.5s  18ä¸ªé‡‡é›†è§’åº¦æ—¶é—´ä¸å¤ªå¤Ÿ
+					illuminant->LightenById(_illuminantID[_iID]+1);
 					illuminant->Start();
-					Sleep(500);
+					Sleep(200);
 				}
-
-				if (_sID != 9)//36¸ö½Ç¶ÈºÄÊ±Ì«³¤
+				if (_sID != 12)//36ä¸ªè§’åº¦è€—æ—¶å¤ªé•¿
 				{
-					sampleComm->GotoNextPos(175);
-					Sleep(3000);//µÈ´ıÑùÆ·Ì¨Ğı×ª£¬ÉèÖÃ2ÃëÊ±Ö¸ÁîÎÛÈ¾
-					emit readyForGrab();
+					sampleComm->GotoNextPos(5250);
+					Sleep(200);//ç•™ç»™ç›¸æœºçš„æ‹æ‘„æ—¶é—´
+					emit readyForGrab(_sID, _iID);
 					_sID++;
 					_isReady = 1;
 					_sampleFlag = 1;
@@ -118,9 +105,9 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				else
 				{
 					_sampleFlag = 0;
-					_sID = 0;//¿ªÊ¼×ªÏÂÒ»È¦
+					_sID = 0;//å¼€å§‹è½¬ä¸‹ä¸€åœˆ
 					_iID++;
-					_isReady = 1;
+					_isReady = 0;
 				}
 			}
 			else if (_iID == 196)
@@ -129,24 +116,45 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				_isReady = 1;
 			}
 		}
+		*/
+
+		//æ¯ä¸ªæ ·å“å°è§’åº¦ç‚¹äº®196ä¸ªå…‰æº
+		if (_measureFlag == 2)
+		{
+			if (_sID != SAMPLE_NUM)
+			{
+				if (_iID != ILLUMINANT_NUM)
+				{
+					_isReady = 1;
+					illuminant->Suspend();
+					illuminant->SetSteadyTime(20);//æœ€é•¿ç‚¹äº®æ—¶é—´25.5s  18ä¸ªé‡‡é›†è§’åº¦æ—¶é—´ä¸å¤ªå¤Ÿ
+					illuminant->LightenById(_illuminantID[_iID] + 1);
+					illuminant->Start();
+					Sleep(200);
+					_iID++;
+
+					emit readyForGrab(_sID, _iID);
+				}
+				else if (_iID == ILLUMINANT_NUM)//36ä¸ªè§’åº¦è€—æ—¶å¤ªé•¿
+				{
+					sampleComm->GotoNextPos(5250);
+					//Sleep(200);//ç•™ç»™ç›¸æœºçš„æ‹æ‘„æ—¶é—´			
+					_iID = 0;
+					_sID++;
+				}
+			}
+			else if (_sID == 36)
+			{
+				emit done();
+				_isReady = 1;
+			}
+		}
 	}
-	//else //¹âÔ´ÑùÆ·¾ÍÎ»£¬±£´æÏà»úÏß³Ì·¢À´µÄ²É¼¯Í¼Ïñ
-	//{
-	//SaveSeriesMat(workerID, mat);
-	//emit readyForGrab();
-	//}
 }
 
 void WorkerMeasurement::CheckDone(int workerID)
 {
-#define CAM_NUM 9
-
-	for (int i = 0; i < CAM_NUM; i++)
-	{
-		if (workerID == i)
-			_seriesCAM[i] = 1;
-	}
-
+	_seriesCAM[workerID] = 1;
 	int s = 0;
 	for (int i = 0; i < CAM_NUM; i++)
 	{
@@ -162,57 +170,32 @@ void WorkerMeasurement::CheckDone(int workerID)
 	}
 	else
 		_isReady = 1;
-#undef CAM_NUM
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºContributeBRDF()
-// ÃèÊö£º²É¼¯Ô­Ê¼Í¼ÏñÍê³Éºó£¬Éú³É²ÄÖÊÊı¾İ
-// ÊäÈë£ºNull
-// Êä³ö£ºNull
-// ·µ»Ø£ºNull
-// ±¸×¢£º
+// å‡½æ•°ï¼šContributeBRDF()
+// æè¿°ï¼šé‡‡é›†åŸå§‹å›¾åƒå®Œæˆåï¼Œç”Ÿæˆæè´¨æ•°æ®
+// è¾“å…¥ï¼šNull
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šNull
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
+void WorkerMeasurement::ContributeBRDF()
+{
+
+}
+
 void WorkerMeasurement::CloseWorker()
 {
 	this->killTimer(_timerId);
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºAverageRGB()
-// ÃèÊö£º¶Ô²É¼¯µÃµ½µÄÍ¼Ïñ½øĞĞRGBÈıÍ¨µÀÈ¡Æ½¾ùµÃµ½RGBÈıÍ¨µÀµÄBRDF
-// ÊäÈë£º²É¼¯µÃµ½µÄÍ¼Æ¬
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØRGBÈıÍ¨µÀBRDFÖµµÄÏòÁ¿
-// ±¸×¢£º
-// Modified by 
-////////////////////////////////////////////////////////////////////////////
-vector<double> WorkerMeasurement::AverageRGB(const Mat& inputImage)
-{
-	vector<double> temp = { 0, 0, 0 };
-	int rowNumber = inputImage.rows;
-	int colNumber = inputImage.cols;
-	//¶ÔRGBÈıÍ¨µÀ½øĞĞÈ¡Æ½¾ùÖµ²Ù×÷
-	for (int i = 0; i<rowNumber; i++)
-	{
-		for (int j = 0; j<colNumber; j++)
-		{
-			temp[0] += inputImage.at<Vec3b>(i, j)[0];
-			temp[1] += inputImage.at<Vec3b>(i, j)[1];
-			temp[2] += inputImage.at<Vec3b>(i, j)[2];
-		}
-	}
-	temp[0] = temp[0] / (rowNumber*colNumber);
-	temp[1] = temp[1] / (rowNumber*colNumber);
-	temp[2] = temp[2] / (rowNumber*colNumber);
-	return temp;
-}
-////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºWriteBRDF()
-// ÃèÊö£º½«Ò»ÖÖ²ÄÖÊÔÚ¸÷¸ö(¹âÔ´-Ïà»ú)½Ç¶ÈÏÂµÄBRDFÖµĞ´½ø.binaryÎÄ¼ş
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£ºÊÇ·ñ¶ÁĞ´³É¹¦
-// ±¸×¢£º
+// å‡½æ•°ï¼šWriteBRDF()
+// æè¿°ï¼šå°†ä¸€ç§æè´¨åœ¨å„ä¸ª(å…‰æº-ç›¸æœº)è§’åº¦ä¸‹çš„BRDFå€¼å†™è¿›.binaryæ–‡ä»¶
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šæ˜¯å¦è¯»å†™æˆåŠŸ
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 bool WorkerMeasurement::WriteBRDF()
@@ -259,12 +242,12 @@ bool WorkerMeasurement::WriteBRDF()
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºReadBrdf()
-// ÃèÊö£º´Ó.binaryÎÄ¼ş¶ÁÈ¡³ö²ÄÖÊµÄBRDFÊıÖµ
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£ºÊÇ·ñ¶ÁĞ´³É¹¦
-// ±¸×¢£º
+// å‡½æ•°ï¼šReadBrdf()
+// æè¿°ï¼šä».binaryæ–‡ä»¶è¯»å–å‡ºæè´¨çš„BRDFæ•°å€¼
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šæ˜¯å¦è¯»å†™æˆåŠŸ
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 bool WorkerMeasurement::ReadBrdf(const char *filename, double* &brdf)
@@ -280,12 +263,12 @@ bool WorkerMeasurement::ReadBrdf(const char *filename, double* &brdf)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºtheta_out_index()
-// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄtheta½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØË÷Òı
-// ±¸×¢£º
+// å‡½æ•°ï¼štheta_out_index()
+// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„thetaè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šè¿”å›ç´¢å¼•
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_out_index(int theta_out)
@@ -294,12 +277,12 @@ inline int WorkerMeasurement::theta_out_index(int theta_out)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºfi_out_index()
-// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄfi½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØË÷Òı
-// ±¸×¢£º
+// å‡½æ•°ï¼šfi_out_index()
+// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„fiè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šè¿”å›ç´¢å¼•
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_out_index(int fi_out)
@@ -309,12 +292,12 @@ inline int WorkerMeasurement::fi_out_index(int fi_out)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºtheta_in_index()
-// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞ¹âÔ´µÄtheta½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØË÷Òı
-// ±¸×¢£º
+// å‡½æ•°ï¼štheta_in_index()
+// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­å…‰æºçš„thetaè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šè¿”å›ç´¢å¼•
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_in_index(int theta_in)
@@ -323,12 +306,12 @@ inline int WorkerMeasurement::theta_in_index(int theta_in)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºfi_in_index()
-// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄfi½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
-// ÊäÈë£º
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØË÷Òı
-// ±¸×¢£º
+// å‡½æ•°ï¼šfi_in_index()
+// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„fiè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
+// è¾“å…¥ï¼š
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šè¿”å›ç´¢å¼•
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
@@ -340,12 +323,12 @@ inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// º¯Êı£ºLookupBrdfVal()
-// ÃèÊö£º¸ù¾İ¸ø³öµÄ¹âÔ´ºÍÏà»úµÄ½Ç¶È£¬¼ÆËã³öµ±Ç°½Ç¶ÈÏÂµÄBRDFÖµ
-// ÊäÈë£º¹âÔ´ºÍÏà»úµÄ½Ç¶ÈÒÔ¼°ËùµÃµ½µÄBRDFÊı×é¡£
-// Êä³ö£ºNull
-// ·µ»Ø£º·µ»ØË÷Òı
-// ±¸×¢£º
+// å‡½æ•°ï¼šLookupBrdfVal()
+// æè¿°ï¼šæ ¹æ®ç»™å‡ºçš„å…‰æºå’Œç›¸æœºçš„è§’åº¦ï¼Œè®¡ç®—å‡ºå½“å‰è§’åº¦ä¸‹çš„BRDFå€¼
+// è¾“å…¥ï¼šå…‰æºå’Œç›¸æœºçš„è§’åº¦ä»¥åŠæ‰€å¾—åˆ°çš„BRDFæ•°ç»„ã€‚
+// è¾“å‡ºï¼šNull
+// è¿”å›ï¼šè¿”å›ç´¢å¼•
+// å¤‡æ³¨ï¼š
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void WorkerMeasurement::LookupBrdfVal(double* brdf, int theta_in, int fi_in,
@@ -366,11 +349,3 @@ void WorkerMeasurement::LookupBrdfVal(double* brdf, int theta_in, int fi_in,
 	green_val = brdf[3 * ind + 1];
 	blue_val = brdf[3 * ind + 2];
 }
-
-
-
-
-
-
-
-

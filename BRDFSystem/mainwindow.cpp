@@ -158,6 +158,7 @@ QMainWindow(parent)
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
 
+	connect(this->ui.label_measureState, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
 
 //////////////////////////////////////////////切换页面/////////////////////////////////////////////////////
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
@@ -549,7 +550,23 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 {
 	emit sendingMat(workerID, mat);
 }
-
+////////////////////////////////////////////////////////////////////////////
+// 函数：DisplayMeasureState
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::DisplayMeasureState(int cameraID, int sampleID, int illuminantID)
+{
+	char name[100];
+	sprintf(name, "第%d个倾斜角 第%d个高度角 第%d个样品旋转角度", cameraID, sampleID, illuminantID);
+	QString a;
+	a = QString(QLatin1String(name));
+	this->ui.label_measureState->setText(a);
+}
 
 /////////////////////////////相机预处理页面/////////////////////////////////
 
@@ -633,7 +650,7 @@ void MainWindow::PushButton_WhiteBalance_Pressed()
 		//string path = _capturePath + "camera" + to_string(i);
 		//mats = AVTCamera::ReadImages(path);
 		//mat = AVTCamera::AverageImage(mats);
-		_trans = AVTCamera::GetWhiteBalanceTrans(mats);
+		_trans = ImageProcess::ComputeWhiteTrans(mats);
 	}
 	_transs.push_back(_trans);
 	//需要写在配置文件里
@@ -693,6 +710,7 @@ void MainWindow::PushButton_FiniCCD_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::DisplayImage(int workerID, QImage img)
 {
+	//这里这么多if可以有化成map
 	if (_displayFlag == 0)
 	{
 		if (workerID == 0)

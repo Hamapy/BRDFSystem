@@ -10,6 +10,7 @@
 #include <QMutex>
 #include "ccd.h"
 #include "config.h"
+#include "imageProcess.h"
 
 class WorkerCCD : public QObject
 {

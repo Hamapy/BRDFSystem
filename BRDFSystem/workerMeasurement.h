@@ -1,55 +1,47 @@
-////////////////////////////²ÄÖÊ²É¼¯Ïß³ÌÀàÉùÃ÷////////////////////////////
-
+////////////////////////////æè´¨é‡‡é›†çº¿ç¨‹ç±»å£°æ˜////////////////////////////
 #pragma once
-//¶¨ÒåµÄ³£Á¿
-const int               thetaOutNum = 9;
-const int               fiOutNum = 18;
-const int               thetaInNum = 9;
-const int               lightSourceNum = 196;
-
-
-
 #ifndef WORKERMEASUREMENT_H
-
 #define WORKERMEASUREMENT_H
+
 #include <QObject>
 #include <QImage>
 #include <QTimerEvent>
 #include <QThread>
 #include <QMutex>
+#include "config.h"
 #include "ccd.h"
 #include "illuminant.h"
 #include "sampleComm.h"
 #include "slideComm.h"
-#include <sstream>
+
+#define SAMPLE_NUM 36
+#define ILLUMINANT_NUM 196
 
 class WorkerMeasurement : public QObject
 {
 	Q_OBJECT
+
 public:
-	//WorkerMeasurement(QObject *parent = 0);
-	WorkerMeasurement(VimbaSystem& system, QObject *parent = 0);
+	WorkerMeasurement(QObject *parent = 0);
 	virtual ~WorkerMeasurement();
 	virtual void timerEvent(QTimerEvent *event);
 	//virtual void run();
-	friend class MainWindow;//Ö÷½çÃæÀàĞèÒªÓÃµ½¸ÃÀàµÄ²É¼¯Í¼ÏñÏà¹Ø±äÁ¿
+	friend class MainWindow;//ä¸»ç•Œé¢ç±»éœ€è¦ç”¨åˆ°è¯¥ç±»çš„é‡‡é›†å›¾åƒç›¸å…³å˜é‡
 	friend class WorkerCCD;
-	private slots:
+
+private slots:
 	//void	NextMeasureState(int workerID, /*Mat*/QImage mat);
 	//void	SaveAMat(int workerID, /*Mat*/QImage mat);
 	void CheckDone(int workerID);
 	void StartTimer(int measureFlag);
 	void CloseWorker();
-	//void ContributeBRDF();
-	vector<double> AverageRGB(const Mat& inputImage);
-	bool ReadBrdf(const char *filename, double* &brdf);
-	void LookupBrdfVal(double* brdf, int theta_in, int fi_in,
-		int theta_out, int fi_out,
-		double& red_val, double& green_val, double& blue_val);
-	bool WriteBRDF()
-		//void GetExposureTime(int workerID, Mat mat);
+  bool ReadBrdf(const char *filename, double* &brdf);
+	void LookupBrdfVal(double* brdf, int theta_in, int fi_in, int theta_out, int fi_out, double& red_val, double& green_val, double& blue_val);
+	bool WriteBRDF();
+
+	//void GetExposureTime(int workerID, Mat mat);
+
 private:
-	VimbaSystem&			_system;
 	int						_workerID;
 	//AVTCamera*				cameraAVT;
 	QImage					_img;
@@ -63,28 +55,33 @@ private:
 	//string					_imageSavingPath2 = "..\\imgs_measurement2\\";
 	//string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	bool					_isReady;
-	bool					_captureDone;
-	//byte					_seriesCam; //±íÊ¾ÒÑÊÕµ½µÄ9Ì¨Ïà»úÖĞµÄÍ¼ÏñÊıÁ¿£¬byteÖ»ÓĞ8Î»£¬Ö»ÄÜÔİÊ±ÓÃÊı×é±ê¼Ç
+	//bool					_captureDone;
+	//byte					_seriesCam; //è¡¨ç¤ºå·²æ”¶åˆ°çš„9å°ç›¸æœºä¸­çš„å›¾åƒæ•°é‡ï¼Œbyteåªæœ‰8ä½ï¼Œåªèƒ½æš‚æ—¶ç”¨æ•°ç»„æ ‡è®°
 	bool*					_seriesCAM;
 	Illuminant*				illuminant;
 	SampleComm*				sampleComm;
 	SlideComm*				slideComm;
 	UINT                    portNo;
 	int						_timerId;
+
 	UINT*					_illuminantID;
-	UINT					_iID;//ÁÁµÆĞòºÅ
-	UINT					_sID;//ÑùÆ·Ì¨½Ç¶ÈĞòºÅ
+	UINT					_iID;//äº®ç¯åºå·
+	UINT					_sID;//æ ·å“å°è§’åº¦åºå·
 	int						_measureFlag;
-	bool					_sampleFlag;
+	//bool					_sampleFlag;
+	bool					_illuminantFlag;
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//è¯»å–é…ç½®æ–‡ä»¶
 	QMutex					_mutex;
-	string                  path;//¶ÁÈ¡Í¼Æ¬µÄÂ·¾¶
-	char*                   savePath;//±£´æ.binaryÎÄ¼şµÄÂ·¾¶
+	string                  path;//è¯»å–å›¾ç‰‡çš„è·¯å¾„
+	char*                   savePath;//ä¿å­˜.binaryæ–‡ä»¶çš„è·¯å¾„
 	int theta_out_index(int theta_out);
 	inline int  fi_out_index(int fi_out);
 	inline int theta_in_index(int theta_in);
 	inline int fi_in_index(int fi_in, int theta_in);
+
 signals:
-	void					done(); //Í¨ÖªÆäËûÏß³Ì²É¼¯½áÊø
-	void					readyForGrab();
+	void					done(); //é€šçŸ¥å…¶ä»–çº¿ç¨‹é‡‡é›†ç»“æŸ
+	void					readyForGrab(int sID, int iID);
 };
 #endif
+

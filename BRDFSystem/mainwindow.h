@@ -53,6 +53,7 @@ private slots:
 	
 	void IsEdited();
 	void DisplayImage(int workerID, QImage img);
+	void DisplayMeasureState(int cameraID, int sampleID, int illuminantID);
 
 private:
 	Ui::MainWindowClass ui;
@@ -69,8 +70,8 @@ private:
 	//QPixmap*					_pic;
 	QMutex						_mutex;
 	//string						_capturePath = "..\\imgs_calibration";
-	vector<float>				_trans;
-	vector<vector<float>>		_transs;
+	float*						_trans;
+	vector<float*>				_transs;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//∂¡»°≈‰÷√Œƒº˛
 
 	void CreateFolds(string root, string fileName);
