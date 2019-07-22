@@ -149,6 +149,23 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				_isReady = 1;
 			}
 		}
+		//采集材质台旋转一周的图像
+		if (_measureFlag == 3)
+		{
+			if (_sID != SAMPLE_NUM)
+			{
+				_isReady = 1;
+				emit readyForGrab(_sID, _iID);
+				sampleComm->GotoNextPos(1750);
+				//Sleep(200);//留给相机的拍摄时间			
+				_sID++;
+			}
+			else if (_sID == SAMPLE_NUM)
+			{
+				emit done();
+				_isReady = 1;
+			}
+		}
 	}
 }
 

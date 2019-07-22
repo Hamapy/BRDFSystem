@@ -3,6 +3,8 @@
 #define IMAGEPROCESS_H
 
 #include <algorithm>
+#include <opencv2/photo.hpp>
+#include "opencv2/imgcodecs.hpp"  //这个hpp文件opencv2没有，需要更换版本
 #include "opencv2/opencv.hpp"
 #include "stdafx.h"
 
@@ -28,8 +30,10 @@ public:
 	static bool IsOverExposure(Mat src);
 	static float ComputeExposureTime(Mat mat);
 
-	//低动态范围HDR
-	//Mat ContributeHDR(vector<Mat> srcs);
+	//高动态范围HDR
+	//求取一幅RGB图像平均亮度
+	static double ComputeAverage(Mat src);
+	static Mat ContributeHDR(map<double, Mat> imgs, bool crfFlag);
 
 	//坏点校正
 	static vector<int*> DeadPixelDetect(Mat src, int maxNum);

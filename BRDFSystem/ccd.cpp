@@ -324,6 +324,37 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 
 	return isSaved;
 }
+////////////////////////////////////////////////////////////////////////////
+// 函数：GetExposureTime
+// 描述：计算相机在一定角度光源下的合适曝光时间
+// 输入：Null
+// 输出：曝光时间
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+map<double, Mat> AVTCamera::CaptureByDifTimes(double originalTime, Mat originalMat)
+{
+	map<double, Mat> imgs;
+	imgs[originalTime] = originalMat;
+	double ped = ImageProcess::ComputeAverage(originalMat);
+	double max = 255.00 / ped * originalTime;
+	double step = max / HDR_NUM;
+	double exposureTime = 0.00;
+	for (int i = 0; i < HDR_NUM; i++)
+	{
+		exposureTime += step;
+		CameraSettings(exposureTime);
+		//AVTCamera::GetImageSize(_width, _height);
+		uchar* pImageFrame = CaptureAnImage();
+		Mat mat = Mat(_height, _width, CV_8UC3, pImageFrame);
+		imgs[exposureTime] = mat;
+
+		Sleep(exposureTime);
+	}
+
+	return imgs;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 // 函数：CameraThread(CameraThreadInfo threadInfo)

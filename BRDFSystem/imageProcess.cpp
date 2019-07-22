@@ -47,6 +47,80 @@ float ImageProcess::ComputeExposureTime(Mat mat)
 
 	return t;
 }
+
+////////////////////////////////////////////////////////////////////////////
+// 函数：ContributeHDR
+// 描述：合成高动态范围图像
+// 输入：Null
+// 输出：曝光时间
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ContributeHDR(map<double, Mat> imgs, bool crfFlag)
+{
+	vector<Mat> srcs;
+	vector<double> exposureTimes;
+	map<double, Mat>::iterator it;
+	for (it = imgs.begin(); it != imgs.end(); it++)
+	{
+		exposureTimes.push_back(it->first);
+		srcs.push_back(it->second);
+	}
+
+	vector<Mat> ali;
+	//MTB图像对齐
+	//通过将值1分配给比中间亮度更亮的像素来计算图像的MTB，否则为0。 MTB对曝光时间不变。
+	Ptr<AlignMTB> alignMTB = createAlignMTB();
+	alignMTB->process(srcs, ali);
+	
+	//在采集BRDF时，采集图像ROI区域可视为单个像素，单个像素亮度可用图像整体平均亮度近似，故此前测试可认为CRF为线性。
+	//而当采集svBRDF时，CRF不是线性的，需要通过不同曝光时间的图像估计CRF
+	if (crfFlag == 1)
+	{
+		//获取相机CRF曲线(Camera Response Function)
+		Mat responseDebevec;
+		Ptr<CalibrateDebevec> calibrateDebevec = createCalibrateDebevec();
+		calibrateDebevec->process(ali, responseDebevec, exposureTimes);
+
+		//合并生成HDR图像
+		Mat hdrDebevec;
+		Ptr<MergeDebevec> mergeDebevec = createMergeDebevec();
+		mergeDebevec->process(ali, hdrDebevec, exposureTimes, responseDebevec);
+		//imwrite("hdrDebevec.hdr", hdrDebevec);
+
+		//Drago色调映射
+		Mat ldrDrago;
+		Ptr<TonemapDrago> tonemapDrago = createTonemapDrago(1.0, 0.7);
+		tonemapDrago->process(hdrDebevec, ldrDrago);
+		ldrDrago = 3 * ldrDrago;
+		imwrite("ldr-Drago.jpg", ldrDrago * 255);
+
+		return ldrDrago;
+	}
+	else
+	{
+		//获取相机CRF曲线(Camera Response Function)
+		Mat responseDebevec;
+		Ptr<CalibrateDebevec> calibrateDebevec = createCalibrateDebevec();
+		calibrateDebevec->process(ali, responseDebevec, exposureTimes);
+
+		//合并生成HDR图像
+		Mat hdrDebevec;
+		Ptr<MergeDebevec> mergeDebevec = createMergeDebevec();
+		mergeDebevec->process(ali, hdrDebevec, exposureTimes);
+		//imwrite("hdrDebevec.hdr", hdrDebevec);
+
+		//Drago色调映射
+		Mat ldrDrago;
+		Ptr<TonemapDrago> tonemapDrago = createTonemapDrago(1.0, 0.7);
+		tonemapDrago->process(hdrDebevec, ldrDrago);
+		ldrDrago = 3 * ldrDrago * 255;
+		//imwrite("ldr-Drago.jpg", ldrDrago * 255);
+
+		return ldrDrago;
+	}	
+}
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
 //// 描述：
@@ -323,7 +397,11 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 	}
 
 	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
-	merge({ srcB, srcG, srcR }, dst);
+	channels.push_back(srcB);
+	channels.push_back(srcG);
+	channels.push_back(srcR);
+	//merge({ srcB, srcG, srcR }, dst);
+	merge(channels, dst);
 
 	return dst;
 }
@@ -362,7 +440,23 @@ void ImageProcess::Select(Mat src, int i, int j)
 
 	return;
 }
-
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：多幅图像求平均
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+double ImageProcess::ComputeAverage(Mat src)
+{
+	Mat gray;
+	cvtColor(src, gray, CV_RGB2GRAY);
+	Scalar scalar = mean(gray);
+	
+	return scalar.val[0];
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：

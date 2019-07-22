@@ -205,6 +205,7 @@ QMainWindow(parent)
 
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
+	connect(this->ui.pushButton_captureOfPeriod, SIGNAL(pressed()), this, SLOT(pushButton_CaptureOfPeriod_Pressed()));
 	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
 	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
 	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
@@ -618,6 +619,37 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 		CreateFolds(capturePath, cameraPath);
 		this->workerCCD[i]->_capture = 1;
 	}
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_captureContinuously_pressed
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::pushButton_CaptureOfPeriod_Pressed()
+{
+	_measureFlag = 3;
+	//string savePath = "..\\imgs_periodcapture\\";
+		
+	//开启光源与样品线程
+	if (!threadMeasurement->isRunning())
+	{
+		threadMeasurement->start();
+	}
+	emit startMeasurement(_measureFlag);
+
+	//开启相机线程
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		if (!threadCCD[i]->isRunning())
+		{
+			threadCCD[i]->start();
+		}
+	}
+	emit startTimer(_measureFlag);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：
