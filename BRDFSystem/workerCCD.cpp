@@ -88,9 +88,9 @@ void WorkerCCD::Grab(int sID, int iID)
 	//extern string _materialName;
 	string path;
 	if (_measureFlag == 1)
-		path = _imageSavingPath1 + _materialName;
+		path = _imageSavingPath1 + _materialName + "\\";
 	if (_measureFlag == 2)
-		path = _imageSavingPath2 + _materialName;
+		path = _imageSavingPath2 + _materialName + "\\";
 	//if (_measureFlag == 3)
 	//	path = _imageSavingPath3;
 

@@ -2,7 +2,7 @@
 #include <QtWidgets/QApplication>
 
 
-int main(int argc, char *argv[])
+int main0(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	VimbaSystem& system = VimbaSystem::GetInstance();//相机的SDK-Vimba系统

@@ -54,6 +54,8 @@ public:
 	friend class MainWindow;
 
 private:
+	//定位白色标记点
+	static vector<Point> findKeyPoints(Mat src);
 	//多张连续图像求平均
 	static Mat AverageImage(vector<Mat> mats);
 	//读取一个文件夹下所有图片
