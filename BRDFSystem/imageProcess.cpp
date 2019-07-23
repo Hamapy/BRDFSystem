@@ -226,6 +226,33 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 #undef MASK_UNSEL
 }
 //////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeMask
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
+{
+	int i;
+	vector<Mat> dsts;
+	Mat dst;
+	vector<Mat>::iterator iter;
+	string path = ".//imgs_mask//";
+	for (iter = srcs.begin(); iter != srcs.end(); iter++)
+	{
+		i++;
+		path = path + to_string(i) + ".bmp";
+		threshold(*iter, dst, 170, 255, CV_THRESH_BINARY);
+		imwrite(path, dst);
+		dsts.push_back(dst);
+	}
+
+	return dsts;
+}
+//////////////////////////////////////////////////////////////////////////////
 //// 函数：
 //// 描述：
 //// 输入：
@@ -491,8 +518,8 @@ Mat ImageProcess::AverageImage(vector<Mat> mats)
 vector<Mat> ImageProcess::ReadImages(string path)
 {
 	vector<Mat> mats;
-	string imgPattern = "//*.jpg";
-	vector<cv::String> imgFiles;
+	string imgPattern = "\\*.bmp";
+	vector<String> imgFiles;
 	imgPattern = path + imgPattern;
 	glob(imgPattern, imgFiles);
 	for (int i = 0; i<imgFiles.size(); i++)

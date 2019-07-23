@@ -156,9 +156,16 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			if (_sID != SAMPLE_NUM)
 			{
 				_isReady = 1;
+				
+				illuminant->Suspend();
+				illuminant->SetSteadyTime(50);//最长点亮时间25.5s  18个采集角度时间不太够
+				illuminant->LightenById(199);
+				illuminant->Start();
+				Sleep(400);
+
 				emit readyForGrab(_sID, _iID);
 				sampleComm->GotoNextPos(1730);
-				//Sleep(200);//留给相机的拍摄时间			
+				Sleep(400);//留给相机的拍摄时间			
 				_sID++;
 			}
 			else if (_sID == SAMPLE_NUM)

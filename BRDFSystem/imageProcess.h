@@ -47,6 +47,9 @@ public:
 	static vector<Mat> ComputeChessTrans(vector<Mat> mats);
 	static Mat ChessCorrection(Mat src);
 
+	//二值化生成Mask图像
+	static vector<Mat> ComputeMask(vector<Mat> src);
+
 	//白平衡校正（完美全反射）&均匀度校正（事先用白板标定，载物台上标记点仅用于仿射变换及采集过程中的白平衡检验）
 	static float* ComputeWhiteTrans(vector<Mat> mats);
 	static Mat WhiteBalance(Mat src, float* trans);

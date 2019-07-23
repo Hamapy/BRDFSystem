@@ -634,8 +634,8 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_ComputeMask_Pressed()
 {
-	vector<Mat> imgs = ImageProcess::ReadImages(".//imgs_periodcapture//");
-
+	vector<Mat> imgs = ImageProcess::ReadImages(".\\imgs_periodcapture");
+	ImageProcess::ComputeMask(imgs);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_captureContinuously_pressed
