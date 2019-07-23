@@ -45,7 +45,8 @@ WorkerMeasurement::~WorkerMeasurement()
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
 	slideComm->MoveToX2();//滑轨就位
-	Sleep(10000);//等待滑轨就位
+	sampleComm->Reset();
+	Sleep(12000);//等待滑轨就位及材质台归位
 	_measureFlag = measureFlag;
 	//if (_measureFlag == 1)
 		_timerId = this->startTimer(300);
@@ -137,7 +138,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				}
 				else if (_iID == ILLUMINANT_NUM)
 				{
-					sampleComm->GotoNextPos(1750);
+					sampleComm->GotoNextPos(1730);
 					//Sleep(200);//留给相机的拍摄时间			
 					_iID = 0;
 					_sID++;
@@ -156,7 +157,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			{
 				_isReady = 1;
 				emit readyForGrab(_sID, _iID);
-				sampleComm->GotoNextPos(1750);
+				sampleComm->GotoNextPos(1730);
 				//Sleep(200);//留给相机的拍摄时间			
 				_sID++;
 			}

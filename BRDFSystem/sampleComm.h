@@ -37,9 +37,9 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #define STEP_DECELERATE    25       //电机减速度
 #define STEP_RESOLUTION    3        //电机分辨率
 #define STEP_TIMEOUT       3000   //超时,毫秒
-#define STEP_SAFESTEP	   10000	 //归位电机保护步数,最多转这么多步后会停下来
+#define STEP_SAFESTEP	   200000	 //归位电机保护步数,最多转这么多步后会停下来
 #define STEP_STRINGLEN	   256
-#define STEP_TOHOME        63000  //归位需要调节的步数 样品台一圈约6300步
+#define STEP_TOHOME        62280  //归位需要调节的步数 样品台一圈约6300步
 
 class SampleComm : public CRs232Comm
 {

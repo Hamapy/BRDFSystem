@@ -188,9 +188,13 @@ bool SampleComm::Reset()
 
 	ret = InitA();
 	ClearInputBuffer();	
-	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", _homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
-	//sprintf_s(cmd, "DI%d\rFL%d\rFY3L\rSS%s\r", _homeadj, STEP_SAFESTEP, STEP_FEEDBACK);
+	//若未找到挡片，最多转SAFE_STEP=200000（63000转一圈）也会停下
+	//sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rDI%d\rFL\rSS%s\r", _homeadj, STEP_SAFESTEP, 5700, STEP_FEEDBACK);
 
+	// DI2000 - Set distance to stop beyond sensor to 2000 counts / steps 
+	// DC60000 - Set safety distance to 60000 counts / steps 
+	// FY2L - Launch Feed to Sensor : motor will stop when input 2 is low or when   60000 counts / steps are reached : whichever event comes first
+	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", -2000, STEP_SAFESTEP, STEP_FEEDBACK);//这里设置为-2000就好了
 	Write(cmd);
 	
 	if (IsFinished(STEP_TIMEOUT))
