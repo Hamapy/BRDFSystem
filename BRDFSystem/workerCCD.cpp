@@ -47,7 +47,7 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 		//连续采集
 		if (_capture == 1)
 		{
-			string capturePath = ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+			string capturePath = acquisitionParameters->save_calibration; //ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
 			cameraAVT->CaptureImages(_mat, capturePath);
 		}
 

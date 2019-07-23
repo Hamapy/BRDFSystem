@@ -25,12 +25,18 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 SampleComm::SampleComm()
 {
 	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-	_port = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
-	_velocity = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
-	_accelerate = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
-	_decelerate = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
-	_resolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
-	_homeadj = ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
+	//_port = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
+	//_velocity = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
+	//_accelerate = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	//_decelerate = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	//_resolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	//_homeadj = ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
+	_port = stepperMotorParameters->stepperMotorPortSelection;
+	_velocity = stepperMotorParameters->stepperMotorSpeed;
+	_accelerate = stepperMotorParameters->stepperMotorAcceleration;
+	_decelerate = stepperMotorParameters->stepperMotorDeceleration;
+	_resolution = stepperMotorParameters->stepperMotorResolution;
+	_homeadj = stepperMotorParameters->stepperMotorToHome;
 	_step = 0;
 	}
 SampleComm::~SampleComm()

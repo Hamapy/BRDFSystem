@@ -1813,14 +1813,15 @@ public:
         label_serialPortSelection->setText(QApplication::translate("MainWindowClass", "\344\270\262\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_serialPortSelection->clear();
         comboBox_serialPortSelection->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM5", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM6", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "6", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "7", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "8", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "9", Q_NULLPTR)
         );
         label_baudRate->setText(QApplication::translate("MainWindowClass", "\346\263\242\347\211\271\347\216\207", Q_NULLPTR));
         comboBox_baudRate->clear();
@@ -1838,53 +1839,49 @@ public:
         label_stepperMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_stepperMotorPortSelection->clear();
         comboBox_stepperMotorPortSelection->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM5", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM6", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
-        );
-        label_stepperMotorSpeed->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
-        comboBox_stepperMotorSpeed->clear();
-        comboBox_stepperMotorSpeed->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "6", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "7", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "8", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "9", Q_NULLPTR)
+        );
+        label_stepperMotorSpeed->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_stepperMotorSpeed->clear();
+        comboBox_stepperMotorSpeed->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "0.25", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "0.50", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "0.75", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "1.00", Q_NULLPTR)
         );
         label_82->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
         label_stepperMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_stepperMotorAcceleration->clear();
         comboBox_stepperMotorAcceleration->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "25", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "50", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "75", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "100", Q_NULLPTR)
         );
         label_83->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_stepperMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_stepperMotorDeceleration->clear();
         comboBox_stepperMotorDeceleration->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "25", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "50", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "75", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "100", Q_NULLPTR)
         );
         label_86->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_stepperMotorResolution->setText(QApplication::translate("MainWindowClass", "\346\255\245\350\277\233\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
         comboBox_stepperMotorResolution->clear();
         comboBox_stepperMotorResolution->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "8", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "16", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "24", Q_NULLPTR)
         );
         label_sampleRotationAngle->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
         comboBox_sampleRotationAngle->clear();
@@ -1898,53 +1895,47 @@ public:
         label_servoMotorPortSelection->setText(QApplication::translate("MainWindowClass", "\347\253\257\345\217\243\351\200\211\346\213\251", Q_NULLPTR));
         comboBox_servoMotorPortSelection->clear();
         comboBox_servoMotorPortSelection->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "COM1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM5", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM6", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM7", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM8", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM9", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "COM10", Q_NULLPTR)
-        );
-        label_servoMotorSpeed->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
-        comboBox_servoMotorSpeed->clear();
-        comboBox_servoMotorSpeed->insertItems(0, QStringList()
          << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
          << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "6", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "7", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "8", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "9", Q_NULLPTR)
+        );
+        label_servoMotorSpeed->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\351\200\237\345\272\246", Q_NULLPTR));
+        comboBox_servoMotorSpeed->clear();
+        comboBox_servoMotorSpeed->insertItems(0, QStringList()
+         << QApplication::translate("MainWindowClass", "20", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "40", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "60", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "80", Q_NULLPTR)
         );
         label_75->setText(QApplication::translate("MainWindowClass", "m/s", Q_NULLPTR));
         label_servoMotorAcceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\212\240\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorAcceleration->clear();
         comboBox_servoMotorAcceleration->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "100", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "150", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "200", Q_NULLPTR)
         );
         label_78->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_servoMotorDeceleration->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\207\217\351\200\237\345\272\246", Q_NULLPTR));
         comboBox_servoMotorDeceleration->clear();
         comboBox_servoMotorDeceleration->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "1", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "3", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "4", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "5", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "100", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "150", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "200", Q_NULLPTR)
         );
         label_77->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_servoMotorResolution->setText(QApplication::translate("MainWindowClass", "\344\274\272\346\234\215\347\224\265\346\234\272\345\210\206\350\276\250\347\216\207", Q_NULLPTR));
         comboBox_servoMotorResolution->clear();
         comboBox_servoMotorResolution->insertItems(0, QStringList()
-         << QApplication::translate("MainWindowClass", "800", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "1600", Q_NULLPTR)
-         << QApplication::translate("MainWindowClass", "2400", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "20000", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "30000", Q_NULLPTR)
+         << QApplication::translate("MainWindowClass", "40000", Q_NULLPTR)
         );
         label_slideTableMovingDistance->setText(QApplication::translate("MainWindowClass", "\346\273\221\345\217\260\347\247\273\345\212\250\350\267\235\347\246\273", Q_NULLPTR));
         label_79->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));

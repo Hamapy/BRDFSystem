@@ -78,12 +78,12 @@ private:
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 	
-	int gain = 0;
-	int gain_Int = 0;
+	float gain = 0.0;
+	float gain_Float = 0.0;
 	QString gain_Str = "";
-	int darkLevel = 0;
-	int darkLevel_Int = 0;
-	QString darkLevel_Str = "";
+	float blackLevel = 0;
+	float blackLevel_Float = 0;
+	QString blackLevel_Str = "";
 	QString imageSaveFormat = "";
 	QString imageSaveFormat_Str = "";
 	QString imageSavePath = "";

@@ -72,7 +72,7 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& widthOutput, int& heightOutput);
 	//保存一帧图像
-	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex);
+	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int isoFlag);
 	//连续采集图像
 	bool CaptureImages(Mat& captureMat, string imageSavingPath);
 	//连续采集

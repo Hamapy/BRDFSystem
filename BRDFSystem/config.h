@@ -10,6 +10,7 @@
 using namespace std;
 
 extern QSettings* ini;
+//相机参数
 struct CameraParameters
 {
 	//设备注册参数没写，每台相机不同
@@ -44,9 +45,87 @@ struct CameraParameters
 	//AVT Enumeration类型参数
 	char* pixelFormat;//直接用彩色图像格式 一般RGB
 	char* exposureAuto;
-	//string acquisitionMode = "Continuous";
+	string acquisitionMode;
 	char* gainAuto;
 
 };
+
+//光源参数
+struct LightParameters
+{
+	int serialPortSelection;
+	int baudRate;
+	int delaySetting;
+	int lightingSequence;
+	UINT order[196];
+};
+
+
+//步进电机参数
+struct StepperMotorParameters
+{
+	int stepperMotorPortSelection;
+	float stepperMotorSpeed;
+	int stepperMotorAcceleration;
+	int stepperMotorDeceleration;
+	int stepperMotorResolution;
+	int stepperMotorToHome;
+};
+
+
+//伺服电机参数
+struct ServoMotorParameters
+{
+	int servoMotorPortSelection;
+	int	sampleRotationAngle;
+	int	servoMotorSpeed;
+	int	servoMotorAcceleration;
+	int	servoMotorDeceleration;
+	int	servoMotorResolution;
+	int	slideTableMovingDistance;
+};
+
+
+//采集参数
+struct AcquisitionParameters
+{
+	string  save_calibration;
+	string	save_brdfiso;
+	string	save_brdfiniso;
+	string	imageSaveFormat;
+	string	imageSavePath;
+};
+
+struct MainWindowParameters{
+	float gain;
+	float blackLevel;
+	QString imageSaveFormat;
+	QString imageSavePath;
+
+	QString serialPortSelection;
+	QString baudRate;
+	int	delaySetting;
+	int	lightingSequence;
+
+
+	QString stepperMotorPortSelection;
+	QString stepperMotorSpeed;
+	QString stepperMotorAcceleration;
+	QString stepperMotorDeceleration;
+	QString stepperMotorResolution;
+	QString sampleRotationAngle;
+
+	QString servoMotorPortSelection;
+	QString servoMotorSpeed;
+	QString servoMotorAcceleration;
+	QString servoMotorDeceleration;
+	QString servoMotorResolution;
+	int slideTableMovingDistance;
+};
+extern MainWindowParameters* mainWindowParameters;
 extern CameraParameters* cameraParameters;
+extern LightParameters* lightParameters;
+extern StepperMotorParameters* stepperMotorParameters;
+extern ServoMotorParameters* servoMotorParameters;
+extern AcquisitionParameters* acquisitionParameters;
 #endif

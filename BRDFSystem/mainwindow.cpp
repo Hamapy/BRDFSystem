@@ -35,91 +35,111 @@ QMainWindow(parent)
 
 	////显示配置文件的参数
 	////工业相机配置参数
-	gain = ini->value("BRDFSystem-Configuration/gain").toInt();
-	gain_Int = gain;
+	//gain = ini->value("BRDFSystem-Configuration/gain").toFloat();
+	gain = mainWindowParameters->gain;
+	gain_Float = gain;
 	this->ui.horizontalSlider_gain->setValue(gain);
 	this->ui.spinBox_gain->setValue(gain);
-	darkLevel = ini->value("BRDFSystem-Configuration/darkLevel").toInt();
-	darkLevel_Int = darkLevel;
-	this->ui.horizontalSlider_darkLevel->setValue(darkLevel);
-	this->ui.spinBox_darkLevel->setValue(darkLevel);
-	imageSaveFormat = ini->value("BRDFSystem-Configuration/imageSaveFormat").toString();
+	//blackLevel = ini->value("BRDFSystem-Configuration/blackLevel").toFloat();
+	blackLevel = mainWindowParameters->blackLevel;
+	blackLevel_Float = blackLevel;
+	this->ui.horizontalSlider_darkLevel->setValue(blackLevel);
+	this->ui.spinBox_darkLevel->setValue(blackLevel);
+	//imageSaveFormat = ini->value("BRDFSystem-Configuration/imageSaveFormat").toString();
+	imageSaveFormat = mainWindowParameters->imageSaveFormat;
 	imageSaveFormat_Str = imageSaveFormat;
 	int index0 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat);
 	ui.comboBox_imageSaveFormat->setCurrentIndex(index0);
-	imageSavePath = ini->value("BRDFSystem-Configuration/imageSavePath").toString();
+	//imageSavePath = ini->value("BRDFSystem-Configuration/imageSavePath").toString();
+	imageSavePath = mainWindowParameters->imageSavePath;
 	imageSavePath_Str = imageSavePath;
 	this->ui.lineEdit_imageSavePath->setText(imageSavePath);
 
 
 	////光源配置参数
-	serialPortSelection = ini->value("BRDFSystem-Configuration/serialPortSelection").toString();
+	//serialPortSelection = ini->value("BRDFSystem-Configuration/serialPortSelection").toString();
+	serialPortSelection = mainWindowParameters->serialPortSelection;
 	serialPortSelection_Str = serialPortSelection;
 	int index1 = ui.comboBox_serialPortSelection->findText(serialPortSelection);
 	ui.comboBox_serialPortSelection->setCurrentIndex(index1);
-	baudRate = ini->value("BRDFSystem-Configuration/baudRate").toString();
+	//baudRate = ini->value("BRDFSystem-Configuration/baudRate").toString();
+	baudRate = mainWindowParameters->baudRate;
 	baudRate_Str = baudRate;
 	int index2 = ui.comboBox_baudRate->findText(baudRate);
 	ui.comboBox_baudRate->setCurrentIndex(index2);
-	delaySetting = ini->value("BRDFSystem-Configuration/delaySetting").toInt();
+	//delaySetting = ini->value("BRDFSystem-Configuration/delaySetting").toInt();
+	delaySetting = mainWindowParameters->delaySetting;
 	delaySetting_Str = QString::number(delaySetting, 10);
 	this->ui.lineEdit_delaySetting->setText(delaySetting_Str);
-	lightingSequence = ini->value("BRDFSystem-Configuration/lightingSequence").toInt();
+	//lightingSequence = ini->value("BRDFSystem-Configuration/lightingSequence").toInt();
+	lightingSequence = mainWindowParameters->lightingSequence;
 	lightingSequence_Str = QString::number(lightingSequence, 10);
 	this->ui.lineEdit_lightingSequence->setText(lightingSequence_Str);
 
 	////样品台电机驱动配置参数
-	stepperMotorPortSelection = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toString();
+	//stepperMotorPortSelection = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toString();
+	stepperMotorPortSelection = mainWindowParameters->stepperMotorPortSelection;
 	stepperMotorPortSelection_Str = stepperMotorPortSelection;
 	int index3 = ui.comboBox_stepperMotorPortSelection->findText(stepperMotorPortSelection);
 	ui.comboBox_stepperMotorPortSelection->setCurrentIndex(index3);
-	stepperMotorSpeed = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toString();
-	stepperMotorSpeed_Int = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toInt();
+	//stepperMotorSpeed = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toString();
+	//stepperMotorSpeed_Int = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toInt();
+	stepperMotorSpeed = mainWindowParameters->stepperMotorSpeed;
 	stepperMotorSpeed_Str = stepperMotorSpeed;
 	int index4 = ui.comboBox_stepperMotorSpeed->findText(stepperMotorSpeed);
 	ui.comboBox_stepperMotorSpeed->setCurrentIndex(index4);
-	stepperMotorAcceleration = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toString();
-	stepperMotorAcceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	//stepperMotorAcceleration = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toString();
+	//stepperMotorAcceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
+	stepperMotorAcceleration = mainWindowParameters->stepperMotorAcceleration;
 	stepperMotorAcceleration_Str = stepperMotorAcceleration;
 	int index5 = ui.comboBox_stepperMotorAcceleration->findText(stepperMotorAcceleration);
 	ui.comboBox_stepperMotorAcceleration->setCurrentIndex(index5);
-	stepperMotorDeceleration = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toString();
-	stepperMotorDeceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	//stepperMotorDeceleration = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toString();
+	//stepperMotorDeceleration_Int = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
+	stepperMotorDeceleration = mainWindowParameters->stepperMotorDeceleration;
 	stepperMotorDeceleration_Str = stepperMotorDeceleration;
 	int index6 = ui.comboBox_stepperMotorDeceleration->findText(stepperMotorDeceleration);
 	ui.comboBox_stepperMotorDeceleration->setCurrentIndex(index6);
-	stepperMotorResolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toString();
-	stepperMotorResolution_Int = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	//stepperMotorResolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toString();
+	//stepperMotorResolution_Int = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
+	stepperMotorResolution = mainWindowParameters->stepperMotorResolution;
 	stepperMotorResolution_Str = stepperMotorResolution;
 	int index7 = ui.comboBox_stepperMotorResolution->findText(stepperMotorResolution);
 	ui.comboBox_stepperMotorResolution->setCurrentIndex(index7);
-	sampleRotationAngle = ini->value("BRDFSystem-Configuration/sampleRotationAngle").toString();
+	//sampleRotationAngle = ini->value("BRDFSystem-Configuration/sampleRotationAngle").toString();
+	sampleRotationAngle = mainWindowParameters->sampleRotationAngle;
 	sampleRotationAngle_Str = sampleRotationAngle;
 	int index8 = ui.comboBox_sampleRotationAngle->findText(sampleRotationAngle);
 	ui.comboBox_sampleRotationAngle->setCurrentIndex(index8);
 
 	////滑轨电机驱动配置参数
-	servoMotorPortSelection = ini->value("BRDFSystem-Configuration/servoMotorPortSelection").toString();
+	//servoMotorPortSelection = ini->value("BRDFSystem-Configuration/servoMotorPortSelection").toString();
+	servoMotorPortSelection = mainWindowParameters->servoMotorPortSelection;
 	servoMotorPortSelection_Str = servoMotorPortSelection;
 	int index9 = ui.comboBox_servoMotorPortSelection->findText(servoMotorPortSelection);
 	ui.comboBox_servoMotorPortSelection->setCurrentIndex(index9);
-	servoMotorSpeed = ini->value("BRDFSystem-Configuration/servoMotorSpeed").toString();
+	//servoMotorSpeed = ini->value("BRDFSystem-Configuration/servoMotorSpeed").toString();
+	servoMotorSpeed = mainWindowParameters->servoMotorSpeed;
 	servoMotorSpeed_Str = servoMotorSpeed;
 	int index10 = ui.comboBox_servoMotorSpeed->findText(servoMotorSpeed);
 	ui.comboBox_servoMotorSpeed->setCurrentIndex(index10);
-	servoMotorAcceleration = ini->value("BRDFSystem-Configuration/servoMotorAcceleration").toString();
+	//servoMotorAcceleration = ini->value("BRDFSystem-Configuration/servoMotorAcceleration").toString();
+	servoMotorAcceleration = mainWindowParameters->servoMotorAcceleration;
 	servoMotorAcceleration_Str = servoMotorAcceleration;
 	int index11 = ui.comboBox_servoMotorAcceleration->findText(servoMotorAcceleration);
 	ui.comboBox_servoMotorAcceleration->setCurrentIndex(index11);
-	servoMotorDeceleration = ini->value("BRDFSystem-Configuration/servoMotorDeceleration").toString();
+	//servoMotorDeceleration = ini->value("BRDFSystem-Configuration/servoMotorDeceleration").toString();
+	servoMotorDeceleration = mainWindowParameters->servoMotorDeceleration;
 	servoMotorDeceleration_Str = servoMotorDeceleration;
 	int index12 = ui.comboBox_servoMotorDeceleration->findText(servoMotorDeceleration);
 	ui.comboBox_servoMotorDeceleration->setCurrentIndex(index12);
-	servoMotorResolution = ini->value("BRDFSystem-Configuration/servoMotorResolution").toString();
+	//servoMotorResolution = ini->value("BRDFSystem-Configuration/servoMotorResolution").toString();
+	servoMotorResolution = mainWindowParameters->servoMotorResolution;
 	servoMotorResolution_Str = servoMotorResolution;
 	int index13 = ui.comboBox_servoMotorResolution->findText(servoMotorResolution);
 	ui.comboBox_servoMotorResolution->setCurrentIndex(index13);
-	slideTableMovingDistance = ini->value("BRDFSystem-Configuration/slideTableMovingDistance").toInt();
+	//slideTableMovingDistance = ini->value("BRDFSystem-Configuration/slideTableMovingDistance").toInt();
+	slideTableMovingDistance = mainWindowParameters->slideTableMovingDistance;
 	slideTableMovingDistance_Str = QString::number(slideTableMovingDistance, 10);
 	this->ui.lineEdit_slideTableMovingDistance->setText(slideTableMovingDistance_Str);
 
@@ -269,10 +289,10 @@ void MainWindow::IsEdited()
 void MainWindow::PushButton_Save_Pressed()
 {
 	////工业相机配置保存
-	gain = this->ui.spinBox_gain->text().toInt();
+	gain = this->ui.spinBox_gain->text().toFloat();
 	ini->setValue("/BRDFSystem-Configuration/gain", gain);
-	darkLevel = this->ui.spinBox_darkLevel->text().toInt();
-	ini->setValue("/BRDFSystem-Configuration/darkLevel", darkLevel);
+	blackLevel = this->ui.spinBox_darkLevel->text().toFloat();
+	ini->setValue("/BRDFSystem-Configuration/blackLevel", blackLevel);
 	imageSaveFormat = this->ui.comboBox_imageSaveFormat->currentText();
 	ini->setValue("/BRDFSystem-Configuration/imageSaveFormat", imageSaveFormat);
 	imageSavePath = this->ui.lineEdit_imageSavePath->text();
@@ -330,10 +350,10 @@ void MainWindow::PushButton_Save_Pressed()
 void MainWindow::PushButton_Defaults_Pressed()
 {
 	////工业相机默认配置
-	this->ui.horizontalSlider_gain->setValue(gain_Int);
-	this->ui.spinBox_gain->setValue(gain_Int);
-	this->ui.horizontalSlider_darkLevel->setValue(darkLevel_Int);
-	this->ui.spinBox_darkLevel->setValue(darkLevel_Int);
+	this->ui.horizontalSlider_gain->setValue(gain_Float);
+	this->ui.spinBox_gain->setValue(gain_Float);
+	this->ui.horizontalSlider_darkLevel->setValue(blackLevel_Float);
+	this->ui.spinBox_darkLevel->setValue(blackLevel_Float);
 	int index14 = ui.comboBox_imageSaveFormat->findText(imageSaveFormat_Str);
 	ui.comboBox_imageSaveFormat->setCurrentIndex(index14);
 	this->ui.lineEdit_imageSavePath->setText(imageSavePath_Str);
