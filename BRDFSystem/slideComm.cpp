@@ -4,13 +4,18 @@
 SlideComm::SlideComm()
 {
 	//ini = new QSettings("./config.ini", s::IniFormat);//¶ÁÈ¡ÅäÖÃÎÄ¼þ
-	_port = ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
-	_velocity = ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
-	_accelerate = ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
-	_decelerate = ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
-	_resolution = ini->value("SWIR-Configuration/servoMotorResolution").toInt();
-	_distance = 0;
-
+	//_port = ini->value("SWIR-Configuration/servoMotorPortSelection").toInt();
+	//_velocity = ini->value("SWIR-Configuration/servoMotorSpeed").toInt();
+	//_accelerate = ini->value("SWIR-Configuration/servoMotorAcceleration").toInt();
+	//_decelerate = ini->value("SWIR-Configuration/servoMotorDeceleration").toInt();
+	//_resolution = ini->value("SWIR-Configuration/servoMotorResolution").toInt();
+	//_distance = 0;
+	_port = servoMotorParameters->servoMotorPortSelection;
+	_velocity = servoMotorParameters->servoMotorSpeed;
+	_accelerate = servoMotorParameters->servoMotorAcceleration;
+	_decelerate = servoMotorParameters->servoMotorDeceleration;
+	_resolution = servoMotorParameters->servoMotorResolution;
+	_distance = servoMotorParameters->slideTableMovingDistance;
 }
 
 SlideComm::~SlideComm()
