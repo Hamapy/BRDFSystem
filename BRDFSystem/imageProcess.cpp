@@ -12,23 +12,40 @@ ImageProcess::~ImageProcess()
 
 //////////////////////////////////公有函数/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// 函数：IsOverExposure
-// 描述：判断相机是否过曝
+// 函数：IsProperExposure
+// 描述：判断相机是否合适
 // 输入：Null
 // 输出：曝光时间
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool ImageProcess::IsOverExposure(Mat src)
+bool ImageProcess::IsProperExposure(Mat src)
 {
-	//通过计算直方图判断采集图像是否过曝或过暗
+	Mat gray;
+	cvtColor(src, gray, CV_RGB2GRAY);
+	int sum = 0;
+	const int size = gray.cols * gray.rows;
+	//计算灰度值在80-180范围内的像素点比例
+	for (int i = 0; i < gray.rows; i++)
+	{
+		uchar* data = gray.ptr<uchar>(i);
+		for (int j = 0; j < src.cols; j++)
+		{
+			if (100 < data[j] && data[j] < 180)//设定阈值
+			{
+				sum++;
+			}
+		}
+	}
 
-	return 0;
-
+	if (float(sum) / float(size) > 0.7)//设定阈值
+		return true;
+	else
+		return false;
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：GetExposureTime
+// 函数：ComputeExposureTime
 // 描述：计算相机在一定角度光源下的合适曝光时间
 // 输入：Null
 // 输出：曝光时间
@@ -36,14 +53,14 @@ bool ImageProcess::IsOverExposure(Mat src)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-float ImageProcess::ComputeExposureTime(Mat mat)
+float ImageProcess::ComputeExposureTime(Mat oriMat, float oriExposureTime)
 {
 	Mat gray;
-	cvtColor(mat, gray, CV_RGB2GRAY);
+	cvtColor(oriMat, gray, CV_RGB2GRAY);
 	Scalar scalar = mean(gray);
 	float ave = scalar.val[0];
-	float k = 50.00 / ave;//50ms下拍摄图像
-	float t = k * 255 * 0.60;
+	float k = oriExposureTime / ave;//50ms下拍摄图像
+	float t = k * 255 * 0.60;//设定阈值
 
 	return t;
 }
@@ -236,16 +253,18 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 //////////////////////////////////////////////////////////////////////////////
 vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 {
-	int i;
+	int i = 0;
 	vector<Mat> dsts;
 	Mat dst;
 	vector<Mat>::iterator iter;
-	string path = ".//imgs_mask//";
+	
 	for (iter = srcs.begin(); iter != srcs.end(); iter++)
 	{
+		string path = "..//imgs_mask//";
 		i++;
 		path = path + to_string(i) + ".bmp";
-		threshold(*iter, dst, 170, 255, CV_THRESH_BINARY);
+		cvtColor(*iter, dst, CV_BGR2GRAY);
+		threshold(dst, dst, 25, 255, CV_THRESH_BINARY);
 		imwrite(path, dst);
 		dsts.push_back(dst);
 	}
@@ -253,7 +272,7 @@ vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 	return dsts;
 }
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：
+//// 函数：ComputeWhiteTrans
 //// 描述：
 //// 输入：
 //// 输出：
@@ -261,13 +280,12 @@ vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-float* ImageProcess::ComputeWhiteTrans(vector<Mat> mats)
+float* ImageProcess::ComputeWhiteTrans(Mat src)
 {
+	/*
 	Mat src = AverageImage(mats);
-
 #define WHITE_NUM 500
 	//暂时取全图亮度最高的一定数量像素点均值作为白点
-	//...
 	const int height = src.rows;
 	const int width = src.cols;
 
@@ -335,6 +353,62 @@ float* ImageProcess::ComputeWhiteTrans(vector<Mat> mats)
 	return trans;
 
 #undef WHITE_NUM
+	*/
+
+	const int height = src.rows;
+	const int width = src.cols;
+
+	vector<Mat> channels;
+	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+	//Mat B = srcB.clone();
+	//Mat G = srcG.clone();
+	//Mat R = srcR.clone();
+	
+	//计算白色区域三通道的平均值
+	int sum[3] = { 0, 0, 0 };//B G R
+	float v[3] = { 0.00, 0.00, 0.00 };
+	float ave[3] = { 0.00, 0.00, 0.00 };
+	for (int k = 0; k < 3; k++)
+	{
+		for (int i = 0; i < channels.at(k).rows; i++)
+		{
+			uchar* data = channels.at(k).ptr<uchar>(i);
+			for (int j = 0; j < channels.at(k).cols; j++)
+			{
+				if (data[j] == 0)
+					break;
+				v[k] += data[j];				
+				sum[k]++;
+			}
+		}
+		ave[k] = v[k] / float(sum[k]);
+	}
+	//计算三通道平均值中的最大值，其他两通道变换一致
+	float temp = 0.00;
+	int maxCh = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		if (ave[i] > temp)
+		{
+			maxCh = i;
+			temp = ave[i];
+		}
+	}
+
+	static float trans[3] = { 1, 1, 1 };
+	for (int i = 0; i < 3; i++)
+	{
+		if (i == maxCh)
+			trans[i] = 1;
+		else
+			trans[i] = temp / ave[i];
+	}
+
+	return trans;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -352,14 +426,54 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 
 	vector<Mat> channels;
 	split(src, channels);
-	Mat srcB = channels.at(0);
-	Mat srcG = channels.at(1);
-	Mat srcR = channels.at(2);
 
-	float transB = trans[0];
-	float transG = trans[1];
-	float transR = trans[2];
+	Mat gray;
+	cvtColor(src, gray, CV_RGB2GRAY);
+	//Mat srcB = channels.at(0);
+	//Mat srcG = channels.at(1);
+	//Mat srcR = channels.at(2);
 
+	//float transB = trans[0];
+	//float transG = trans[1];
+	//float transR = trans[2];
+
+	map<int,map<int,float>> selectPoints;
+
+	float tempVal = 0;
+	float tempTrans;
+	for (int k = 0; k < 3; k++)
+	{
+		for (int i = 0; i < channels.at(k).rows; i++)
+		{
+			uchar* data = channels.at(k).ptr<uchar>(i);
+			for (int j = 0; j < channels.at(k).cols; j++)
+			{
+				tempVal = float(data[j]) * trans[k];
+				if (!IsSelected(gray, i, j))
+				{
+					if (tempVal > 255)
+					{
+						data[j] = 255;
+						tempTrans = 255.00 / float(data[j]);
+						selectPoints[i][j] = tempTrans;
+						Select(gray, i, j);
+					}
+					else
+						data[j] = tempVal;
+				}	
+				else
+				{
+					tempTrans = selectPoints[i][j];
+					data[j] = tempTrans * data[j];
+				}				
+			}
+		}
+	}
+
+	return src;
+
+
+	/*
 	//对每个点将像素拉到[0,255]之间
 	//针对超出1的像素，重新归一化
 	vector<vector<float>> fBGR(height, vector<float>(width, 0));
@@ -423,6 +537,7 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 		}
 	}
 
+
 	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
 	channels.push_back(srcB);
 	channels.push_back(srcG);
@@ -431,8 +546,30 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 	merge(channels, dst);
 
 	return dst;
+	*/
 }
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：GrayStrech
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::GrayStrech(Mat src)
+{
+	Mat gray;
+	cvtColor(src, gray, CV_RGB2GRAY);
+	double minVal = 0, maxVal = 0;
+	minMaxLoc(gray, &minVal, &maxVal);
 
+	float tran = 255.00 / maxVal;
+	float trans[3] = { tran };
+	Mat dst = WhiteBalance(src, trans);//鸡贼地借用了白平衡里的循环，懒得再写了
+
+	return dst;
+}
 /////////////////////////////////私有函数/////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -515,14 +652,14 @@ Mat ImageProcess::AverageImage(vector<Mat> mats)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<Mat> ImageProcess::ReadImages(string path)
+vector<Mat> ImageProcess::ReadImages(cv::String path)
 {
 	vector<Mat> mats;
-	string imgPattern = "\\*.bmp";
+	String imgPattern = "//*.bmp";
 	vector<String> imgFiles;
 	imgPattern = path + imgPattern;
 	glob(imgPattern, imgFiles);
-	for (int i = 0; i<imgFiles.size(); i++)
+	for (size_t i = 0; i<imgFiles.size(); i++)
 	{
 		Mat mat = imread(imgFiles[i]);
 		mats.push_back(mat);
@@ -530,3 +667,22 @@ vector<Mat> ImageProcess::ReadImages(string path)
 
 	return mats;
 }
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeWhiteArea
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeSampleArea
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////

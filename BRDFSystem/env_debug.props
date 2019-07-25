@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>opencv_ts300.lib;opencv_ts300d.lib;opencv_world300.lib;opencv_world300d.lib;VimbaC.lib;VimbaCPP.lib;VimbaImageTransform.lib;EDSDK.lib;ServoRs232Comm.lib;lapack.lib;blas.lib;f2c.lib;tmglib.lib;levmar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_ts300d.lib;opencv_world300d.lib;VimbaC.lib;VimbaCPP.lib;VimbaImageTransform.lib;EDSDK.lib;ServoRs232Comm.lib;lapack.lib;blas.lib;f2c.lib;tmglib.lib;levmar.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>

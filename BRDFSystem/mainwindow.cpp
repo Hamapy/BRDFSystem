@@ -634,7 +634,7 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_ComputeMask_Pressed()
 {
-	vector<Mat> imgs = ImageProcess::ReadImages(".\\imgs_periodcapture");
+	vector<Mat> imgs = ImageProcess::ReadImages("..//imgs_periodcapture");
 	ImageProcess::ComputeMask(imgs);
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -699,7 +699,7 @@ void MainWindow::PushButton_WhiteBalance_Pressed()
 		//string path = _capturePath + "camera" + to_string(i);
 		//mats = AVTCamera::ReadImages(path);
 		//mat = AVTCamera::AverageImage(mats);
-		_trans = ImageProcess::ComputeWhiteTrans(mats);
+		//_trans = ImageProcess::ComputeWhiteTrans(mats);
 	}
 	_transs.push_back(_trans);
 	//需要写在配置文件里

@@ -129,22 +129,6 @@ public:
     QWidget *PreCamera;
     QGridLayout *gridLayout_43;
     QGridLayout *gridLayout_44;
-    QGridLayout *gridLayout_30;
-    QPushButton *pushButton_finiCCD;
-    QPushButton *pushButton_chess;
-    QPushButton *pushButton_iniCCD;
-    QPushButton *pushButton_whiteBalance;
-    QPushButton *pushButton_captureOfPeriod;
-    QHBoxLayout *horizontalLayout_2;
-    QLabel *label_21;
-    QLineEdit *lineEdit_captureNum;
-    QPushButton *pushButton_captureContinuously;
-    QPushButton *pushButton_deadPixels;
-    QPushButton *pushButton_computeMask;
-    QHBoxLayout *horizontalLayout_3;
-    QLabel *label_sampleNum;
-    QLineEdit *lineEdit_sampleNum;
-    QPushButton *pushButton_blackLevel;
     QGridLayout *gridLayout_3;
     QGroupBox *groupBox_precamera4;
     QGridLayout *gridLayout_39;
@@ -173,6 +157,40 @@ public:
     QGroupBox *groupBox_precamera8;
     QGridLayout *gridLayout_4;
     QLabel *label_precamera8;
+    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout_6;
+    QPushButton *pushButton_iniCCD;
+    QPushButton *pushButton_finiCCD;
+    QGroupBox *groupBox;
+    QGridLayout *gridLayout_48;
+    QGridLayout *gridLayout_47;
+    QPushButton *pushButton_3;
+    QPushButton *pushButton_5;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_3;
+    QLineEdit *lineEdit_4;
+    QPushButton *pushButton_blackLevel;
+    QPushButton *pushButton_deadPixels;
+    QGroupBox *groupBox_2;
+    QGridLayout *gridLayout_50;
+    QGridLayout *gridLayout_49;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label_21;
+    QLineEdit *lineEdit_captureNum;
+    QPushButton *pushButton_captureContinuously;
+    QPushButton *pushButton_chess;
+    QPushButton *pushButton_2;
+    QGroupBox *groupBox_3;
+    QGridLayout *gridLayout_52;
+    QGridLayout *gridLayout_51;
+    QPushButton *pushButton_computeMask;
+    QHBoxLayout *horizontalLayout_3;
+    QLabel *label_sampleNum;
+    QLineEdit *lineEdit_sampleNum;
+    QPushButton *pushButton_captureOfPeriod;
+    QPushButton *pushButton_6;
+    QPushButton *pushButton_whiteBalance;
+    QPushButton *pushButton_7;
     QWidget *Test;
     QGridLayout *gridLayout_6;
     QGroupBox *groupBox_20;
@@ -741,95 +759,6 @@ public:
         gridLayout_44 = new QGridLayout();
         gridLayout_44->setSpacing(6);
         gridLayout_44->setObjectName(QStringLiteral("gridLayout_44"));
-        gridLayout_30 = new QGridLayout();
-        gridLayout_30->setSpacing(6);
-        gridLayout_30->setObjectName(QStringLiteral("gridLayout_30"));
-        gridLayout_30->setVerticalSpacing(36);
-        gridLayout_30->setContentsMargins(-1, -1, -1, 400);
-        pushButton_finiCCD = new QPushButton(PreCamera);
-        pushButton_finiCCD->setObjectName(QStringLiteral("pushButton_finiCCD"));
-
-        gridLayout_30->addWidget(pushButton_finiCCD, 0, 1, 1, 1);
-
-        pushButton_chess = new QPushButton(PreCamera);
-        pushButton_chess->setObjectName(QStringLiteral("pushButton_chess"));
-
-        gridLayout_30->addWidget(pushButton_chess, 6, 0, 1, 1);
-
-        pushButton_iniCCD = new QPushButton(PreCamera);
-        pushButton_iniCCD->setObjectName(QStringLiteral("pushButton_iniCCD"));
-
-        gridLayout_30->addWidget(pushButton_iniCCD, 0, 0, 1, 1);
-
-        pushButton_whiteBalance = new QPushButton(PreCamera);
-        pushButton_whiteBalance->setObjectName(QStringLiteral("pushButton_whiteBalance"));
-
-        gridLayout_30->addWidget(pushButton_whiteBalance, 7, 0, 1, 1);
-
-        pushButton_captureOfPeriod = new QPushButton(PreCamera);
-        pushButton_captureOfPeriod->setObjectName(QStringLiteral("pushButton_captureOfPeriod"));
-
-        gridLayout_30->addWidget(pushButton_captureOfPeriod, 2, 0, 1, 1);
-
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setSpacing(0);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        label_21 = new QLabel(PreCamera);
-        label_21->setObjectName(QStringLiteral("label_21"));
-
-        horizontalLayout_2->addWidget(label_21);
-
-        lineEdit_captureNum = new QLineEdit(PreCamera);
-        lineEdit_captureNum->setObjectName(QStringLiteral("lineEdit_captureNum"));
-
-        horizontalLayout_2->addWidget(lineEdit_captureNum);
-
-        horizontalLayout_2->setStretch(0, 1);
-        horizontalLayout_2->setStretch(1, 5);
-
-        gridLayout_30->addLayout(horizontalLayout_2, 1, 1, 1, 1);
-
-        pushButton_captureContinuously = new QPushButton(PreCamera);
-        pushButton_captureContinuously->setObjectName(QStringLiteral("pushButton_captureContinuously"));
-
-        gridLayout_30->addWidget(pushButton_captureContinuously, 1, 0, 1, 1);
-
-        pushButton_deadPixels = new QPushButton(PreCamera);
-        pushButton_deadPixels->setObjectName(QStringLiteral("pushButton_deadPixels"));
-
-        gridLayout_30->addWidget(pushButton_deadPixels, 3, 0, 1, 1);
-
-        pushButton_computeMask = new QPushButton(PreCamera);
-        pushButton_computeMask->setObjectName(QStringLiteral("pushButton_computeMask"));
-
-        gridLayout_30->addWidget(pushButton_computeMask, 5, 0, 1, 1);
-
-        horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        label_sampleNum = new QLabel(PreCamera);
-        label_sampleNum->setObjectName(QStringLiteral("label_sampleNum"));
-
-        horizontalLayout_3->addWidget(label_sampleNum);
-
-        lineEdit_sampleNum = new QLineEdit(PreCamera);
-        lineEdit_sampleNum->setObjectName(QStringLiteral("lineEdit_sampleNum"));
-
-        horizontalLayout_3->addWidget(lineEdit_sampleNum);
-
-
-        gridLayout_30->addLayout(horizontalLayout_3, 2, 1, 1, 1);
-
-        pushButton_blackLevel = new QPushButton(PreCamera);
-        pushButton_blackLevel->setObjectName(QStringLiteral("pushButton_blackLevel"));
-
-        gridLayout_30->addWidget(pushButton_blackLevel, 4, 0, 1, 1);
-
-        gridLayout_30->setColumnStretch(0, 1);
-        gridLayout_30->setColumnStretch(1, 1);
-
-        gridLayout_44->addLayout(gridLayout_30, 0, 0, 1, 1);
-
         gridLayout_3 = new QGridLayout();
         gridLayout_3->setSpacing(6);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
@@ -963,10 +892,205 @@ public:
         gridLayout_3->addWidget(groupBox_precamera8, 4, 4, 1, 1);
 
 
-        gridLayout_44->addLayout(gridLayout_3, 0, 1, 1, 1);
+        gridLayout_44->addLayout(gridLayout_3, 0, 0, 1, 1);
 
-        gridLayout_44->setColumnStretch(0, 1);
-        gridLayout_44->setColumnStretch(1, 3);
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        pushButton_iniCCD = new QPushButton(PreCamera);
+        pushButton_iniCCD->setObjectName(QStringLiteral("pushButton_iniCCD"));
+
+        horizontalLayout_6->addWidget(pushButton_iniCCD);
+
+        pushButton_finiCCD = new QPushButton(PreCamera);
+        pushButton_finiCCD->setObjectName(QStringLiteral("pushButton_finiCCD"));
+
+        horizontalLayout_6->addWidget(pushButton_finiCCD);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_6);
+
+        groupBox = new QGroupBox(PreCamera);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        gridLayout_48 = new QGridLayout(groupBox);
+        gridLayout_48->setSpacing(6);
+        gridLayout_48->setContentsMargins(11, 11, 11, 11);
+        gridLayout_48->setObjectName(QStringLiteral("gridLayout_48"));
+        gridLayout_47 = new QGridLayout();
+        gridLayout_47->setSpacing(6);
+        gridLayout_47->setObjectName(QStringLiteral("gridLayout_47"));
+        pushButton_3 = new QPushButton(groupBox);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+
+        gridLayout_47->addWidget(pushButton_3, 1, 0, 1, 1);
+
+        pushButton_5 = new QPushButton(groupBox);
+        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+
+        gridLayout_47->addWidget(pushButton_5, 0, 0, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        label_3 = new QLabel(groupBox);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        horizontalLayout_4->addWidget(label_3);
+
+        lineEdit_4 = new QLineEdit(groupBox);
+        lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
+
+        horizontalLayout_4->addWidget(lineEdit_4);
+
+
+        gridLayout_47->addLayout(horizontalLayout_4, 1, 1, 1, 1);
+
+        pushButton_blackLevel = new QPushButton(groupBox);
+        pushButton_blackLevel->setObjectName(QStringLiteral("pushButton_blackLevel"));
+
+        gridLayout_47->addWidget(pushButton_blackLevel, 2, 0, 1, 1);
+
+        pushButton_deadPixels = new QPushButton(groupBox);
+        pushButton_deadPixels->setObjectName(QStringLiteral("pushButton_deadPixels"));
+
+        gridLayout_47->addWidget(pushButton_deadPixels, 2, 1, 1, 1);
+
+        gridLayout_47->setColumnStretch(0, 1);
+        gridLayout_47->setColumnStretch(1, 1);
+        gridLayout_47->setRowMinimumHeight(0, 1);
+        gridLayout_47->setRowMinimumHeight(1, 1);
+        gridLayout_47->setRowMinimumHeight(2, 1);
+
+        gridLayout_48->addLayout(gridLayout_47, 0, 0, 1, 1);
+
+
+        verticalLayout_2->addWidget(groupBox);
+
+        groupBox_2 = new QGroupBox(PreCamera);
+        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
+        gridLayout_50 = new QGridLayout(groupBox_2);
+        gridLayout_50->setSpacing(6);
+        gridLayout_50->setContentsMargins(11, 11, 11, 11);
+        gridLayout_50->setObjectName(QStringLiteral("gridLayout_50"));
+        gridLayout_49 = new QGridLayout();
+        gridLayout_49->setSpacing(6);
+        gridLayout_49->setObjectName(QStringLiteral("gridLayout_49"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(0);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        label_21 = new QLabel(groupBox_2);
+        label_21->setObjectName(QStringLiteral("label_21"));
+
+        horizontalLayout_2->addWidget(label_21);
+
+        lineEdit_captureNum = new QLineEdit(groupBox_2);
+        lineEdit_captureNum->setObjectName(QStringLiteral("lineEdit_captureNum"));
+
+        horizontalLayout_2->addWidget(lineEdit_captureNum);
+
+        horizontalLayout_2->setStretch(0, 1);
+        horizontalLayout_2->setStretch(1, 5);
+
+        gridLayout_49->addLayout(horizontalLayout_2, 0, 1, 1, 1);
+
+        pushButton_captureContinuously = new QPushButton(groupBox_2);
+        pushButton_captureContinuously->setObjectName(QStringLiteral("pushButton_captureContinuously"));
+
+        gridLayout_49->addWidget(pushButton_captureContinuously, 0, 0, 1, 1);
+
+        pushButton_chess = new QPushButton(groupBox_2);
+        pushButton_chess->setObjectName(QStringLiteral("pushButton_chess"));
+
+        gridLayout_49->addWidget(pushButton_chess, 1, 0, 1, 1);
+
+        pushButton_2 = new QPushButton(groupBox_2);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+
+        gridLayout_49->addWidget(pushButton_2, 1, 1, 1, 1);
+
+        gridLayout_49->setColumnStretch(0, 1);
+        gridLayout_49->setColumnStretch(1, 1);
+        gridLayout_49->setRowMinimumHeight(0, 1);
+        gridLayout_49->setRowMinimumHeight(1, 1);
+
+        gridLayout_50->addLayout(gridLayout_49, 0, 0, 1, 1);
+
+
+        verticalLayout_2->addWidget(groupBox_2);
+
+        groupBox_3 = new QGroupBox(PreCamera);
+        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
+        gridLayout_52 = new QGridLayout(groupBox_3);
+        gridLayout_52->setSpacing(6);
+        gridLayout_52->setContentsMargins(11, 11, 11, 11);
+        gridLayout_52->setObjectName(QStringLiteral("gridLayout_52"));
+        gridLayout_51 = new QGridLayout();
+        gridLayout_51->setSpacing(6);
+        gridLayout_51->setObjectName(QStringLiteral("gridLayout_51"));
+        pushButton_computeMask = new QPushButton(groupBox_3);
+        pushButton_computeMask->setObjectName(QStringLiteral("pushButton_computeMask"));
+
+        gridLayout_51->addWidget(pushButton_computeMask, 1, 0, 1, 1);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        label_sampleNum = new QLabel(groupBox_3);
+        label_sampleNum->setObjectName(QStringLiteral("label_sampleNum"));
+
+        horizontalLayout_3->addWidget(label_sampleNum);
+
+        lineEdit_sampleNum = new QLineEdit(groupBox_3);
+        lineEdit_sampleNum->setObjectName(QStringLiteral("lineEdit_sampleNum"));
+
+        horizontalLayout_3->addWidget(lineEdit_sampleNum);
+
+
+        gridLayout_51->addLayout(horizontalLayout_3, 0, 1, 1, 1);
+
+        pushButton_captureOfPeriod = new QPushButton(groupBox_3);
+        pushButton_captureOfPeriod->setObjectName(QStringLiteral("pushButton_captureOfPeriod"));
+
+        gridLayout_51->addWidget(pushButton_captureOfPeriod, 0, 0, 1, 1);
+
+        pushButton_6 = new QPushButton(groupBox_3);
+        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+
+        gridLayout_51->addWidget(pushButton_6, 1, 1, 1, 1);
+
+        pushButton_whiteBalance = new QPushButton(groupBox_3);
+        pushButton_whiteBalance->setObjectName(QStringLiteral("pushButton_whiteBalance"));
+
+        gridLayout_51->addWidget(pushButton_whiteBalance, 2, 0, 1, 1);
+
+        pushButton_7 = new QPushButton(groupBox_3);
+        pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
+
+        gridLayout_51->addWidget(pushButton_7, 2, 1, 1, 1);
+
+        gridLayout_51->setColumnStretch(0, 1);
+        gridLayout_51->setColumnStretch(1, 1);
+        gridLayout_51->setRowMinimumHeight(0, 1);
+        gridLayout_51->setRowMinimumHeight(1, 1);
+        gridLayout_51->setRowMinimumHeight(2, 1);
+
+        gridLayout_52->addLayout(gridLayout_51, 0, 0, 1, 1);
+
+
+        verticalLayout_2->addWidget(groupBox_3);
+
+        verticalLayout_2->setStretch(0, 1);
+        verticalLayout_2->setStretch(1, 3);
+        verticalLayout_2->setStretch(2, 3);
+        verticalLayout_2->setStretch(3, 3);
+
+        gridLayout_44->addLayout(verticalLayout_2, 0, 1, 1, 1);
+
+        gridLayout_44->setColumnStretch(0, 4);
+        gridLayout_44->setColumnStretch(1, 1);
 
         gridLayout_43->addLayout(gridLayout_44, 0, 0, 1, 1);
 
@@ -1997,19 +2121,6 @@ public:
         label_79->setText(QApplication::translate("MainWindowClass", "cm", Q_NULLPTR));
         pushButton_save->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_defaults->setText(QApplication::translate("MainWindowClass", "\346\201\242\345\244\215\351\273\230\350\256\244\351\205\215\347\275\256", Q_NULLPTR));
-        pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
-        pushButton_chess->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\346\240\241\346\255\243\357\274\210\346\243\213\347\233\230\346\240\274\346\240\207\345\256\232\357\274\211", Q_NULLPTR));
-        pushButton_iniCCD->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245\347\233\270\346\234\272", Q_NULLPTR));
-        pushButton_whiteBalance->setText(QApplication::translate("MainWindowClass", "\347\231\275\345\271\263\350\241\241\346\240\241\346\255\243", Q_NULLPTR));
-        pushButton_captureOfPeriod->setText(QApplication::translate("MainWindowClass", "\345\221\250\346\234\237\351\207\207\351\233\206\357\274\210\346\240\267\345\223\201\346\227\213\350\275\254\344\270\200\345\221\250\357\274\211", Q_NULLPTR));
-        label_21->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\225\260\351\207\217\357\274\210/\345\217\260\357\274\211", Q_NULLPTR));
-        lineEdit_captureNum->setText(QApplication::translate("MainWindowClass", "150", Q_NULLPTR));
-        pushButton_captureContinuously->setText(QApplication::translate("MainWindowClass", "\350\277\236\347\273\255\351\207\207\351\233\206\357\274\210\346\240\267\345\223\201\351\235\231\346\255\242\357\274\211", Q_NULLPTR));
-        pushButton_deadPixels->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\241\346\255\243", Q_NULLPTR));
-        pushButton_computeMask->setText(QApplication::translate("MainWindowClass", "\347\224\237\346\210\220Mask", Q_NULLPTR));
-        label_sampleNum->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\350\247\222\345\272\246\346\225\260\351\207\217", Q_NULLPTR));
-        lineEdit_sampleNum->setText(QApplication::translate("MainWindowClass", "36", Q_NULLPTR));
-        pushButton_blackLevel->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\346\240\241\346\255\243", Q_NULLPTR));
         groupBox_precamera4->setTitle(QApplication::translate("MainWindowClass", "Camera4", Q_NULLPTR));
         label_precamera4->setText(QString());
         groupBox_precamera3->setTitle(QApplication::translate("MainWindowClass", "Camera3", Q_NULLPTR));
@@ -2028,6 +2139,28 @@ public:
         label_precamera7->setText(QString());
         groupBox_precamera8->setTitle(QApplication::translate("MainWindowClass", "Camera8", Q_NULLPTR));
         label_precamera8->setText(QString());
+        pushButton_iniCCD->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245\347\233\270\346\234\272", Q_NULLPTR));
+        pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\345\272\225\345\231\252\346\240\241\346\255\243", Q_NULLPTR));
+        pushButton_3->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\350\247\202\346\265\213", Q_NULLPTR));
+        pushButton_5->setText(QApplication::translate("MainWindowClass", "Dark\345\233\276\345\203\217\351\207\207\351\233\206", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindowClass", "BlackLevel", Q_NULLPTR));
+        pushButton_blackLevel->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\346\240\241\346\255\243", Q_NULLPTR));
+        pushButton_deadPixels->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\241\346\255\243", Q_NULLPTR));
+        groupBox_2->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\347\225\270\345\217\230\345\217\212\350\247\206\350\247\222\346\240\241\346\255\243", Q_NULLPTR));
+        label_21->setText(QApplication::translate("MainWindowClass", "\351\207\207\351\233\206\346\225\260\351\207\217\357\274\210/\345\217\260\357\274\211", Q_NULLPTR));
+        lineEdit_captureNum->setText(QApplication::translate("MainWindowClass", "150", Q_NULLPTR));
+        pushButton_captureContinuously->setText(QApplication::translate("MainWindowClass", "\346\243\213\347\233\230\346\240\274\351\207\207\351\233\206", Q_NULLPTR));
+        pushButton_chess->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\346\240\207\345\256\232\345\217\202\346\225\260", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\346\240\241\346\255\243", Q_NULLPTR));
+        groupBox_3->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\350\276\220\345\260\204\345\272\246\346\240\241\346\255\243", Q_NULLPTR));
+        pushButton_computeMask->setText(QApplication::translate("MainWindowClass", "\347\224\237\346\210\220Mask", Q_NULLPTR));
+        label_sampleNum->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\350\247\222\345\272\246\346\225\260\351\207\217", Q_NULLPTR));
+        lineEdit_sampleNum->setText(QApplication::translate("MainWindowClass", "36", Q_NULLPTR));
+        pushButton_captureOfPeriod->setText(QApplication::translate("MainWindowClass", "Mask\346\272\220\351\207\207\351\233\206", Q_NULLPTR));
+        pushButton_6->setText(QApplication::translate("MainWindowClass", "\345\213\276\351\200\211\346\240\207\350\256\260\345\214\272\345\237\237", Q_NULLPTR));
+        pushButton_whiteBalance->setText(QApplication::translate("MainWindowClass", "\347\231\275\345\271\263\350\241\241\346\240\241\346\255\243", Q_NULLPTR));
+        pushButton_7->setText(QApplication::translate("MainWindowClass", "\351\242\234\350\211\262\345\217\230\346\215\242", Q_NULLPTR));
         groupBox_20->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\240\267\345\223\201\345\271\263\351\235\242\346\216\247\345\210\266", Q_NULLPTR));
         label_61->setText(QApplication::translate("MainWindowClass", "m/s^2", Q_NULLPTR));
         label_63->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\346\227\213\350\275\254\350\247\222\345\272\246", Q_NULLPTR));
