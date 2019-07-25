@@ -12,40 +12,23 @@ ImageProcess::~ImageProcess()
 
 //////////////////////////////////公有函数/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// 函数：IsProperExposure
-// 描述：判断相机是否合适
+// 函数：IsOverExposure
+// 描述：判断相机是否过曝
 // 输入：Null
 // 输出：曝光时间
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool ImageProcess::IsProperExposure(Mat src)
+bool ImageProcess::IsOverExposure(Mat src)
 {
-	Mat gray;
-	cvtColor(src, gray, CV_RGB2GRAY);
-	int sum = 0;
-	const int size = gray.cols * gray.rows;
-	//计算灰度值在80-180范围内的像素点比例
-	for (int i = 0; i < gray.rows; i++)
-	{
-		uchar* data = gray.ptr<uchar>(i);
-		for (int j = 0; j < src.cols; j++)
-		{
-			if (100 < data[j] && data[j] < 180)//设定阈值
-			{
-				sum++;
-			}
-		}
-	}
+	//通过计算直方图判断采集图像是否过曝或过暗
 
-	if (float(sum) / float(size) > 0.7)//设定阈值
-		return true;
-	else
-		return false;
+	return 0;
+
 }
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ComputeExposureTime
+// 函数：GetExposureTime
 // 描述：计算相机在一定角度光源下的合适曝光时间
 // 输入：Null
 // 输出：曝光时间
@@ -53,90 +36,16 @@ bool ImageProcess::IsProperExposure(Mat src)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-float ImageProcess::ComputeExposureTime(Mat oriMat, float oriExposureTime)
+float ImageProcess::ComputeExposureTime(Mat mat)
 {
 	Mat gray;
-	cvtColor(oriMat, gray, CV_RGB2GRAY);
+	cvtColor(mat, gray, CV_RGB2GRAY);
 	Scalar scalar = mean(gray);
 	float ave = scalar.val[0];
-	float k = oriExposureTime / ave;//50ms下拍摄图像
-	float t = k * 255 * 0.60;//设定阈值
+	float k = 50.00 / ave;//50ms下拍摄图像
+	float t = k * 255 * 0.60;
 
 	return t;
-}
-
-////////////////////////////////////////////////////////////////////////////
-// 函数：ContributeHDR
-// 描述：合成高动态范围图像
-// 输入：Null
-// 输出：曝光时间
-// 返回：
-// 备注：
-// Modified by 
-////////////////////////////////////////////////////////////////////////////
-Mat ImageProcess::ContributeHDR(map<double, Mat> imgs, bool crfFlag)
-{
-	vector<Mat> srcs;
-	vector<double> exposureTimes;
-	map<double, Mat>::iterator it;
-	for (it = imgs.begin(); it != imgs.end(); it++)
-	{
-		exposureTimes.push_back(it->first);
-		srcs.push_back(it->second);
-	}
-
-	vector<Mat> ali;
-	//MTB图像对齐
-	//通过将值1分配给比中间亮度更亮的像素来计算图像的MTB，否则为0。 MTB对曝光时间不变。
-	Ptr<AlignMTB> alignMTB = createAlignMTB();
-	alignMTB->process(srcs, ali);
-	
-	//在采集BRDF时，采集图像ROI区域可视为单个像素，单个像素亮度可用图像整体平均亮度近似，故此前测试可认为CRF为线性。
-	//而当采集svBRDF时，CRF不是线性的，需要通过不同曝光时间的图像估计CRF
-	if (crfFlag == 1)
-	{
-		//获取相机CRF曲线(Camera Response Function)
-		Mat responseDebevec;
-		Ptr<CalibrateDebevec> calibrateDebevec = createCalibrateDebevec();
-		calibrateDebevec->process(ali, responseDebevec, exposureTimes);
-
-		//合并生成HDR图像
-		Mat hdrDebevec;
-		Ptr<MergeDebevec> mergeDebevec = createMergeDebevec();
-		mergeDebevec->process(ali, hdrDebevec, exposureTimes, responseDebevec);
-		//imwrite("hdrDebevec.hdr", hdrDebevec);
-
-		//Drago色调映射
-		Mat ldrDrago;
-		Ptr<TonemapDrago> tonemapDrago = createTonemapDrago(1.0, 0.7);
-		tonemapDrago->process(hdrDebevec, ldrDrago);
-		ldrDrago = 3 * ldrDrago;
-		imwrite("ldr-Drago.jpg", ldrDrago * 255);
-
-		return ldrDrago;
-	}
-	else
-	{
-		//获取相机CRF曲线(Camera Response Function)
-		Mat responseDebevec;
-		Ptr<CalibrateDebevec> calibrateDebevec = createCalibrateDebevec();
-		calibrateDebevec->process(ali, responseDebevec, exposureTimes);
-
-		//合并生成HDR图像
-		Mat hdrDebevec;
-		Ptr<MergeDebevec> mergeDebevec = createMergeDebevec();
-		mergeDebevec->process(ali, hdrDebevec, exposureTimes);
-		//imwrite("hdrDebevec.hdr", hdrDebevec);
-
-		//Drago色调映射
-		Mat ldrDrago;
-		Ptr<TonemapDrago> tonemapDrago = createTonemapDrago(1.0, 0.7);
-		tonemapDrago->process(hdrDebevec, ldrDrago);
-		ldrDrago = 3 * ldrDrago * 255;
-		//imwrite("ldr-Drago.jpg", ldrDrago * 255);
-
-		return ldrDrago;
-	}	
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -243,7 +152,7 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 #undef MASK_UNSEL
 }
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：ComputeMask
+//// 函数：
 //// 描述：
 //// 输入：
 //// 输出：
@@ -251,41 +160,13 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
+float* ImageProcess::ComputeWhiteTrans(vector<Mat> mats)
 {
-	int i = 0;
-	vector<Mat> dsts;
-	Mat dst;
-	vector<Mat>::iterator iter;
-	
-	for (iter = srcs.begin(); iter != srcs.end(); iter++)
-	{
-		string path = "..//imgs_mask//";
-		i++;
-		path = path + to_string(i) + ".bmp";
-		cvtColor(*iter, dst, CV_BGR2GRAY);
-		threshold(dst, dst, 25, 255, CV_THRESH_BINARY);
-		imwrite(path, dst);
-		dsts.push_back(dst);
-	}
-
-	return dsts;
-}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：ComputeWhiteTrans
-//// 描述：
-//// 输入：
-//// 输出：
-//// 返回：
-//// 备注：
-//// Modified by 
-//////////////////////////////////////////////////////////////////////////////
-float* ImageProcess::ComputeWhiteTrans(Mat src)
-{
-	/*
 	Mat src = AverageImage(mats);
+
 #define WHITE_NUM 500
 	//暂时取全图亮度最高的一定数量像素点均值作为白点
+	//...
 	const int height = src.rows;
 	const int width = src.cols;
 
@@ -353,62 +234,6 @@ float* ImageProcess::ComputeWhiteTrans(Mat src)
 	return trans;
 
 #undef WHITE_NUM
-	*/
-
-	const int height = src.rows;
-	const int width = src.cols;
-
-	vector<Mat> channels;
-	split(src, channels);
-	Mat srcB = channels.at(0);
-	Mat srcG = channels.at(1);
-	Mat srcR = channels.at(2);
-
-	//Mat B = srcB.clone();
-	//Mat G = srcG.clone();
-	//Mat R = srcR.clone();
-	
-	//计算白色区域三通道的平均值
-	int sum[3] = { 0, 0, 0 };//B G R
-	float v[3] = { 0.00, 0.00, 0.00 };
-	float ave[3] = { 0.00, 0.00, 0.00 };
-	for (int k = 0; k < 3; k++)
-	{
-		for (int i = 0; i < channels.at(k).rows; i++)
-		{
-			uchar* data = channels.at(k).ptr<uchar>(i);
-			for (int j = 0; j < channels.at(k).cols; j++)
-			{
-				if (data[j] == 0)
-					break;
-				v[k] += data[j];				
-				sum[k]++;
-			}
-		}
-		ave[k] = v[k] / float(sum[k]);
-	}
-	//计算三通道平均值中的最大值，其他两通道变换一致
-	float temp = 0.00;
-	int maxCh = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		if (ave[i] > temp)
-		{
-			maxCh = i;
-			temp = ave[i];
-		}
-	}
-
-	static float trans[3] = { 1, 1, 1 };
-	for (int i = 0; i < 3; i++)
-	{
-		if (i == maxCh)
-			trans[i] = 1;
-		else
-			trans[i] = temp / ave[i];
-	}
-
-	return trans;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -426,54 +251,14 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 
 	vector<Mat> channels;
 	split(src, channels);
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
 
-	Mat gray;
-	cvtColor(src, gray, CV_RGB2GRAY);
-	//Mat srcB = channels.at(0);
-	//Mat srcG = channels.at(1);
-	//Mat srcR = channels.at(2);
+	float transB = trans[0];
+	float transG = trans[1];
+	float transR = trans[2];
 
-	//float transB = trans[0];
-	//float transG = trans[1];
-	//float transR = trans[2];
-
-	map<int,map<int,float>> selectPoints;
-
-	float tempVal = 0;
-	float tempTrans;
-	for (int k = 0; k < 3; k++)
-	{
-		for (int i = 0; i < channels.at(k).rows; i++)
-		{
-			uchar* data = channels.at(k).ptr<uchar>(i);
-			for (int j = 0; j < channels.at(k).cols; j++)
-			{
-				tempVal = float(data[j]) * trans[k];
-				if (!IsSelected(gray, i, j))
-				{
-					if (tempVal > 255)
-					{
-						data[j] = 255;
-						tempTrans = 255.00 / float(data[j]);
-						selectPoints[i][j] = tempTrans;
-						Select(gray, i, j);
-					}
-					else
-						data[j] = tempVal;
-				}	
-				else
-				{
-					tempTrans = selectPoints[i][j];
-					data[j] = tempTrans * data[j];
-				}				
-			}
-		}
-	}
-
-	return src;
-
-
-	/*
 	//对每个点将像素拉到[0,255]之间
 	//针对超出1的像素，重新归一化
 	vector<vector<float>> fBGR(height, vector<float>(width, 0));
@@ -537,39 +322,12 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 		}
 	}
 
-
 	Mat dst(src.rows, src.cols, CV_8UC3, Scalar::all(0));
-	channels.push_back(srcB);
-	channels.push_back(srcG);
-	channels.push_back(srcR);
-	//merge({ srcB, srcG, srcR }, dst);
-	merge(channels, dst);
-
-	return dst;
-	*/
-}
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：GrayStrech
-//// 描述：
-//// 输入：
-//// 输出：
-//// 返回：
-//// 备注：
-//// Modified by 
-//////////////////////////////////////////////////////////////////////////////
-Mat ImageProcess::GrayStrech(Mat src)
-{
-	Mat gray;
-	cvtColor(src, gray, CV_RGB2GRAY);
-	double minVal = 0, maxVal = 0;
-	minMaxLoc(gray, &minVal, &maxVal);
-
-	float tran = 255.00 / maxVal;
-	float trans[3] = { tran };
-	Mat dst = WhiteBalance(src, trans);//鸡贼地借用了白平衡里的循环，懒得再写了
+	merge({ srcB, srcG, srcR }, dst);
 
 	return dst;
 }
+
 /////////////////////////////////私有函数/////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -604,23 +362,7 @@ void ImageProcess::Select(Mat src, int i, int j)
 
 	return;
 }
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：
-//// 描述：多幅图像求平均
-//// 输入：
-//// 输出：
-//// 返回：
-//// 备注：
-//// Modified by 
-//////////////////////////////////////////////////////////////////////////////
-double ImageProcess::ComputeAverage(Mat src)
-{
-	Mat gray;
-	cvtColor(src, gray, CV_RGB2GRAY);
-	Scalar scalar = mean(gray);
-	
-	return scalar.val[0];
-}
+
 
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -652,14 +394,14 @@ Mat ImageProcess::AverageImage(vector<Mat> mats)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<Mat> ImageProcess::ReadImages(cv::String path)
+vector<Mat> ImageProcess::ReadImages(string path)
 {
 	vector<Mat> mats;
-	String imgPattern = "//*.bmp";
-	vector<String> imgFiles;
+	string imgPattern = "//*.jpg";
+	vector<cv::String> imgFiles;
 	imgPattern = path + imgPattern;
 	glob(imgPattern, imgFiles);
-	for (size_t i = 0; i<imgFiles.size(); i++)
+	for (int i = 0; i<imgFiles.size(); i++)
 	{
 		Mat mat = imread(imgFiles[i]);
 		mats.push_back(mat);
@@ -668,21 +410,129 @@ vector<Mat> ImageProcess::ReadImages(cv::String path)
 	return mats;
 }
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：ComputeWhiteArea
-//// 描述：
-//// 输入：
+//// 函数：ComputeChessTrans
+//// 描述：函数计算的是相机校正后的内外参数、旋转矩阵、旋转向量、平移向量
+//// 输入：mats为输入图片的集合，boardSize为棋盘格上角点的信息、squareSize是棋盘格上每个方格的边长信息
 //// 输出：
-//// 返回：
+//// 返回：包含相机信息的结构体
+//// 备注：务必注意boardSize要与实际的角点信息匹配，否则程序将报错
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+cameraCalibrationParamaters ImageProcess::ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize)
+{
+	cameraCalibrationParamaters camCalParas;
+	int imageCount = mats.size();
+	Size imageSize;
+	Mat imageInput;
+	//读取每一幅图像，从中提取出角点，然后对角点进行亚像素精确化
+	vector<Point2f> imagePointsBuf;/* 缓存每幅图像上检测到的角点 */
+	vector<vector<Point2f>> imagePointsSeq;/* 缓存每幅图像上检测到的角点 */
+	for (int i = 0; i < imageCount; i++)
+	{
+		imageInput = mats[i];
+		if (i == 0)
+		{
+			imageSize.width = imageInput.cols;
+			imageSize.height = imageInput.rows;
+		}
+		//注意这里的boardSize必须和用于检测的棋盘格图片匹配，否则程序将退出
+		if (0 == findChessboardCorners(imageInput, boardSize, imagePointsBuf))
+		{
+			//cout << "can not find chessboard corneres!\n";
+			exit(1);
+		}
+		else
+		{
+			Mat viewGray;
+			cvtColor(imageInput, viewGray, CV_RGB2GRAY);
+			/* 亚像素精确化 */
+			find4QuadCornerSubpix(viewGray, imagePointsBuf, Size(5, 5)); //对粗提取的角点进行精确化
+			imagePointsSeq.push_back(imagePointsBuf);  //保存亚像素角点
+			/* 在图像上显示角点位置 */
+			//drawChessboardCorners(viewGray, boardSize, imagePointsBuf, true);
+			//waitKey(500);
+		}
+	}
+	vector<vector<Point3f>> objectPoints;
+	/* 摄像机内参数矩阵 */
+	Mat cameraMatrix = Mat(3, 3, CV_32FC1, Scalar::all(0));
+	vector<int> pointCounts;
+	Mat distCoeffs = Mat(1, 5, CV_32FC1, Scalar::all(0)); /* 摄像机的5个畸变系数：k1,k2,p1,p2,k3 */
+	/* 初始化标定板上角点的三维坐标 */
+	int i, j, t;
+	for (t = 0; t<imageCount; t++)
+	{
+		vector<Point3f> tempPointSet;
+		for (i = 0; i<boardSize.height; i++)
+		{
+			for (j = 0; j<boardSize.width; j++)
+			{
+				Point3f realPoint;
+				/* 假设标定板放在世界坐标系中z=0的平面上 */
+				realPoint.x = i*squareSize.width;
+				realPoint.y = j*squareSize.height;
+				realPoint.z = 0;
+				tempPointSet.push_back(realPoint);
+			}
+		}
+		objectPoints.push_back(tempPointSet);
+	}
+	/* 初始化每幅图像中的角点数量，假定每幅图像中都可以看到完整的标定板 */
+	for (i = 0; i<imageCount; i++)
+	{
+		pointCounts.push_back(boardSize.width*boardSize.height);
+	}
+	/* 开始标定 */
+	calibrateCamera(objectPoints, imagePointsSeq, imageSize, cameraMatrix, distCoeffs, camCalParas.rvecsMats, camCalParas.tvecsMats, 0);
+	//对标定结果进行评价
+	double total_err = 0.0; /* 所有图像的平均误差的总和 */
+	double err = 0.0; /* 每幅图像的平均误差 */
+	vector<Point2f> image_points2; /* 保存重新计算得到的投影点 */
+	vector<Mat> rotationMatrixs(imageCount);
+	for (i = 0; i<imageCount; i++)
+	{
+		vector<Point3f> tempPointSet = objectPoints[i];
+		/* 通过得到的摄像机内外参数，对空间的三维点进行重新投影计算，得到新的投影点 */
+		projectPoints(tempPointSet, rvecsMat[i], tvecsMat[i], cameraMatrix, distCoeffs, image_points2);
+		/* 计算新的投影点和旧的投影点之间的误差*/
+		vector<Point2f> tempImagePoint = imagePointsSeq[i];
+		Mat tempImagePointMat = Mat(1, tempImagePoint.size(), CV_32FC2);
+		Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
+		for (int j = 0; j < tempImagePoint.size(); j++)
+		{
+			image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
+			tempImagePointMat.at<Vec2f>(0, j) = Vec2f(tempImagePoint[j].x, tempImagePoint[j].y);
+		}
+		err = norm(image_points2Mat, tempImagePointMat, NORM_L2);
+		total_err += err /= pointCounts[i];
+		Rodrigues(camCalParas.rvecsMats[i], rotationMatrixs[i]);
+	}
+	camCalParas.Count = imageCount;
+	camCalParas.cameraMatrix = cameraMatrix;
+	camCalParas.distCoeffs = distCoeffs;
+	camCalParas.error = total_err / imageCount;
+	camCalParas.rotationMatrixs = rotationMatrixs;
+	return camCalParas;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：Calibration
+//// 描述：根据相机的畸变系数、内参来校正拍摄的图片
+//// 输入：imageSource为待校正的图片，cameraMatrix为相机的内参数，distCoeffs为畸变系数向量
+//// 输出：
+//// 返回：畸变校正后的图片
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-//// 函数：ComputeSampleArea
-//// 描述：
-//// 输入：
-//// 输出：
-//// 返回：
-//// 备注：
-//// Modified by 
-//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs)
+{
+	Size imageSize;
+	imageSize.width = imageSource.cols;
+	imageSize.height = imageSource.rows;
+	Mat R = Mat::eye(3, 3, CV_32F);
+	Mat mapx = Mat(imageSize, CV_32FC1);
+	Mat mapy = Mat(imageSize, CV_32FC1);
+	Mat newImage = imageSource.clone();
+	initUndistortRectifyMap(cameraMatrix, distCoeffs, R, cameraMatrix, imageSize, CV_32FC1, mapx, mapy);
+	remap(imageSource, newImage, mapx, mapy, INTER_LINEAR);
+	return newImage;
+}
