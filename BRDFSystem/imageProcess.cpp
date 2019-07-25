@@ -409,3 +409,130 @@ vector<Mat> ImageProcess::ReadImages(string path)
 
 	return mats;
 }
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeChessTrans
+//// 描述：函数计算的是相机校正后的内外参数、旋转矩阵、旋转向量、平移向量
+//// 输入：mats为输入图片的集合，boardSize为棋盘格上角点的信息、squareSize是棋盘格上每个方格的边长信息
+//// 输出：
+//// 返回：包含相机信息的结构体
+//// 备注：务必注意boardSize要与实际的角点信息匹配，否则程序将报错
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+cameraCalibrationParamaters ImageProcess::ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize)
+{
+	cameraCalibrationParamaters camCalParas;
+	int imageCount = mats.size();
+	Size imageSize;
+	Mat imageInput;
+	//读取每一幅图像，从中提取出角点，然后对角点进行亚像素精确化
+	vector<Point2f> imagePointsBuf;/* 缓存每幅图像上检测到的角点 */
+	vector<vector<Point2f>> imagePointsSeq;/* 缓存每幅图像上检测到的角点 */
+	for (int i = 0; i < imageCount; i++)
+	{
+		imageInput = mats[i];
+		if (i == 0)
+		{
+			imageSize.width = imageInput.cols;
+			imageSize.height = imageInput.rows;
+		}
+		//注意这里的boardSize必须和用于检测的棋盘格图片匹配，否则程序将退出
+		if (0 == findChessboardCorners(imageInput, boardSize, imagePointsBuf))
+		{
+			//cout << "can not find chessboard corneres!\n";
+			exit(1);
+		}
+		else
+		{
+			Mat viewGray;
+			cvtColor(imageInput, viewGray, CV_RGB2GRAY);
+			/* 亚像素精确化 */
+			find4QuadCornerSubpix(viewGray, imagePointsBuf, Size(5, 5)); //对粗提取的角点进行精确化
+			imagePointsSeq.push_back(imagePointsBuf);  //保存亚像素角点
+			/* 在图像上显示角点位置 */
+			//drawChessboardCorners(viewGray, boardSize, imagePointsBuf, true);
+			//waitKey(500);
+		}
+	}
+	vector<vector<Point3f>> objectPoints;
+	/* 摄像机内参数矩阵 */
+	Mat cameraMatrix = Mat(3, 3, CV_32FC1, Scalar::all(0));
+	vector<int> pointCounts;
+	Mat distCoeffs = Mat(1, 5, CV_32FC1, Scalar::all(0)); /* 摄像机的5个畸变系数：k1,k2,p1,p2,k3 */
+	/* 初始化标定板上角点的三维坐标 */
+	int i, j, t;
+	for (t = 0; t<imageCount; t++)
+	{
+		vector<Point3f> tempPointSet;
+		for (i = 0; i<boardSize.height; i++)
+		{
+			for (j = 0; j<boardSize.width; j++)
+			{
+				Point3f realPoint;
+				/* 假设标定板放在世界坐标系中z=0的平面上 */
+				realPoint.x = i*squareSize.width;
+				realPoint.y = j*squareSize.height;
+				realPoint.z = 0;
+				tempPointSet.push_back(realPoint);
+			}
+		}
+		objectPoints.push_back(tempPointSet);
+	}
+	/* 初始化每幅图像中的角点数量，假定每幅图像中都可以看到完整的标定板 */
+	for (i = 0; i<imageCount; i++)
+	{
+		pointCounts.push_back(boardSize.width*boardSize.height);
+	}
+	/* 开始标定 */
+	calibrateCamera(objectPoints, imagePointsSeq, imageSize, cameraMatrix, distCoeffs, camCalParas.rvecsMats, camCalParas.tvecsMats, 0);
+	//对标定结果进行评价
+	double total_err = 0.0; /* 所有图像的平均误差的总和 */
+	double err = 0.0; /* 每幅图像的平均误差 */
+	vector<Point2f> image_points2; /* 保存重新计算得到的投影点 */
+	vector<Mat> rotationMatrixs(imageCount);
+	for (i = 0; i<imageCount; i++)
+	{
+		vector<Point3f> tempPointSet = objectPoints[i];
+		/* 通过得到的摄像机内外参数，对空间的三维点进行重新投影计算，得到新的投影点 */
+		projectPoints(tempPointSet, rvecsMat[i], tvecsMat[i], cameraMatrix, distCoeffs, image_points2);
+		/* 计算新的投影点和旧的投影点之间的误差*/
+		vector<Point2f> tempImagePoint = imagePointsSeq[i];
+		Mat tempImagePointMat = Mat(1, tempImagePoint.size(), CV_32FC2);
+		Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
+		for (int j = 0; j < tempImagePoint.size(); j++)
+		{
+			image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
+			tempImagePointMat.at<Vec2f>(0, j) = Vec2f(tempImagePoint[j].x, tempImagePoint[j].y);
+		}
+		err = norm(image_points2Mat, tempImagePointMat, NORM_L2);
+		total_err += err /= pointCounts[i];
+		Rodrigues(camCalParas.rvecsMats[i], rotationMatrixs[i]);
+	}
+	camCalParas.Count = imageCount;
+	camCalParas.cameraMatrix = cameraMatrix;
+	camCalParas.distCoeffs = distCoeffs;
+	camCalParas.error = total_err / imageCount;
+	camCalParas.rotationMatrixs = rotationMatrixs;
+	return camCalParas;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：Calibration
+//// 描述：根据相机的畸变系数、内参来校正拍摄的图片
+//// 输入：imageSource为待校正的图片，cameraMatrix为相机的内参数，distCoeffs为畸变系数向量
+//// 输出：
+//// 返回：畸变校正后的图片
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs)
+{
+	Size imageSize;
+	imageSize.width = imageSource.cols;
+	imageSize.height = imageSource.rows;
+	Mat R = Mat::eye(3, 3, CV_32F);
+	Mat mapx = Mat(imageSize, CV_32FC1);
+	Mat mapy = Mat(imageSize, CV_32FC1);
+	Mat newImage = imageSource.clone();
+	initUndistortRectifyMap(cameraMatrix, distCoeffs, R, cameraMatrix, imageSize, CV_32FC1, mapx, mapy);
+	remap(imageSource, newImage, mapx, mapy, INTER_LINEAR);
+	return newImage;
+}
