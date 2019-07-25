@@ -1,6 +1,6 @@
 #include "workerMeasurement.h"
 
-////////////////////////////////AVTç›¸æœºçº¿ç¨‹ç±»å®šä¹‰////////////////////////////
+////////////////////////////////AVTÏà»úÏß³ÌÀà¶¨Òå////////////////////////////
 WorkerMeasurement::WorkerMeasurement(QObject *parent) :
 QObject(parent)
 {
@@ -14,8 +14,8 @@ QObject(parent)
 	illuminant = new Illuminant();
 	illuminant->InitCOM(5);
 
-	//å…‰æºæ’å¸ƒé¡ºåº
-	//è¿™è¾¹å†™é”™äº†ï¼Œä¸åº”è¯¥ä»0å¼€å§‹å†™
+	//¹âÔ´ÅÅ²¼Ë³Ğò
+	//Õâ±ßĞ´´íÁË£¬²»Ó¦¸Ã´Ó0¿ªÊ¼Ğ´
 	_illuminantID = new UINT[196] { 0, 1, 2, 3,    25, 26, 27, 28, 29,    50,51,52,53,       75,76,77,78,79,   100,101,102,103,      125,126,127,128,129,    150,151,152,153,      175,176,177,178,179,\
 									  4,5,6,7,8,     30,31,32,33,           54,55,56,57,58,    80,81,82,83,      104,105,106,107,108,  130,131,132,133,        154,155,156,157,158,  180,181,182,183,\
 									  9,10,11,12,    34,35,36,37,           59,60,61,62,       84,85,86,87,      109,110,111,112,      134,135,136,137,        159,160,161,162,      184,185,186,187,\
@@ -44,8 +44,9 @@ WorkerMeasurement::~WorkerMeasurement()
 
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
-	slideComm->MoveToX2();//æ»‘è½¨å°±ä½
-	Sleep(10000);//ç­‰å¾…æ»‘è½¨å°±ä½
+	slideComm->MoveToX2();//»¬¹ì¾ÍÎ»
+	sampleComm->Reset();
+	Sleep(12000);//µÈ´ı»¬¹ì¾ÍÎ»¼°²ÄÖÊÌ¨¹éÎ»
 	_measureFlag = measureFlag;
 	//if (_measureFlag == 1)
 		_timerId = this->startTimer(300);
@@ -64,12 +65,12 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				_isReady = 1;
 				illuminant->Suspend();
 				illuminant->SetSteadyTime(20);
-				illuminant->LightenById(_illuminantID[_iID]+1);//å…‰æºåºåˆ—æ˜¯ä»0å¼€å§‹å†™çš„
+				illuminant->LightenById(_illuminantID[_iID]+1);//¹âÔ´ĞòÁĞÊÇ´Ó0¿ªÊ¼Ğ´µÄ
 				illuminant->Start();
 				Sleep(200);
 				_iID++;
 
-				emit readyForGrab(_sID, _iID);//é€šè¿‡ä¸»çº¿ç¨‹å‘Šè¯‰ç›¸æœºå’±åˆ‡æ¢åˆ°ä¸‹ä¸€ä¸ªç¯äº†ï¼Œä½ å¯ä»¥è¯•è¯•è°ƒæ•´ä¸€ä¸‹ä½ çš„æ›å…‰æ—¶é—´
+				emit readyForGrab(_sID, _iID);//Í¨¹ıÖ÷Ïß³Ì¸æËßÏà»úÔÛÇĞ»»µ½ÏÂÒ»¸öµÆÁË£¬Äã¿ÉÒÔÊÔÊÔµ÷ÕûÒ»ÏÂÄãµÄÆØ¹âÊ±¼ä
 			}
 			else if (_iID == ILLUMINANT_NUM)
 			{
@@ -78,7 +79,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 			}
 		}
 
-		//æ¯ä¸ªå…‰æºæ—‹è½¬æ ·å“å°18ä¸ªè§’åº¦
+		//Ã¿¸ö¹âÔ´Ğı×ªÑùÆ·Ì¨18¸ö½Ç¶È
 		/*
 		if (_measureFlag == 2)
 		{
@@ -88,15 +89,15 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				{
 					_isReady = 1;
 					illuminant->Suspend();
-					illuminant->SetSteadyTime(240);//æœ€é•¿ç‚¹äº®æ—¶é—´25.5s  18ä¸ªé‡‡é›†è§’åº¦æ—¶é—´ä¸å¤ªå¤Ÿ
+					illuminant->SetSteadyTime(240);//×î³¤µãÁÁÊ±¼ä25.5s  18¸ö²É¼¯½Ç¶ÈÊ±¼ä²»Ì«¹»
 					illuminant->LightenById(_illuminantID[_iID]+1);
 					illuminant->Start();
 					Sleep(200);
 				}
-				if (_sID != 12)//36ä¸ªè§’åº¦è€—æ—¶å¤ªé•¿
+				if (_sID != 12)//36¸ö½Ç¶ÈºÄÊ±Ì«³¤
 				{
 					sampleComm->GotoNextPos(5250);
-					Sleep(200);//ç•™ç»™ç›¸æœºçš„æ‹æ‘„æ—¶é—´
+					Sleep(200);//Áô¸øÏà»úµÄÅÄÉãÊ±¼ä
 					emit readyForGrab(_sID, _iID);
 					_sID++;
 					_isReady = 1;
@@ -105,7 +106,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				else
 				{
 					_sampleFlag = 0;
-					_sID = 0;//å¼€å§‹è½¬ä¸‹ä¸€åœˆ
+					_sID = 0;//¿ªÊ¼×ªÏÂÒ»È¦
 					_iID++;
 					_isReady = 0;
 				}
@@ -118,7 +119,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 		}
 		*/
 
-		//æ¯ä¸ªæ ·å“å°è§’åº¦ç‚¹äº®196ä¸ªå…‰æº
+		//Ã¿¸öÑùÆ·Ì¨½Ç¶ÈµãÁÁ196¸ö¹âÔ´
 		if (_measureFlag == 2)
 		{
 			if (_sID != SAMPLE_NUM)
@@ -127,7 +128,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				{
 					_isReady = 1;
 					illuminant->Suspend();
-					illuminant->SetSteadyTime(20);//æœ€é•¿ç‚¹äº®æ—¶é—´25.5s  18ä¸ªé‡‡é›†è§’åº¦æ—¶é—´ä¸å¤ªå¤Ÿ
+					illuminant->SetSteadyTime(10);//×î³¤µãÁÁÊ±¼ä25.5s  18¸ö²É¼¯½Ç¶ÈÊ±¼ä²»Ì«¹»
 					illuminant->LightenById(_illuminantID[_iID] + 1);
 					illuminant->Start();
 					Sleep(200);
@@ -135,15 +136,39 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 
 					emit readyForGrab(_sID, _iID);
 				}
-				else if (_iID == ILLUMINANT_NUM)//36ä¸ªè§’åº¦è€—æ—¶å¤ªé•¿
+				else if (_iID == ILLUMINANT_NUM)
 				{
-					sampleComm->GotoNextPos(5250);
-					//Sleep(200);//ç•™ç»™ç›¸æœºçš„æ‹æ‘„æ—¶é—´			
+					sampleComm->GotoNextPos(1730);
+					//Sleep(200);//Áô¸øÏà»úµÄÅÄÉãÊ±¼ä			
 					_iID = 0;
 					_sID++;
 				}
 			}
-			else if (_sID == 36)
+			else if (_sID == SAMPLE_NUM)
+			{
+				emit done();
+				_isReady = 1;
+			}
+		}
+		//²É¼¯²ÄÖÊÌ¨Ğı×ªÒ»ÖÜµÄÍ¼Ïñ
+		if (_measureFlag == 3)
+		{
+			if (_sID != SAMPLE_NUM)
+			{
+				_isReady = 1;
+				
+				illuminant->Suspend();
+				illuminant->SetSteadyTime(50);//×î³¤µãÁÁÊ±¼ä25.5s  18¸ö²É¼¯½Ç¶ÈÊ±¼ä²»Ì«¹»
+				illuminant->LightenById(199);
+				illuminant->Start();
+				Sleep(400);
+
+				emit readyForGrab(_sID, _iID);
+				sampleComm->GotoNextPos(1730);
+				Sleep(400);//Áô¸øÏà»úµÄÅÄÉãÊ±¼ä			
+				_sID++;
+			}
+			else if (_sID == SAMPLE_NUM)
 			{
 				emit done();
 				_isReady = 1;
@@ -171,31 +196,40 @@ void WorkerMeasurement::CheckDone(int workerID)
 	else
 		_isReady = 1;
 }
-////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šContributeBRDF()
-// æè¿°ï¼šé‡‡é›†åŸå§‹å›¾åƒå®Œæˆåï¼Œç”Ÿæˆæè´¨æ•°æ®
-// è¾“å…¥ï¼šNull
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šNull
-// å¤‡æ³¨ï¼š
-// Modified by 
-////////////////////////////////////////////////////////////////////////////
-void WorkerMeasurement::ContributeBRDF()
-{
-
-}
 
 void WorkerMeasurement::CloseWorker()
 {
 	this->killTimer(_timerId);
 }
+
+vector<double> WorkerMeasurement::AverageRGB(const Mat& inputImage)
+{
+	vector<double> temp = { 0, 0, 0 };
+	Mat outputImage = inputImage.clone();
+	int rowNumber = outputImage.rows;
+	int colNumber = outputImage.cols;
+	//¶ÔRGBÈıÍ¨µÀ½øĞĞÈ¡Æ½¾ùÖµ²Ù×÷
+	for (int i = 0; i<rowNumber; i++)
+	{
+		for (int j = 0; j<colNumber; j++)
+		{
+			temp[0] += inputImage.at<Vec3f>(i, j)[0];
+			temp[1] += inputImage.at<Vec3f>(i, j)[1];
+			temp[2] += inputImage.at<Vec3f>(i, j)[2];
+		}
+	}
+	temp[0] = temp[0] / (rowNumber*colNumber);
+	temp[1] = temp[1] / (rowNumber*colNumber);
+	temp[2] = temp[2] / (rowNumber*colNumber);
+	return temp;
+}
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šWriteBRDF()
-// æè¿°ï¼šå°†ä¸€ç§æè´¨åœ¨å„ä¸ª(å…‰æº-ç›¸æœº)è§’åº¦ä¸‹çš„BRDFå€¼å†™è¿›.binaryæ–‡ä»¶
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šæ˜¯å¦è¯»å†™æˆåŠŸ
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºWriteBRDF()
+// ÃèÊö£º½«Ò»ÖÖ²ÄÖÊÔÚ¸÷¸ö(¹âÔ´-Ïà»ú)½Ç¶ÈÏÂµÄBRDFÖµĞ´½ø.binaryÎÄ¼ş
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£ºÊÇ·ñ¶ÁĞ´³É¹¦
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 bool WorkerMeasurement::WriteBRDF()
@@ -242,12 +276,12 @@ bool WorkerMeasurement::WriteBRDF()
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šReadBrdf()
-// æè¿°ï¼šä».binaryæ–‡ä»¶è¯»å–å‡ºæè´¨çš„BRDFæ•°å€¼
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šæ˜¯å¦è¯»å†™æˆåŠŸ
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºReadBrdf()
+// ÃèÊö£º´Ó.binaryÎÄ¼ş¶ÁÈ¡³ö²ÄÖÊµÄBRDFÊıÖµ
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£ºÊÇ·ñ¶ÁĞ´³É¹¦
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 bool WorkerMeasurement::ReadBrdf(const char *filename, double* &brdf)
@@ -263,12 +297,12 @@ bool WorkerMeasurement::ReadBrdf(const char *filename, double* &brdf)
 }
 
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼štheta_out_index()
-// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„thetaè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šè¿”å›ç´¢å¼•
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºtheta_out_index()
+// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄtheta½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£º·µ»ØË÷Òı
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_out_index(int theta_out)
@@ -277,12 +311,12 @@ inline int WorkerMeasurement::theta_out_index(int theta_out)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šfi_out_index()
-// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„fiè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šè¿”å›ç´¢å¼•
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºfi_out_index()
+// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄfi½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£º·µ»ØË÷Òı
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_out_index(int fi_out)
@@ -292,12 +326,12 @@ inline int WorkerMeasurement::fi_out_index(int fi_out)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼štheta_in_index()
-// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­å…‰æºçš„thetaè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šè¿”å›ç´¢å¼•
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºtheta_in_index()
+// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞ¹âÔ´µÄtheta½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£º·µ»ØË÷Òı
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::theta_in_index(int theta_in)
@@ -306,12 +340,12 @@ inline int WorkerMeasurement::theta_in_index(int theta_in)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šfi_in_index()
-// æè¿°ï¼šè®¡ç®—æ ¹æ®æ–‡ä»¶å¤¹çš„å‘½åä¸­ç›¸æœºçš„fiè§’ï¼Œå¾—åˆ°å½“å‰è§’åº¦çš„ç´¢å¼•
-// è¾“å…¥ï¼š
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šè¿”å›ç´¢å¼•
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºfi_in_index()
+// ÃèÊö£º¼ÆËã¸ù¾İÎÄ¼ş¼ĞµÄÃüÃûÖĞÏà»úµÄfi½Ç£¬µÃµ½µ±Ç°½Ç¶ÈµÄË÷Òı
+// ÊäÈë£º
+// Êä³ö£ºNull
+// ·µ»Ø£º·µ»ØË÷Òı
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
@@ -323,12 +357,12 @@ inline int WorkerMeasurement::fi_in_index(int fi_in, int theta_in)
 	return index;
 }
 ////////////////////////////////////////////////////////////////////////////
-// å‡½æ•°ï¼šLookupBrdfVal()
-// æè¿°ï¼šæ ¹æ®ç»™å‡ºçš„å…‰æºå’Œç›¸æœºçš„è§’åº¦ï¼Œè®¡ç®—å‡ºå½“å‰è§’åº¦ä¸‹çš„BRDFå€¼
-// è¾“å…¥ï¼šå…‰æºå’Œç›¸æœºçš„è§’åº¦ä»¥åŠæ‰€å¾—åˆ°çš„BRDFæ•°ç»„ã€‚
-// è¾“å‡ºï¼šNull
-// è¿”å›ï¼šè¿”å›ç´¢å¼•
-// å¤‡æ³¨ï¼š
+// º¯Êı£ºLookupBrdfVal()
+// ÃèÊö£º¸ù¾İ¸ø³öµÄ¹âÔ´ºÍÏà»úµÄ½Ç¶È£¬¼ÆËã³öµ±Ç°½Ç¶ÈÏÂµÄBRDFÖµ
+// ÊäÈë£º¹âÔ´ºÍÏà»úµÄ½Ç¶ÈÒÔ¼°ËùµÃµ½µÄBRDFÊı×é¡£
+// Êä³ö£ºNull
+// ·µ»Ø£º·µ»ØË÷Òı
+// ±¸×¢£º
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
 void WorkerMeasurement::LookupBrdfVal(double* brdf, int theta_in, int fi_in,
@@ -349,3 +383,14 @@ void WorkerMeasurement::LookupBrdfVal(double* brdf, int theta_in, int fi_in,
 	green_val = brdf[3 * ind + 1];
 	blue_val = brdf[3 * ind + 2];
 }
+
+
+
+
+
+
+
+
+
+
+

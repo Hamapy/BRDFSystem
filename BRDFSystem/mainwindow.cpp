@@ -158,8 +158,7 @@ QMainWindow(parent)
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textChanged(QString)), this, SLOT(IsEdited()));
 	connect(this->ui.lineEdit_slideTableMovingDistance, SIGNAL(textEdited(QString)), this, SLOT(IsEdited()));
 
-	connect(this->ui.label_measureState, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
-
+	
 //////////////////////////////////////////////切换页面/////////////////////////////////////////////////////
 	connect(this->ui.pushButton_measure1, SIGNAL(pressed()), this, SLOT(TurnToMeasurement1()));
 	connect(this->ui.pushButton_measure2, SIGNAL(pressed()), this, SLOT(TurnToMeasurement2()));
@@ -188,12 +187,13 @@ QMainWindow(parent)
 		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
 		connect(this->workerMeasurement, SIGNAL(readyForGrab(int,int)), this->workerCCD[i], SLOT(Grab(int,int)), Qt::QueuedConnection);
 		connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
+		connect(this->workerCCD[i]->cameraAVT, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
+
 	}
 	connect(this, SIGNAL(startMeasurement(int)), this->workerMeasurement, SLOT(StartTimer(int)));
 	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
 	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
 	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
-
 	
 ///////////////////////////////////////////////相机预处理页面///////////////////////////////////////////////
 	this->ui.pushButton_captureContinuously->setEnabled(false);
@@ -205,11 +205,14 @@ QMainWindow(parent)
 
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
+	connect(this->ui.pushButton_captureOfPeriod, SIGNAL(pressed()), this, SLOT(pushButton_CaptureOfPeriod_Pressed()));
 	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
 	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
 	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
 	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
 	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
+	connect(this->ui.pushButton_computeMask, SIGNAL(pressed()), this, SLOT(PushButton_ComputeMask_Pressed()));
+	
 }
 
 MainWindow::~MainWindow()
@@ -561,11 +564,12 @@ void MainWindow::SendingMat(int workerID, QImage mat)
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::DisplayMeasureState(int cameraID, int sampleID, int illuminantID)
 {
-	char name[100];
-	sprintf(name, "第%d个倾斜角 第%d个高度角 第%d个样品旋转角度", cameraID, sampleID, illuminantID);
-	QString a;
-	a = QString(QLatin1String(name));
-	this->ui.label_measureState->setText(a);
+	char str[1024];
+	sprintf(str, "第(%d / 36)个样品角度，第(%d / 196)个光源", sampleID, illuminantID);
+	//QString str_ch = QString::fromUtf8(str);//qlabel显示中文
+	QTextCodec* codec = QTextCodec::codecForName("GBK");
+	QString str_ch = codec->toUnicode(str);
+	this->ui.label_measureState->setText(str_ch);
 }
 
 /////////////////////////////相机预处理页面/////////////////////////////////
@@ -620,6 +624,51 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_ComputeMask_Pressed
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_ComputeMask_Pressed()
+{
+	vector<Mat> imgs = ImageProcess::ReadImages("..//imgs_periodcapture");
+	ImageProcess::ComputeMask(imgs);
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_captureContinuously_pressed
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::pushButton_CaptureOfPeriod_Pressed()
+{
+	_measureFlag = 3;
+	//string savePath = "..\\imgs_periodcapture\\";
+		
+	//开启光源与样品线程
+	if (!threadMeasurement->isRunning())
+	{
+		threadMeasurement->start();
+	}
+	emit startMeasurement(_measureFlag);
+
+	//开启相机线程
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		if (!threadCCD[i]->isRunning())
+		{
+			threadCCD[i]->start();
+		}
+	}
+	emit startTimer(_measureFlag);
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：
 // 描述：
 // 输入：Null
@@ -650,7 +699,7 @@ void MainWindow::PushButton_WhiteBalance_Pressed()
 		//string path = _capturePath + "camera" + to_string(i);
 		//mats = AVTCamera::ReadImages(path);
 		//mat = AVTCamera::AverageImage(mats);
-		_trans = ImageProcess::ComputeWhiteTrans(mats);
+		//_trans = ImageProcess::ComputeWhiteTrans(mats);
 	}
 	_transs.push_back(_trans);
 	//需要写在配置文件里

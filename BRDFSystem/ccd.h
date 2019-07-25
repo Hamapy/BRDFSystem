@@ -14,15 +14,16 @@
 //#include "IFrameObserver.h"
 //#include "VmbTransformTypes.h"
 #include "opencv2/opencv.hpp"
-#include "BasicImage.h"
+//#include "BasicImage.h"
 #include "config.h"
 #include "stdafx.h"
-//#include <QtWidgets/QMainWindow>
+#include "imageProcess.h"
 
 using namespace std;
 using namespace cv;
 using namespace AVT::VmbAPI;
 
+#define HDR_NUM 3 //HDR曝光次数
 #define CAM_NUM 9 //连接相机数量
 #define CAPTURE_NUM 150 //采集图像数量 
 #define TIMEOUT 5000 //采集图像等待超时时间 
@@ -66,9 +67,11 @@ public:
 	//返回图像尺寸
 	bool GetImageSize(int& width, int& height);
 	//保存一帧图像
-	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex);
+	bool SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int measureFlag);
 	//连续采集图像
 	bool SaveImages(Mat& captureMat, string imageSavingPath);
+	//采集不同曝光时间下的一组图像（用于HDR）
+	map<double, Mat> CaptureByDifTimes(double originalTime, Mat originalMat);
 	//相机多线程函数
 	//static void CameraThread(CameraThreadInfo threadInfo);//线程调用的接口必须是全局函数或静态成员函数
 	//多相机（9台）同步采集

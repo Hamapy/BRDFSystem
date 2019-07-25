@@ -227,7 +227,7 @@ bool AVTCamera::SaveImages(Mat& captureMat, string imageSavingPath)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int mutex)
+bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, int illuminantID, int measureFlag)
 {
 
 	char name[200];
@@ -238,10 +238,7 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 
 	//出射角Phi
 	double outPhi = sampleID * 30.0;
-	//各向同性材质出射角Phi为0
-	if (mutex == 1) outPhi = 0.0;
-
-
+		
 	double inTheta, inPhi;
 	int i;
 
@@ -310,7 +307,15 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 		}
 	}
 
-
+	//各向同性材质出射角Phi为0
+	if (measureFlag == 1)
+		outPhi = 0.0;
+	//采集一周不用考虑光源角度
+	if (measureFlag == 3)
+	{
+		inTheta = 0.0;
+		inPhi = 0.0;
+	}
 
 	//命名方式：out_相机角度-材质台角度_in_光源θ-光源σ
 	sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", outTheta, outPhi, inTheta, inPhi);
@@ -323,6 +328,37 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 	emit sendingMeasureState(cameraID, sampleID, illuminantID); //告诉界面线程该角度下的图像已采集，修改界面的Qlabel
 
 	return isSaved;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：GetExposureTime
+// 描述：计算相机在一定角度光源下的合适曝光时间
+// 输入：Null
+// 输出：曝光时间
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+map<double, Mat> AVTCamera::CaptureByDifTimes(double originalTime, Mat originalMat)
+{
+	map<double, Mat> imgs;
+	imgs[originalTime] = originalMat;
+	double ped = ImageProcess::ComputeAverage(originalMat);
+	double max = 255.00 / ped * originalTime;
+	double step = max / HDR_NUM;
+	double exposureTime = 0.00;
+	for (int i = 0; i < HDR_NUM; i++)
+	{
+		exposureTime += step;
+		CameraSettings(exposureTime);
+		//AVTCamera::GetImageSize(_width, _height);
+		uchar* pImageFrame = CaptureAnImage();
+		Mat mat = Mat(_height, _width, CV_8UC3, pImageFrame);
+		imgs[exposureTime] = mat;
+
+		Sleep(exposureTime);
+	}
+
+	return imgs;
 }
 
 ////////////////////////////////////////////////////////////////////////////

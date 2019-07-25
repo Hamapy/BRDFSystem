@@ -37,13 +37,14 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 {
 	if (event->timerId() == _timerId)
 	{
+	
 		cameraAVT->GetImageSize(_width, _height);
 		_pImageFrame = cameraAVT->CaptureAnImage();
 		_mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
 		//_matWB = cameraAVT->WhiteBalance(_mat);
 		_img = QImage(_pImageFrame, _width, _height, QImage::Format_RGB888);
-		//_img = QImage((const unsigned char*)(_matWB.data), _matWB.cols, _matWB.rows, QImage::Format_RGB888);
-
+		emit sendingImg(_workerID, _img);//给界面显示线程传递
+		
 		//连续采集
 		if (_capture == 1)
 		{
@@ -51,7 +52,6 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 			cameraAVT->SaveImages(_mat, capturePath);
 		}
 
-		emit sendingImg(_workerID, _img);//给界面显示线程传递
 	}
 }
 
@@ -69,32 +69,47 @@ void WorkerCCD::GetMaterialName(QString materialName)
 
 void WorkerCCD::Grab(int sID, int iID)
 {
-	cameraAVT->GetImageSize(_width, _height);
-	uchar* pImageFrame = cameraAVT->CaptureAnImage();
-	Mat mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-
-	if (ImageProcess::IsOverExposure(mat))
+	uchar* pImageFrame = NULL;
+	Mat mat = Mat::zeros(_height, _width, CV_8UC3);
+	if (_measureFlag != 3)
 	{
-		_exposureTime = ImageProcess::ComputeExposureTime(_mat);//更新曝光时间
-		cameraAVT->CameraSettings(_exposureTime * 1000);
-		Sleep(500);//等曝光时间生效
-
-		//重新拍摄
 		cameraAVT->GetImageSize(_width, _height);
 		pImageFrame = cameraAVT->CaptureAnImage();
-		mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+		mat = Mat(_height, _width, CV_8UC3, pImageFrame);
+
+		if (ImageProcess::IsProperExposure(mat))
+		{
+			_exposureTime = ImageProcess::ComputeExposureTime(_mat, 50);//更新曝光时间
+			cameraAVT->CameraSettings(_exposureTime * 1000);
+			Sleep(500);//等曝光时间生效
+
+			//重新拍摄
+			cameraAVT->GetImageSize(_width, _height);
+			pImageFrame = cameraAVT->CaptureAnImage();
+			mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+		}
 	}
-	
-	//extern string _materialName;
+	else
+	{
+		
+		cameraAVT->GetImageSize(_width, _height);
+		pImageFrame = cameraAVT->CaptureAnImage();
+		mat = Mat(_height, _width, CV_8UC3, pImageFrame);
+		/*
+		map<double, Mat> imgs = cameraAVT->CaptureByDifTimes(_exposureTime, mat);
+		Mat hdr = ImageProcess::ContributeHDR(imgs, 0);//暂定线性CRF
+		*/
+	}
+
 	string path;
 	if (_measureFlag == 1)
-		path = _imageSavingPath1 + _materialName;
+		path = _imageSavingPath1 + _materialName + "\\";
 	if (_measureFlag == 2)
-		path = _imageSavingPath2 + _materialName;
-	//if (_measureFlag == 3)
-	//	path = _imageSavingPath3;
+		path = _imageSavingPath2 + _materialName + "\\";
+	if (_measureFlag == 3)
+		path = _imageSavingPath3;
 
-	cameraAVT->SaveAnImage(_mat, path, _workerID, sID, iID, 1);
+	cameraAVT->SaveAnImage(mat, path, _workerID, sID, iID, _measureFlag);
 
 	emit grabDone(_workerID);
 }

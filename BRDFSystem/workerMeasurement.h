@@ -1,4 +1,4 @@
-////////////////////////////æè´¨é‡‡é›†çº¿ç¨‹ç±»å£°æ˜////////////////////////////
+////////////////////////////²ÄÖÊ²É¼¯Ïß³ÌÀàÉùÃ÷////////////////////////////
 #pragma once
 #ifndef WORKERMEASUREMENT_H
 #define WORKERMEASUREMENT_H
@@ -26,7 +26,7 @@ public:
 	virtual ~WorkerMeasurement();
 	virtual void timerEvent(QTimerEvent *event);
 	//virtual void run();
-	friend class MainWindow;//ä¸»ç•Œé¢ç±»éœ€è¦ç”¨åˆ°è¯¥ç±»çš„é‡‡é›†å›¾åƒç›¸å…³å˜é‡
+	friend class MainWindow;//Ö÷½çÃæÀàĞèÒªÓÃµ½¸ÃÀàµÄ²É¼¯Í¼ÏñÏà¹Ø±äÁ¿
 	friend class WorkerCCD;
 
 private slots:
@@ -35,7 +35,7 @@ private slots:
 	void CheckDone(int workerID);
 	void StartTimer(int measureFlag);
 	void CloseWorker();
-  bool ReadBrdf(const char *filename, double* &brdf);
+	bool ReadBrdf(const char *filename, double* &brdf);
 	void LookupBrdfVal(double* brdf, int theta_in, int fi_in, int theta_out, int fi_out, double& red_val, double& green_val, double& blue_val);
 	bool WriteBRDF();
 
@@ -56,7 +56,7 @@ private:
 	//string					_imageSavingPath3 = "..\\imgs_calibration\\";
 	bool					_isReady;
 	//bool					_captureDone;
-	//byte					_seriesCam; //è¡¨ç¤ºå·²æ”¶åˆ°çš„9å°ç›¸æœºä¸­çš„å›¾åƒæ•°é‡ï¼Œbyteåªæœ‰8ä½ï¼Œåªèƒ½æš‚æ—¶ç”¨æ•°ç»„æ ‡è®°
+	//byte					_seriesCam; //±íÊ¾ÒÑÊÕµ½µÄ9Ì¨Ïà»úÖĞµÄÍ¼ÏñÊıÁ¿£¬byteÖ»ÓĞ8Î»£¬Ö»ÄÜÔİÊ±ÓÃÊı×é±ê¼Ç
 	bool*					_seriesCAM;
 	Illuminant*				illuminant;
 	SampleComm*				sampleComm;
@@ -65,23 +65,29 @@ private:
 	int						_timerId;
 
 	UINT*					_illuminantID;
-	UINT					_iID;//äº®ç¯åºå·
-	UINT					_sID;//æ ·å“å°è§’åº¦åºå·
+	UINT					_iID;//ÁÁµÆĞòºÅ
+	UINT					_sID;//ÑùÆ·Ì¨½Ç¶ÈĞòºÅ
 	int						_measureFlag;
 	//bool					_sampleFlag;
 	bool					_illuminantFlag;
-	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//è¯»å–é…ç½®æ–‡ä»¶
+	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//¶ÁÈ¡ÅäÖÃÎÄ¼ş
 	QMutex					_mutex;
-	string                  path;//è¯»å–å›¾ç‰‡çš„è·¯å¾„
-	char*                   savePath;//ä¿å­˜.binaryæ–‡ä»¶çš„è·¯å¾„
+
+	const int               thetaOutNum = 9;
+	const int               fiOutNum = 12;
+	const int               thetaInNum = 9;
+	const int               lightSourceNum = 196;
+	
+	string                  path;//¶ÁÈ¡Í¼Æ¬µÄÂ·¾¶
+	char*                   savePath;//±£´æ.binaryÎÄ¼şµÄÂ·¾¶
+	vector<double> AverageRGB(const Mat& inputImage);
 	int theta_out_index(int theta_out);
 	inline int  fi_out_index(int fi_out);
 	inline int theta_in_index(int theta_in);
 	inline int fi_in_index(int fi_in, int theta_in);
 
 signals:
-	void					done(); //é€šçŸ¥å…¶ä»–çº¿ç¨‹é‡‡é›†ç»“æŸ
+	void					done(); //Í¨ÖªÆäËûÏß³Ì²É¼¯½áÊø
 	void					readyForGrab(int sID, int iID);
 };
 #endif
-

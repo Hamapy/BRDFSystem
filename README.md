@@ -47,9 +47,7 @@
     该类的公有成员函数StartFitting(int BRDFSerialNumber)和BRDFSample(int BRDFSerialNumber)传入参数为需要拟合的原始数据的文件的序号（序号为1-100之间）。
     该类的私有函数ComputeSamplingAngle()目前是对thetaOut和thetaIn以10:5:80、phiIn以5:5:175采样的，剔除了仰角低于10度和高于80度的数据，因为这些数据误差较大，而且采用每隔5度均匀采样以提高可靠性。
     后续可根据采样的需求更改优化。
-
     如何使用该工程：调用该类的开始拟合函数StartFitting(int BRDFSerialNumber)，传入文件名称序号即可，默认将该原始文件放到文件夹Param中，所有相关的文件都按照序号存放在这里，如采样后的文件以“brdf_simple.binary”形式存储，拟合结果以“WdDu_parameter.txt”存储。
-
     之所以使用WardDuer模型是由于经过我们的测试以及视觉分析对比，认为CookTorrance和WardDuer模型表现总体最好，而CookTorrance模型不适用于后面要对接的svBRDF。
 
 2、文件夹Matlab程序中包含Fitting拟合代码和遗传算法使用的原始数据Param10_175和MERL文章给出的结果MERL_Param。

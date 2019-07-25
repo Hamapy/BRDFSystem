@@ -48,7 +48,8 @@ private:
 	float					_exposureTime;
 	string					_imageSavingPath1 = "..\\imgs_measurement1\\";
 	string					_imageSavingPath2 = "..\\imgs_measurement2\\";
-	string					_imageSavingPath3 = "..\\imgs_calibration\\";
+	string					_imageSavingPath3 = "..\\imgs_periodcapture\\";
+	string					_imageSavingPathHDR = "..\\imgs_measurementHDR\\";
 	int						_measureFlag;//主界面传入的采集类型标记
 	QMutex					_mutex;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
