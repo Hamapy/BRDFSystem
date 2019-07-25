@@ -50,7 +50,8 @@ public:
 	//颜色校正（多项式回归），返回变换矩阵
 	//static vector<Mat> GetColorTrans(vector<Mat> mats);
 	//Mat ColorCorrection(Mat src);
-
+	cameraCalibrationParamaters ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize)
+	Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs)
 	friend class MainWindow;
 
 private:
