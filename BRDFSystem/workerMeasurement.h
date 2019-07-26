@@ -72,11 +72,12 @@ private:
 	bool					_illuminantFlag;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	QMutex					_mutex;
-
+	
 	const int               thetaOutNum = 9;
 	const int               fiOutNum = 12;
 	const int               thetaInNum = 9;
 	const int               lightSourceNum = 196;
+
 	
 	string                  path;//读取图片的路径
 	char*                   savePath;//保存.binary文件的路径

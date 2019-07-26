@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[40];
-    char stringdata0[756];
+    QByteArrayData data[41];
+    char stringdata0[774];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -55,20 +55,21 @@ QT_MOC_LITERAL(22, 363, 30), // "PushButton_SampleReset_Pressed"
 QT_MOC_LITERAL(23, 394, 10), // "SendingMat"
 QT_MOC_LITERAL(24, 405, 25), // "PushButton_IniCCD_Pressed"
 QT_MOC_LITERAL(25, 431, 38), // "PushButton_CaptureContinuousl..."
-QT_MOC_LITERAL(26, 470, 34), // "pushButton_CaptureOfPeriod_Pr..."
-QT_MOC_LITERAL(27, 505, 24), // "PushButton_Chess_Pressed"
-QT_MOC_LITERAL(28, 530, 31), // "PushButton_WhiteBalance_Pressed"
-QT_MOC_LITERAL(29, 562, 28), // "PushButton_DeadPixel_Pressed"
-QT_MOC_LITERAL(30, 591, 29), // "PushButton_BlackLevel_Pressed"
-QT_MOC_LITERAL(31, 621, 26), // "PushButton_FiniCCD_Pressed"
+QT_MOC_LITERAL(26, 470, 24), // "PushButton_Chess_Pressed"
+QT_MOC_LITERAL(27, 495, 31), // "PushButton_WhiteBalance_Pressed"
+QT_MOC_LITERAL(28, 527, 28), // "PushButton_DeadPixel_Pressed"
+QT_MOC_LITERAL(29, 556, 29), // "PushButton_BlackLevel_Pressed"
+QT_MOC_LITERAL(30, 586, 26), // "PushButton_FiniCCD_Pressed"
+QT_MOC_LITERAL(31, 613, 34), // "PushButton_CaptureOfPeriod_Pr..."
 QT_MOC_LITERAL(32, 648, 30), // "PushButton_ComputeMask_Pressed"
-QT_MOC_LITERAL(33, 679, 8), // "IsEdited"
-QT_MOC_LITERAL(34, 688, 12), // "DisplayImage"
-QT_MOC_LITERAL(35, 701, 3), // "img"
-QT_MOC_LITERAL(36, 705, 19), // "DisplayMeasureState"
-QT_MOC_LITERAL(37, 725, 8), // "cameraID"
-QT_MOC_LITERAL(38, 734, 8), // "sampleID"
-QT_MOC_LITERAL(39, 743, 12) // "illuminantID"
+QT_MOC_LITERAL(33, 679, 17), // "PushButton_Masked"
+QT_MOC_LITERAL(34, 697, 8), // "IsEdited"
+QT_MOC_LITERAL(35, 706, 12), // "DisplayImage"
+QT_MOC_LITERAL(36, 719, 3), // "img"
+QT_MOC_LITERAL(37, 723, 19), // "DisplayMeasureState"
+QT_MOC_LITERAL(38, 743, 8), // "cameraID"
+QT_MOC_LITERAL(39, 752, 8), // "sampleID"
+QT_MOC_LITERAL(40, 761, 12) // "illuminantID"
 
     },
     "MainWindow\0startTimer\0\0measureFlag\0"
@@ -85,15 +86,16 @@ QT_MOC_LITERAL(39, 743, 12) // "illuminantID"
     "PushButton_SampleReset_Pressed\0"
     "SendingMat\0PushButton_IniCCD_Pressed\0"
     "PushButton_CaptureContinuously_Pressed\0"
-    "pushButton_CaptureOfPeriod_Pressed\0"
     "PushButton_Chess_Pressed\0"
     "PushButton_WhiteBalance_Pressed\0"
     "PushButton_DeadPixel_Pressed\0"
     "PushButton_BlackLevel_Pressed\0"
     "PushButton_FiniCCD_Pressed\0"
-    "PushButton_ComputeMask_Pressed\0IsEdited\0"
-    "DisplayImage\0img\0DisplayMeasureState\0"
-    "cameraID\0sampleID\0illuminantID"
+    "PushButton_CaptureOfPeriod_Pressed\0"
+    "PushButton_ComputeMask_Pressed\0"
+    "PushButton_Masked\0IsEdited\0DisplayImage\0"
+    "img\0DisplayMeasureState\0cameraID\0"
+    "sampleID\0illuminantID"
 };
 #undef QT_MOC_LITERAL
 
@@ -103,7 +105,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      30,   14, // methods
+      31,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -111,38 +113,39 @@ static const uint qt_meta_data_MainWindow[] = {
        4,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,  164,    2, 0x06 /* Public */,
-       4,    1,  167,    2, 0x06 /* Public */,
-       5,    1,  170,    2, 0x06 /* Public */,
-       7,    2,  173,    2, 0x06 /* Public */,
+       1,    1,  169,    2, 0x06 /* Public */,
+       4,    1,  172,    2, 0x06 /* Public */,
+       5,    1,  175,    2, 0x06 /* Public */,
+       7,    2,  178,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      10,    0,  178,    2, 0x08 /* Private */,
-      11,    0,  179,    2, 0x08 /* Private */,
-      12,    0,  180,    2, 0x08 /* Private */,
-      13,    0,  181,    2, 0x08 /* Private */,
-      14,    0,  182,    2, 0x08 /* Private */,
-      15,    0,  183,    2, 0x08 /* Private */,
-      16,    0,  184,    2, 0x08 /* Private */,
-      17,    0,  185,    2, 0x08 /* Private */,
-      18,    0,  186,    2, 0x08 /* Private */,
-      19,    0,  187,    2, 0x08 /* Private */,
-      20,    0,  188,    2, 0x08 /* Private */,
-      21,    0,  189,    2, 0x08 /* Private */,
-      22,    0,  190,    2, 0x08 /* Private */,
-      23,    2,  191,    2, 0x08 /* Private */,
-      24,    0,  196,    2, 0x08 /* Private */,
-      25,    0,  197,    2, 0x08 /* Private */,
-      26,    0,  198,    2, 0x08 /* Private */,
-      27,    0,  199,    2, 0x08 /* Private */,
-      28,    0,  200,    2, 0x08 /* Private */,
-      29,    0,  201,    2, 0x08 /* Private */,
-      30,    0,  202,    2, 0x08 /* Private */,
-      31,    0,  203,    2, 0x08 /* Private */,
-      32,    0,  204,    2, 0x08 /* Private */,
-      33,    0,  205,    2, 0x08 /* Private */,
-      34,    2,  206,    2, 0x08 /* Private */,
-      36,    3,  211,    2, 0x08 /* Private */,
+      10,    0,  183,    2, 0x08 /* Private */,
+      11,    0,  184,    2, 0x08 /* Private */,
+      12,    0,  185,    2, 0x08 /* Private */,
+      13,    0,  186,    2, 0x08 /* Private */,
+      14,    0,  187,    2, 0x08 /* Private */,
+      15,    0,  188,    2, 0x08 /* Private */,
+      16,    0,  189,    2, 0x08 /* Private */,
+      17,    0,  190,    2, 0x08 /* Private */,
+      18,    0,  191,    2, 0x08 /* Private */,
+      19,    0,  192,    2, 0x08 /* Private */,
+      20,    0,  193,    2, 0x08 /* Private */,
+      21,    0,  194,    2, 0x08 /* Private */,
+      22,    0,  195,    2, 0x08 /* Private */,
+      23,    2,  196,    2, 0x08 /* Private */,
+      24,    0,  201,    2, 0x08 /* Private */,
+      25,    0,  202,    2, 0x08 /* Private */,
+      26,    0,  203,    2, 0x08 /* Private */,
+      27,    0,  204,    2, 0x08 /* Private */,
+      28,    0,  205,    2, 0x08 /* Private */,
+      29,    0,  206,    2, 0x08 /* Private */,
+      30,    0,  207,    2, 0x08 /* Private */,
+      31,    0,  208,    2, 0x08 /* Private */,
+      32,    0,  209,    2, 0x08 /* Private */,
+      33,    0,  210,    2, 0x08 /* Private */,
+      34,    0,  211,    2, 0x08 /* Private */,
+      35,    2,  212,    2, 0x08 /* Private */,
+      37,    3,  217,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -175,8 +178,9 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,   35,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,   37,   38,   39,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::QImage,    8,   36,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,   38,   39,   40,
 
        0        // eod
 };
@@ -207,16 +211,17 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 17: _t->SendingMat((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
         case 18: _t->PushButton_IniCCD_Pressed(); break;
         case 19: _t->PushButton_CaptureContinuously_Pressed(); break;
-        case 20: _t->pushButton_CaptureOfPeriod_Pressed(); break;
-        case 21: _t->PushButton_Chess_Pressed(); break;
-        case 22: _t->PushButton_WhiteBalance_Pressed(); break;
-        case 23: _t->PushButton_DeadPixel_Pressed(); break;
-        case 24: _t->PushButton_BlackLevel_Pressed(); break;
-        case 25: _t->PushButton_FiniCCD_Pressed(); break;
+        case 20: _t->PushButton_Chess_Pressed(); break;
+        case 21: _t->PushButton_WhiteBalance_Pressed(); break;
+        case 22: _t->PushButton_DeadPixel_Pressed(); break;
+        case 23: _t->PushButton_BlackLevel_Pressed(); break;
+        case 24: _t->PushButton_FiniCCD_Pressed(); break;
+        case 25: _t->PushButton_CaptureOfPeriod_Pressed(); break;
         case 26: _t->PushButton_ComputeMask_Pressed(); break;
-        case 27: _t->IsEdited(); break;
-        case 28: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
-        case 29: _t->DisplayMeasureState((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 27: _t->PushButton_Masked(); break;
+        case 28: _t->IsEdited(); break;
+        case 29: _t->DisplayImage((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QImage(*)>(_a[2]))); break;
+        case 30: _t->DisplayMeasureState((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -278,13 +283,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 30)
+        if (_id < 31)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 30;
+        _id -= 31;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 30)
+        if (_id < 31)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 30;
+        _id -= 31;
     }
     return _id;
 }

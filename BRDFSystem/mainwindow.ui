@@ -948,14 +948,14 @@
                  <item row="0" column="0">
                   <layout class="QGridLayout" name="gridLayout_47" columnstretch="1,1" rowminimumheight="1,1,1">
                    <item row="1" column="0">
-                    <widget class="QPushButton" name="pushButton_3">
+                    <widget class="QPushButton" name="pushButton_darkVal">
                      <property name="text">
                       <string>暗电平观测</string>
                      </property>
                     </widget>
                    </item>
                    <item row="0" column="0">
-                    <widget class="QPushButton" name="pushButton_5">
+                    <widget class="QPushButton" name="pushButton_darkCapture">
                      <property name="text">
                       <string>Dark图像采集</string>
                      </property>
@@ -1090,7 +1090,7 @@
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QPushButton" name="pushButton_6">
+                    <widget class="QPushButton" name="pushButton_masked">
                      <property name="text">
                       <string>勾选标记区域</string>
                      </property>

@@ -164,8 +164,8 @@ public:
     QGroupBox *groupBox;
     QGridLayout *gridLayout_48;
     QGridLayout *gridLayout_47;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_5;
+    QPushButton *pushButton_darkVal;
+    QPushButton *pushButton_darkCapture;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_3;
     QLineEdit *lineEdit_4;
@@ -188,7 +188,7 @@ public:
     QLabel *label_sampleNum;
     QLineEdit *lineEdit_sampleNum;
     QPushButton *pushButton_captureOfPeriod;
-    QPushButton *pushButton_6;
+    QPushButton *pushButton_masked;
     QPushButton *pushButton_whiteBalance;
     QPushButton *pushButton_7;
     QWidget *Test;
@@ -922,15 +922,15 @@ public:
         gridLayout_47 = new QGridLayout();
         gridLayout_47->setSpacing(6);
         gridLayout_47->setObjectName(QStringLiteral("gridLayout_47"));
-        pushButton_3 = new QPushButton(groupBox);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_darkVal = new QPushButton(groupBox);
+        pushButton_darkVal->setObjectName(QStringLiteral("pushButton_darkVal"));
 
-        gridLayout_47->addWidget(pushButton_3, 1, 0, 1, 1);
+        gridLayout_47->addWidget(pushButton_darkVal, 1, 0, 1, 1);
 
-        pushButton_5 = new QPushButton(groupBox);
-        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+        pushButton_darkCapture = new QPushButton(groupBox);
+        pushButton_darkCapture->setObjectName(QStringLiteral("pushButton_darkCapture"));
 
-        gridLayout_47->addWidget(pushButton_5, 0, 0, 1, 1);
+        gridLayout_47->addWidget(pushButton_darkCapture, 0, 0, 1, 1);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
@@ -1056,10 +1056,10 @@ public:
 
         gridLayout_51->addWidget(pushButton_captureOfPeriod, 0, 0, 1, 1);
 
-        pushButton_6 = new QPushButton(groupBox_3);
-        pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
+        pushButton_masked = new QPushButton(groupBox_3);
+        pushButton_masked->setObjectName(QStringLiteral("pushButton_masked"));
 
-        gridLayout_51->addWidget(pushButton_6, 1, 1, 1, 1);
+        gridLayout_51->addWidget(pushButton_masked, 1, 1, 1, 1);
 
         pushButton_whiteBalance = new QPushButton(groupBox_3);
         pushButton_whiteBalance->setObjectName(QStringLiteral("pushButton_whiteBalance"));
@@ -2142,8 +2142,8 @@ public:
         pushButton_iniCCD->setText(QApplication::translate("MainWindowClass", "\350\277\236\346\216\245\347\233\270\346\234\272", Q_NULLPTR));
         pushButton_finiCCD->setText(QApplication::translate("MainWindowClass", "\346\226\255\345\274\200\347\233\270\346\234\272", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\345\272\225\345\231\252\346\240\241\346\255\243", Q_NULLPTR));
-        pushButton_3->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\350\247\202\346\265\213", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindowClass", "Dark\345\233\276\345\203\217\351\207\207\351\233\206", Q_NULLPTR));
+        pushButton_darkVal->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\350\247\202\346\265\213", Q_NULLPTR));
+        pushButton_darkCapture->setText(QApplication::translate("MainWindowClass", "Dark\345\233\276\345\203\217\351\207\207\351\233\206", Q_NULLPTR));
         label_3->setText(QApplication::translate("MainWindowClass", "BlackLevel", Q_NULLPTR));
         pushButton_blackLevel->setText(QApplication::translate("MainWindowClass", "\346\232\227\347\224\265\345\271\263\346\240\241\346\255\243", Q_NULLPTR));
         pushButton_deadPixels->setText(QApplication::translate("MainWindowClass", "\345\235\217\347\202\271\346\240\241\346\255\243", Q_NULLPTR));
@@ -2158,7 +2158,7 @@ public:
         label_sampleNum->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\350\247\222\345\272\246\346\225\260\351\207\217", Q_NULLPTR));
         lineEdit_sampleNum->setText(QApplication::translate("MainWindowClass", "36", Q_NULLPTR));
         pushButton_captureOfPeriod->setText(QApplication::translate("MainWindowClass", "Mask\346\272\220\351\207\207\351\233\206", Q_NULLPTR));
-        pushButton_6->setText(QApplication::translate("MainWindowClass", "\345\213\276\351\200\211\346\240\207\350\256\260\345\214\272\345\237\237", Q_NULLPTR));
+        pushButton_masked->setText(QApplication::translate("MainWindowClass", "\345\213\276\351\200\211\346\240\207\350\256\260\345\214\272\345\237\237", Q_NULLPTR));
         pushButton_whiteBalance->setText(QApplication::translate("MainWindowClass", "\347\231\275\345\271\263\350\241\241\346\240\241\346\255\243", Q_NULLPTR));
         pushButton_7->setText(QApplication::translate("MainWindowClass", "\351\242\234\350\211\262\345\217\230\346\215\242", Q_NULLPTR));
         groupBox_20->setTitle(QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\217\260\346\240\267\345\223\201\345\271\263\351\235\242\346\216\247\345\210\266", Q_NULLPTR));

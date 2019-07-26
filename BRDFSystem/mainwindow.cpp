@@ -198,21 +198,26 @@ QMainWindow(parent)
 ///////////////////////////////////////////////相机预处理页面///////////////////////////////////////////////
 	this->ui.pushButton_captureContinuously->setEnabled(false);
 	this->ui.pushButton_chess->setEnabled(false);
-	this->ui.pushButton_whiteBalance->setEnabled(false);
 	this->ui.pushButton_deadPixels->setEnabled(false);
 	this->ui.pushButton_blackLevel->setEnabled(false);
 	this->ui.pushButton_finiCCD->setEnabled(false);
-
+	
 	connect(this->ui.pushButton_iniCCD, SIGNAL(pressed()), this, SLOT(PushButton_IniCCD_Pressed()));
 	connect(this->ui.pushButton_captureContinuously, SIGNAL(pressed()), this, SLOT(PushButton_CaptureContinuously_Pressed()));
-	connect(this->ui.pushButton_captureOfPeriod, SIGNAL(pressed()), this, SLOT(pushButton_CaptureOfPeriod_Pressed()));
 	connect(this->ui.pushButton_chess, SIGNAL(pressed()), this, SLOT(PushButton_Chess_Pressed()));
 	connect(this->ui.pushButton_whiteBalance, SIGNAL(pressed()), this, SLOT(PushButton_WhiteBalance_Pressed()));
 	connect(this->ui.pushButton_deadPixels, SIGNAL(pressed()), this, SLOT(PushButton_DeadPixel_Pressed()));
 	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
 	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
-	connect(this->ui.pushButton_computeMask, SIGNAL(pressed()), this, SLOT(PushButton_ComputeMask_Pressed()));
 	
+	//辐射度标定
+	this->ui.pushButton_captureOfPeriod->setEnabled(false);
+	this->ui.pushButton_computeMask->setEnabled(false);
+	this->ui.pushButton_masked->setEnabled(false);
+	this->ui.pushButton_whiteBalance->setEnabled(false);
+	connect(this->ui.pushButton_captureOfPeriod, SIGNAL(pressed()), this, SLOT(PushButton_CaptureOfPeriod_Pressed()));
+	connect(this->ui.pushButton_computeMask, SIGNAL(pressed()), this, SLOT(PushButton_ComputeMask_Pressed()));
+	connect(this->ui.pushButton_masked, SIGNAL(pressed()), this, SLOT(PushButton_Masked()));
 }
 
 MainWindow::~MainWindow()
@@ -598,10 +603,13 @@ void MainWindow::PushButton_IniCCD_Pressed()
 
 	this->ui.pushButton_captureContinuously->setEnabled(true);
 	this->ui.pushButton_chess->setEnabled(true);
-	this->ui.pushButton_whiteBalance->setEnabled(true);
 	this->ui.pushButton_deadPixels->setEnabled(true);
 	this->ui.pushButton_blackLevel->setEnabled(true);
 	this->ui.pushButton_finiCCD->setEnabled(true);
+	this->ui.pushButton_captureOfPeriod->setEnabled(true);
+	this->ui.pushButton_computeMask->setEnabled(true);
+	this->ui.pushButton_masked->setEnabled(true);
+	this->ui.pushButton_whiteBalance->setEnabled(true);
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_captureContinuously_pressed
@@ -624,6 +632,19 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 	}
 }
 ////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_captureContinuously_pressed
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_Masked()
+{
+
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_ComputeMask_Pressed
 // 描述：
 // 输入：Null
@@ -634,7 +655,7 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_ComputeMask_Pressed()
 {
-	vector<Mat> imgs = ImageProcess::ReadImages("..//imgs_periodcapture");
+	vector<Mat, string> imgs = ImageProcess::ReadImages("..//imgs_periodcapture");
 	ImageProcess::ComputeMask(imgs);
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -646,7 +667,7 @@ void MainWindow::PushButton_ComputeMask_Pressed()
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void MainWindow::pushButton_CaptureOfPeriod_Pressed()
+void MainWindow::PushButton_CaptureOfPeriod_Pressed()
 {
 	_measureFlag = 3;
 	//string savePath = "..\\imgs_periodcapture\\";

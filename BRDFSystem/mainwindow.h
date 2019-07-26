@@ -45,13 +45,16 @@ private slots:
 	
 	void PushButton_IniCCD_Pressed();
 	void PushButton_CaptureContinuously_Pressed();
-	void pushButton_CaptureOfPeriod_Pressed();
 	void PushButton_Chess_Pressed();
 	void PushButton_WhiteBalance_Pressed();
 	void PushButton_DeadPixel_Pressed();
 	void PushButton_BlackLevel_Pressed();
 	void PushButton_FiniCCD_Pressed();
+
+	void PushButton_CaptureOfPeriod_Pressed();
 	void PushButton_ComputeMask_Pressed();
+	void PushButton_Masked();
+
 
 	
 	void IsEdited();

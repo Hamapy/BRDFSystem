@@ -318,10 +318,10 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
+void ImageProcess::ComputeMask(vector<Mat, string> srcs)
 {
 	int i = 0;
-	vector<Mat> dsts;
+	//vector<Mat> dsts;
 	Mat dst;
 	vector<Mat>::iterator iter;
 	
@@ -334,10 +334,10 @@ vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 		//int th = ComputeThreshold(*iter);
 		threshold(dst, dst, 25, 255, CV_THRESH_BINARY);
 		imwrite(path, dst);
-		dsts.push_back(dst);
+		//dsts.push_back(dst);
 	}
 
-	return dsts;
+	return;
 }
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -630,11 +630,12 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 	//Mat srcG = channels.at(1);
 	//Mat srcR = channels.at(2);
 
-	float transB = trans[0];
-	float transG = trans[1];
-	float transR = trans[2];
+	//float transB = trans[0];
+	//float transG = trans[1];
+	//float transR = trans[2];
 
-	map<int,map<int,float>> selectPoints;
+	//map<int,map<int,float>> selectPoints;
+	Mat selectPoints = Mat::zeros(height, width, CV_32FC3);//标记溢出255的点，用Mat搜索快很多
 
 	float tempVal = 0;
 	float tempTrans;
@@ -643,6 +644,7 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 		for (int i = 0; i < channels.at(k).rows; i++)
 		{
 			uchar* data = channels.at(k).ptr<uchar>(i);
+			uchar* data_s = selectPoints.ptr<uchar>(i);
 			for (int j = 0; j < channels.at(k).cols; j++)
 			{
 				tempVal = float(data[j]) * trans[k];
@@ -652,7 +654,8 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 					{
 						data[j] = 255;
 						tempTrans = 255.00 / float(data[j]);
-						selectPoints[i][j] = tempTrans;
+						//selectPoints[i][j] = tempTrans;
+						data_s[j] = tempTrans;
 						Select(gray, i, j);
 					}
 					else
@@ -660,7 +663,8 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 				}	
 				else
 				{
-					tempTrans = selectPoints[i][j];
+					//tempTrans = selectPoints[i][j];
+					data_s[j] = tempTrans;
 					data[j] = tempTrans * data[j];
 				}				
 			}
@@ -850,9 +854,9 @@ Mat ImageProcess::AverageImage(vector<Mat> mats)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<Mat> ImageProcess::ReadImages(cv::String path)
+vector<Mat, string> ImageProcess::ReadImages(cv::String path)
 {
-	vector<Mat> mats;
+	vector<Mat, string> mats;
 	String imgPattern = "//*.bmp";
 	vector<String> imgFiles;
 	imgPattern = path + imgPattern;
@@ -1023,4 +1027,27 @@ int ImageProcess::ComputeThreshold(Mat srcImage)
 		total += data[i];
 	}
 	return total / index;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ReadMask(int cameraID, int sampleID)
+{
+	string filename, path;
+	string tmp;
+	path = "..//imgs_mask//";
+	stringstream ss;
+	ss << cameraID;
+	string s1 = ss.str();
+	tmp = "00" + s1;
+	filename = path + tmp + ".bmp";
+	Mat mask;
+	mask = imread(filename);
+	return mask;
 }

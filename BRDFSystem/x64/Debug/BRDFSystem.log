@@ -1,4 +1,4 @@
-﻿生成启动时间为 2019/7/26 17:20:51。
+﻿生成启动时间为 2019/7/26 21:22:57。
      1>项目“E:\IVLab\基于几何与材质建模的真实感渲染\BRDF系统搭建\系统硬件控制及软件编程\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Rebuild 个目标)。
      1>CustomBuild:
          Moc'ing workerMeasurement.h...
@@ -65,4 +65,4 @@
 
 生成成功。
 
-已用时间 00:00:42.42
+已用时间 00:00:42.55

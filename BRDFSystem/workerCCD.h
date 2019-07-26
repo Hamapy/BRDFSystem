@@ -34,6 +34,7 @@ private slots:
 private:
 	VimbaSystem&			_system;
 	int						_workerID;
+	int						_sampleID;
 	AVTCamera*				cameraAVT;
 	QImage					_img;
 	Mat						_mat;
@@ -52,6 +53,11 @@ private:
 	string					_imageSavingPathHDR = "..\\imgs_measurementHDR\\";
 	int						_measureFlag;//主界面传入的采集类型标记
 	QMutex					_mutex;
+	bool					_isMasked;
+	bool					_hasWhiteTrans;
+	float*					_whiteTrans;
+
+	QImage					CvMat2QImage(const Mat& mat);
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 
 signals:

@@ -1,6 +1,6 @@
 #include "imageProcess.h"
 
-int main()
+int main0()
 {
 	//ImageProcess s;
 	Mat test = imread("..//imgs_test//src.bmp");
