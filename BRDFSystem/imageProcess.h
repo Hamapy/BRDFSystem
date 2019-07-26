@@ -27,6 +27,15 @@ public:
 	ImageProcess();
 	virtual ~ImageProcess();
 
+	//计算标定参数
+	//static CameraCalibrationParamaters ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize);
+	//相机径向畸变校正
+	//static Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs);
+	//相机正视图校正
+	static void RotateImageXoY(Mat& img, int sampleID, Point2f center);
+	static Mat ComputeAffineTrans(Point2f* pSrc, Point2f* pDst);
+	static void AngelCalibration(Mat& img, Mat trans);
+
 	//若采集Bayer图像，RAW转RGB去马赛克
 	//Mat Demosiac(Mat src);
 
@@ -47,10 +56,6 @@ public:
 	//static int ComputeBlackPedal(Mat src);
 	//static Mat BlackLevelCorrection(Mat src);
 
-	//Zhang棋盘格标定 返回相机参数矩阵
-	static vector<Mat> ComputeChessTrans(vector<Mat> mats);
-	static Mat ChessCorrection(Mat src);
-
 	//二值化生成Mask图像
 	static vector<Mat> ComputeMask(vector<Mat> src);
 
@@ -62,6 +67,8 @@ public:
 	//颜色校正（多项式回归），返回变换矩阵
 	//static vector<Mat> GetColorTrans(vector<Mat> mats);
 	//Mat ColorCorrection(Mat src);
+
+
 
 	friend class MainWindow;
 
@@ -76,9 +83,15 @@ private:
 	static bool IsSelected(Mat src, int i, int j);
 	//选中标记像素点
 	static void Select(Mat src, int i, int j);
-	//根据Mask得到标记点位置，并根据二值化后的均值和方差来判断位置是否准确
+
+public:
+	//根据Mask得到标记点区域，并根据二值化后的均值和方差来判断位置是否准确
 	static Mat ComputeWhiteArea(Mat mask, Mat src);
+	//根据标记区域提取特征点用于仿射变换
+	static Point2f* ComputeKeyPoints(Mat src);
 	//根据标记点Mask计算样品感兴趣区域
 	static Mat ComputeSampleArea(Mat mask);
+	//计算灰度图像最亮像素集合平均值作为二值化阈值
+	static int ComputeThreshold(Mat src);
 };
 #endif

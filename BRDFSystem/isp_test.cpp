@@ -3,16 +3,19 @@
 int main()
 {
 	//ImageProcess s;
-	Mat test = imread("..//imgs_test//test6.bmp");
-	resize(test, test, Size(test.cols*0.6, test.rows*0.6));
-	imshow("Ô­Í¼", test);
-	float* trans = ImageProcess::ComputeWhiteTrans(test);
-	float b = trans[0];
-	float g = trans[1];
-	float r = trans[2];
-	Mat dst = ImageProcess::WhiteBalance(test, trans);
-	dst = ImageProcess::GrayStrech(dst);
-	imshow("°×Æ½ºâ", dst);
+	Mat test = imread("..//imgs_test//src.bmp");
+	Mat mask = imread("..//imgs_test//mask.bmp");
+	//imshow("ori", test);
+	//imshow("mask", mask);
+	//waitKey();
+	//int th = ImageProcess::ComputeThreshold(test);
+	Mat dst = ImageProcess::ComputeWhiteArea(mask, test);
+	imwrite("..//imgs_test//whitearea.bmp", dst);
+	float* trans = ImageProcess::ComputeWhiteTrans(dst);
+	dst = ImageProcess::WhiteBalance(test, trans);
+	resize(dst, dst, Size(test.cols*0.6, test.rows*0.6));
+	imshow("result", dst);
+	imwrite("..//imgs_test//result.bmp", dst);
 	waitKey();
 
 	return 1;

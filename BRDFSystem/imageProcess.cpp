@@ -12,6 +12,73 @@ ImageProcess::~ImageProcess()
 
 //////////////////////////////////公有函数/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
+// 函数：RotateImageXoY
+// 描述：采集图像XoY角度旋转
+// 输入：
+// 输出：
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void ImageProcess::RotateImageXoY(Mat& img, int sampleID, Point2f center)
+{
+	float angle = 10 * sampleID;
+	float radian = (float)(angle / 180.0 * CV_PI);
+
+	int maxBorder = (int)(max(img.cols, img.rows)* sqrt(2)); //填充到45°图像边界最大的情况
+	int dx = (maxBorder - img.cols) / 2;
+	int dy = (maxBorder - img.rows) / 2;
+	copyMakeBorder(img, img, dy, dy, dx, dx, BORDER_CONSTANT);
+
+	//旋转
+	//Point2f center((float)(img.cols / 2), (float)(img.rows / 2));//暂定整张图像中心为旋转中心
+	Mat affMatrix = getRotationMatrix2D(center, angle, 1.0);//求得旋转矩阵
+	warpAffine(img, img, affMatrix, img.size());
+
+	/*
+	//计算图像旋转之后包含图像的最大的矩形
+	float sinVal = abs(sin(radian));
+	float cosVal = abs(cos(radian));
+	Size targetSize((int)(src.cols * cosVal + src.rows * sinVal),
+		(int)(src.cols * sinVal + src.rows * cosVal));
+
+	//剪掉多余边框
+	int x = (dst.cols - targetSize.width) / 2;
+	int y = (dst.rows - targetSize.height) / 2;
+	Rect rect(x, y, targetSize.width, targetSize.height);
+	dst = Mat(dst, rect);
+	*/
+	return;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：AngelCalibration
+// 描述：根据相机外参及样品旋转角度将拍摄视图对齐到正视角
+// 输入：
+// 输出：
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ComputeAffineTrans(Point2f* pSrc, Point2f* pDst)
+{
+	Mat affMatrix = getAffineTransform(pSrc, pDst);
+
+	return affMatrix;
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：AngelCalibration
+// 描述：将拍摄视图对齐到正视角
+// 输入：
+// 输出：
+// 返回：
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void ImageProcess::AngelCalibration(Mat& img, Mat affMatrix)
+{
+	warpAffine(img, img, affMatrix, img.size());
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：IsProperExposure
 // 描述：判断相机是否合适
 // 输入：Null
@@ -264,6 +331,7 @@ vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 		i++;
 		path = path + to_string(i) + ".bmp";
 		cvtColor(*iter, dst, CV_BGR2GRAY);
+		//int th = ComputeThreshold(*iter);
 		threshold(dst, dst, 25, 255, CV_THRESH_BINARY);
 		imwrite(path, dst);
 		dsts.push_back(dst);
@@ -271,6 +339,135 @@ vector<Mat> ImageProcess::ComputeMask(vector<Mat> srcs)
 
 	return dsts;
 }
+//
+////////////////////////////////////////////////////////////////////////////////
+////// 函数：ComputeChessTrans
+////// 描述：函数计算的是相机校正后的内外参数、旋转矩阵、旋转向量、平移向量
+////// 输入：mats为输入图片的集合，boardSize为棋盘格上角点的信息、squareSize是棋盘格上每个方格的边长信息
+////// 输出：
+////// 返回：包含相机信息的结构体
+////// 备注：务必注意boardSize要与实际的角点信息匹配，否则程序将报错
+////// Modified by 
+////////////////////////////////////////////////////////////////////////////////
+//CameraCalibrationParamaters ImageProcess::ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize)
+//{
+//	//CameraCalibrationParamaters camCalParas;
+//	int imageCount = mats.size();
+//	Size imageSize;
+//	Mat imageInput;
+//	//读取每一幅图像，从中提取出角点，然后对角点进行亚像素精确化
+//	vector<Point2f> imagePointsBuf;/* 缓存每幅图像上检测到的角点 */
+//	vector<vector<Point2f>> imagePointsSeq;/* 缓存每幅图像上检测到的角点 */
+//	for (int i = 0; i < imageCount; i++)
+//	{
+//		imageInput = mats[i];
+//		if (i == 0)
+//		{
+//			imageSize.width = imageInput.cols;
+//			imageSize.height = imageInput.rows;
+//		}
+//		//注意这里的boardSize必须和用于检测的棋盘格图片匹配，否则程序将退出
+//		if (0 == findChessboardCorners(imageInput, boardSize, imagePointsBuf))
+//		{
+//			//cout << "can not find chessboard corneres!\n";
+//			exit(1);
+//		}
+//		else
+//		{
+//			Mat viewGray;
+//			cvtColor(imageInput, viewGray, CV_RGB2GRAY);
+//			/* 亚像素精确化 */
+//			find4QuadCornerSubpix(viewGray, imagePointsBuf, Size(5, 5)); //对粗提取的角点进行精确化
+//			imagePointsSeq.push_back(imagePointsBuf);  //保存亚像素角点
+//			/* 在图像上显示角点位置 */
+//			//drawChessboardCorners(viewGray, boardSize, imagePointsBuf, true);
+//			//waitKey(500);
+//		}
+//	}
+//	vector<vector<Point3f>> objectPoints;
+//	/* 摄像机内参数矩阵 */
+//	Mat cameraMatrix = Mat(3, 3, CV_32FC1, Scalar::all(0));
+//	vector<int> pointCounts;
+//	Mat distCoeffs = Mat(1, 5, CV_32FC1, Scalar::all(0)); /* 摄像机的5个畸变系数：k1,k2,p1,p2,k3 */
+//	/* 初始化标定板上角点的三维坐标 */
+//	int i, j, t;
+//	for (t = 0; t<imageCount; t++)
+//	{
+//		vector<Point3f> tempPointSet;
+//		for (i = 0; i<boardSize.height; i++)
+//		{
+//			for (j = 0; j<boardSize.width; j++)
+//			{
+//				Point3f realPoint;
+//				/* 假设标定板放在世界坐标系中z=0的平面上 */
+//				realPoint.x = i*squareSize.width;
+//				realPoint.y = j*squareSize.height;
+//				realPoint.z = 0;
+//				tempPointSet.push_back(realPoint);
+//			}
+//		}
+//		objectPoints.push_back(tempPointSet);
+//	}
+//	/* 初始化每幅图像中的角点数量，假定每幅图像中都可以看到完整的标定板 */
+//	for (i = 0; i<imageCount; i++)
+//	{
+//		pointCounts.push_back(boardSize.width*boardSize.height);
+//	}
+//	/* 开始标定 */
+//	calibrateCamera(objectPoints, imagePointsSeq, imageSize, cameraMatrix, distCoeffs, camCalParas.rvecsMats, camCalParas.tvecsMats, 0);
+//	//对标定结果进行评价
+//	double total_err = 0.0; /* 所有图像的平均误差的总和 */
+//	double err = 0.0; /* 每幅图像的平均误差 */
+//	vector<Point2f> image_points2; /* 保存重新计算得到的投影点 */
+//	vector<Mat> rotationMatrixs(imageCount);
+//	for (i = 0; i<imageCount; i++)
+//	{
+//		vector<Point3f> tempPointSet = objectPoints[i];
+//		/* 通过得到的摄像机内外参数，对空间的三维点进行重新投影计算，得到新的投影点 */
+//		projectPoints(tempPointSet, rvecsMat[i], tvecsMat[i], cameraMatrix, distCoeffs, image_points2);
+//		/* 计算新的投影点和旧的投影点之间的误差*/
+//		vector<Point2f> tempImagePoint = imagePointsSeq[i];
+//		Mat tempImagePointMat = Mat(1, tempImagePoint.size(), CV_32FC2);
+//		Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
+//		for (int j = 0; j < tempImagePoint.size(); j++)
+//		{
+//			image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
+//			tempImagePointMat.at<Vec2f>(0, j) = Vec2f(tempImagePoint[j].x, tempImagePoint[j].y);
+//		}
+//		err = norm(image_points2Mat, tempImagePointMat, NORM_L2);
+//		total_err += err /= pointCounts[i];
+//		Rodrigues(camCalParas.rvecsMats[i], rotationMatrixs[i]);
+//	}
+//	camCalParas.Count = imageCount;
+//	camCalParas.cameraMatrix = cameraMatrix;
+//	camCalParas.distCoeffs = distCoeffs;
+//	camCalParas.error = total_err / imageCount;
+//	camCalParas.rotationMatrixs = rotationMatrixs;
+//	return camCalParas;
+//}
+////////////////////////////////////////////////////////////////////////////////
+////// 函数：Calibration
+////// 描述：根据相机的畸变系数、内参来校正拍摄的图片
+////// 输入：imageSource为待校正的图片，cameraMatrix为相机的内参数，distCoeffs为畸变系数向量
+////// 输出：
+////// 返回：畸变校正后的图片
+////// 备注：
+////// Modified by 
+////////////////////////////////////////////////////////////////////////////////
+//Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs)
+//{
+//	Size imageSize;
+//	imageSize.width = imageSource.cols;
+//	imageSize.height = imageSource.rows;
+//	Mat R = Mat::eye(3, 3, CV_32F);
+//	Mat mapx = Mat(imageSize, CV_32FC1);
+//	Mat mapy = Mat(imageSize, CV_32FC1);
+//	Mat newImage = imageSource.clone();
+//	initUndistortRectifyMap(cameraMatrix, distCoeffs, R, cameraMatrix, imageSize, CV_32FC1, mapx, mapy);
+//	remap(imageSource, newImage, mapx, mapy, INTER_LINEAR);
+//	return newImage;
+//}
+
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：ComputeWhiteTrans
 //// 描述：
@@ -369,9 +566,9 @@ float* ImageProcess::ComputeWhiteTrans(Mat src)
 	//Mat R = srcR.clone();
 	
 	//计算白色区域三通道的平均值
-	int sum[3] = { 0, 0, 0 };//B G R
-	float v[3] = { 0.00, 0.00, 0.00 };
-	float ave[3] = { 0.00, 0.00, 0.00 };
+	int sum[3] = {};//B G R
+	float v[3] = {};
+	float ave[3] = {};
 	for (int k = 0; k < 3; k++)
 	{
 		for (int i = 0; i < channels.at(k).rows; i++)
@@ -379,8 +576,8 @@ float* ImageProcess::ComputeWhiteTrans(Mat src)
 			uchar* data = channels.at(k).ptr<uchar>(i);
 			for (int j = 0; j < channels.at(k).cols; j++)
 			{
-				if (data[j] == 0)
-					break;
+				//if (data[j] == 0)
+				//	break;
 				v[k] += data[j];				
 				sum[k]++;
 			}
@@ -399,7 +596,7 @@ float* ImageProcess::ComputeWhiteTrans(Mat src)
 		}
 	}
 
-	static float trans[3] = { 1, 1, 1 };
+	static float trans[3];
 	for (int i = 0; i < 3; i++)
 	{
 		if (i == maxCh)
@@ -433,9 +630,9 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 	//Mat srcG = channels.at(1);
 	//Mat srcR = channels.at(2);
 
-	//float transB = trans[0];
-	//float transG = trans[1];
-	//float transR = trans[2];
+	float transB = trans[0];
+	float transG = trans[1];
+	float transR = trans[2];
 
 	map<int,map<int,float>> selectPoints;
 
@@ -469,8 +666,9 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 			}
 		}
 	}
-
-	return src;
+	Mat	dst(src.rows, src.cols, CV_8UC3, Scalar(0));
+	merge(channels, dst);
+	return dst;
 
 
 	/*
@@ -676,6 +874,122 @@ vector<Mat> ImageProcess::ReadImages(cv::String path)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ComputeWhiteArea(Mat mask, Mat src)
+{
+	int i, j;
+	int maskCols, maskRows;
+	maskCols = mask.cols;
+	maskRows = mask.rows;
+	Scalar total;
+	int sumAll;
+	float count = 0.0;
+	float mean = 0.0;
+	float variance = 0.0;
+	cvtColor(mask, mask, CV_BGR2GRAY);
+	//非零个数n
+	int n = countNonZero(mask);
+	//元素总和sumAll
+	total = sum(mask);
+	sumAll = total[0];
+
+	//求非零元素均值mean
+	mean = sumAll*1.0 / n;
+
+	//求非零元素方差variance
+	for (i = 0; i < maskRows; i++)
+	{
+		uchar* data2 = mask.ptr<uchar>(i);
+		for (j = 0; j < maskCols; j++)
+		{
+			if (data2[j] != 0)
+			{
+				count = count + pow(data2[j] - mean, 2);
+			}
+
+		}
+	}
+
+	variance = count*1.0 / n;
+
+	if (mean<220.0&&variance>5.0)
+	{
+		Mat whiteArea = Mat::zeros(maskRows, maskCols, CV_8UC3);
+		return whiteArea;
+	}
+	else
+	{
+		vector<Mat> channels;
+		split(src, channels);
+
+		Mat srcB = channels.at(0);
+		Mat srcG = channels.at(1);
+		Mat srcR = channels.at(2);
+
+
+		for (i = 0; i < maskRows; i++)
+		{
+			uchar* data1 = mask.ptr<uchar>(i);
+
+			for (j = 0; j < maskCols; j++)
+			{
+
+				data1[j] = data1[j] / 255;
+			}
+		}
+
+		channels.at(0) = srcB.mul(mask);
+		channels.at(1) = srcG.mul(mask);
+		channels.at(2) = srcR.mul(mask);
+
+
+		Mat	whiteArea(src.rows, src.cols, CV_8UC3, Scalar(0));
+		merge(channels, whiteArea);
+		return whiteArea;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeKeyPoints
+//// 描述：求取连通域的几何中心
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Point2f* ImageProcess::ComputeKeyPoints(Mat src)
+{
+	GaussianBlur(src, src, Size(5, 5), 0);
+	vector<vector<Point> > contours;//contours的类型，双重的vector
+	vector<Vec4i> hierarchy;//Vec4i是指每一个vector元素中有四个int型数据。
+	//阈值
+	threshold(src, src, 60, 255, THRESH_BINARY);
+	findContours(src.clone(), contours, hierarchy, CV_RETR_EXTERNAL, CHAIN_APPROX_SIMPLE, Point(0, 0));
+	/// 计算矩
+	vector<Moments> mu(contours.size());
+	for (int i = 0; i < contours.size(); i++)
+	{
+		mu[i] = moments(contours[i], false);
+	}
+	///  计算中心矩:
+	static Point2f pts[3];
+	for (int i = 0; i < contours.size(); i++)
+	{
+		pts[i] = Point2f(mu[i].m10 / mu[i].m00, mu[i].m01 / mu[i].m00);
+	}
+	/// 绘制轮廓
+	Mat drawing = Mat::zeros(src.size(), CV_8UC1);
+	for (int i = 0; i < contours.size(); i++)
+	{
+		Scalar color = Scalar(255);
+		drawContours(drawing, contours, i, color, 2, 8, hierarchy, 0, Point());
+		circle(drawing, pts[i], 4, color, -1, 8, 0);
+	}
+	imshow("outImage", drawing);
+	waitKey();
+
+	return pts;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：ComputeSampleArea
@@ -686,3 +1000,27 @@ vector<Mat> ImageProcess::ReadImages(cv::String path)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：ComputeThreshold
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+int ImageProcess::ComputeThreshold(Mat srcImage)
+{
+	srcImage = srcImage.reshape(0, 1);
+	Size imageSize = srcImage.size();
+	cv::sort(srcImage, srcImage, CV_SORT_EVERY_ROW + CV_SORT_ASCENDING);
+	uchar* data = srcImage.ptr<uchar>(0);
+	int index = (int)imageSize.width*imageSize.height*0.05;
+	int total = 0;
+	for (int i = 0; i < index; i++)
+	{
+		total += data[i];
+	}
+	return total / index;
+}

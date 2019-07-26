@@ -1872,7 +1872,7 @@ public:
         toolBox->addItem(MaterialMeasurement, QString::fromUtf8("\346\235\220\350\264\250\351\207\207\351\233\206"));
         MeterialModeling = new QWidget();
         MeterialModeling->setObjectName(QStringLiteral("MeterialModeling"));
-        MeterialModeling->setGeometry(QRect(0, 0, 223, 783));
+        MeterialModeling->setGeometry(QRect(0, 0, 124, 721));
         gridLayout_15 = new QGridLayout(MeterialModeling);
         gridLayout_15->setSpacing(6);
         gridLayout_15->setContentsMargins(11, 11, 11, 11);
@@ -1897,7 +1897,7 @@ public:
         toolBox->addItem(MeterialModeling, QString::fromUtf8("\346\235\220\350\264\250\345\273\272\346\250\241"));
         SystemSettings = new QWidget();
         SystemSettings->setObjectName(QStringLiteral("SystemSettings"));
-        SystemSettings->setGeometry(QRect(0, 0, 223, 783));
+        SystemSettings->setGeometry(QRect(0, 0, 124, 740));
         gridLayout_16 = new QGridLayout(SystemSettings);
         gridLayout_16->setSpacing(6);
         gridLayout_16->setContentsMargins(11, 11, 11, 11);
@@ -2152,7 +2152,7 @@ public:
         lineEdit_captureNum->setText(QApplication::translate("MainWindowClass", "150", Q_NULLPTR));
         pushButton_captureContinuously->setText(QApplication::translate("MainWindowClass", "\346\243\213\347\233\230\346\240\274\351\207\207\351\233\206", Q_NULLPTR));
         pushButton_chess->setText(QApplication::translate("MainWindowClass", "\344\277\235\345\255\230\346\240\207\345\256\232\345\217\202\346\225\260", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\346\240\241\346\255\243", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("MainWindowClass", "\347\225\270\345\217\230\345\217\212\350\247\206\350\247\222\346\240\241\346\255\243", Q_NULLPTR));
         groupBox_3->setTitle(QApplication::translate("MainWindowClass", "\347\233\270\346\234\272\350\276\220\345\260\204\345\272\246\346\240\241\346\255\243", Q_NULLPTR));
         pushButton_computeMask->setText(QApplication::translate("MainWindowClass", "\347\224\237\346\210\220Mask", Q_NULLPTR));
         label_sampleNum->setText(QApplication::translate("MainWindowClass", "\346\240\267\345\223\201\350\247\222\345\272\246\346\225\260\351\207\217", Q_NULLPTR));

@@ -32,7 +32,7 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #include "config.h"
 
 #define STEP_FEEDBACK      "DONE"    //电机反馈标识
-#define STEP_VELOCITY	   0.25		//电机速度
+#define STEP_VELOCITY	   0.4		//电机速度
 #define STEP_ACCELERATE    25       //电机加速度
 #define STEP_DECELERATE    25       //电机减速度
 #define STEP_RESOLUTION    3        //电机分辨率
