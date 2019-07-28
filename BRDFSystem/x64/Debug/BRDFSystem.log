@@ -1,11 +1,22 @@
-﻿生成启动时间为 2019/7/24 10:30:24。
+﻿生成启动时间为 2019/7/28 14:32:24。
      1>项目“F:\BRDF002\BRDFSystem\BRDFSystem\BRDFSystem.vcxproj”在节点 2 上(Build 个目标)。
-     1>ClCompile:
-         C:\Program Files (x86)\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtCore /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtGui /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D x64 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt workerCCD.cpp
-         workerCCD.cpp
+     1>CustomBuild:
+         Moc'ing mainwindow.h...
+       ClCompile:
+         C:\Program Files (x86)\VC\bin\x86_amd64\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include /I.\GeneratedFiles\Debug /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtCore /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtGui /IC:\Qt\Qt5.6.3\5.6.3\msvc2013_64\include\QtWidgets /Zi /nologo /W1 /WX- /Od /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_WIDGETS_LIB /D _CRT_SECURE_NO_WARNINGS /D x64 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt GeneratedFiles\Debug\moc_mainwindow.cpp main.cpp mainwindow.cpp
+         moc_mainwindow.cpp
      1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/mat.hpp(1918): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         main.cpp
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/mat.hpp(1918): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         mainwindow.cpp
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/mat.hpp(1918): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>F:\BRDF002\BRDFSystem\BRDFSystem\dependences\OpenCV\opencv3.3.0\include\opencv2/core/utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         正在生成代码...
        Link:
          C:\Program Files (x86)\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"F:\BRDF002\BRDFSystem\x64\Debug\\BRDFSystem.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib qtmaind.lib Qt5Cored.lib Qt5Guid.lib Qt5Widgetsd.lib opencv_ts300.lib opencv_ts300d.lib opencv_world300.lib opencv_world300d.lib VimbaC.lib VimbaCPP.lib VimbaImageTransform.lib EDSDK.lib ServoRs232Comm.lib lapack.lib blas.lib f2c.lib tmglib.lib levmar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\BRDF002\BRDFSystem\x64\Debug\BRDFSystem.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\BRDF002\BRDFSystem\x64\Debug\BRDFSystem.lib" /MACHINE:X64 /NODEFAULTLIB:msvcrt.lib x64\Debug\brdfModeling.obj
          x64\Debug\config.obj
@@ -34,4 +45,4 @@
 
 生成成功。
 
-已用时间 00:00:02.17
+已用时间 00:00:08.51

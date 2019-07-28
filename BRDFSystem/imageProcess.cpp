@@ -502,4 +502,346 @@ vector<Mat> ImageProcess::ReadImages(string path)
 	}
 
 	return mats;
+
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ComputeWhiteArea(Mat mask, Mat src)
+{
+	int i, j;
+	int maskCols, maskRows;
+	maskCols = mask.cols;
+	maskRows = mask.rows;
+	Scalar total;
+	int sumAll;
+	int n;
+	int Max = 0;
+	float count = 0.0;
+	float mean, variance;
+
+
+	vector<Mat> channels;
+	split(src, channels);
+
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+
+	for (i = 0; i < maskRows; i++)
+	{
+		uchar* data1 = mask.ptr<uchar>(i);
+
+		for (j = 0; j < maskCols; j++)
+		{
+
+			data1[j] = data1[j] / 255;
+		}
+	}
+
+	channels.at(0) = srcB.mul(mask);
+	channels.at(1) = srcG.mul(mask);
+	channels.at(2) = srcR.mul(mask);
+
+
+	Mat	whiteArea(src.rows, src.cols, CV_8UC3, Scalar(0));
+	merge(channels, whiteArea);
+	
+
+	//创建与whiteArea同类型和同大小的矩阵
+	Mat grayImage;
+	grayImage.create(whiteArea.size(), whiteArea.type());
+	//将原图转换为灰度图像
+	cvtColor(whiteArea, grayImage, CV_BGR2GRAY);
+
+	//非零个数n
+	n = countNonZero(mask);
+	//元素总和sumAll
+	for (i = 0; i < maskRows; i++)
+	{
+		uchar* data3 = grayImage.ptr<uchar>(i);
+		for (j = 0; j < maskCols; j++)
+		{
+			if (data3[j] > Max)
+			{
+				Max = data3[j];
+			}
+
+		}
+	}
+	//元素总和sumAll
+	total = sum(grayImage);
+	sumAll = total[0];
+
+	//求非零元素均值mean
+	mean = sumAll*1.0 / n;
+
+	//求非零元素方差variance
+	for (i = 0; i < maskRows; i++)
+	{
+		uchar* data2 = grayImage.ptr<uchar>(i);
+		for (j = 0; j < maskCols; j++)
+		{
+			if (data2[j] != 0)
+			{
+				count = count + pow(data2[j] - mean, 2);
+			}
+
+		}
+	}
+
+	variance = count*1.0 / n;
+
+	if (mean<=(Max*0.6)&&variance>1.0)
+	{
+		whiteArea = Mat::zeros(maskRows, maskCols, CV_8UC3);
+		return whiteArea;
+	}
+	
+	return whiteArea;
+
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+//Mat ImageProcess::ComputeSampleArea(Mat mask, Mat src)
+//{
+//	int i, j;
+//	int maskCols, maskRows;
+//	maskCols = mask.cols;
+//	maskRows = mask.rows;
+//
+//	int xMin, xMax, yMin, yMax;
+//	int countRows;
+//	int countCols;
+//
+//	xMin = maskRows;
+//	yMin = maskCols;
+//	xMax = 0;
+//	yMax = 0;
+//
+//
+//	
+//	//寻找非零点
+//	for (i = 0; i < maskRows; i++)
+//	{
+//		uchar* data1 = mask.ptr<uchar>(i);
+//		for (j = 0; j < maskCols; j++)
+//		{
+//			if (data1[j] == 255)
+//			{
+//				
+//				//记录xMin
+//				if (i < xMin)
+//				{
+//					xMin = i;
+//				}
+//	
+//
+//				//记录xMax
+//				if (i > xMax)
+//				{
+//					xMax = i;
+//				}
+//
+//
+//				//记录yMin
+//				if (j < yMin)
+//				{
+//					yMin = j;
+//				}
+//
+//
+//				//记录yMax
+//				if (j > yMax)
+//				{
+//					yMax = j;
+//				}
+//
+//			}
+//
+//		}
+//	}
+//
+//	countRows = (xMax - xMin + 1) * 130 / 200;
+//	countCols = (yMax - yMin + 1) * 130 / 200;
+//
+//	Mat temp = Mat::zeros(maskRows, maskCols, CV_8UC1);
+//	for (i = xMin + (xMax - xMin + 1) * 35 / 200; i < xMin + (xMax - xMin + 1) * 35 / 200 + countRows; i++)
+//	{
+//		uchar* data2 = temp.ptr<uchar>(i);
+//		for (j = yMin + (yMax - yMin + 1) * 35 / 200; j < yMin + (yMax - yMin + 1) * 35 / 200 + countCols; j++)
+//		{
+//			data2[j] = 1;
+//		}
+//	}
+//
+//
+//
+//
+//	vector<Mat> channels;
+//	split(src, channels);
+//
+//	Mat srcB = channels.at(0);
+//	Mat srcG = channels.at(1);
+//	Mat srcR = channels.at(2);
+//
+//
+//	channels.at(0) = srcB.mul(temp);
+//	channels.at(1) = srcG.mul(temp);
+//	channels.at(2) = srcR.mul(temp);
+//
+//
+//
+//	Mat	sampleArea(src.rows, src.cols, CV_8UC3, Scalar(0));
+//	merge(channels, sampleArea);
+//	return sampleArea;
+//}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ComputeSampleArea(vector<Point> point, Mat src)
+{
+	int i, j;
+	int srcCols, srcRows;
+	srcCols = src.cols;
+	srcRows = src.rows;
+
+	int xMin, xMax, yMin, yMax;
+	int countRows;
+	int countCols;
+
+	xMin = srcRows;
+	yMin = srcCols;
+	xMax = 0;
+	yMax = 0;
+
+	for (i = 0; i < point.size(); i++)
+	{
+		if (point[i].x < xMin)
+			xMin = point[i].x;
+		if (point[i].y < yMin)
+			yMin = point[i].y;
+		if (point[i].x > xMax)
+			xMax = point[i].x;
+		if (point[i].y > yMax)
+			yMax = point[i].y;
+	}
+
+	////寻找非零点
+	//for (i = 0; i < maskRows; i++)
+	//{
+	//	uchar* data1 = mask.ptr<uchar>(i);
+	//	for (j = 0; j < maskCols; j++)
+	//	{
+	//		if (data1[j] == 255)
+	//		{
+
+	//			//记录xMin
+	//			if (i < xMin)
+	//			{
+	//				xMin = i;
+	//			}
+
+
+	//			//记录xMax
+	//			if (i > xMax)
+	//			{
+	//				xMax = i;
+	//			}
+
+
+	//			//记录yMin
+	//			if (j < yMin)
+	//			{
+	//				yMin = j;
+	//			}
+
+
+	//			//记录yMax
+	//			if (j > yMax)
+	//			{
+	//				yMax = j;
+	//			}
+
+	//		}
+
+	//	}
+	//}
+
+	countRows = (xMax - xMin + 1) * 120 / 200;
+	countCols = (yMax - yMin + 1) * 120 / 200;
+
+	Mat temp = Mat::zeros(srcRows, srcCols, CV_8UC1);
+	for (i = xMin + (xMax - xMin + 1) * 40 / 200; i < xMin + (xMax - xMin + 1) * 40 / 200 + countRows; i++)
+	{
+		uchar* data2 = temp.ptr<uchar>(i);
+		for (j = yMin + (yMax - yMin + 1) * 40 / 200; j < yMin + (yMax - yMin + 1) * 40 / 200 + countCols; j++)
+		{
+			data2[j] = 1;
+		}
+	}
+
+
+
+
+	vector<Mat> channels;
+	split(src, channels);
+
+	Mat srcB = channels.at(0);
+	Mat srcG = channels.at(1);
+	Mat srcR = channels.at(2);
+
+
+	channels.at(0) = srcB.mul(temp);
+	channels.at(1) = srcG.mul(temp);
+	channels.at(2) = srcR.mul(temp);
+
+
+
+	Mat	sampleArea(src.rows, src.cols, CV_8UC3, Scalar(0));
+	merge(channels, sampleArea);
+	return sampleArea;
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：
+//// 描述：
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+Mat ImageProcess::ReadMaskWithWorkerID(int workerID)
+{
+	string filename, path;
+	string tmp;
+	path = "..//imgs_mask//";
+	stringstream ss;
+	ss << workerID;
+	string s1 = ss.str();
+	tmp = "00" + s1;
+	filename = path + tmp + ".bmp";
+	Mat mask;
+	mask = imread(filename);
+	return mask;
 }

@@ -11,6 +11,7 @@
 #include "workerMeasurement.h"
 #include "workerCCD.h"
 #include "config.h"
+//#include "brdfModeling.h"    //BRDF拟合用的,若出现ACCESS_MASK不明确,注释掉cv,所有相关地方加cv::,在cpp文件中加命名空间
 
 //class workerCCD;//由于要用到worker类的变量，故此作前向声明
 class MainWindow : public QMainWindow
@@ -20,6 +21,9 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(VimbaSystem&	system, QWidget *parent = 0);
 	virtual ~MainWindow();
+
+	//friend class BRDFFitting;
+	//class BRDFFitting a;
 
 private slots:
 	
@@ -31,6 +35,7 @@ private slots:
 	void TurnToSettings();
 	void TurnToTest();
 	void TurnToPreCamera();
+	void TurnToFitting();
 	
 	
 	void PushButton_Save_Pressed();
@@ -52,7 +57,7 @@ private slots:
 	void PushButton_BlackLevel_Pressed();
 	void PushButton_FiniCCD_Pressed();
 	void PushButton_ComputeMask_Pressed();
-
+	void PushButton_CheckMarkArea_Pressed();
 	
 	void IsEdited();
 	void DisplayImage(int workerID, QImage img);

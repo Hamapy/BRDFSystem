@@ -20,861 +20,729 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="Settings">
-         <layout class="QGridLayout" name="gridLayout_46">
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox_14">
-            <property name="title">
-             <string>工业相机</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_9" rowstretch="1,1,1,1" columnstretch="1,1,1">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_gain">
-               <property name="text">
-                <string>Gain</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSlider" name="horizontalSlider_gain">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QSpinBox" name="spinBox_gain"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_darkLevel">
-               <property name="text">
-                <string>暗电平</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSlider" name="horizontalSlider_darkLevel">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QSpinBox" name="spinBox_darkLevel"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_imageSaveFormat">
-               <property name="text">
-                <string>图像保存格式</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="comboBox_imageSaveFormat">
-               <item>
-                <property name="text">
-                 <string>.JPEG</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>.BMP</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>.PNG</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_imageSavePath">
-               <property name="text">
-                <string>图像保存路径</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="lineEdit_imageSavePath"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QGroupBox" name="groupBox_16">
-            <property name="title">
-             <string>光源</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,1,1">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_serialPortSelection">
-               <property name="text">
-                <string>串口选择</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="comboBox_serialPortSelection">
-               <item>
-                <property name="text">
-                 <string>COM1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM5</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM6</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM7</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM8</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_baudRate">
-               <property name="text">
-                <string>波特率</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="comboBox_baudRate">
-               <property name="currentText">
-                <string>4800</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>4800</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>9600</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>19200</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_68">
-               <property name="text">
-                <string>Baut/s</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_delaySetting">
-               <property name="text">
-                <string>延时设置</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="lineEdit_delaySetting"/>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>*100ms</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_lightingSequence">
-               <property name="text">
-                <string>亮灯序列</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="lineEdit_lightingSequence"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QGroupBox" name="groupBox_21">
-            <property name="title">
-             <string>样品台电机驱动</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_8" rowstretch="0,0,0,0,0,0" columnstretch="1,1,1">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_stepperMotorPortSelection">
-               <property name="text">
-                <string>端口选择</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="comboBox_stepperMotorPortSelection">
-               <item>
-                <property name="text">
-                 <string>COM1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM5</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM6</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM7</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM8</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM9</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM10</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_stepperMotorSpeed">
-               <property name="text">
-                <string>步进电机速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="comboBox_stepperMotorSpeed">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_82">
-               <property name="text">
-                <string>m/s</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_stepperMotorAcceleration">
-               <property name="text">
-                <string>步进电机加速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="comboBox_stepperMotorAcceleration">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_83">
-               <property name="text">
-                <string>m/s^2</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_stepperMotorDeceleration">
-               <property name="text">
-                <string>步进电机减速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QComboBox" name="comboBox_stepperMotorDeceleration">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_86">
-               <property name="text">
-                <string>m/s^2</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_stepperMotorResolution">
-               <property name="text">
-                <string>步进电机分辨率</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QComboBox" name="comboBox_stepperMotorResolution">
-               <item>
-                <property name="text">
-                 <string>800</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>1600</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2400</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_sampleRotationAngle">
-               <property name="text">
-                <string>样品旋转角度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QComboBox" name="comboBox_sampleRotationAngle">
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>10</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>15</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="5" column="2">
-              <widget class="QLabel" name="label_87">
-               <property name="text">
-                <string>°</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QGroupBox" name="groupBox_22">
-            <property name="title">
-             <string>滑轨电机驱动</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_10" columnstretch="1,1,1">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_servoMotorPortSelection">
-               <property name="text">
-                <string>端口选择</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QComboBox" name="comboBox_servoMotorPortSelection">
-               <item>
-                <property name="text">
-                 <string>COM1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM5</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM6</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM7</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM8</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM9</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>COM10</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_servoMotorSpeed">
-               <property name="text">
-                <string>伺服电机速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="comboBox_servoMotorSpeed">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_75">
-               <property name="text">
-                <string>m/s</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_servoMotorAcceleration">
-               <property name="text">
-                <string>伺服电机加速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QComboBox" name="comboBox_servoMotorAcceleration">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_78">
-               <property name="text">
-                <string>m/s^2</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_servoMotorDeceleration">
-               <property name="text">
-                <string>伺服电机减速度</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QComboBox" name="comboBox_servoMotorDeceleration">
-               <item>
-                <property name="text">
-                 <string>1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>4</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>5</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QLabel" name="label_77">
-               <property name="text">
-                <string>m/s^2</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_servoMotorResolution">
-               <property name="text">
-                <string>伺服电机分辨率</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QComboBox" name="comboBox_servoMotorResolution">
-               <item>
-                <property name="text">
-                 <string>800</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>1600</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>2400</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item row="5" column="0">
-              <widget class="QLabel" name="label_slideTableMovingDistance">
-               <property name="text">
-                <string>滑台移动距离</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QLineEdit" name="lineEdit_slideTableMovingDistance"/>
-             </item>
-             <item row="5" column="2">
-              <widget class="QLabel" name="label_79">
-               <property name="text">
-                <string>cm</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <layout class="QGridLayout" name="gridLayout_45">
-            <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton_save">
-              <property name="font">
-               <font>
-                <family>Times New Roman</family>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
+         <widget class="QGroupBox" name="groupBox_14">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>50</y>
+            <width>551</width>
+            <height>221</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>工业相机</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,1,1">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_gain">
+             <property name="text">
+              <string>Gain</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSlider" name="horizontalSlider_gain">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QSpinBox" name="spinBox_gain"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_darkLevel">
+             <property name="text">
+              <string>暗电平</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSlider" name="horizontalSlider_darkLevel">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="spinBox_darkLevel"/>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_imageSaveFormat">
+             <property name="text">
+              <string>图像保存格式</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="comboBox_imageSaveFormat">
+             <item>
               <property name="text">
-               <string>保存配置</string>
+               <string>.JPEG</string>
               </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_defaults">
-              <property name="font">
-               <font>
-                <family>Times New Roman</family>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
+             </item>
+             <item>
               <property name="text">
-               <string>恢复默认配置</string>
+               <string>.BMP</string>
               </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+             </item>
+             <item>
+              <property name="text">
+               <string>.PNG</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_imageSavePath">
+             <property name="text">
+              <string>图像保存路径</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_imageSavePath"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_16">
+          <property name="geometry">
+           <rect>
+            <x>670</x>
+            <y>50</y>
+            <width>561</width>
+            <height>221</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>光源</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,1,1">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_serialPortSelection">
+             <property name="text">
+              <string>串口选择</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="comboBox_serialPortSelection">
+             <item>
+              <property name="text">
+               <string>COM1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>COM8</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_baudRate">
+             <property name="text">
+              <string>波特率</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBox_baudRate">
+             <property name="currentText">
+              <string>4800</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>4800</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9600</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>19200</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_68">
+             <property name="text">
+              <string>Baut/s</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_delaySetting">
+             <property name="text">
+              <string>延时设置</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_delaySetting"/>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>*100ms</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_lightingSequence">
+             <property name="text">
+              <string>亮灯序列</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="lineEdit_lightingSequence"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_21">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>340</y>
+            <width>551</width>
+            <height>261</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>样品台电机驱动</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,1,1">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_stepperMotorPortSelection">
+             <property name="text">
+              <string>端口选择</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="comboBox_stepperMotorPortSelection">
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_stepperMotorSpeed">
+             <property name="text">
+              <string>步进电机速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBox_stepperMotorSpeed">
+             <item>
+              <property name="text">
+               <string>0.25</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>0.50</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>0.75</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1.00</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_82">
+             <property name="text">
+              <string>m/s</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_stepperMotorAcceleration">
+             <property name="text">
+              <string>步进电机加速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="comboBox_stepperMotorAcceleration">
+             <item>
+              <property name="text">
+               <string>25</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>50</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>75</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>100</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_83">
+             <property name="text">
+              <string>m/s^2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_stepperMotorDeceleration">
+             <property name="text">
+              <string>步进电机减速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="comboBox_stepperMotorDeceleration">
+             <item>
+              <property name="text">
+               <string>25</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>50</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>75</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>100</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_86">
+             <property name="text">
+              <string>m/s^2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_stepperMotorResolution">
+             <property name="text">
+              <string>步进电机分辨率</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="comboBox_stepperMotorResolution">
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>16</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_sampleRotationAngle">
+             <property name="text">
+              <string>样品旋转角度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="comboBox_sampleRotationAngle">
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>15</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLabel" name="label_87">
+             <property name="text">
+              <string>°</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_22">
+          <property name="geometry">
+           <rect>
+            <x>670</x>
+            <y>340</y>
+            <width>561</width>
+            <height>261</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>滑轨电机驱动</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_10" columnstretch="1,1,1">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_servoMotorPortSelection">
+             <property name="text">
+              <string>端口选择</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="comboBox_servoMotorPortSelection">
+             <item>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_servoMotorSpeed">
+             <property name="text">
+              <string>伺服电机速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="comboBox_servoMotorSpeed">
+             <item>
+              <property name="text">
+               <string>20</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>40</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>60</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>80</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_75">
+             <property name="text">
+              <string>m/s</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_servoMotorAcceleration">
+             <property name="text">
+              <string>伺服电机加速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="comboBox_servoMotorAcceleration">
+             <item>
+              <property name="text">
+               <string>100</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>150</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>200</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_78">
+             <property name="text">
+              <string>m/s^2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_servoMotorDeceleration">
+             <property name="text">
+              <string>伺服电机减速度</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="comboBox_servoMotorDeceleration">
+             <item>
+              <property name="text">
+               <string>100</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>150</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>200</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_77">
+             <property name="text">
+              <string>m/s^2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_servoMotorResolution">
+             <property name="text">
+              <string>伺服电机分辨率</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="comboBox_servoMotorResolution">
+             <item>
+              <property name="text">
+               <string>20000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>40000</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_slideTableMovingDistance">
+             <property name="text">
+              <string>滑台移动距离</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLineEdit" name="lineEdit_slideTableMovingDistance"/>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLabel" name="label_79">
+             <property name="text">
+              <string>cm</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>770</x>
+            <y>630</y>
+            <width>371</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_45">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButton_defaults">
+             <property name="font">
+              <font>
+               <family>Times New Roman</family>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>恢复默认配置</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton_save">
+             <property name="font">
+              <font>
+               <family>Times New Roman</family>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>保存配置</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
         <widget class="QWidget" name="PreCamera">
          <layout class="QGridLayout" name="gridLayout_43">
           <item row="0" column="0">
-           <layout class="QGridLayout" name="gridLayout_44" columnstretch="1,3,0,0,0">
+           <layout class="QGridLayout" name="gridLayout_44" columnstretch="4,1">
             <item row="0" column="0">
-             <layout class="QGridLayout" name="gridLayout_30" rowstretch="0,0,0,0,0,0,0,0,0,0" columnstretch="1,1">
-              <property name="bottomMargin">
-               <number>400</number>
-              </property>
-              <property name="verticalSpacing">
-               <number>36</number>
-              </property>
-              <item row="0" column="1">
-               <widget class="QPushButton" name="pushButton_finiCCD">
-                <property name="text">
-                 <string>断开相机</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="0">
-               <widget class="QPushButton" name="pushButton_chess">
-                <property name="text">
-                 <string>畸变校正（棋盘格标定）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QPushButton" name="pushButton_iniCCD">
-                <property name="text">
-                 <string>连接相机</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="0">
-               <widget class="QPushButton" name="pushButton_whiteBalance">
-                <property name="text">
-                 <string>白平衡校正</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QPushButton" name="pushButton_captureOfPeriod">
-                <property name="text">
-                 <string>周期采集（样品旋转一周）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="label_21">
-                  <property name="text">
-                   <string>采集数量（/台）</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_captureNum">
-                  <property name="text">
-                   <string>150</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QPushButton" name="pushButton_captureContinuously">
-                <property name="text">
-                 <string>连续采集（样品静止）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QPushButton" name="pushButton_deadPixels">
-                <property name="text">
-                 <string>坏点校正</string>
-                </property>
-               </widget>
-              </item>
-              <item row="5" column="0">
-               <widget class="QPushButton" name="pushButton_computeMask">
-                <property name="text">
-                 <string>生成Mask</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLabel" name="label_sampleNum">
-                  <property name="text">
-                   <string>样品角度数量</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_sampleNum">
-                  <property name="text">
-                   <string>36</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="4" column="0">
-               <widget class="QPushButton" name="pushButton_blackLevel">
-                <property name="text">
-                 <string>暗电平校正</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="0" column="1">
              <layout class="QGridLayout" name="gridLayout_3">
               <item row="3" column="3">
                <widget class="QGroupBox" name="groupBox_precamera4">
@@ -1025,6 +893,204 @@
                     <bool>false</bool>
                    </property>
                   </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,3,3,3">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <item>
+                 <widget class="QPushButton" name="pushButton_iniCCD">
+                  <property name="text">
+                   <string>连接相机</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_finiCCD">
+                  <property name="text">
+                   <string>断开相机</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="title">
+                 <string>相机底噪校正</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_48">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_47" columnstretch="1,1" rowminimumheight="1,1,1">
+                   <item row="1" column="0">
+                    <widget class="QPushButton" name="pushButton_3">
+                     <property name="text">
+                      <string>暗电平观测</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QPushButton" name="pushButton_5">
+                     <property name="text">
+                      <string>Dark图像采集</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <layout class="QHBoxLayout" name="horizontalLayout_4">
+                     <item>
+                      <widget class="QLabel" name="label_3">
+                       <property name="text">
+                        <string>BlackLevel</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="lineEdit_4"/>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QPushButton" name="pushButton_blackLevel">
+                     <property name="text">
+                      <string>暗电平校正</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QPushButton" name="pushButton_deadPixels">
+                     <property name="text">
+                      <string>坏点校正</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_2">
+                <property name="title">
+                 <string>相机畸变及视角校正</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_50">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_49" columnstretch="1,1" rowminimumheight="1,1">
+                   <item row="0" column="1">
+                    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,5">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_21">
+                       <property name="text">
+                        <string>采集数量（/台）</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="lineEdit_captureNum">
+                       <property name="text">
+                        <string>150</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QPushButton" name="pushButton_captureContinuously">
+                     <property name="text">
+                      <string>棋盘格采集</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QPushButton" name="pushButton_chess">
+                     <property name="text">
+                      <string>保存标定参数</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QPushButton" name="pushButton_2">
+                     <property name="text">
+                      <string>畸变校正</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_3">
+                <property name="title">
+                 <string>相机辐射度校正</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_52">
+                 <item row="0" column="0">
+                  <layout class="QGridLayout" name="gridLayout_51" columnstretch="1,1" rowminimumheight="1,1,1">
+                   <item row="1" column="0">
+                    <widget class="QPushButton" name="pushButton_computeMask">
+                     <property name="text">
+                      <string>生成Mask</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <layout class="QHBoxLayout" name="horizontalLayout_3">
+                     <item>
+                      <widget class="QLabel" name="label_sampleNum">
+                       <property name="text">
+                        <string>样品角度数量</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLineEdit" name="lineEdit_sampleNum">
+                       <property name="text">
+                        <string>36</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QPushButton" name="pushButton_captureOfPeriod">
+                     <property name="text">
+                      <string>Mask源采集</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QPushButton" name="pushButton_checkMarkArea">
+                     <property name="text">
+                      <string>勾选标记区域</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QPushButton" name="pushButton_whiteBalance">
+                     <property name="text">
+                      <string>白平衡校正</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QPushButton" name="pushButton_7">
+                     <property name="text">
+                      <string>颜色变换</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </item>
                 </layout>
                </widget>
@@ -1964,7 +2030,7 @@
           <item row="0" column="1">
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
-             <widget class="QPushButton" name="pushButton_13">
+             <widget class="QPushButton" name="pushButton_startFitting">
               <property name="text">
                <string>开始拟合</string>
               </property>

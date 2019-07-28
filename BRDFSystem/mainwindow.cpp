@@ -188,6 +188,7 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_settings, SIGNAL(pressed()), this, SLOT(TurnToSettings()));
 	connect(this->ui.pushButton_test, SIGNAL(pressed()), this, SLOT(TurnToTest()));
 	connect(this->ui.pushButton_preCamera, SIGNAL(pressed()), this, SLOT(TurnToPreCamera()));
+	connect(this->ui.pushButton_startFitting, SIGNAL(pressed()), this, SLOT(TurnToFitting()));
 
 //////////////////////////////////////////////采集页面/////////////////////////////////////////////////////
 	workerMeasurement = new WorkerMeasurement();
@@ -232,6 +233,7 @@ QMainWindow(parent)
 	connect(this->ui.pushButton_blackLevel, SIGNAL(pressed()), this, SLOT(PushButton_BlackLevel_Pressed()));
 	connect(this->ui.pushButton_finiCCD, SIGNAL(pressed()), this, SLOT(PushButton_FiniCCD_Pressed()));
 	connect(this->ui.pushButton_computeMask, SIGNAL(pressed()), this, SLOT(PushButton_ComputeMask_Pressed()));
+	connect(this->ui.pushButton_checkMarkArea, SIGNAL(pressed()), this, SLOT(PushButton_CheckMarkArea_Pressed()));
 	
 }
 
@@ -472,7 +474,17 @@ void MainWindow::TurnToPreCamera()
 	_displayFlag = 0;
 	this->ui.stackedWidget->setCurrentWidget(this->ui.PreCamera);
 }
-
+////////////////////////////////////////////////////////////////////////////
+// 函数：TurnToFitting
+// 描述：根据菜单栏选项切换主窗口
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::TurnToFitting()
+{
+	int fileName;
+	fileName = ui.treeWidget->topLevelItem(1)->child(0)->text(0).toInt();
+	//BRDFFitting a;                                                      //BRDF拟合用的,若出现ACCESS_MASK不明确,注释掉cv,所有相关地方加cv::,在cpp文件中加命名空间
+	//a.StartFitting(fileName, 10, 15, 5, 35, 5);
+}
 
 ////////////////////////////////采集页面/////////////////////////////////////
 
@@ -641,6 +653,26 @@ void MainWindow::PushButton_CaptureContinuously_Pressed()
 		sprintf(cameraPath, "camera%d", i);
 		CreateFolds(capturePath, cameraPath);
 		this->workerCCD[i]->_capture = 1;
+	}
+}
+////////////////////////////////////////////////////////////////////////////
+// 函数：PushButton_CheckMarkArea_Pressed
+// 描述：
+// 输入：Null
+// 输出：Null
+// 返回：Null
+// 备注：
+// Modified by 
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::PushButton_CheckMarkArea_Pressed()
+{
+	for (int i = 0; i < CAM_NUM; i++)
+	{
+		//string capturePath = acquisitionParameters->save_calibration; //ini->value("BRDFSystem-Configuration/save_calibration").toString().toStdString();
+		//char cameraPath[16];
+		//sprintf(cameraPath, "camera%d", i);
+		//CreateFolds(capturePath, cameraPath);
+		this->workerCCD[i]->_checkMarkArea = 1;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////

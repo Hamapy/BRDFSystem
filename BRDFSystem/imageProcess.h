@@ -55,6 +55,13 @@ public:
 	//static vector<Mat> GetColorTrans(vector<Mat> mats);
 	//Mat ColorCorrection(Mat src);
 
+	//根据mask得到标记点位置，并根据二值化后的均值和方差来判断位置是否准确
+	static Mat ComputeWhiteArea(Mat mask, Mat src);
+	//根据标记点计算样品感兴趣区域
+	static Mat ComputeSampleArea(vector<Point> point, Mat src);
+	//根据相机序号读取对应的mask
+	static Mat ReadMaskWithWorkerID(int workerID);
+
 	friend class MainWindow;
 
 private:
@@ -68,5 +75,12 @@ private:
 	static bool IsSelected(Mat src, int i, int j);
 	//选中标记像素点
 	static void Select(Mat src, int i, int j);
+
+	////根据mask得到标记点位置，并根据二值化后的均值和方差来判断位置是否准确
+	//static Mat ComputeWhiteArea(Mat mask, Mat src);
+	////根据标记点计算样品感兴趣区域
+	//static Mat ComputeSampleArea(vector<Point> point, Mat src);
+	////根据相机序号读取对应的mask
+	//static Mat ReadMaskWithWorkerID(int workerID);
 };
 #endif

@@ -49,7 +49,7 @@ public:
 	// 根据BRDF文件名序号以及采样信息进行采样和保存，并读取BRDF数据
 	Mat  BRDFSample(int BRDFSerialNumber, int thetaInLowerLimit, int thetaInNumber,
 		int phiInLowerLimit, int phiInNumber, int Gap);
-
+	
 
 
 

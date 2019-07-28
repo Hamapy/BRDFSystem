@@ -36,9 +36,12 @@ private:
 	int						_workerID;
 	AVTCamera*				cameraAVT;
 	QImage					_img;
+	QImage                  _imgCheckMarkArea;
 	Mat						_mat;
 	Mat						_matWB;
+	Mat                     _matCheckMarkArea;
 	bool					_capture;
+	bool                    _checkMarkArea;
 	string					_materialName;
 	int						_timerId;
 	unsigned char*			_pImageFrame;

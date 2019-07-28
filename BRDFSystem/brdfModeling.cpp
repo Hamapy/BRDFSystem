@@ -1,5 +1,6 @@
 #include "brdfModeling.h"
 
+
 //初始化局部静态变量
 double	BRDFFitting::_T[SIZE * 3] = { 0 };
 double  BRDFFitting::_p[7] = { 0 };
