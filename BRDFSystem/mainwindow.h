@@ -7,10 +7,19 @@
 #include <time.h>
 #include <QMessageBox>
 #include <QTextCodec>
+//#include <QStringList>
+//#include <QDirIterator>
+//#include <QFileInfo>
+//#include <QDir>
+#include <QDateTime>
 #include "ui_mainwindow.h"
 #include "workerMeasurement.h"
 #include "workerCCD.h"
 #include "config.h"
+#include "brdfModeling.h" 
+
+using namespace std;
+using namespace cv;
 
 //class workerCCD;//由于要用到worker类的变量，故此作前向声明
 class MainWindow : public QMainWindow
@@ -31,6 +40,8 @@ private slots:
 	void TurnToSettings();
 	void TurnToTest();
 	void TurnToPreCamera();
+
+	void PushButton_StartFitting_Pressed();
 	
 	
 	void PushButton_Save_Pressed();
@@ -53,7 +64,7 @@ private slots:
 
 	void PushButton_CaptureOfPeriod_Pressed();
 	void PushButton_ComputeMask_Pressed();
-	void PushButton_Masked();
+	void PushButton_Masked_Pressed();
 
 
 	
@@ -64,7 +75,9 @@ private slots:
 private:
 	Ui::MainWindowClass ui;
 
-	
+	//friend class BRDFFitting;
+	//class BRDFFitting a;
+	BRDFFitting*				brdfFitting;
 	WorkerMeasurement*			workerMeasurement;
 	QThread*					threadMeasurement;
 	WorkerCCD*					workerCCD[9];
@@ -74,7 +87,7 @@ private:
 	bool						_displayFlag;
 	int							_measureFlag;
 	//QPixmap*					_pic;
-	QMutex						_mutex;
+	//QMutex						_mutex;
 	//string						_capturePath = "..\\imgs_calibration";
 	float*						_trans;
 	vector<float*>				_transs;
@@ -84,11 +97,11 @@ private:
 	void ShowImgOnQLabel(QLabel* qlabel, QImage img);
 
 	
-	int gain = 0;
-	int gain_Int = 0;
+	float gain = 0.0;
+	float gain_Float = 0.0;
 	QString gain_Str = "";
-	int darkLevel = 0;
-	int darkLevel_Int = 0;
+	float blackLevel = 0;
+	float blackLevel_Float = 0;
 	QString darkLevel_Str = "";
 	QString imageSaveFormat = "";
 	QString imageSaveFormat_Str = "";

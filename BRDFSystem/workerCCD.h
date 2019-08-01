@@ -12,6 +12,9 @@
 #include "config.h"
 #include "imageProcess.h"
 
+using namespace std;
+using namespace cv;
+
 class WorkerCCD : public QObject
 {
 	Q_OBJECT
@@ -49,16 +52,20 @@ private:
 	float					_exposureTime;
 	string					_imageSavingPath1 = "..\\imgs_measurement1\\";
 	string					_imageSavingPath2 = "..\\imgs_measurement2\\";
-	string					_imageSavingPath3 = "..\\imgs_periodcapture\\";
+	string					_imageSavingPath3 = "..\\imgs_measuremasks\\";
 	string					_imageSavingPathHDR = "..\\imgs_measurementHDR\\";
 	int						_measureFlag;//主界面传入的采集类型标记
-	QMutex					_mutex;
+	//QMutex					_mutex;
 	bool					_isMasked;
 	bool					_hasWhiteTrans;
+	bool					_hasAffineTrans;
 	float*					_whiteTrans;
+	Mat						_affineTrans;
 
 	QImage					CvMat2QImage(const Mat& mat);
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	//ImageProcess*           imageProcess;
+	Mat						_gray;
 
 signals:
 	//void next();

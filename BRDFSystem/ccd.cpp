@@ -56,23 +56,22 @@ bool AVTCamera::IniCamera()
 
 		if (VmbErrorSuccess == _camera->Open(VmbAccessModeFull))//完全读写相机权限
 		{
-			//相机参数初始化设置
-			_camera->GetFeatureByName("PixelFormat", _feature);
-			_feature->SetValue("RGB8Packed");//这个像素源格式很重要，否则后续的QImage、QPixmap包括Mat的数据转换都会报错
-			_camera->GetFeatureByName("Gain", _feature);
-			_feature->SetValue(0);
-			_camera->GetFeatureByName("BlackLevel", _feature);
-			_feature->SetValue(0);
-			_camera->GetFeatureByName("Gamma", _feature);
-			_feature->SetValue(0);
-			//_camera->GetFeatureByName("Hue", _feature);
+			////相机参数初始化设置
+			//_camera->GetFeatureByName("PixelFormat", _feature);
+			//_feature->SetValue("RGB8Packed");//这个像素源格式很重要，否则后续的QImage、QPixmap包括Mat的数据转换都会报错
+			//_camera->GetFeatureByName("Gain", _feature);
 			//_feature->SetValue(0);
-
-			string name;
-			_camera->GetName(name);
-			string ID;
-			_camera->GetID(ID);
-			cout << "第" << _cameraID << "个相机" << name << " " << ID << " 打开成功" << endl;
+			//_camera->GetFeatureByName("BlackLevel", _feature);
+			//_feature->SetValue(0);
+			//_camera->GetFeatureByName("Gamma", _feature);
+			//_feature->SetValue(0);
+			////_camera->GetFeatureByName("Hue", _feature);
+			////_feature->SetValue(0);
+			//string name;
+			//_camera->GetName(name);
+			//string ID;
+			//_camera->GetID(ID);
+			//cout << "第" << _cameraID << "个相机" << name << " " << ID << " 打开成功" << endl;
 
 			return 1;
 		}
@@ -237,7 +236,7 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 	else   outTheta = 5.0 + cameraID * 10.0;
 
 	//出射角Phi
-	double outPhi = sampleID * 30.0;
+	double outPhi = sampleID * 10.0;
 		
 	double inTheta, inPhi;
 	int i;
@@ -309,16 +308,22 @@ bool AVTCamera::SaveAnImage(Mat mat, string path, int cameraID, int sampleID, in
 
 	//各向同性材质出射角Phi为0
 	if (measureFlag == 1)
+	{
 		outPhi = 0.0;
+		//命名方式：out_相机角度-材质台角度_in_光源θ-光源σ
+		sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", outTheta, outPhi, inTheta, inPhi);
+	}
+	//各向异性材质
+	if (measureFlag == 2)
+	{
+		sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", outTheta, outPhi, inTheta, inPhi);
+	}	
 	//采集一周不用考虑光源角度
 	if (measureFlag == 3)
 	{
-		inTheta = 0.0;
-		inPhi = 0.0;
+		sprintf(name, "%d-%d.bmp", cameraID, sampleID);
 	}
 
-	//命名方式：out_相机角度-材质台角度_in_光源θ-光源σ
-	sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", outTheta, outPhi, inTheta, inPhi);
 	string spath = path + name;
 	bool isSaved = imwrite(spath, mat);
 	//mat.save(QString::fromStdString(path), "BMP", 100);

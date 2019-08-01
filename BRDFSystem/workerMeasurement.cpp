@@ -42,136 +42,134 @@ WorkerMeasurement::~WorkerMeasurement()
 	delete _seriesCAM;
 }
 
+void WorkerMeasurement::GetMaterialName(QString materialName)
+{
+	_materialName = materialName.toStdString();
+}
+
 void WorkerMeasurement::StartTimer(int measureFlag)
 {
 	slideComm->MoveToX2();//滑轨就位
-	sampleComm->Reset();
-	Sleep(12000);//等待滑轨就位及材质台归位
+	sampleComm->Reset();//样品归位
+	Sleep(10000);//等待滑轨就位及材质台归位
 	_measureFlag = measureFlag;
-	//if (_measureFlag == 1)
-		_timerId = this->startTimer(300);
-	//if (_measureFlag == 2)
-		//_timerId = this->startTimer(2100);
+	_timerId = this->startTimer(8000);//这个时间间隔设置很重要
+
 }
 
 void WorkerMeasurement::timerEvent(QTimerEvent *event)
 {
-	if (!_isReady)
+	if (event->timerId() == _timerId)
 	{
-		if (_measureFlag == 1)
+		if (!_isReady)
 		{
-			if (_iID != ILLUMINANT_NUM)
-			{
-				_isReady = 1;
-				illuminant->Suspend();
-				illuminant->SetSteadyTime(20);
-				illuminant->LightenById(_illuminantID[_iID]+1);//光源序列是从0开始写的
-				illuminant->Start();
-				Sleep(200);
-				_iID++;
-
-				emit readyForGrab(_sID, _iID);//通过主线程告诉相机咱切换到下一个灯了，你可以试试调整一下你的曝光时间
-			}
-			else if (_iID == ILLUMINANT_NUM)
-			{
-				emit done();
-				_isReady = 1;
-			}
-		}
-
-		//每个光源旋转样品台18个角度
-		/*
-		if (_measureFlag == 2)
-		{
-			if (_iID != 196)
-			{
-				if (_sampleFlag == 0)
-				{
-					_isReady = 1;
-					illuminant->Suspend();
-					illuminant->SetSteadyTime(240);//最长点亮时间25.5s  18个采集角度时间不太够
-					illuminant->LightenById(_illuminantID[_iID]+1);
-					illuminant->Start();
-					Sleep(200);
-				}
-				if (_sID != 12)//36个角度耗时太长
-				{
-					sampleComm->GotoNextPos(5250);
-					Sleep(200);//留给相机的拍摄时间
-					emit readyForGrab(_sID, _iID);
-					_sID++;
-					_isReady = 1;
-					_sampleFlag = 1;
-				}
-				else
-				{
-					_sampleFlag = 0;
-					_sID = 0;//开始转下一圈
-					_iID++;
-					_isReady = 0;
-				}
-			}
-			else if (_iID == 196)
-			{
-				emit done();
-				_isReady = 1;
-			}
-		}
-		*/
-
-		//每个样品台角度点亮196个光源
-		if (_measureFlag == 2)
-		{
-			if (_sID != SAMPLE_NUM)
+			if (_measureFlag == 1)
 			{
 				if (_iID != ILLUMINANT_NUM)
 				{
 					_isReady = 1;
 					illuminant->Suspend();
-					illuminant->SetSteadyTime(10);//最长点亮时间25.5s  18个采集角度时间不太够
-					illuminant->LightenById(_illuminantID[_iID] + 1);
+					//Sleep(1000);
+					illuminant->LightenById(_illuminantID[_iID] + 1);//光源序列是从0开始写的
+					illuminant->SetSteadyTime(50);
 					illuminant->Start();
-					Sleep(200);
+					//Sleep(200);
 					_iID++;
 
-					emit readyForGrab(_sID, _iID);
+					emit readyForGrab(_sID, _iID);//通过主线程告诉相机咱切换到下一个灯了，你可以试试调整一下你的曝光时间
 				}
 				else if (_iID == ILLUMINANT_NUM)
 				{
-					sampleComm->GotoNextPos(1730);
-					//Sleep(200);//留给相机的拍摄时间			
-					_iID = 0;
-					_sID++;
+					emit done();
+					string brdfPath = _imageSavingPath1 + _materialName + "\\";
+					WriteBRDF(brdfPath, "..\\sampledata\\");
+					_isReady = 1;
 				}
 			}
-			else if (_sID == SAMPLE_NUM)
+			//每个样品台角度点亮196个光源
+			if (_measureFlag == 2)
 			{
-				emit done();
-				_isReady = 1;
-			}
-		}
-		//采集材质台旋转一周的图像
-		if (_measureFlag == 3)
-		{
-			if (_sID != SAMPLE_NUM)
-			{
-				_isReady = 1;
-				
-				illuminant->Suspend();
-				illuminant->SetSteadyTime(50);//最长点亮时间25.5s  18个采集角度时间不太够
-				illuminant->LightenById(199);
-				illuminant->Start();
-				Sleep(400);
+				if (_sID != SAMPLE_NUM)
+				{
+					if (_iID != ILLUMINANT_NUM)
+					{
+						_isReady = 1;
+						illuminant->Suspend();
+						illuminant->LightenById(_illuminantID[_iID] + 1);
+						illuminant->SetSteadyTime(50);//最长点亮时间25.5s  18个采集角度时间不太够
+						illuminant->Start();
+						//Sleep(200);
+						_iID++;
 
-				emit readyForGrab(_sID, _iID);
-				sampleComm->GotoNextPos(1730);
-				Sleep(400);//留给相机的拍摄时间			
-				_sID++;
+						emit readyForGrab(_sID, _iID);
+					}
+					else if (_iID == ILLUMINANT_NUM)
+					{
+						sampleComm->GotoNextPos(1730);
+						//Sleep(200);//留给相机的拍摄时间			
+						_iID = 0;
+						_sID++;
+					}
+				}
+				else if (_sID == SAMPLE_NUM)
+				{
+					emit done();
+					string brdfPath = _imageSavingPath2 + _materialName + "\\";
+					WriteBRDF(brdfPath, "..\\sampledata\\");
+					_isReady = 1;
+				}
 			}
-			else if (_sID == SAMPLE_NUM)
+			//采集材质台旋转一周的图像
+			if (_measureFlag == 3)
 			{
-				emit done();
-				_isReady = 1;
+				if (_sID != SAMPLE_NUM)
+				{
+					_isReady = 1;
+
+					//光源常亮，中间断3次（25s时间不够）
+					if (_sID == 0)
+					{
+						//illuminant->Suspend();
+						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+						illuminant->LightenById(199);
+						illuminant->Start();
+						Sleep(200);
+					}
+
+					else if (_sID == SAMPLE_NUM / 4)
+					{
+						illuminant->Suspend();
+						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+						illuminant->LightenById(199);
+						illuminant->Start();
+						Sleep(200);
+					}
+					else if (_sID == SAMPLE_NUM * 2 / 4)
+					{
+						illuminant->Suspend();
+						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+						illuminant->LightenById(199);
+						illuminant->Start();
+						Sleep(200);
+					}
+					else if (_sID == SAMPLE_NUM * 3 / 4)
+					{
+						illuminant->Suspend();
+						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
+						illuminant->LightenById(199);
+						illuminant->Start();
+						Sleep(200);
+					}
+					emit readyForGrab(_sID, _iID);
+					sampleComm->GotoNextPos(1730);
+					//Sleep(600);//留给相机的拍摄时间			
+					_sID++;
+				}
+				else if (_sID == SAMPLE_NUM)
+				{
+					emit done();
+					_isReady = 1;
+				}
 			}
 		}
 	}
@@ -232,41 +230,45 @@ vector<double> WorkerMeasurement::AverageRGB(const Mat& inputImage)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool WorkerMeasurement::WriteBRDF()
+bool WorkerMeasurement::WriteBRDF(string path, const char* savePath)
 {
 	Mat Image;
 	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
-	FILE *f = fopen(savePath, "wa+");
+	FILE *f = fopen(savePath, "wb+");
 	if (f == 0)
 	{
 		return false;
 	}
 	string filename;
+	char name[200];
 	double data[3] = { 0 };
 	vector<double> tmp;
-	int theta_out, fi_out, theta_in, fi_in;
+	double theta_out, fi_out, theta_in, fi_in;
 	for (int i = 0; i<thetaOutNum; i++)
 	{
 		if (i == 0)
-			theta_out = 0;
+			theta_out = 0.0;
 		else
-			theta_out = i * 10 + 5;
+			theta_out = i * 10.0 + 5.0;
 		for (int j = 0; j<fiOutNum; j++)
 		{
-			fi_out = j*(360 / fiOutNum);
+			fi_out = j*(360.0 / fiOutNum);
 			for (int k = 0; k<thetaInNum; k++)
 			{
-				theta_in = k * 10;
+				theta_in = k * 10.0;
+				if (theta_in == 0)
+					theta_in = 5.0;
 				for (int m = 0; m<num[k]; m++)
 				{
-					fi_in = (360 / num[k])*m;
-					filename = path + "out" + to_string(theta_out) + "_" + to_string(fi_out) +
-						"in" + to_string(theta_in) + "_" + to_string(fi_in) + ".tiff";
-					cout << filename << endl;
+					fi_in = (360.0 / num[k])*m;
+					sprintf(name, "out_%.2f-%.2f_in_%.2f-%.2f.bmp", theta_out, fi_out, theta_in, fi_in);
+					filename = path + name;
 					Image = imread(filename);
 					tmp = AverageRGB(Image);
 					for (int n = 0; n < 3; n++)
+					{
 						data[n] = tmp[n];
+					}
 					fwrite(data, sizeof(double), 3, f);
 				}
 			}

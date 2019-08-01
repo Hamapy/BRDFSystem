@@ -25,14 +25,23 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 SampleComm::SampleComm()
 {
 	//ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+	/*
 	_port = ini->value("BRDFSystem-Configuration/stepperMotorPortSelection").toInt();
 	_velocity = ini->value("BRDFSystem-Configuration/stepperMotorSpeed").toFloat();
 	_accelerate = ini->value("BRDFSystem-Configuration/stepperMotorAcceleration").toInt();
 	_decelerate = ini->value("BRDFSystem-Configuration/stepperMotorDeceleration").toInt();
 	_resolution = ini->value("BRDFSystem-Configuration/stepperMotorResolution").toInt();
 	_homeadj = ini->value("BRDFSystem-Configuration/stepperMotorToHome").toInt();
+	*/
+
+	_port = stepperMotorParameters->stepperMotorPortSelection;
+	_velocity = stepperMotorParameters->stepperMotorSpeed;
+	_accelerate = stepperMotorParameters->stepperMotorAcceleration;
+	_decelerate = stepperMotorParameters->stepperMotorDeceleration;
+	_resolution = stepperMotorParameters->stepperMotorResolution;
+	_homeadj = stepperMotorParameters->stepperMotorToHome;
 	_step = 0;
-	}
+}
 SampleComm::~SampleComm()
 {
     Fini();
@@ -194,7 +203,8 @@ bool SampleComm::Reset()
 	// DI2000 - Set distance to stop beyond sensor to 2000 counts / steps 
 	// DC60000 - Set safety distance to 60000 counts / steps 
 	// FY2L - Launch Feed to Sensor : motor will stop when input 2 is low or when   60000 counts / steps are reached : whichever event comes first
-	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", -2000, STEP_SAFESTEP, STEP_FEEDBACK);//这里设置为-2000就好了
+	//sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", -2000, STEP_SAFESTEP, STEP_FEEDBACK);//这里设置为-2000就好了
+	sprintf_s(cmd, "DI%d\rDC%d\rFY3L\rSS%s\r", 2000, STEP_SAFESTEP, STEP_FEEDBACK);//这里设置为-2000就好了
 	Write(cmd);
 	
 	if (IsFinished(STEP_TIMEOUT))

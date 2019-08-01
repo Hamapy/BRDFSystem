@@ -17,6 +17,9 @@
 #define SAMPLE_NUM 36
 #define ILLUMINANT_NUM 196
 
+using namespace std;
+using namespace cv;
+
 class WorkerMeasurement : public QObject
 {
 	Q_OBJECT
@@ -28,6 +31,7 @@ public:
 	//virtual void run();
 	friend class MainWindow;//主界面类需要用到该类的采集图像相关变量
 	friend class WorkerCCD;
+	friend class BRDFFitting;
 
 private slots:
 	//void	NextMeasureState(int workerID, /*Mat*/QImage mat);
@@ -37,7 +41,8 @@ private slots:
 	void CloseWorker();
 	bool ReadBrdf(const char *filename, double* &brdf);
 	void LookupBrdfVal(double* brdf, int theta_in, int fi_in, int theta_out, int fi_out, double& red_val, double& green_val, double& blue_val);
-	bool WriteBRDF();
+	bool WriteBRDF(string path, const char* savePath);
+	void GetMaterialName(QString materialName);
 
 	//void GetExposureTime(int workerID, Mat mat);
 
@@ -63,6 +68,7 @@ private:
 	SlideComm*				slideComm;
 	UINT                    portNo;
 	int						_timerId;
+	string					_materialName;
 
 	UINT*					_illuminantID;
 	UINT					_iID;//亮灯序号
@@ -71,16 +77,22 @@ private:
 	//bool					_sampleFlag;
 	bool					_illuminantFlag;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
-	QMutex					_mutex;
+	//QMutex					_mutex;
 	
 	const int               thetaOutNum = 9;
 	const int               fiOutNum = 12;
 	const int               thetaInNum = 9;
 	const int               lightSourceNum = 196;
 
+	string					_imageSavingPath1 = "..\\imgs_measurement1\\";
+	string					_imageSavingPath2 = "..\\imgs_measurement2\\";
+	string					_imageSavingPath3 = "..\\imgs_measuremasks\\";
+	string					_imageSavingPathHDR = "..\\imgs_measurementHDR\\";
+
 	
 	string                  path;//读取图片的路径
 	char*                   savePath;//保存.binary文件的路径
+
 	vector<double> AverageRGB(const Mat& inputImage);
 	int theta_out_index(int theta_out);
 	inline int  fi_out_index(int fi_out);

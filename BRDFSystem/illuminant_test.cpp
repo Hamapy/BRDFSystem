@@ -1,5 +1,5 @@
 #include<iostream>
-#include<windows.h> 
+//#include<windows.h> 
 #include "Illuminant.h"
 using namespace std;
 int main4()

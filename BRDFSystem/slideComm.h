@@ -16,6 +16,7 @@
 #define MOVE_DISTANCE			 170		 // 材质台移动最大距离，单位cm
 #define STRING_LEN               2048       // 普通字符串变量的长度
 
+using namespace std;
 
 class SlideComm : public CRs232Comm
 {

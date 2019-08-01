@@ -1,128 +1,137 @@
 #include "brdfModeling.h"
 
-//初始化局部静态变量
+
+// 初始化局部静态变量
 double	BRDFFitting::_T[SIZE * 3] = { 0 };
 double  BRDFFitting::_p[7] = { 0 };
 
+BRDFFitting::BRDFFitting()
+{
+
+};
+
+BRDFFitting::~BRDFFitting()
+{
+
+};
 
 ///////////////////////////////////BRDF参数拟合类公有函数/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // 函数：StartFitting
-// 描述：进行第BRDFSerialNumber个材质的参数拟合
-// 输入：BRDFSerialNumber，thetaInLowerLimit, thetaInNumber, phiInLowerLimit, phiInNumber, Gap
+// 描述：根据材质名称进行材质的参数拟合
+// 输入：MaterialName
 // 输出：7个拟合参数值
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void BRDFFitting::StartFitting(int BRDFSerialNumber, int thetaInLowerLimit, int thetaInNumber,
-	int phiInLowerLimit, int phiInNumber, int Gap)
+Mat BRDFFitting::StartFitting(string MaterialName)
 {
 
-
-	BRDFSample(BRDFSerialNumber, thetaInLowerLimit, thetaInNumber,
-		phiInLowerLimit, phiInNumber, Gap);
+	_param = Mat::zeros(1, 7, CV_64FC1);
+	BRDFRead(MaterialName);
 	GetOriginValue();
 	GetFinalValue();
 
+	double* data1 = _param.ptr<double>(0);
+	for (int i = 0; i < 7; i++)
+	{
+		data1[i] = _p[i];
+	}
 
+	return _param;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////
 // 函数：BRDFSample
-// 描述：对BRDF原始数据进行采样预处理
-// 输入：BRDFSerialNumber，thetaInLowerLimit, thetaInNumber, phiInLowerLimit, phiInNumber, Gap
+// 描述：对BRDF原始数据根据角度读取对于BRDF值，并进行归一化
+// 输入：MaterialName
 // 输出：
-// 返回：brdf
-// 备注：此处的BRDFSerialNumber只要输入BRDF文件的序号，序号值为1-100
+// 返回：_brdf
+// 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-Mat BRDFFitting::BRDFSample(int BRDFSerialNumber, int thetaInLowerLimit, int thetaInNumber,
-	int phiInLowerLimit, int phiInNumber, int Gap)
+Mat BRDFFitting::BRDFRead(string MaterialName)
 {
-
-	ComputeSamplingAngle(thetaInNumber, phiInNumber, Gap);
-	double* brdftmp, *InOut;
+	ComputeAngle();
+	double* brdftmp;
 	int count;
 	ofstream out;
 
+	_materialName = MaterialName.c_str();
+	_fileName = _file_fold + _materialName;
+	char *readname =(char*)_fileName.GetBuffer(sizeof(_fileName));
+	cout << _fileName << endl;
 
-	_s_tmp.Format(_T("%d"), BRDFSerialNumber);
-	if (BRDFSerialNumber < 10)
-		_s_tmp = "00" + _s_tmp;
-	else if (BRDFSerialNumber < 100)
-		_s_tmp = "0" + _s_tmp;
-	else if (BRDFSerialNumber = 100)
-		_s_tmp = _s_tmp;
-	_filename = _file_fold + _s_tmp + "\\brdf.binary";
-	char *readname = (char*)_filename.GetBuffer(sizeof(_filename));
-	_savename = _save_fold + _s_tmp + "\\brdf_simple.binary";
-	cout << _filename << endl;
-
-	// 读取BRDF
+	// 读取整个BRDF
 	if (!read_brdf(readname, brdftmp))
 	{
-		fprintf(stderr, "Error reading %s\n", _filename);
+		fprintf(stderr, "Error reading %s\n", _fileName);
 		system("pause");
 		exit(0);
 	}
 
-	InOut = (double*)malloc(sizeof(double) * 3 * thetaInNumber *thetaInNumber * phiInNumber);
-	int *thetaOut, *thetaIn, *phiIn;
-	thetaOut = (int*)malloc(sizeof(int)* thetaInNumber);
-	thetaIn = (int*)malloc(sizeof(int)* thetaInNumber);
-	phiIn = (int*)malloc(sizeof(int)* phiInNumber);
-	// 采样的角度
-	for (int i = 0; i < thetaInNumber; i++)
-	{
-		thetaOut[i] = thetaInLowerLimit + i * Gap;
-		thetaIn[i] = thetaOut[i];
-	}
 
-	for (int i = 0; i< phiInNumber; i++)
-	{
-		phiIn[i] = phiInLowerLimit + Gap * i;
-	}
-
-	// BRDF采样
+	// 根据四个角度读取对应BRDF存放到_brdf中
+	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
 	count = 0;
-	for (int i = 0; i < thetaInNumber; i++)
+
+	for (int i = 0; i < _thetaOutNum; i++)
 	{
-		double theta_out = double(thetaOut[i]) * PI / _flatAngle;
+		double theta_out;
+		if (i == 0)
+			theta_out = 0.0;
+		else
+			theta_out = double(i * 10.0 + 5.0);
 
-		for (int j = 0; j < thetaInNumber; j++)
+		for (int j = 0; j < _thetaIntNum; j++)
 		{
-			double theta_in = double(thetaIn[j]) * PI / _flatAngle;
+			double theta_in = double(j * 10.0);
+			if (theta_in == 0)
+				theta_in = double(5.0);
 
-			for (int k = 0; k < phiInNumber; k++)
+			for (int k = 0; k < num[j]; k++)
 			{
-
-				double phi_in = double(phiIn[k]) * PI / _flatAngle;
+				double phi_in = (_flatAngle * 2.0 / num[j]) * k;
 				double phi_out = 0.0;
 				double red, green, blue;
 				lookup_brdf_val(brdftmp, theta_in, phi_in, theta_out, phi_out, red, green, blue);
 				double* data1 = _brdf.ptr<double>(count);
-				InOut[count * 3 + 0] = red;
-				InOut[count * 3 + 1] = green / _greenScale;
-				InOut[count * 3 + 2] = blue / _blueScale;
-				data1[0] = InOut[count * 3 + 0];
-				data1[1] = InOut[count * 3 + 1];
-				data1[2] = InOut[count * 3 + 2];
+				data1[0] = red;
+				data1[1] = green;
+				data1[2] = blue;
 				count++;
 			}
 		}
 	}
 
-	// 保存采样文件
-	out.open(_savename, ios::out | ios::binary);
-	out.write((char*)&InOut[0], sizeof(double) * thetaInNumber * thetaInNumber *phiInNumber * 3);
-	out.close();
 	free(brdftmp);
-	free(InOut);
-	free(thetaOut);
-	free(thetaIn);
-	free(phiIn);
+
+
+	// 对读取的BRDF进行归一化
+	double maxR, maxG, maxB;
+	double minR, minG, minB;
+	maxR = maxG = maxB = 0.0;
+	minR = minG = minB = 1000.0;
+	for (int i = 0; i < SIZE; i++)
+	{
+		double* data1 = _brdf.ptr<double>(i);
+		if (data1[0]>maxR) maxR = data1[0];
+		if (data1[1]>maxG) maxG = data1[1];
+		if (data1[2]>maxB) maxB = data1[2];
+		if (data1[0]<minR) minR = data1[0];
+		if (data1[1]<minG) minG = data1[1];
+		if (data1[2]<minB) minB = data1[2];
+	}
+
+	for (int i = 0; i < SIZE; i++)
+	{
+		double* data1 = _brdf.ptr<double>(i);
+		data1[0] = (data1[0] - minR) / (maxR - minR);
+		data1[1] = (data1[1] - minG) / (maxG - minG);
+		data1[2] = (data1[2] - minB) / (maxB - minB);
+	}
 	return _brdf;
 
 
@@ -135,60 +144,50 @@ Mat BRDFFitting::BRDFSample(int BRDFSerialNumber, int thetaInLowerLimit, int the
 
 //////////////////////////////////BRDF参数拟合类私有函数/////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-// 函数：ComputeSamplingAngle
-// 描述：获得brdf_simple数据的采样角度
-// 输入：thetaInNumber, phiInNumber, Gap
+// 函数：ComputeSampleAngle
+// 描述：获得brdf数据的角度信息
+// 输入：
 // 输出：
 // 返回：
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-void BRDFFitting::ComputeSamplingAngle(int thetaInNumber, int phiInNumber, int Gap)
+void BRDFFitting::ComputeAngle()
 {
-	_lth0 = Mat::ones(SIZE, 1, CV_64FC1);
-	_lph0 = Mat::ones(SIZE, 1, CV_64FC1);
-	_vth0 = Mat::ones(SIZE, 1, CV_64FC1);
+	_vth0 = Mat::zeros(SIZE, 1, CV_64FC1);
+	_lth0 = Mat::zeros(SIZE, 1, CV_64FC1);
+	_lph0 = Mat::zeros(SIZE, 1, CV_64FC1);
 	_brdf = Mat::ones(SIZE, 3, CV_64FC1);
 	_brdfandAngle = Mat::zeros(SIZE, 6, CV_64FC1);
 	_l = Mat::ones(SIZE, 1, CV_64FC1);
 	_delta = Mat::ones(SIZE, 1, CV_64FC1);
 	_G = Mat::ones(SIZE, 1, CV_64FC1);
-	int i;
 
-	for (i = 0; i < SIZE; i++)
+	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
+	double theta_out, theta_in, fi_in;
+	int count = 0;
+	for (int i = 0; i < _thetaOutNum; i++)
 	{
-		double* data1 = _lph0.ptr<double>(i);
-		double* data2 = _lth0.ptr<double>(i);
-		double* data3 = _vth0.ptr<double>(i);
-		// lph0存放入射角度phi信息
-		if ((i + 1) % phiInNumber == 0)
-		{
-			data1[0] = phiInNumber * Gap * _redScale / _flatAngle * PI;
-		}
+		if (i == 0)
+			theta_out = 0.0;
 		else
+			theta_out = (i * 10.0 + 5.0)* PI / _flatAngle;
+		for (int j = 0; j < _thetaIntNum; j++)
 		{
-			data1[0] = (i + 1) % phiInNumber * Gap * _redScale / _flatAngle * PI;
+			theta_in = j * 10.0* PI / _flatAngle;
+			if (theta_in == 0)
+				theta_in = 5.0* PI / _flatAngle;
+			for (int k = 0; k < num[j]; k++)
+			{
+				fi_in = (_flatAngle * 2.0 / num[j])*k;
+				_vth0.at<double>(count, 0) = theta_out;
+				_lth0.at<double>(count, 0) = theta_in;
+				_lph0.at<double>(count, 0) = fi_in;
+				count++;
+			}
 		}
-
-		// lth0存放入射角度phi信息
-		if ((i + 1) % (thetaInNumber * phiInNumber) == 0)
-		{
-			data2[0] = (thetaInNumber * phiInNumber / phiInNumber + 1) * Gap * _redScale / _flatAngle * PI;
-		}
-		else if ((i + 1) % phiInNumber == 0)
-		{
-			data2[0] = ((i + 1) % (thetaInNumber * phiInNumber) / phiInNumber + 1) * Gap * _redScale / _flatAngle * PI;
-		}
-		else
-		{
-			data2[0] = ((i + 1) % (thetaInNumber * phiInNumber) / phiInNumber + 2) * Gap * _redScale / _flatAngle * PI;
-		}
-
-		// vth0存放入射角度phi信息
-		data3[0] = (i / (thetaInNumber * phiInNumber) + 2) * Gap * _redScale / _flatAngle * PI;
-
-
 	}
+
 
 }
 
@@ -205,6 +204,7 @@ void BRDFFitting::ComputeSamplingAngle(int thetaInNumber, int phiInNumber, int G
 ////////////////////////////////////////////////////////////////////////////
 void BRDFFitting::GetOriginValue()
 {
+
 	// 角度和BRDF原始数据存储到BRDF变量中
 	_vth0.col(0).copyTo(_brdfandAngle.col(0));
 	_lth0.col(0).copyTo(_brdfandAngle.col(1));
@@ -333,9 +333,13 @@ void BRDFFitting::GetFinalValue()
 	printf("%f %f %f %f %f %f %f\n", _p[0], _p[1], _p[2], _p[3], _p[4], _p[5], _p[6]);
 
 
-	// 保存拟合参数结果
-	_savename = _save_fold + _s_tmp + "\\WdDu_parameter.txt";
-	ofstream out(_savename);
+	// 根据传入材质名称去除后缀，保存拟合参数结果
+	int pos = _materialName.ReverseFind('.');
+	CString paramName;
+	if (pos > 0)
+		paramName = _materialName.Left(pos);
+	_saveName = _save_fold + paramName + ".txt";
+	ofstream out(_saveName);
 	for (int i = 0; i<6; i++)
 		out << _p[i] << " ";
 	out << _p[6];
@@ -369,213 +373,70 @@ void BRDFFitting::WardDuerfun(double *p, double *hx, int m, int n, void *adata)
 
 
 
-// 两个相量的交叉乘积
-void BRDFFitting::cross_product(double* v1, double* v2, double* out)
-{
-	out[0] = v1[1] * v2[2] - v1[2] * v2[1];
-	out[1] = v1[2] * v2[0] - v1[0] * v2[2];
-	out[2] = v1[0] * v2[1] - v1[1] * v2[0];
-}
-
-// 归一化矢量
-void BRDFFitting::normalize(double* v)
-{
-	// 归一化
-	double len = sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-	v[0] = v[0] / len;
-	v[1] = v[1] / len;
-	v[2] = v[2] / len;
-}
-
-// 沿一个轴旋转矢量
-void BRDFFitting::rotate_vector(double* vector, double* axis, double angle, double* out)
-{
-	double temp;
-	double cross[3];
-	double cos_ang = cos(angle);
-	double sin_ang = sin(angle);
-
-	out[0] = vector[0] * cos_ang;
-	out[1] = vector[1] * cos_ang;
-	out[2] = vector[2] * cos_ang;
-
-	temp = axis[0] * vector[0] + axis[1] * vector[1] + axis[2] * vector[2];
-	temp = temp*(1.0 - cos_ang);
-
-	out[0] += axis[0] * temp;
-	out[1] += axis[1] * temp;
-	out[2] += axis[2] * temp;
-
-	cross_product(axis, vector, cross);
-
-	out[0] += cross[0] * sin_ang;
-	out[1] += cross[1] * sin_ang;
-	out[2] += cross[2] * sin_ang;
-}
 
 
-// 将标准坐标转换为半矢量/差矢量坐标
-void BRDFFitting::std_coords_to_half_diff_coords(double theta_in, double fi_in, double theta_out, double fi_out,
-	double& theta_half, double& fi_half, double& theta_diff, double& fi_diff)
-{
-
-	// 计算入射向量
-	double in_vec_z = cos(theta_in);
-	double proj_in_vec = sin(theta_in);
-	double in_vec_x = proj_in_vec*cos(fi_in);
-	double in_vec_y = proj_in_vec*sin(fi_in);
-	double in[3] = { in_vec_x, in_vec_y, in_vec_z };
-	normalize(in);
-
-
-	// 计算出射向量
-	double out_vec_z = cos(theta_out);
-	double proj_out_vec = sin(theta_out);
-	double out_vec_x = proj_out_vec*cos(fi_out);
-	double out_vec_y = proj_out_vec*sin(fi_out);
-	double out[3] = { out_vec_x, out_vec_y, out_vec_z };
-	normalize(out);
-
-
-	// compute halfway vector
-	double half_x = (in_vec_x + out_vec_x) / 2.0f;
-	double half_y = (in_vec_y + out_vec_y) / 2.0f;
-	double half_z = (in_vec_z + out_vec_z) / 2.0f;
-	double half[3] = { half_x, half_y, half_z };
-	normalize(half);
-
-	// 计算theta_half, fi_half
-	theta_half = acos(half[2]);
-	fi_half = atan2(half[1], half[0]);
-
-
-	double bi_normal[3] = { 0.0, 1.0, 0.0 };
-	double normal[3] = { 0.0, 0.0, 1.0 };
-	double temp[3];
-	double diff[3];
-
-	// 计算diff向量
-	rotate_vector(in, normal, -fi_half, temp);
-	rotate_vector(temp, bi_normal, -theta_half, diff);
-
-	// 计算theta_diff, fi_diff	
-	theta_diff = acos(diff[2]);
-	fi_diff = atan2(diff[1], diff[0]);
-
-}
-
-
-// 查找theta_half索引
-// 这是一个非线性映射
-// In:  [0 .. pi/2]
-// Out: [0 .. 89]
-inline int BRDFFitting::theta_half_index(double theta_half)
-{
-	if (theta_half <= 0.0)
-		return 0;
-	double theta_half_deg = ((theta_half / (PI / 2.0))*BRDF_SAMPLING_RES_THETA_H);
-	double temp = theta_half_deg*BRDF_SAMPLING_RES_THETA_H;
-	temp = sqrt(temp);
-	int ret_val = (int)temp;
-	if (ret_val < 0) ret_val = 0;
-	if (ret_val >= BRDF_SAMPLING_RES_THETA_H)
-		ret_val = BRDF_SAMPLING_RES_THETA_H - 1;
-	return ret_val;
-}
-
-
-// 查找theta_diff索引
-// In:  [0 .. pi/2]
-// Out: [0 .. 89]
-inline int BRDFFitting::theta_diff_index(double theta_diff)
-{
-	int tmp = int(theta_diff / (PI * 0.5) * BRDF_SAMPLING_RES_THETA_D);
-	if (tmp < 0)
-		return 0;
-	else if (tmp < BRDF_SAMPLING_RES_THETA_D - 1)
-		return tmp;
-	else
-		return BRDF_SAMPLING_RES_THETA_D - 1;
-}
-
-
-// 查找phi_diff索引
-inline int BRDFFitting::phi_diff_index(double phi_diff)
-{
-	// 由于相互性，BRDF不变
-	// phi_diff -> phi_diff + M_PI
-	if (phi_diff < 0.0)
-		phi_diff += PI;
-
-	// In: phi_diff in [0 .. pi]
-	// Out: tmp in [0 .. 179]
-	int tmp = int(phi_diff / PI * BRDF_SAMPLING_RES_PHI_D / 2);
-	if (tmp < 0)
-		return 0;
-	else if (tmp < BRDF_SAMPLING_RES_PHI_D / 2 - 1)
-		return tmp;
-	else
-		return BRDF_SAMPLING_RES_PHI_D / 2 - 1;
-}
-
-
-// 给定一对传入/传出角度，查找BRDF。
-void BRDFFitting::lookup_brdf_val(double* brdf, double theta_in, double fi_in,
-	double theta_out, double fi_out,
-	double& red_val, double& green_val, double& blue_val)
-{
-	// 转换为半角/差角坐标
-	double theta_half, fi_half, theta_diff, fi_diff;
-
-	std_coords_to_half_diff_coords(theta_in, fi_in, theta_out, fi_out,
-		theta_half, fi_half, theta_diff, fi_diff);
-
-
-	// 查找索引.
-	// 注意到由于假定为各向同性BRDF，因此忽略phi_half
-	int ind = phi_diff_index(fi_diff) +
-		theta_diff_index(theta_diff) * BRDF_SAMPLING_RES_PHI_D / 2 +
-		theta_half_index(theta_half) * BRDF_SAMPLING_RES_PHI_D / 2 *
-		BRDF_SAMPLING_RES_THETA_D;
-
-	red_val = brdf[ind] * RED_SCALE;
-	green_val = brdf[ind + BRDF_SAMPLING_RES_THETA_H*BRDF_SAMPLING_RES_THETA_D*BRDF_SAMPLING_RES_PHI_D / 2] * GREEN_SCALE;
-	blue_val = brdf[ind + BRDF_SAMPLING_RES_THETA_H*BRDF_SAMPLING_RES_THETA_D*BRDF_SAMPLING_RES_PHI_D] * BLUE_SCALE;
-
-
-	if (red_val < 0.0 || green_val < 0.0 || blue_val < 0.0)
-		fprintf(stderr, "Below horizon.\n");
-
-}
-
-
-
-// 读取BRDF数据
+// Read BRDF data,n为数据库的维度,后面的为数据double
 bool BRDFFitting::read_brdf(const char *filename, double* &brdf)
 {
 	FILE *f = fopen(filename, "rb");
 	if (!f)
 		return false;
+	int thetaOutNum = 9;
+	int fiOutNum = 1;
+	int lightSourceNum = 196;
 
-	int dims[3];
-	fread(dims, sizeof(int), 3, f);
-
-	int n = dims[0] * dims[1] * dims[2];
-	if (n != BRDF_SAMPLING_RES_THETA_H *
-		BRDF_SAMPLING_RES_THETA_D *
-		BRDF_SAMPLING_RES_PHI_D / 2)
-	{
-		fprintf(stderr, "Dimensions don't match\n");
-		fclose(f);
-		return false;
-	}
-
+	int n = thetaOutNum*fiOutNum*lightSourceNum;
 	brdf = (double*)malloc(sizeof(double) * 3 * n);
 	fread(brdf, sizeof(double), 3 * n, f);
-
 	fclose(f);
-
-
 	return true;
 }
-
+// first index
+inline int BRDFFitting::theta_out_index(double theta_out)
+{
+	int index = theta_out / 10;
+	return index;
+}
+// second index
+inline int BRDFFitting::fi_out_index(double fi_out)
+{
+	int index = 0;
+	index = fi_out / (360 / 12);
+	return index;
+}
+// third index
+inline int BRDFFitting::theta_in_index(double theta_in)
+{
+	int index = theta_in / 10;
+	return index;
+}
+// fourth index
+inline int BRDFFitting::fi_in_index(double fi_in, double theta_in)
+{
+	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
+	int index = 0;
+	int thetaInIndex = theta_in_index(theta_in);
+	index = fi_in / (360 / num[thetaInIndex]);
+	return index;
+}
+// Given a pair of incoming/outgoing angles, look up the BRDF.
+void BRDFFitting::lookup_brdf_val(double* brdf, double theta_in, double fi_in,
+	double theta_out, double fi_out,
+	double& red_val, double& green_val, double& blue_val)
+{
+	int lightSourceNum = 196;
+	int fiOutNum = 1;
+	int num[9] = { 4, 6, 12, 18, 24, 28, 32, 36, 36 };
+	// Find index.
+	int ind = theta_out_index(theta_out) * lightSourceNum * fiOutNum +
+		fi_out_index(fi_out) * lightSourceNum;
+	int thetaInIndex = theta_in_index(theta_in);
+	for (int i = 0; i<thetaInIndex - 1; i++)
+	{
+		ind += num[i];
+	}
+	ind += fi_in_index(fi_in, theta_in);
+	red_val = brdf[3 * ind + 2];
+	green_val = brdf[3 * ind + 1];
+	blue_val = brdf[3 * ind];
+}

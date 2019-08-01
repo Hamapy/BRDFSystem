@@ -314,7 +314,7 @@ public:
     QGridLayout *gridLayout_27;
     QTreeWidget *treeWidget;
     QVBoxLayout *verticalLayout_9;
-    QPushButton *pushButton_13;
+    QPushButton *pushButton_startFitting;
     QPushButton *pushButton_14;
     QGroupBox *groupBox_13;
     QGridLayout *gridLayout_29;
@@ -1730,10 +1730,10 @@ public:
         verticalLayout_9 = new QVBoxLayout();
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
-        pushButton_13 = new QPushButton(Modeling);
-        pushButton_13->setObjectName(QStringLiteral("pushButton_13"));
+        pushButton_startFitting = new QPushButton(Modeling);
+        pushButton_startFitting->setObjectName(QStringLiteral("pushButton_startFitting"));
 
-        verticalLayout_9->addWidget(pushButton_13);
+        verticalLayout_9->addWidget(pushButton_startFitting);
 
         pushButton_14 = new QPushButton(Modeling);
         pushButton_14->setObjectName(QStringLiteral("pushButton_14"));
@@ -1750,6 +1750,7 @@ public:
         gridLayout_28 = new QGridLayout();
         gridLayout_28->setSpacing(6);
         gridLayout_28->setObjectName(QStringLiteral("gridLayout_28"));
+        gridLayout_28->setContentsMargins(-1, -1, -1, 400);
         label_43 = new QLabel(groupBox_13);
         label_43->setObjectName(QStringLiteral("label_43"));
 
@@ -1863,6 +1864,7 @@ public:
 
         pushButton_measure3 = new QPushButton(MaterialMeasurement);
         pushButton_measure3->setObjectName(QStringLiteral("pushButton_measure3"));
+        pushButton_measure3->setEnabled(false);
 
         verticalLayout_4->addWidget(pushButton_measure3);
 
@@ -1872,7 +1874,7 @@ public:
         toolBox->addItem(MaterialMeasurement, QString::fromUtf8("\346\235\220\350\264\250\351\207\207\351\233\206"));
         MeterialModeling = new QWidget();
         MeterialModeling->setObjectName(QStringLiteral("MeterialModeling"));
-        MeterialModeling->setGeometry(QRect(0, 0, 124, 721));
+        MeterialModeling->setGeometry(QRect(0, 0, 223, 783));
         gridLayout_15 = new QGridLayout(MeterialModeling);
         gridLayout_15->setSpacing(6);
         gridLayout_15->setContentsMargins(11, 11, 11, 11);
@@ -1888,6 +1890,7 @@ public:
 
         pushButton_svbrdfModeling = new QPushButton(MeterialModeling);
         pushButton_svbrdfModeling->setObjectName(QStringLiteral("pushButton_svbrdfModeling"));
+        pushButton_svbrdfModeling->setEnabled(false);
 
         verticalLayout_5->addWidget(pushButton_svbrdfModeling);
 
@@ -1897,7 +1900,7 @@ public:
         toolBox->addItem(MeterialModeling, QString::fromUtf8("\346\235\220\350\264\250\345\273\272\346\250\241"));
         SystemSettings = new QWidget();
         SystemSettings->setObjectName(QStringLiteral("SystemSettings"));
-        SystemSettings->setGeometry(QRect(0, 0, 124, 740));
+        SystemSettings->setGeometry(QRect(0, 0, 223, 783));
         gridLayout_16 = new QGridLayout(SystemSettings);
         gridLayout_16->setSpacing(6);
         gridLayout_16->setContentsMargins(11, 11, 11, 11);
@@ -1940,7 +1943,7 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(4);
         toolBox->setCurrentIndex(0);
 
 
@@ -2305,7 +2308,7 @@ public:
         ___qtreewidgetitem->setText(2, QApplication::translate("MainWindowClass", "\344\277\256\346\224\271\346\227\266\351\227\264", Q_NULLPTR));
         ___qtreewidgetitem->setText(1, QApplication::translate("MainWindowClass", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
         ___qtreewidgetitem->setText(0, QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\220\215\347\247\260", Q_NULLPTR));
-        pushButton_13->setText(QApplication::translate("MainWindowClass", "\345\274\200\345\247\213\346\213\237\345\220\210", Q_NULLPTR));
+        pushButton_startFitting->setText(QApplication::translate("MainWindowClass", "\345\274\200\345\247\213\346\213\237\345\220\210", Q_NULLPTR));
         pushButton_14->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\346\213\237\345\220\210", Q_NULLPTR));
         groupBox_13->setTitle(QApplication::translate("MainWindowClass", "\346\213\237\345\220\210\347\273\223\346\236\234", Q_NULLPTR));
         label_43->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));

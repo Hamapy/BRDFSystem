@@ -9,7 +9,10 @@
 #include <string>
 
 using namespace std;
+using namespace cv;
 
+extern vector<Point2f> referPts;
+extern QMutex _ispMutex;
 extern QSettings* ini;
 struct CameraParameters
 {
@@ -67,6 +70,86 @@ struct CameraParameters
 //	double error;
 //};
 
+//光源参数
+struct LightParameters
+{
+	int serialPortSelection;
+	int baudRate;
+	int delaySetting;
+	int lightingSequence;
+	UINT order[196];
+};
+
+
+//步进电机参数
+struct StepperMotorParameters
+{
+	int stepperMotorPortSelection;
+	float stepperMotorSpeed;
+	int stepperMotorAcceleration;
+	int stepperMotorDeceleration;
+	int stepperMotorResolution;
+	int stepperMotorToHome;
+};
+
+
+//伺服电机参数
+struct ServoMotorParameters
+{
+	int servoMotorPortSelection;
+	int	sampleRotationAngle;
+	int	servoMotorSpeed;
+	int	servoMotorAcceleration;
+	int	servoMotorDeceleration;
+	int	servoMotorResolution;
+	int	slideTableMovingDistance;
+};
+
+
+//采集参数
+struct AcquisitionParameters
+{
+	string  save_calibration;
+	string	save_brdfiso;
+	string	save_brdfiniso;
+	string	imageSaveFormat;
+	string	imageSavePath;
+};
+
+struct MainWindowParameters{
+	float gain;
+	float blackLevel;
+	QString imageSaveFormat;
+	QString imageSavePath;
+
+	QString serialPortSelection;
+	QString baudRate;
+	int	delaySetting;
+	int	lightingSequence;
+
+
+	QString stepperMotorPortSelection;
+	QString stepperMotorSpeed;
+	QString stepperMotorAcceleration;
+	QString stepperMotorDeceleration;
+	QString stepperMotorResolution;
+	QString sampleRotationAngle;
+
+	QString servoMotorPortSelection;
+	QString servoMotorSpeed;
+	QString servoMotorAcceleration;
+	QString servoMotorDeceleration;
+	QString servoMotorResolution;
+	int slideTableMovingDistance;
+};
+extern MainWindowParameters* mainWindowParameters;
+extern CameraParameters* cameraParameters;
+extern LightParameters* lightParameters;
+extern StepperMotorParameters* stepperMotorParameters;
+extern ServoMotorParameters* servoMotorParameters;
+extern AcquisitionParameters* acquisitionParameters;
 extern CameraParameters* cameraParameters;
 //extern CameraCalibrationParamaters* camCalParas;
+
+
 #endif

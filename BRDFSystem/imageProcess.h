@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <opencv2/photo.hpp>
-#include "opencv2/imgcodecs.hpp"  //这个hpp文件opencv2没有，需要更换版本
+//#include "opencv2/imgcodecs.hpp"  //这个hpp文件opencv2没有，需要更换版本
 //#include "opencv2/imgproc.hpp"
 //#include "opencv2/highgui.hpp"
 //#include "opencv2/ml.hpp"
@@ -33,7 +33,7 @@ public:
 	//static Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs);
 	//相机正视图校正
 	static void RotateImageXoY(Mat& img, int sampleID, Point2f center);
-	static Mat ComputeAffineTrans(Point2f* pSrc, Point2f* pDst);
+	static Mat ComputeAffineTrans(vector<Point2f> pSrc, vector<Point2f> pDst);
 	static void AngelCalibration(Mat& img, Mat trans);
 
 	//若采集Bayer图像，RAW转RGB去马赛克
@@ -57,12 +57,12 @@ public:
 	//static Mat BlackLevelCorrection(Mat src);
 
 	//二值化生成Mask图像
-	static void ComputeMask(vector<Mat, string> src);
+	static void ComputeMask(map<string, Mat> src);
 
 	//白平衡校正（完美全反射）&均匀度校正
 	static float* ComputeWhiteTrans(Mat src);
 	static Mat WhiteBalance(Mat src, float* trans);
-	static Mat GrayStrech(Mat src);
+	//static Mat GrayStrech(Mat src);//直接写在白平衡里面
 	
 	//颜色校正（多项式回归），返回变换矩阵
 	//static vector<Mat> GetColorTrans(vector<Mat> mats);
@@ -78,7 +78,7 @@ private:
 	//多张连续图像求平均
 	static Mat AverageImage(vector<Mat> mats);
 	//读取一个文件夹下所有图片
-	static vector<Mat, string> ReadImages(cv::String path);
+	static map<string, Mat> ReadImages(cv::String path);
 	//判断该像素点是否被标记
 	static bool IsSelected(Mat src, int i, int j);
 	//选中标记像素点
@@ -90,10 +90,15 @@ public:
 	//根据Mask得到标记点区域，并根据二值化后的均值和方差来判断位置是否准确
 	static Mat ComputeWhiteArea(Mat mask, Mat src);
 	//根据标记区域提取特征点用于仿射变换
-	static Point2f* ComputeKeyPoints(Mat src);
-	//根据标记点Mask计算样品感兴趣区域
-	static Mat ComputeSampleArea(Mat mask);
+	static vector<Point2f> ComputeKeyPoints(Mat src);
+	//根据标记点计算样品感兴趣区域
+	static Mat ComputeSampleArea(vector<Point2f> points, Mat src);
 	//计算灰度图像最亮像素集合平均值作为二值化阈值
 	static int ComputeThreshold(Mat src);
+	//计算材质中心坐标（用于旋转
+	static Point2f ComputeCenterPoint(vector<Point2f> pts);
+	//裁剪材质区域
+	static void CutSampleArea(Mat& src);
+
 };
 #endif

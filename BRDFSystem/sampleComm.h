@@ -41,6 +41,8 @@ AR : Alarm Reset(Immediate) 报警复位（直接）
 #define STEP_STRINGLEN	   256
 #define STEP_TOHOME        62280  //归位需要调节的步数 样品台一圈约6300步
 
+using namespace std;
+
 class SampleComm : public CRs232Comm
 {
 public:

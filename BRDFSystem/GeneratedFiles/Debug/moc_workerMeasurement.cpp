@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_WorkerMeasurement_t {
-    QByteArrayData data[27];
-    char stringdata0[242];
+    QByteArrayData data[32];
+    char stringdata0[292];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -55,7 +55,12 @@ QT_MOC_LITERAL(22, 197, 7), // "double&"
 QT_MOC_LITERAL(23, 205, 7), // "red_val"
 QT_MOC_LITERAL(24, 213, 9), // "green_val"
 QT_MOC_LITERAL(25, 223, 8), // "blue_val"
-QT_MOC_LITERAL(26, 232, 9) // "WriteBRDF"
+QT_MOC_LITERAL(26, 232, 9), // "WriteBRDF"
+QT_MOC_LITERAL(27, 242, 6), // "string"
+QT_MOC_LITERAL(28, 249, 4), // "path"
+QT_MOC_LITERAL(29, 254, 8), // "savePath"
+QT_MOC_LITERAL(30, 263, 15), // "GetMaterialName"
+QT_MOC_LITERAL(31, 279, 12) // "materialName"
 
     },
     "WorkerMeasurement\0done\0\0readyForGrab\0"
@@ -64,7 +69,9 @@ QT_MOC_LITERAL(26, 232, 9) // "WriteBRDF"
     "const char*\0filename\0double*&\0brdf\0"
     "LookupBrdfVal\0double*\0theta_in\0fi_in\0"
     "theta_out\0fi_out\0double&\0red_val\0"
-    "green_val\0blue_val\0WriteBRDF"
+    "green_val\0blue_val\0WriteBRDF\0string\0"
+    "path\0savePath\0GetMaterialName\0"
+    "materialName"
 };
 #undef QT_MOC_LITERAL
 
@@ -74,7 +81,7 @@ static const uint qt_meta_data_WorkerMeasurement[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -82,16 +89,17 @@ static const uint qt_meta_data_WorkerMeasurement[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x06 /* Public */,
-       3,    2,   55,    2, 0x06 /* Public */,
+       1,    0,   59,    2, 0x06 /* Public */,
+       3,    2,   60,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    1,   60,    2, 0x08 /* Private */,
-       8,    1,   63,    2, 0x08 /* Private */,
-      10,    0,   66,    2, 0x08 /* Private */,
-      11,    2,   67,    2, 0x08 /* Private */,
-      16,    8,   72,    2, 0x08 /* Private */,
-      26,    0,   89,    2, 0x08 /* Private */,
+       6,    1,   65,    2, 0x08 /* Private */,
+       8,    1,   68,    2, 0x08 /* Private */,
+      10,    0,   71,    2, 0x08 /* Private */,
+      11,    2,   72,    2, 0x08 /* Private */,
+      16,    8,   77,    2, 0x08 /* Private */,
+      26,    2,   94,    2, 0x08 /* Private */,
+      30,    1,   99,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -103,7 +111,8 @@ static const uint qt_meta_data_WorkerMeasurement[] = {
     QMetaType::Void,
     QMetaType::Bool, 0x80000000 | 12, 0x80000000 | 14,   13,   15,
     QMetaType::Void, 0x80000000 | 17, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, 0x80000000 | 22, 0x80000000 | 22, 0x80000000 | 22,   15,   18,   19,   20,   21,   23,   24,   25,
-    QMetaType::Bool,
+    QMetaType::Bool, 0x80000000 | 27, 0x80000000 | 12,   28,   29,
+    QMetaType::Void, QMetaType::QString,   31,
 
        0        // eod
 };
@@ -122,8 +131,9 @@ void WorkerMeasurement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 5: { bool _r = _t->ReadBrdf((*reinterpret_cast< const char*(*)>(_a[1])),(*reinterpret_cast< double*(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
         case 6: _t->LookupBrdfVal((*reinterpret_cast< double*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< double(*)>(_a[6])),(*reinterpret_cast< double(*)>(_a[7])),(*reinterpret_cast< double(*)>(_a[8]))); break;
-        case 7: { bool _r = _t->WriteBRDF();
+        case 7: { bool _r = _t->WriteBRDF((*reinterpret_cast< string(*)>(_a[1])),(*reinterpret_cast< const char*(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 8: _t->GetMaterialName((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -171,13 +181,13 @@ int WorkerMeasurement::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

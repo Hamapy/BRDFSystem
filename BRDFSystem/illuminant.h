@@ -11,6 +11,7 @@
 #include "config.h"
 
 using namespace std;
+
 class Illuminant
 {
 public:
