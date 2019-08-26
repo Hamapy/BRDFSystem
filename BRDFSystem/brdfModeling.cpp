@@ -28,18 +28,18 @@ BRDFFitting::~BRDFFitting()
 Mat BRDFFitting::StartFitting(string MaterialName)
 {
 
-	_param = Mat::zeros(1, 7, CV_64FC1);
+	Mat params = Mat::zeros(1, 7, CV_64FC1);
 	BRDFRead(MaterialName);
 	GetOriginValue();
 	GetFinalValue();
 
-	double* data1 = _param.ptr<double>(0);
+	double* data1 = params.ptr<double>(0);
 	for (int i = 0; i < 7; i++)
 	{
 		data1[i] = _p[i];
 	}
 
-	return _param;
+	return params;
 }
 
 
@@ -52,25 +52,27 @@ Mat BRDFFitting::StartFitting(string MaterialName)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-Mat BRDFFitting::BRDFRead(string MaterialName)
+Mat BRDFFitting::BRDFRead(string materialName)
 {
 	ComputeAngle();
 	double* brdftmp;
 	int count;
 	ofstream out;
 
-	_materialName = MaterialName.c_str();
-	_fileName = _file_fold + _materialName;
-	char *readname =(char*)_fileName.GetBuffer(sizeof(_fileName));
-	cout << _fileName << endl;
+	_materialName = materialName.c_str();
+	string fileName = _file_fold + materialName;
+	const char* readname = fileName.c_str();
+	//char *readname =(char*)_fileName.GetBuffer(sizeof(_fileName));
+	//cout << _fileName << endl;
 
 	// 读取整个BRDF
-	if (!read_brdf(readname, brdftmp))
-	{
-		fprintf(stderr, "Error reading %s\n", _fileName);
-		system("pause");
-		exit(0);
-	}
+	read_brdf(readname, brdftmp);
+	//if (!read_brdf(readname, brdftmp))
+	//{
+	//	fprintf(stderr, "Error reading %s\n", _fileName);
+	//	system("pause");
+	//	exit(0);
+	//}
 
 
 	// 根据四个角度读取对应BRDF存放到_brdf中
@@ -132,11 +134,8 @@ Mat BRDFFitting::BRDFRead(string MaterialName)
 		data1[1] = (data1[1] - minG) / (maxG - minG);
 		data1[2] = (data1[2] - minB) / (maxB - minB);
 	}
-	return _brdf;
-
-
-
-
+	Mat brdf = _brdf.clone();
+	return brdf;
 }
 
 
@@ -188,7 +187,7 @@ void BRDFFitting::ComputeAngle()
 		}
 	}
 
-
+	return;
 }
 
 
@@ -288,6 +287,8 @@ void BRDFFitting::GetOriginValue()
 	R = R1*(P.t())*b;
 	R.row(0).copyTo(_Ad);
 	R.row(1).copyTo(_As);
+
+	return;
 }
 
 
@@ -338,12 +339,14 @@ void BRDFFitting::GetFinalValue()
 	CString paramName;
 	if (pos > 0)
 		paramName = _materialName.Left(pos);
-	_saveName = _save_fold + paramName + ".txt";
+	_saveName = _save_fold.c_str() + paramName + ".txt";
 	ofstream out(_saveName);
 	for (int i = 0; i<6; i++)
 		out << _p[i] << " ";
 	out << _p[6];
 	out.close();
+
+	return;
 }
 
 
@@ -367,6 +370,7 @@ void BRDFFitting::WardDuerfun(double *p, double *hx, int m, int n, void *adata)
 		hx[i + SIZE * 2] = (p[2] / PI)*_T[i] + _T[i] * p[5] * _T[i + SIZE] * exp(-pow(tan(_T[i + SIZE * 2]), 2)*1.0 / pow(p[6], 2)) / pow(p[6], 2);
 	}
 
+	return;
 }
 
 

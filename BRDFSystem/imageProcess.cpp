@@ -214,60 +214,23 @@ Mat ImageProcess::ContributeHDR(map<double, Mat> imgs, bool crfFlag)
 	return mat;
 }
 //////////////////////////////////////////////////////////////////////////////
-//// 函数：
-//// 描述：
-//// 输入：
+//// 函数：DeadPixelDetect
+//// 描述：检测CCD坏点位置(未测试)
+//// 输入
 //// 输出：
 //// 返回：
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
+vector<vector<int>> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 {
 #define LAMDA 5.0  //亮度值 > mean + LAMDA * sigma 被视为坏点
 #define MASK_SEL 1 
 #define MASK_UNSEL 0 //是否已选像素
 
-	vector<int*> deadPixelPos;
+	vector<vector<int>> deadPixelPos;
 
-	//对均匀图像可暂时不用滑动窗口
-	/*
-	int count = 0;  //记录滑动窗口的数目
-	int x_step = cvCeil(x_percent*wndSize.width);
-	int y_step = cvCeil(y_percent*wndSize.height);
-	//利用窗口对图像进行遍历
-	for (int i = 0; i < src.cols - wndSize.width; i += y_step)
-	{
-	for (int j = 0; j < src.rows - wndSize.height; j += x_step)
-	{
-	Rect roi(Point(j, i), wndSize);
-	Mat ROI = src(roi);
-	wnd.push_back(ROI);
-	count++;
-	}
-	}
-	*/
-
-	//坏点不受通道影响，直接看灰度图就好
-	/*
-	//求出图像三通道均值和方差
-	Scalar mean;
-	Scalar stddev;
-	meanStdDev(src, mean, stddev);
-	float meanB = mean.val[0];
-	float stddevB = stddev.val[0];
-	float meanG = mean.val[1];
-	float stddevG = stddev.val[1];
-	float meanR = mean.val[2];
-	float stddevR = stddev.val[2];
-
-	vector<Mat> channels;
-	split(src, channels);
-	Mat srcB = channels.at(0);
-	Mat srcG = channels.at(1);
-	Mat srcR = channels.at(2);
-	int ch = src.channels;
-	*/
+	//对均匀（全局接近0）图像可不用滑动窗口
 
 	PIXEL pSel;
 	Mat gray;
@@ -275,7 +238,7 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 	cvtColor(src, gray, CV_BGR2GRAY);
 	Scalar mean;
 	Scalar stddev;
-	meanStdDev(src, mean, stddev);
+	meanStdDev(gray, mean, stddev);
 	float m = mean.val[0];
 	float sigma = stddev.val[0];
 
@@ -283,10 +246,10 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 	for (int k = 0; k < maxNum; k++)
 	{
 		int maxVal = 0;
-		for (int i = 0; i < src.rows; i++)
+		for (int i = 0; i < gray.rows; i++)
 		{
 			uchar* data = gray.ptr<uchar>(i);
-			for (int j = 0; j < src.cols; j++)
+			for (int j = 0; j < gray.cols; j++)
 			{
 				if (IsSelected(zeroMat, i, j) == MASK_UNSEL)
 				{
@@ -302,7 +265,7 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 
 		if (maxVal > m + LAMDA * sigma)  // 若该点满足坏点条件
 		{
-			int deadPos[2] = { pSel.i, pSel.j };
+			vector<int> deadPos = { pSel.i, pSel.j };
 			deadPixelPos.push_back(deadPos);
 			Select(zeroMat, pSel.i, pSel.j);
 		}
@@ -316,6 +279,50 @@ vector<int*> ImageProcess::DeadPixelDetect(Mat src, int maxNum)
 #undef LAMDA
 #undef MASK_SEL
 #undef MASK_UNSEL
+}
+//////////////////////////////////////////////////////////////////////////////
+//// 函数：DeadPixelCorrection
+//// 描述：坏点校正
+//// 输入：
+//// 输出：
+//// 返回：
+//// 备注：
+//// Modified by 
+//////////////////////////////////////////////////////////////////////////////
+void ImageProcess::DeadPixelCorrection(Mat& src, vector<vector<int>> deadPos)
+{
+	vector<Mat> channels;
+	split(src, channels);
+	//vector<vector<int>>::iterator iter = deadPos.begin();
+
+	for (int k = 0; k < 3; k++)
+	{
+		for (int i = 1; i < src.rows-1; i++)//暂时可以偷懒忽略边界上的点（对材质部分不构成影响）
+		{
+			uchar* data = channels.at(k).ptr<uchar>(i);
+			for (int j = 1; j < src.cols-1; j++)
+			{
+				//for (; iter != deadPos.end(); iter++)
+				for (int m = 0; m < deadPos.size(); m++)
+				{
+					if (deadPos[m][0] == i && deadPos[m][1] == j)
+					{
+						//取8领域平均
+						data[j] = (channels.at(k).ptr<uchar>(i - 1)[j - 1] + \
+							channels.at(k).ptr<uchar>(i - 1)[j + 1] + \
+							channels.at(k).ptr<uchar>(i)[j - 1] + \
+							channels.at(k).ptr<uchar>(i)[j] + \
+							channels.at(k).ptr<uchar>(i)[j + 1] + \
+							channels.at(k).ptr<uchar>(i + 1)[j - 1] + \
+							channels.at(k).ptr<uchar>(i + 1)[j] + \
+							channels.at(k).ptr<uchar>(i + 1)[j + 1]) / 8;
+					}
+				}
+			}
+		}
+	}
+
+	return;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：ComputeMask
@@ -339,14 +346,14 @@ void ImageProcess::ComputeMask(map<string, Mat> srcs)
 		path = path + iter->first + ".bmp";
 		cvtColor(iter->second, dst, CV_BGR2GRAY);
 		//int th = ComputeThreshold(iter->second);
-		threshold(dst, dst, 20, 255, CV_THRESH_BINARY);
+		threshold(dst, dst, 180, 255, CV_THRESH_BINARY);
 		imwrite(path, dst);
 		//dsts.push_back(dst);
 	}
 
 	return;
 }
-//
+
 ////////////////////////////////////////////////////////////////////////////////
 ////// 函数：ComputeChessTrans
 ////// 描述：函数计算的是相机校正后的内外参数、旋转矩阵、旋转向量、平移向量
@@ -421,7 +428,7 @@ void ImageProcess::ComputeMask(map<string, Mat> srcs)
 //		pointCounts.push_back(boardSize.width*boardSize.height);
 //	}
 //	/* 开始标定 */
-//	calibrateCamera(objectPoints, imagePointsSeq, imageSize, cameraMatrix, distCoeffs, camCalParas.rvecsMats, camCalParas.tvecsMats, 0);
+//	calibrateCamera(objectPoints, imagePointsSeq, imageSize, cameraMatrix, distCoeffs, cameraCalibrationParamaters.rvecsMats, cameraCalibrationParamaters.tvecsMats, 0);
 //	//对标定结果进行评价
 //	double total_err = 0.0; /* 所有图像的平均误差的总和 */
 //	double err = 0.0; /* 每幅图像的平均误差 */
@@ -461,7 +468,7 @@ void ImageProcess::ComputeMask(map<string, Mat> srcs)
 ////// 备注：
 ////// Modified by 
 ////////////////////////////////////////////////////////////////////////////////
-//Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs)
+//void ImageProcess::DistortionCorrection(Mat& imageSource, Mat cameraMatrix, Mat distCoeffs)
 //{
 //	Size imageSize;
 //	imageSize.width = imageSource.cols;
@@ -469,10 +476,10 @@ void ImageProcess::ComputeMask(map<string, Mat> srcs)
 //	Mat R = Mat::eye(3, 3, CV_32F);
 //	Mat mapx = Mat(imageSize, CV_32FC1);
 //	Mat mapy = Mat(imageSize, CV_32FC1);
-//	Mat newImage = imageSource.clone();
+//	//Mat newImage = imageSource.clone();
 //	initUndistortRectifyMap(cameraMatrix, distCoeffs, R, cameraMatrix, imageSize, CV_32FC1, mapx, mapy);
-//	remap(imageSource, newImage, mapx, mapy, INTER_LINEAR);
-//	return newImage;
+//	remap(imageSource, imageSource, mapx, mapy, INTER_LINEAR);
+//	return;
 //}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -554,7 +561,7 @@ float* ImageProcess::ComputeWhiteTrans(Mat src)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-Mat ImageProcess::WhiteBalance(Mat src, float* trans)
+void ImageProcess::WhiteBalance(Mat& src, float* trans)
 {
 	const int height = src.rows;
 	const int width = src.cols;
@@ -601,9 +608,9 @@ Mat ImageProcess::WhiteBalance(Mat src, float* trans)
 			}
 		}
 	}
-	Mat	dst(src.rows, src.cols, CV_8UC3, Scalar(0));
-	merge(channels, dst);
-	return dst;
+	//Mat	dst(src.rows, src.cols, CV_8UC3, Scalar(0));
+	merge(channels, src);
+	return;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：GrayStrech
@@ -925,8 +932,10 @@ int ImageProcess::ComputeThreshold(Mat src)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-Mat ImageProcess::ComputeSampleArea(vector<Point2f> points, Mat src)
+void ImageProcess::ComputeSampleArea(Mat& src, vector<Point2f> points)
 {
+	//7.31待改 RotatedRect
+	/*
 	int i, j;
 	const int srcCols = src.cols; 
 	const int srcRows = src.rows;
@@ -977,9 +986,25 @@ Mat ImageProcess::ComputeSampleArea(vector<Point2f> points, Mat src)
 	channels.at(1) = srcG.mul(temp);
 	channels.at(2) = srcR.mul(temp);
 
-	Mat	sampleArea(src.rows, src.cols, CV_8UC3, Scalar(0));
-	merge(channels, sampleArea);
-	return sampleArea;
+	//Mat	sampleArea(src.rows, src.cols, CV_8UC3, Scalar(0));
+	merge(channels, src);
+	*/
+
+
+	//外接矩形
+	RotatedRect rect = minAreaRect(points);
+	//外接矩形的中心
+	Point2f center = rect.center;
+	Mat rot_mat = getRotationMatrix2D(center, rect.angle, 1.0);//求旋转矩阵
+	Mat rot_image;//src旋转到水平后的图像
+	Size dst_sz(src.size());
+	warpAffine(src, rot_image, rot_mat, dst_sz);//原图像旋转到外接矩形水平
+
+	//按比例提取外接矩形中的一定区域
+	Rect rect1(center.x - (rect.size.width / 2) + rect.size.width * 7.5 / 145, center.y - (rect.size.height / 2) + rect.size.height * 7.5 / 145, rect.size.width * 130 / 145, rect.size.height * 130 / 145);
+	rot_image(rect1).copyTo(src);
+
+	return;
 }
 //////////////////////////////////////////////////////////////////////////////
 //// 函数：
@@ -1043,10 +1068,11 @@ Point2f ImageProcess::ComputeCenterPoint(vector<Point2f> points)
 //// 备注：
 //// Modified by 
 //////////////////////////////////////////////////////////////////////////////
-void ImageProcess::CutSampleArea(Mat& src)
+void ImageProcess::CutSampleArea(Mat& src, Point2f pCenter)
 {
-	src = src(Rect(940, 560, 30, 20));
-	
+	//src = src(Rect(pCenter.x-15, pCenter.y-15, 30, 30));//自己定义有效区域
+	src = src(Rect(src.rows / 2 - 10, src.cols / 2 - 10, 20, 20));//自己定义有效区域
+
 	/*
 	int rowNumber = imageROI.rows;
 	int colNumer = imageROI.cols;

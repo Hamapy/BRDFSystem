@@ -174,7 +174,8 @@ bool Illuminant::LightenById(UINT id)
 	unsigned char *temp = new unsigned char[5];
 	temp[0] = 0x05;
 	temp[1] = 0x01;//机位号
-	temp[2] = 0xFb;
+	//temp[2] = 0xFb;
+	temp[2] = 0x2A;
 	temp[3] = (char)id;//光源的id
 	temp[4] = Xor(temp + 1, 3);//光源的校验值
 	if (!WriteData(temp, 5))
@@ -183,7 +184,8 @@ bool Illuminant::LightenById(UINT id)
 		return false; 
 	}
 	delete[]temp;
-	Sleep(1 * 100);
+	Sleep(2 * 100);
+
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -226,7 +228,7 @@ bool Illuminant::LightenByOrder(int num)
 		return false;
 	}
 	delete[]temp;
-	Sleep(1 * 100);
+	Sleep(3 * 100);
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -266,19 +268,36 @@ bool Illuminant::LightenByCustomOrder(unsigned char* Order, int length)
 // 备注：
 // Modified by 
 ////////////////////////////////////////////////////////////////////////////
-bool Illuminant::Suspend()
+bool Illuminant::Suspend(UINT id)
 {
-	unsigned char *temp1 = new unsigned char[4];
-	temp1[0] = 0x04;
-	temp1[1] = 0x01;//机位号
-	temp1[2] = 0xA1;
-	temp1[3] = 0xA0;
-	if (!WriteData(temp1, 4))
+	//unsigned char *temp1 = new unsigned char[4];
+	//temp1[0] = 0x04;
+	//temp1[1] = 0x01;//机位号
+	//temp1[2] = 0xA1;
+	//temp1[3] = 0xA0;
+	//if (!WriteData(temp1, 4))
+	//{
+	//	return false;
+	//}
+	//Sleep(2 * 100);
+	//delete[]temp1;
+	//return true;
+
+	unsigned char *temp = new unsigned char[5];
+	temp[0] = 0x05;
+	temp[1] = 0x01;//机位号
+	//temp[2] = 0xFb;
+	temp[2] = 0x2B;
+	temp[3] = (char)id;//光源的id
+	temp[4] = Xor(temp + 1, 3);//光源的校验值
+	if (!WriteData(temp, 5))
 	{
+		//cout << "LightenById error" << endl;
 		return false;
 	}
-	Sleep(2 * 100);
-	delete[]temp1;
+	delete[]temp;
+	Sleep(3 * 100);
+
 	return true;
 }
 
@@ -412,7 +431,8 @@ bool Illuminant::ReadChar(unsigned char &cRecved)
 	if (!bResult)
 	{
 		DWORD dwError = GetLastError();
-		PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+		//PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+		PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 		LeaveCriticalSection(&_csCommunicationSync);
 		return false;
 	}
@@ -437,11 +457,12 @@ bool Illuminant::WriteData(unsigned char *pData, int length)
 	{
 		return false;
 	}
-	EnterCriticalSection(&_csCommunicationSync);
+	//EnterCriticalSection(&_csCommunicationSync);//这句莫名跳出
 	bResult = WriteFile(_hComm, pData, length, &BytesToSend, NULL);
 	if (!bResult)
 	{
-		PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+		//PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_RXABORT);
+		PurgeComm(_hComm, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 		LeaveCriticalSection(&_csCommunicationSync);
 		return false;
 	}
@@ -522,7 +543,7 @@ UINT WINAPI Illuminant::ListenThread(void* pParam)
 }
 ////////////////////////////////////////////////////////////////////////////
 // 函数：Clear
-// 描述：实现异或运算，得到校验码
+// 描述：
 // 输入：清空串口输入缓冲区
 // 输出：
 // 返回：

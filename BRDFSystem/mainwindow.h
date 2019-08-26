@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "config.h"
 #include <QtWidgets/QMainWindow>
 #include <QDebug>
 #include <QFileDialog>
@@ -15,7 +16,6 @@
 #include "ui_mainwindow.h"
 #include "workerMeasurement.h"
 #include "workerCCD.h"
-#include "config.h"
 #include "brdfModeling.h" 
 
 using namespace std;
@@ -27,7 +27,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(VimbaSystem&	system, QWidget *parent = 0);
+	MainWindow(QWidget *parent = 0);
 	virtual ~MainWindow();
 
 private slots:
@@ -41,6 +41,8 @@ private slots:
 	void TurnToTest();
 	void TurnToPreCamera();
 
+
+	void ItemClicked();
 	void PushButton_StartFitting_Pressed();
 	
 	
@@ -82,7 +84,7 @@ private:
 	QThread*					threadMeasurement;
 	WorkerCCD*					workerCCD[9];
 	QThread*					threadCCD[9];
-	VimbaSystem&				_system;
+	//VimbaSystem&				_system;
 	QString						_qMaterialName;
 	bool						_displayFlag;
 	int							_measureFlag;

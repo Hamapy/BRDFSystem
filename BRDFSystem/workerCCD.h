@@ -20,8 +20,7 @@ class WorkerCCD : public QObject
 	Q_OBJECT
 
 public:
-	//WorkerCCD(int workerID, QObject *parent = 0);
-	WorkerCCD(int workerID, VimbaSystem& system, QObject *parent = 0);
+	WorkerCCD(int workerID, QObject *parent = 0);
 	virtual ~WorkerCCD();
 	virtual void timerEvent(QTimerEvent *event);
 	//virtual void run();
@@ -35,7 +34,7 @@ private slots:
 	void GetMaterialName(QString materialName);
 
 private:
-	VimbaSystem&			_system;
+	//VimbaSystem&			_system;
 	int						_workerID;
 	int						_sampleID;
 	AVTCamera*				cameraAVT;
@@ -59,13 +58,19 @@ private:
 	bool					_isMasked;
 	bool					_hasWhiteTrans;
 	bool					_hasAffineTrans;
-	float*					_whiteTrans;
-	Mat						_affineTrans;
-
 	QImage					CvMat2QImage(const Mat& mat);
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
 	//ImageProcess*           imageProcess;
 	Mat						_gray;
+	bool					_isHdr;
+
+	//标定后从本地配置文件读取的参数
+	vector<vector<int>>		_deadPos;
+	Mat						_cameraMatrix;
+	Mat						_distCoeffs;
+	Mat						_affineTrans;
+	float*					_whiteTrans;
+	Point2f					pCenter;
 
 signals:
 	//void next();

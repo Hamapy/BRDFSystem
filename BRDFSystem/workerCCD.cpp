@@ -1,9 +1,8 @@
 #include "workerCCD.h"
 
 ////////////////////////////////AVT相机线程类定义////////////////////////////
-WorkerCCD::WorkerCCD(int workerID, VimbaSystem&	system, QObject *parent) :
+WorkerCCD::WorkerCCD(int workerID, QObject *parent) :
 _workerID(workerID),
-_system(system),
 QObject(parent) 
 {
 	
@@ -14,12 +13,27 @@ QObject(parent)
 	_hasAffineTrans = 0;
 	_measureFlag = 0;
 	_sampleID = 0;
-	//_mutex.lock();//防止9台相机抢占Vimba系统别名
-	cameraAVT = new AVTCamera(_workerID, _system);
-	_exposureTime = 700000;
-	cameraAVT->CameraSettings(_exposureTime);//设置初始曝光时间为50ms
-	//_mutex.unlock();
+	_isHdr = 0;
 
+	cameraAVT = new AVTCamera(_workerID);
+	cameraAVT->IniCamera();
+	_exposureTime = 600000;
+	cameraAVT->CameraSettings(_exposureTime);//设置初始曝光时间为50ms
+
+	//////读取标定的仿射变换矩阵
+	//_fileMutex.lock();
+	//FileStorage cvfs("affineTrans.xml", FileStorage::READ);
+	////cvfs["cam" + to_string(workerID)] >> _affineTrans;
+	//////读取正视角下角点
+	//Mat corners(4, 2, CV_8UC1);
+	//cvfs["corners-cam0"] >> corners;
+	//_fileMutex.unlock();
+
+	//////Point2f pCenter;
+	//pCenter.x = (corners.at<double>(0, 0) + corners.at<double>(1, 0) + corners.at<double>(2, 0) + corners.at<double>(3, 0)) / 4.0;
+	//pCenter.y = (corners.at<double>(0, 1) + corners.at<double>(1, 1) + corners.at<double>(2, 1) + corners.at<double>(3, 1)) / 4.0;
+	//cvfs.release();
+	
 	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
 
 	//imageProcess = new ImageProcess();
@@ -45,6 +59,25 @@ QObject(parent)
 		referPts = ImageProcess::ComputeKeyPoints(dst);
 	}
 	*/
+}
+
+WorkerCCD::~WorkerCCD()
+{
+	cameraAVT->IniCamera();
+	//this->killTimer(_timerId);//销毁计时器写在析构函数里会报错
+	delete cameraAVT;
+	cameraAVT = NULL;
+
+	//delete workerMeasurement;
+	//workerMeasurement = NULL;
+
+	//if (threadMeasurement->isFinished())
+	//	return;
+	//threadMeasurement->quit();
+	//threadMeasurement->wait();
+
+	//delete threadMeasurement;
+	//threadMeasurement = NULL;
 }
 
 void WorkerCCD::StartTimer(int measureFlag)
@@ -91,13 +124,6 @@ void WorkerCCD::timerEvent(QTimerEvent *event)
 	}
 }
 
-//void WorkerCCD::SetExposureTime()
-//{
-//	_exposureTime = AVTCamera::GetExposureTime(_mat);//更新曝光时间
-//	cameraAVT->CameraSettings(_exposureTime * 1000);
-//	Sleep(500);//等曝光时间生效
-//}
-
 void WorkerCCD::GetMaterialName(QString materialName)
 {
 	_materialName = materialName.toStdString();
@@ -118,66 +144,83 @@ void WorkerCCD::Grab(int sID, int iID)
 		//waitKey();
 				
 		_ispMutex.lock();
+		//
+		//////1.1、自动曝光
+		//Mat temp = mat.clone();
+		//ImageProcess::CutSampleArea(temp, pCenter);//取中间一小块区域作为参考，整幅图做转换耗时较长
+		//cvtColor(temp, _gray, CV_BGR2GRAY);//转灰度图函数提到外面保存下来
+		//if (!ImageProcess::IsProperExposure(_gray))
+		//{
+		//	_exposureTime = ImageProcess::ComputeExposureTime(_gray, _exposureTime);//更新曝光时间
+		//	cameraAVT->CameraSettings(_exposureTime);
+		//	Sleep(500);//等曝光时间生效
 
+		//	//重新拍摄
+		//	//cameraAVT->GetImageSize(_width, _height);
+		//	pImageFrame = cameraAVT->CaptureAnImage();
+		//	mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
+
+		//	cvtColor(mat, _gray, CV_BGR2GRAY);//改尺寸图片转换比较耗时，统一处理
+		//}
+		////1.2、HDR采集（opencv2版本下待完善）
+		///*
+		//if (_isHdr)
+		//{
+		//	map<double, Mat> imgs = cameraAVT->CaptureByDifTimes(_exposureTime, mat);
+		//	Mat hdr = ImageProcess::ContributeHDR(imgs, 0);//暂视为单色区域整体CRF曲线为线性
+		//}
+		//*/
+
+		//////2、坏点校正（待测试，这一步厂家在demosiac时应该做过，暂可不用）
+		////ImageProcess::DeadPixelCorrection(mat, _deadPos);
+
+		//////3、相机内参畸变矫正（同上，暂可不用）
+		////ImageProcess::DistortionCorrection(mat, _cameraMatrix, _distCoeffs);
+
+		//////4、采集图像正视角校正
+		////高度角仿射变换
+		//ImageProcess::AngelCalibration(mat, _affineTrans);
+		//方位角角度旋转
+		//ImageProcess::RotateImageXoY(mat, sID, { 600, 800 });
 		/*
-		//自动曝光比较耗时
-		Mat temp = mat.clone();
-		ImageProcess::CutSampleArea(temp);
-		cvtColor(temp, _gray, CV_BGR2GRAY);//转灰度图函数提到外面保存下来
-		if (!ImageProcess::IsProperExposure(_gray))//这个函数的cvtColor函数耗时较长
-		{
-			_exposureTime = ImageProcess::ComputeExposureTime(_gray, _exposureTime);//更新曝光时间
-			cameraAVT->CameraSettings(_exposureTime);
-			Sleep(500);//等曝光时间生效
+		////7.26日前考虑的定点方案，但低纬度相机下视野非常小，难以计算mask
+		//vector<Point2f> pts = ImageProcess::ComputeKeyPoints(dst);
+		//if (_hasAffineTrans == 0)
+		//{
+		//_affineTrans = ImageProcess::ComputeAffineTrans(pts, referPts);
+		//_hasAffineTrans = 1;
+		//}
+		//ImageProcess::AngelCalibration(mat, _affineTrans);
+		//mat = ImageProcess::ComputeSampleArea(pts, mat);
+		//Point2f center = ImageProcess::ComputeCenterPoint(pts);
+		//ImageProcess::RotateImageXoY(mat, sID, center);
+		////第一个相机由于安装位置限制，需要额外旋转45°
+		//if (_workerID == 0)
+		//	ImageProcess::RotateImageXoY(mat, 4.5, center);
+		//*/
 
-			//重新拍摄
-			//cameraAVT->GetImageSize(_width, _height);
-			pImageFrame = cameraAVT->CaptureAnImage();
-			mat = Mat(_height, _width, CV_8UC3, _pImageFrame);
-		}
-		*/
-		////采集图像处理
-		//Mat mask = ImageProcess::ReadMask(_workerID, sID);
-		//Mat dst = ImageProcess::ComputeWhiteArea(mask, mat);
+		//////5、根据标定Mask计算白点标记区域，进行白平衡校正	
+		//Mat mask = ImageProcess::ReadMask(_workerID, sID);//统一转换到正视角下后再做mask（仅白平衡用），减少mask的存取数量
+		//Mat dst = ImageProcess::ComputeWhiteArea(mask, mat);//获取白色标记区域
+		//采集时根据第一帧获取白平衡矩阵，不必先进行标定
 		//if (_hasWhiteTrans == 0)
 		//{
 		//	_whiteTrans = ImageProcess::ComputeWhiteTrans(dst);
 		//	_hasWhiteTrans = 1;
 		//}
-		//dst = ImageProcess::WhiteBalance(dst, _whiteTrans);
+		//ImageProcess::WhiteBalance(mat, _whiteTrans);
 
-		//先不对样品方向进行校正，直接取中间一小块区域
-		/*
-		vector<Point2f> pts = ImageProcess::ComputeKeyPoints(dst);
-		if (_hasAffineTrans == 0)
-		{
-			_affineTrans = ImageProcess::ComputeAffineTrans(pts, referPts);
-			_hasAffineTrans = 1;
-		}
-		ImageProcess::AngelCalibration(mat, _affineTrans);
-		mat = ImageProcess::ComputeSampleArea(pts, mat);
-		Point2f center = ImageProcess::ComputeCenterPoint(pts);
-		ImageProcess::RotateImageXoY(mat, sID, center);
-		//第一个相机由于安装位置限制，视野旋转45°
-		if (_workerID == 0)
-		{
-			ImageProcess::RotateImageXoY(mat, 4.5, center);
-		}
-		*/
-		ImageProcess::CutSampleArea(mat);
+		//////6、截取材质中心高质量区域（这一步视采集方式来定，样品多角度采集需要框取整个材质区域）
+		//ImageProcess::ComputeSampleArea(mat, pCorners);//框取材质样品区域（svbrdf要求像素精度）
+		ImageProcess::CutSampleArea(mat, {600,800});//框取光照中心区域有效值
 
-		_ispMutex.unlock();
-		
+		_ispMutex.unlock();	
 	}
 	else
 	{
 		cameraAVT->GetImageSize(_width, _height);
 		pImageFrame = cameraAVT->CaptureAnImage();
 		mat = Mat(_height, _width, CV_8UC3, pImageFrame);
-		/*
-		map<double, Mat> imgs = cameraAVT->CaptureByDifTimes(_exposureTime, mat);
-		Mat hdr = ImageProcess::ContributeHDR(imgs, 0);//暂定线性CRF
-		*/
 	}
 
 	string path;
@@ -196,24 +239,6 @@ void WorkerCCD::Grab(int sID, int iID)
 void WorkerCCD::CloseWorker()
 {
 	this->killTimer(_timerId);//销毁计时器写在析构函数里会报错
-}
-
-WorkerCCD::~WorkerCCD()
-{
-	//this->killTimer(_timerId);//销毁计时器写在析构函数里会报错
-	delete cameraAVT;
-	cameraAVT = NULL;
-
-	//delete workerMeasurement;
-	//workerMeasurement = NULL;
-
-	//if (threadMeasurement->isFinished())
-	//	return;
-	//threadMeasurement->quit();
-	//threadMeasurement->wait();
-
-	//delete threadMeasurement;
-	//threadMeasurement = NULL;
 }
 
 QImage WorkerCCD::CvMat2QImage(const Mat& mat)

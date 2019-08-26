@@ -23,8 +23,8 @@ using namespace std;
 using namespace cv;
 using namespace AVT::VmbAPI;
 
-#define HDR_NUM 3 //HDR曝光次数
-#define CAM_NUM 9 //连接相机数量
+#define HDR_NUM 6 //HDR曝光次数
+#define CAM_NUM 0 //连接相机数量
 #define CAPTURE_NUM 150 //采集图像数量 
 #define TIMEOUT 5000 //采集图像等待超时时间 
 
@@ -52,8 +52,8 @@ class AVTCamera : public QObject
 
 public:
 	//AVTCamera();
-	AVTCamera(VimbaSystem& system);
-	AVTCamera(int cameraID, VimbaSystem& system);
+	AVTCamera();
+	AVTCamera(int cameraID);
 	virtual ~AVTCamera();
 
 	//系统初始化
@@ -84,9 +84,9 @@ public:
 	friend class MainWindow;
 
 private:
-	VimbaSystem&				_system;
+	//VimbaSystem&				_system;
 	int							_cameraID;
-	CameraPtrVector				_cameras;
+	static CameraPtrVector		_cameras;
 	CameraPtr					_camera;
 	FramePtr					_pFrame;
 	VmbUchar_t*					_pImage;

@@ -4,15 +4,21 @@
 
 #include "stdafx.h"
 #include "opencv2/opencv.hpp"
+#include "VimbaSystem.h"
 #include <QObject>
 #include <QSettings>
 #include <string>
+#include <io.h>
+#include <iostream>
 
 using namespace std;
 using namespace cv;
+using namespace AVT::VmbAPI;
 
+extern bool device_on;
 extern vector<Point2f> referPts;
 extern QMutex _ispMutex;
+extern QMutex _fileMutex;
 extern QSettings* ini;
 struct CameraParameters
 {
@@ -52,23 +58,25 @@ struct CameraParameters
 	char* gainAuto;
 };
 
-//struct CameraCalibrationParamaters
-//{
-//	/* 参与校正的图片的总数量 */
-//	int Count;
-//	/* 摄像机内参数矩阵 */
-//	Mat cameraMatrix;
-//	/* 摄像机的5个畸变系数：k1,k2,p1,p2,k3 */
-//	Mat distCoeffs;
-//	/* 对应的每张图片的旋转向量 */
-//	vector<Mat> rvecsMats;
-//	/* 对应的每张图片的旋转矩阵 */
-//	vector<Mat> rotationMatrixs;
-//	/* 对应的每张图片的平移向量 */
-//	vector<Mat> tvecsMats;
-//	/* 校正后图片的平均误差 */
-//	double error;
-//};
+struct CameraCalibrationParamaters
+{
+	/* 参与校正的图片的总数量 */
+	int Count;
+	/* 摄像机内参数矩阵 */
+	Mat cameraMatrix;
+	/* 摄像机的5个畸变系数：k1,k2,p1,p2,k3 */
+	Mat distCoeffs;
+	/* 对应的每张图片的旋转向量 */
+	vector<Mat> rvecsMats;
+	/* 对应的每张图片的旋转矩阵 */
+	vector<Mat> rotationMatrixs;
+	/* 对应的每张图片的平移向量 */
+	vector<Mat> tvecsMats;
+	/* 校正后图片的平均误差 */
+	double error;
+};
+
+
 
 //光源参数
 struct LightParameters
@@ -144,6 +152,10 @@ struct MainWindowParameters{
 };
 extern MainWindowParameters* mainWindowParameters;
 extern CameraParameters* cameraParameters;
+extern CameraCalibrationParamaters* cameraCalibrationParamaters;
+//extern FileStorage cvfs;
+//extern vector<Point2f> pCorners;//正视角下四个标记点
+//extern Point2f pCenter;//正视角下中心点
 extern LightParameters* lightParameters;
 extern StepperMotorParameters* stepperMotorParameters;
 extern ServoMotorParameters* servoMotorParameters;

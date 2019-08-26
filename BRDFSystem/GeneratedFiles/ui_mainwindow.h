@@ -315,7 +315,7 @@ public:
     QTreeWidget *treeWidget;
     QVBoxLayout *verticalLayout_9;
     QPushButton *pushButton_startFitting;
-    QPushButton *pushButton_14;
+    QPushButton *pushButton_stopFitting;
     QGroupBox *groupBox_13;
     QGridLayout *gridLayout_29;
     QGridLayout *gridLayout_28;
@@ -1735,10 +1735,10 @@ public:
 
         verticalLayout_9->addWidget(pushButton_startFitting);
 
-        pushButton_14 = new QPushButton(Modeling);
-        pushButton_14->setObjectName(QStringLiteral("pushButton_14"));
+        pushButton_stopFitting = new QPushButton(Modeling);
+        pushButton_stopFitting->setObjectName(QStringLiteral("pushButton_stopFitting"));
 
-        verticalLayout_9->addWidget(pushButton_14);
+        verticalLayout_9->addWidget(pushButton_stopFitting);
 
         groupBox_13 = new QGroupBox(Modeling);
         groupBox_13->setObjectName(QStringLiteral("groupBox_13"));
@@ -1750,7 +1750,7 @@ public:
         gridLayout_28 = new QGridLayout();
         gridLayout_28->setSpacing(6);
         gridLayout_28->setObjectName(QStringLiteral("gridLayout_28"));
-        gridLayout_28->setContentsMargins(-1, -1, -1, 400);
+        gridLayout_28->setContentsMargins(-1, -1, -1, 500);
         label_43 = new QLabel(groupBox_13);
         label_43->setObjectName(QStringLiteral("label_43"));
 
@@ -1821,6 +1821,8 @@ public:
 
         gridLayout_28->addWidget(lineEdit_11, 6, 1, 1, 1);
 
+        gridLayout_28->setColumnStretch(0, 1);
+        gridLayout_28->setColumnStretch(1, 2);
 
         gridLayout_29->addLayout(gridLayout_28, 0, 0, 1, 1);
 
@@ -1916,6 +1918,7 @@ public:
 
         pushButton_test = new QPushButton(SystemSettings);
         pushButton_test->setObjectName(QStringLiteral("pushButton_test"));
+        pushButton_test->setEnabled(false);
 
         verticalLayout_6->addWidget(pushButton_test);
 
@@ -1943,8 +1946,8 @@ public:
 
         retranslateUi(MainWindowClass);
 
-        stackedWidget->setCurrentIndex(4);
-        toolBox->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(0);
+        toolBox->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindowClass);
@@ -2309,15 +2312,15 @@ public:
         ___qtreewidgetitem->setText(1, QApplication::translate("MainWindowClass", "\346\226\207\344\273\266\345\244\247\345\260\217", Q_NULLPTR));
         ___qtreewidgetitem->setText(0, QApplication::translate("MainWindowClass", "\346\235\220\350\264\250\345\220\215\347\247\260", Q_NULLPTR));
         pushButton_startFitting->setText(QApplication::translate("MainWindowClass", "\345\274\200\345\247\213\346\213\237\345\220\210", Q_NULLPTR));
-        pushButton_14->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\346\213\237\345\220\210", Q_NULLPTR));
+        pushButton_stopFitting->setText(QApplication::translate("MainWindowClass", "\345\201\234\346\255\242\346\213\237\345\220\210", Q_NULLPTR));
         groupBox_13->setTitle(QApplication::translate("MainWindowClass", "\346\213\237\345\220\210\347\273\223\346\236\234", Q_NULLPTR));
-        label_43->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_42->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_45->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_44->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_46->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_47->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
-        label_41->setText(QApplication::translate("MainWindowClass", "TextLabel", Q_NULLPTR));
+        label_43->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2603", Q_NULLPTR));
+        label_42->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2602", Q_NULLPTR));
+        label_45->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2605", Q_NULLPTR));
+        label_44->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2604", Q_NULLPTR));
+        label_46->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2606", Q_NULLPTR));
+        label_47->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2607", Q_NULLPTR));
+        label_41->setText(QApplication::translate("MainWindowClass", "\345\217\202\346\225\2601", Q_NULLPTR));
         pushButton_measure1->setText(QApplication::translate("MainWindowClass", "BRDF\357\274\210\345\220\204\345\220\221\345\220\214\346\200\247\357\274\211\351\207\207\351\233\206", Q_NULLPTR));
         pushButton_measure2->setText(QApplication::translate("MainWindowClass", "BRDF\357\274\210\345\220\204\345\220\221\345\274\202\346\200\247\357\274\211\351\207\207\351\233\206", Q_NULLPTR));
         pushButton_measure3->setText(QApplication::translate("MainWindowClass", "svBRDF\351\207\207\351\233\206", Q_NULLPTR));

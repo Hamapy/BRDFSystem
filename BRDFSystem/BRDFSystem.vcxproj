@@ -177,8 +177,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="hdr_test.cpp" />
     <ClCompile Include="imageProcess.cpp" />
     <ClCompile Include="isp_test.cpp" />
+    <ClCompile Include="render.cpp" />
     <ClCompile Include="workerCCD.cpp" />
     <ClCompile Include="ccd_test.cpp" />
     <ClCompile Include="illuminant.cpp" />
@@ -192,6 +194,7 @@
     <ClCompile Include="slideComm.cpp" />
     <ClCompile Include="slideComm_test.cpp" />
     <ClCompile Include="workerMeasurement.cpp" />
+    <ClCompile Include="writebrdf_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="workerMeasurement.h">
@@ -267,6 +270,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB -D_CRT_SECURE_NO_WARNINGS -Dx64 -D_DEBUG -D_CONSOLE "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
     <ClInclude Include="imageProcess.h" />
+    <ClInclude Include="render.h" />
     <ClInclude Include="sampleComm.h" />
     <ClInclude Include="slideComm.h" />
     <ClInclude Include="stdafx.h" />

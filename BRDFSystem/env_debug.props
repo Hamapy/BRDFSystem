@@ -3,30 +3,13 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>.\dependences\OpenCV\opencv2.4.13\include;.\dependences\OpenCV\opencv2.4.13\include\opencv2;.\dependences\VimbaC\Include;.\dependences\VimbaCPP\Include;.\dependences;.\dependences\VimbaImageTransform\Include;.\dependences\EDSDK_64\Header;.\dependences\EDSDK_64\Sample;.\dependences\EDSDK_64\Sample\Class;.\dependences\EDSDK_64\Sample\Camera;.\dependences\EDSDK_64\Sample\Command;.\dependences\levmar-2.6\include;$(IncludePath)</IncludePath>
-    <LibraryPath>.\dependences\VimbaCPP\Lib\Win64;.\dependences\VimbaC\Lib\Win64;.\dependences\OpenCV\opencv2.4.13\x64\vc12\lib;.\dependences\VimbaImageTransform\Lib\Win64;.\dependences\EDSDK_64\Library;.\dependences\ServoMotor\x64\Debug;.\dependences\levmar-2.6\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>.\dependences\EDSDK_64\Dll;.\dependences\EDSDK_64\Dll\IHL;.\dependences\EDSDK_64\Dll\DPP4Lib;.\dependences\EDSDK_64\Dll\DPP4Lib\Extension;.\dependences\EDSDK_64\Dll\DPP4Lib\Model;.\dependences\ServoMotor\x64\Debug;.\dependences\OpenCV\opencv2.4.13\x64\vc12\bin;.\dependences\VimbaCPP\Bin\Win64;.\dependences\VimbaC\Bin\Win64;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>.\dependences\OpenCV\opencv2.4.13\include;.\dependences\OpenCV\opencv2.4.13\include\opencv2;.\dependences\VimbaC\Include;.\dependences\VimbaCPP\Include;.\dependences;.\dependences\VimbaImageTransform\Include;.\dependences\EDSDK_64\Header;.\dependences\EDSDK_64\Sample;.\dependences\EDSDK_64\Sample\Class;.\dependences\EDSDK_64\Sample\Camera;.\dependences\EDSDK_64\Sample\Command;.\dependences\levmar-2.6\include;.\dependences\OpenGL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\dependences\VimbaCPP\Lib\Win64;.\dependences\VimbaC\Lib\Win64;.\dependences\OpenCV\opencv2.4.13\x64\vc12\lib;.\dependences\VimbaImageTransform\Lib\Win64;.\dependences\EDSDK_64\Library;.\dependences\ServoMotor\x64\Debug;.\dependences\levmar-2.6\lib;.\dependences\OpenGL\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>.\dependences\EDSDK_64\Dll;.\dependences\EDSDK_64\Dll\IHL;.\dependences\EDSDK_64\Dll\DPP4Lib;.\dependences\EDSDK_64\Dll\DPP4Lib\Extension;.\dependences\EDSDK_64\Dll\DPP4Lib\Model;.\dependences\ServoMotor\x64\Debug;.\dependences\OpenCV\opencv2.4.13\x64\vc12\bin;.\dependences\VimbaCPP\Bin\Win64;.\dependences\VimbaC\Bin\Win64;.\dependences\Qt\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>opencv_calib3d2413d.lib;
-opencv_contrib2413d.lib;
-opencv_core2413d.lib;
-opencv_features2d2413d.lib;
-opencv_flann2413d.lib;
-opencv_gpu2413d.lib;opencv_highgui2413d.lib
-;opencv_imgproc2413d.lib;
-opencv_legacy2413d.lib;
-opencv_ml2413d.lib;
-opencv_nonfree2413d.lib;
-opencv_objdetect2413d.lib;
-opencv_ocl2413d.lib;
-opencv_photo2413d.lib;
-opencv_stitching2413d.lib;
-opencv_superres2413d.lib;
-opencv_ts2413d.lib;
-opencv_video2413d.lib;
-opencv_videostab2413d.lib;VimbaC.lib;VimbaCPP.lib;VimbaImageTransform.lib;EDSDK.lib;ServoRs232Comm.lib;lapack.lib;blas.lib;f2c.lib;tmglib.lib;levmar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_calib3d2413d.lib;opencv_contrib2413d.lib;opencv_core2413d.lib;opencv_features2d2413d.lib;opencv_flann2413d.lib;opencv_gpu2413d.lib;opencv_highgui2413d.lib;opencv_imgproc2413d.lib;opencv_legacy2413d.lib;opencv_ml2413d.lib;opencv_nonfree2413d.lib;opencv_objdetect2413d.lib;opencv_ocl2413d.lib;opencv_photo2413d.lib;opencv_stitching2413d.lib;opencv_superres2413d.lib;opencv_ts2413d.lib;opencv_video2413d.lib;opencv_videostab2413d.lib;VimbaC.lib;VimbaCPP.lib;VimbaImageTransform.lib;EDSDK.lib;ServoRs232Comm.lib;lapack.lib;blas.lib;f2c.lib;tmglib.lib;levmar.lib;glut.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -11,6 +11,7 @@
 //#include "opencv2/objdetect.hpp"
 #include "opencv2/opencv.hpp"
 #include "stdafx.h"
+#include "config.h"
 
 using namespace std;
 using namespace cv;
@@ -28,9 +29,9 @@ public:
 	virtual ~ImageProcess();
 
 	//计算标定参数
-	//static CameraCalibrationParamaters ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize);
+	static CameraCalibrationParamaters ComputeChessTrans(const vector<Mat>& mats, const Size boardSize, const Size squareSize);
 	//相机径向畸变校正
-	//static Mat ImageProcess::Calibration(Mat imageSource, Mat cameraMatrix, Mat distCoeffs);
+	static void DistortionCorrection(Mat& imageSource, Mat cameraMatrix, Mat distCoeffs);
 	//相机正视图校正
 	static void RotateImageXoY(Mat& img, int sampleID, Point2f center);
 	static Mat ComputeAffineTrans(vector<Point2f> pSrc, vector<Point2f> pDst);
@@ -49,8 +50,8 @@ public:
 	static Mat ContributeHDR(map<double, Mat> imgs, bool crfFlag);
 
 	//坏点校正
-	static vector<int*> DeadPixelDetect(Mat src, int maxNum);
-	static Mat DeadPixelCorrection(Mat src);
+	static vector<vector<int>> DeadPixelDetect(Mat src, int maxNum);
+	static void DeadPixelCorrection(Mat& src, vector<vector<int>> deadPos);
 
 	//暗电平处理 返回需要减去的基值，MatLab测试BlackLevel = 0时像素点值范围1-2（0-255），故暂不用考虑做暗电平处理
 	//static int ComputeBlackPedal(Mat src);
@@ -61,7 +62,7 @@ public:
 
 	//白平衡校正（完美全反射）&均匀度校正
 	static float* ComputeWhiteTrans(Mat src);
-	static Mat WhiteBalance(Mat src, float* trans);
+	static void WhiteBalance(Mat& src, float* trans);
 	//static Mat GrayStrech(Mat src);//直接写在白平衡里面
 	
 	//颜色校正（多项式回归），返回变换矩阵
@@ -92,13 +93,13 @@ public:
 	//根据标记区域提取特征点用于仿射变换
 	static vector<Point2f> ComputeKeyPoints(Mat src);
 	//根据标记点计算样品感兴趣区域
-	static Mat ComputeSampleArea(vector<Point2f> points, Mat src);
+	static void ComputeSampleArea(Mat& src, vector<Point2f> points);
 	//计算灰度图像最亮像素集合平均值作为二值化阈值
 	static int ComputeThreshold(Mat src);
 	//计算材质中心坐标（用于旋转
 	static Point2f ComputeCenterPoint(vector<Point2f> pts);
 	//裁剪材质区域
-	static void CutSampleArea(Mat& src);
+	static void CutSampleArea(Mat& src, Point2f pCenter);
 
 };
 #endif

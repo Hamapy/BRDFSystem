@@ -1,18 +1,15 @@
 ﻿#include "ccd.h"
 
-AVTCamera::AVTCamera(VimbaSystem& system) :
-_system(system)
+CameraPtrVector	AVTCamera::_cameras;
+AVTCamera::AVTCamera()
 {
 	_saveName = 0;
-	IniCamera();
 }
 
-AVTCamera::AVTCamera(int cameraID, VimbaSystem& system) :
-_cameraID(cameraID),
-_system(system)
+AVTCamera::AVTCamera(int cameraID) :
+_cameraID(cameraID)
 {
 	_saveName = 0;
-	IniCamera();
 }
 
 AVTCamera::~AVTCamera()
@@ -32,8 +29,10 @@ bool AVTCamera::IniVimba(VimbaSystem& system)
 {
 	if (VmbErrorSuccess == system.Startup())
 	{
-		cout << "相机系统初始化完成" << endl;
-		return 1;
+		if (VmbErrorSuccess == system.GetCameras(_cameras))
+			return 1;
+		else
+			return 0;
 	}
 	else
 		return 0;
@@ -49,33 +48,10 @@ bool AVTCamera::IniVimba(VimbaSystem& system)
 ////////////////////////////////////////////////////////////////////////////
 bool AVTCamera::IniCamera()
 {
-	if (VmbErrorSuccess == _system.GetCameras(_cameras))
-	{
-		//cout << "相机初始化完成" << endl;
-		_camera = _cameras[_cameraID];
-
-		if (VmbErrorSuccess == _camera->Open(VmbAccessModeFull))//完全读写相机权限
-		{
-			////相机参数初始化设置
-			//_camera->GetFeatureByName("PixelFormat", _feature);
-			//_feature->SetValue("RGB8Packed");//这个像素源格式很重要，否则后续的QImage、QPixmap包括Mat的数据转换都会报错
-			//_camera->GetFeatureByName("Gain", _feature);
-			//_feature->SetValue(0);
-			//_camera->GetFeatureByName("BlackLevel", _feature);
-			//_feature->SetValue(0);
-			//_camera->GetFeatureByName("Gamma", _feature);
-			//_feature->SetValue(0);
-			////_camera->GetFeatureByName("Hue", _feature);
-			////_feature->SetValue(0);
-			//string name;
-			//_camera->GetName(name);
-			//string ID;
-			//_camera->GetID(ID);
-			//cout << "第" << _cameraID << "个相机" << name << " " << ID << " 打开成功" << endl;
-
-			return 1;
-		}
-	}	
+	_camera = _cameras[_cameraID];
+	if (VmbErrorSuccess == _camera->Open(VmbAccessModeFull))//完全读写相机权限
+		return 1;
+	
 	return 0;
 }
 ////////////////////////////////////////////////////////////////////////////

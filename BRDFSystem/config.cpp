@@ -1,8 +1,10 @@
 #include "config.h"
 
-vector<Point2f> referPts;
+//vector<Point2f> referPts;
 QMutex _ispMutex;
+QMutex _fileMutex;
 QSettings* ini = new QSettings("./config.ini", QSettings::IniFormat);//读取配置文件
+bool device_on = ini->value("BRDFSystem-Configuration/device_on").toBool();
 
 CameraParameters* cameraParameters = new CameraParameters{
 	/*acquisitionFrameCount =*/ 1,
@@ -51,6 +53,10 @@ CameraParameters* cameraParameters = new CameraParameters{
 	//ini->value("BRDFSystem-Configuration/acquisitionMode").toString().toStdString(),
 	//(char*)(ini->value("BRDFSystem-Configuration/gainAuto").toString().toLocal8Bit()).data()
 };
+
+//CameraCalibrationParamaters* cameraCalibrationParamaters = new CameraCalibrationParamaters;
+
+Point2f pCenter;//正视角下中心点
 
 LightParameters* lightParameters = new LightParameters{
 	ini->value("BRDFSystem-Configuration/serialPortSelection").toInt(),

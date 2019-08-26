@@ -20,7 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>4</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="Settings">
          <layout class="QGridLayout" name="gridLayout_46">
@@ -2057,7 +2057,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_14">
+             <widget class="QPushButton" name="pushButton_stopFitting">
               <property name="text">
                <string>停止拟合</string>
               </property>
@@ -2073,56 +2073,56 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_29">
                <item row="0" column="0">
-                <layout class="QGridLayout" name="gridLayout_28">
+                <layout class="QGridLayout" name="gridLayout_28" columnstretch="1,2">
                  <property name="bottomMargin">
-                  <number>400</number>
+                  <number>500</number>
                  </property>
                  <item row="2" column="0">
                   <widget class="QLabel" name="label_43">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数3</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="label_42">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数2</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="label_45">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数5</string>
                    </property>
                   </widget>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_44">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数4</string>
                    </property>
                   </widget>
                  </item>
                  <item row="5" column="0">
                   <widget class="QLabel" name="label_46">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数6</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="label_47">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数7</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_41">
                    <property name="text">
-                    <string>TextLabel</string>
+                    <string>参数1</string>
                    </property>
                   </widget>
                  </item>
@@ -2163,7 +2163,7 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="MaterialMeasurement">
        <property name="geometry">
@@ -2286,6 +2286,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_test">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>设备测试</string>
             </property>

@@ -31,7 +31,7 @@ public:
 	//发送启动指令
 	bool Start();
 	//发送暂停指令
-	bool Suspend();
+	bool Suspend(UINT id);
 	//实现按照自定义的顺序点亮光源
 	bool LightenByCustomOrder(unsigned char* Order, int length);
 	//bool Run(unsigned char* Order, int length);

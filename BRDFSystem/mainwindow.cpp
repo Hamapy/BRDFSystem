@@ -1,14 +1,12 @@
 ﻿#include "mainwindow.h"
 
 ////////////////////////////////主界面定义////////////////////////////
-MainWindow::MainWindow(VimbaSystem&	system, QWidget *parent) : 
-_system(system),
+MainWindow::MainWindow(QWidget *parent) : 
 QMainWindow(parent)
 {
 	ui.setupUi(this);
 	
 	//界面及软件初始化
-	AVTCamera::IniVimba(_system);
 	//extern QSettings *ini;
 	this->setAttribute(Qt::WA_DeleteOnClose, true);//关闭窗口时清空内存
 	TurnToMeasurement1();
@@ -168,35 +166,43 @@ QMainWindow(parent)
 
 //////////////////////////////////////////////建模页面/////////////////////////////////////////////////////
 	brdfFitting = new BRDFFitting();
+	this->ui.pushButton_startFitting->setEnabled(false);
+	this->ui.pushButton_stopFitting->setEnabled(false);
+	connect(this->ui.treeWidget, SIGNAL(itemSelectionChanged()), this, SLOT(ItemClicked()));
 	connect(this->ui.pushButton_startFitting, SIGNAL(pressed()), this, SLOT(PushButton_StartFitting_Pressed()));
 
 //////////////////////////////////////////////采集页面/////////////////////////////////////////////////////
-	workerMeasurement = new WorkerMeasurement();
-	threadMeasurement = new QThread();
-	workerMeasurement->moveToThread(threadMeasurement);
-	for (int i = 0; i < CAM_NUM; i++)
+	if (device_on == 1)
 	{
-		workerCCD[i] = new WorkerCCD(i, _system);
-		threadCCD[i] = new QThread();
-		workerCCD[i]->moveToThread(threadCCD[i]);
+		VimbaSystem& camSDK = VimbaSystem::GetInstance();//相机的SDK-Vimba系统，为了避免每个相机线程重复开启Vimba系统，只能暂时吧该引用提到最上层
+		AVTCamera::IniVimba(camSDK);
+		workerMeasurement = new WorkerMeasurement();
+		threadMeasurement = new QThread();
+		workerMeasurement->moveToThread(threadMeasurement);
+		for (int i = 0; i < CAM_NUM; i++)
+		{
+			workerCCD[i] = new WorkerCCD(i);
+			threadCCD[i] = new QThread();
+			workerCCD[i]->moveToThread(threadCCD[i]);
 
-		//用槽机制传递Mat保存下来的是空图？
-		//qRegisterMetaType<Mat>("Mat");
-		connect(this, SIGNAL(startTimer(int)), this->workerCCD[i], SLOT(StartTimer(int)));
-		connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//防止重复连接。如果当前信号和槽已经连接过了，就不再连接了;UniqueConnection 模式：严格说不算连接方式，只是一个附加的参数。
-		connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);
-		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
-		connect(this->workerMeasurement, SIGNAL(readyForGrab(int,int)), this->workerCCD[i], SLOT(Grab(int,int)), Qt::QueuedConnection);
-		connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
-		connect(this->workerCCD[i]->cameraAVT, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
+			//用槽机制传递Mat保存下来的是空图？
+			//qRegisterMetaType<Mat>("Mat");
+			connect(this, SIGNAL(startTimer(int)), this->workerCCD[i], SLOT(StartTimer(int)));
+			connect(this->workerCCD[i], SIGNAL(sendingImg(int, QImage)), this, SLOT(DisplayImage(int, QImage)), Qt::UniqueConnection);//防止重复连接。如果当前信号和槽已经连接过了，就不再连接了;UniqueConnection 模式：严格说不算连接方式，只是一个附加的参数。
+			connect(this->workerCCD[i], SIGNAL(grabDone(int)), this->workerMeasurement, SLOT(CheckDone(int)), Qt::QueuedConnection);
+			connect(this, SIGNAL(sendingMaterialName(QString)), this->workerCCD[i], SLOT(GetMaterialName(QString)));
+			connect(this->workerMeasurement, SIGNAL(readyForGrab(int, int)), this->workerCCD[i], SLOT(Grab(int, int)), Qt::QueuedConnection);
+			connect(this->workerMeasurement, SIGNAL(done()), this->workerCCD[i], SLOT(WokerClose()));
+			connect(this->workerCCD[i]->cameraAVT, SIGNAL(sendingMeasureState(int, int, int)), this, SLOT(DisplayMeasureState(int, int, int)));
 
+		}
+		connect(this, SIGNAL(startMeasurement(int)), this->workerMeasurement, SLOT(StartTimer(int)));
+		connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
+		connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
+		connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
+		connect(this, SIGNAL(sendingMaterialName(QString)), this->workerMeasurement, SLOT(GetMaterialName(QString)));
 	}
-	connect(this, SIGNAL(startMeasurement(int)), this->workerMeasurement, SLOT(StartTimer(int)));
-	connect(this->ui.pushButton_startMeasurement, SIGNAL(pressed()), this, SLOT(PushButton_StartMeasurement_Pressed()));
-	connect(this->ui.pushButton_stopMeasurement, SIGNAL(pressed()), this, SLOT(StopMeasurement()));
-	connect(this->ui.pushButton_sampleReset, SIGNAL(pressed()), this, SLOT(PushButton_SampleReset_Pressed()));
-	connect(this, SIGNAL(sendingMaterialName(QString)), this->workerMeasurement, SLOT(GetMaterialName(QString)));
-
+	
 ///////////////////////////////////////////////相机预处理页面///////////////////////////////////////////////
 	this->ui.pushButton_captureContinuously->setEnabled(false);
 	this->ui.pushButton_chess->setEnabled(false);
@@ -246,7 +252,11 @@ MainWindow::~MainWindow()
 	delete threadMeasurement;
 	threadMeasurement = NULL;
 
-	AVTCamera::FiniVimba(_system);
+	if (device_on == 1)
+	{
+		VimbaSystem& camSDK = VimbaSystem::GetInstance();
+		AVTCamera::FiniVimba(camSDK);
+	}
 }
 
 ////////////////////////////////私有槽函数/////////////////////////////////////
@@ -385,23 +395,43 @@ void MainWindow::PushButton_Defaults_Pressed()
 }
 ////////////////////////////////建模页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
+// 函数：
+// 描述：treewidget选中item后可以点击开始拟合
+////////////////////////////////////////////////////////////////////////////
+void MainWindow::ItemClicked()
+{
+	this->ui.pushButton_startFitting->setEnabled(true);
+}
+////////////////////////////////////////////////////////////////////////////
 // 函数：PushButton_StartFitting_Pressed
 // 描述：根据菜单栏选项切换主窗口
 ////////////////////////////////////////////////////////////////////////////
 void MainWindow::PushButton_StartFitting_Pressed()
 {
 	string fileName;
-	if (ui.treeWidget->isAnimated())
-	{
+	//if (ui.treeWidget->isAnimated())
+	//{
+		this->ui.pushButton_stopFitting->setEnabled(true);
 		fileName = ui.treeWidget->currentItem()->text(0).toStdString();
-	}
-	else
-	{
-		QMessageBox::critical(NULL, QStringLiteral("警告"), QStringLiteral("请选择材质"), QMessageBox::Ok);
-		return;
-	}
-	//brdfFitting->StartFitting(fileName, 10, 15, 5, 35, 5);
+	//}
+	//else
+	//{
+	//	QMessageBox::critical(NULL, QStringLiteral("警告"), QStringLiteral("请选择材质"), QMessageBox::Ok);
+	//	return;
+	//}
+	brdfFitting->StartFitting(fileName);
 	//在界面显示拟合结果
+	Mat param=Mat::zeros(1, 7, CV_64FC1);
+	param=brdfFitting->StartFitting(fileName);
+
+	this->ui.lineEdit_5->setText(QString::number(param.at<double>(0, 0), 'f', 6));
+	this->ui.lineEdit_6->setText(QString::number(param.at<double>(0, 1), 'f', 6));
+	this->ui.lineEdit_7->setText(QString::number(param.at<double>(0, 2), 'f', 6));
+	this->ui.lineEdit_8->setText(QString::number(param.at<double>(0, 3), 'f', 6));
+	this->ui.lineEdit_9->setText(QString::number(param.at<double>(0, 4), 'f', 6));
+	this->ui.lineEdit_10->setText(QString::number(param.at<double>(0, 5), 'f', 6));
+	this->ui.lineEdit_11->setText(QString::number(param.at<double>(0, 6), 'f', 6));
+
 }
 ////////////////////////////////切换页面/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////

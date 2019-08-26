@@ -39,6 +39,8 @@ private slots:
 	void CheckDone(int workerID);
 	void StartTimer(int measureFlag);
 	void CloseWorker();
+
+public:
 	bool ReadBrdf(const char *filename, double* &brdf);
 	void LookupBrdfVal(double* brdf, int theta_in, int fi_in, int theta_out, int fi_out, double& red_val, double& green_val, double& blue_val);
 	bool WriteBRDF(string path, const char* savePath);
@@ -76,6 +78,7 @@ private:
 	int						_measureFlag;
 	//bool					_sampleFlag;
 	bool					_illuminantFlag;
+	bool					_lightenFlag;
 	//QSettings *ini = new QSettings("./config.ini", QSettings::IniFormat);//∂¡»°≈‰÷√Œƒº˛
 	//QMutex					_mutex;
 	

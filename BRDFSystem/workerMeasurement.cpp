@@ -5,7 +5,7 @@ WorkerMeasurement::WorkerMeasurement(QObject *parent) :
 QObject(parent)
 {
 	connect(this, SIGNAL(OnClose()), this, SLOT(CloseWorker()));
-	connect(this, SIGNAL(done()), this, SLOT(ContributeBRDF()));
+	//connect(this, SIGNAL(done()), this, SLOT(writeBRDF()));
 
 	sampleComm = new SampleComm();
 	sampleComm->Init(2);
@@ -30,11 +30,13 @@ QObject(parent)
 	_isReady = 0;
 	//_captureDone = 0;
 	_measureFlag = 0;
+	_lightenFlag = 0;
 	//_sampleFlag = 0;
 	_seriesCAM = new bool[9]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 WorkerMeasurement::~WorkerMeasurement()
 {
+	//this->killTimer(_timerId);
 	delete illuminant;
 	delete _illuminantID;
 	delete sampleComm;
@@ -51,9 +53,9 @@ void WorkerMeasurement::StartTimer(int measureFlag)
 {
 	slideComm->MoveToX2();//滑轨就位
 	sampleComm->Reset();//样品归位
-	Sleep(10000);//等待滑轨就位及材质台归位
+	Sleep(5000);//等待滑轨就位及材质台归位
 	_measureFlag = measureFlag;
-	_timerId = this->startTimer(8000);//这个时间间隔设置很重要
+	_timerId = this->startTimer(100);//这个时间间隔设置很重要
 
 }
 
@@ -61,6 +63,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 {
 	if (event->timerId() == _timerId)
 	{
+		
 		if (!_isReady)
 		{
 			if (_measureFlag == 1)
@@ -68,11 +71,14 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				if (_iID != ILLUMINANT_NUM)
 				{
 					_isReady = 1;
-					illuminant->Suspend();
+					if (_lightenFlag == 1)
+						illuminant->Suspend(_illuminantID[_iID-1] + 1);
+					else
+						_lightenFlag = 1;
 					//Sleep(1000);
 					illuminant->LightenById(_illuminantID[_iID] + 1);//光源序列是从0开始写的
-					illuminant->SetSteadyTime(50);
-					illuminant->Start();
+					//illuminant->SetSteadyTime(50);
+					//illuminant->Start();
 					//Sleep(200);
 					_iID++;
 
@@ -82,7 +88,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				{
 					emit done();
 					string brdfPath = _imageSavingPath1 + _materialName + "\\";
-					WriteBRDF(brdfPath, "..\\sampledata\\");
+					//WriteBRDF(brdfPath, "..\\sampledata\\");
 					_isReady = 1;
 				}
 			}
@@ -94,10 +100,13 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 					if (_iID != ILLUMINANT_NUM)
 					{
 						_isReady = 1;
-						illuminant->Suspend();
+						if (_lightenFlag == 1)
+							illuminant->Suspend(_illuminantID[_iID - 1] + 1);
+						else
+							_lightenFlag = 1;
 						illuminant->LightenById(_illuminantID[_iID] + 1);
-						illuminant->SetSteadyTime(50);//最长点亮时间25.5s  18个采集角度时间不太够
-						illuminant->Start();
+						//illuminant->SetSteadyTime(50);//最长点亮时间25.5s  18个采集角度时间不太够
+						//illuminant->Start();
 						//Sleep(200);
 						_iID++;
 
@@ -115,7 +124,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				{
 					emit done();
 					string brdfPath = _imageSavingPath2 + _materialName + "\\";
-					WriteBRDF(brdfPath, "..\\sampledata\\");
+					//WriteBRDF(brdfPath, "..\\sampledata\\");
 					_isReady = 1;
 				}
 			}
@@ -125,41 +134,8 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				if (_sID != SAMPLE_NUM)
 				{
 					_isReady = 1;
+					illuminant->LightenById(199);
 
-					//光源常亮，中间断3次（25s时间不够）
-					if (_sID == 0)
-					{
-						//illuminant->Suspend();
-						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
-						illuminant->LightenById(199);
-						illuminant->Start();
-						Sleep(200);
-					}
-
-					else if (_sID == SAMPLE_NUM / 4)
-					{
-						illuminant->Suspend();
-						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
-						illuminant->LightenById(199);
-						illuminant->Start();
-						Sleep(200);
-					}
-					else if (_sID == SAMPLE_NUM * 2 / 4)
-					{
-						illuminant->Suspend();
-						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
-						illuminant->LightenById(199);
-						illuminant->Start();
-						Sleep(200);
-					}
-					else if (_sID == SAMPLE_NUM * 3 / 4)
-					{
-						illuminant->Suspend();
-						illuminant->SetSteadyTime(200);//最长点亮时间25.5s  18个采集角度时间不太够
-						illuminant->LightenById(199);
-						illuminant->Start();
-						Sleep(200);
-					}
 					emit readyForGrab(_sID, _iID);
 					sampleComm->GotoNextPos(1730);
 					//Sleep(600);//留给相机的拍摄时间			
@@ -167,6 +143,7 @@ void WorkerMeasurement::timerEvent(QTimerEvent *event)
 				}
 				else if (_sID == SAMPLE_NUM)
 				{
+					illuminant->Suspend(199);
 					emit done();
 					_isReady = 1;
 				}
@@ -211,9 +188,9 @@ vector<double> WorkerMeasurement::AverageRGB(const Mat& inputImage)
 	{
 		for (int j = 0; j<colNumber; j++)
 		{
-			temp[0] += inputImage.at<Vec3f>(i, j)[0];
-			temp[1] += inputImage.at<Vec3f>(i, j)[1];
-			temp[2] += inputImage.at<Vec3f>(i, j)[2];
+			temp[0] += inputImage.at<Vec3b>(i, j)[0];
+			temp[1] += inputImage.at<Vec3b>(i, j)[1];
+			temp[2] += inputImage.at<Vec3b>(i, j)[2];
 		}
 	}
 	temp[0] = temp[0] / (rowNumber*colNumber);
